@@ -1,0 +1,7 @@
+FROM quay.io/keycloak/keycloak:20.0.0 as builder
+
+WORKDIR /opt/keycloak
+
+# Here all required extensions copy
+
+ENTRYPOINT [ "/opt/keycloak/bin/kc.sh", "start-dev" ]
