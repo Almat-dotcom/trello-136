@@ -1,56 +1,9 @@
 {{/*
-Expand the name of the chart.
+Return the proper Keycloak image name
 */}}
-{{- define "common.names.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- define "keycloak.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
 {{- end -}}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "common.names.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "common.names.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Allow the release namespace to be overridden for multi-namespace deployments in combined charts.
-*/}}
-{{- define "common.names.namespace" -}}
-{{- if .Values.namespaceOverride -}}
-{{- .Values.namespaceOverride -}}
-{{- else -}}
-{{- .Release.Namespace -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Kubernetes standard labels
-*/}}
-{{- define "common.labels.standard" -}}
-app.kubernetes.io/name: {{ include "common.names.name" . }}
-helm.sh/chart: {{ include "common.names.chart" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end -}}
-
 {{/*
 Return true if a configmap object should be created
 */}}
@@ -75,5 +28,47 @@ Return database password in base64 if it is present in .Values
 {{- define "keycloak.database.password" -}}
 {{- if .Values.database.password -}}
     {{- .Values.database.password | b64enc -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper Docker Image Registry Secret Names
+*/}}
+{{- define "keycloak.imagePullSecrets" -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
+Return the secret containing the Keycloak admin password
+*/}}
+{{- define "keycloak.secretName" -}}
+{{- $secretName := .Values.auth.existingSecret -}}
+{{- if $secretName -}}
+    {{- printf "%s" (tpl $secretName $) -}}
+{{- else -}}
+    {{- printf "%s" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the secret key that contains the Keycloak admin password
+*/}}
+{{- define "keycloak.secretKey" -}}
+{{- $secretName := .Values.auth.existingSecret -}}
+{{- if and $secretName .Values.auth.passwordSecretKey -}}
+    {{- printf "%s" .Values.auth.passwordSecretKey -}}
+{{- else -}}
+    {{- print "admin-password" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Keycloak configuration configmap
+*/}}
+{{- define "keycloak.configmapName" -}}
+{{- if .Values.existingConfigmap -}}
+    {{- printf "%s" (tpl .Values.existingConfigmap $) -}}
+{{- else -}}
+    {{- printf "%s-configuration" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}

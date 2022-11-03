@@ -1,4 +1,180 @@
 
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - name: myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
+
+# Image of the keycloak
+image:
+  # Registry url
+  registry: nexus.kacd.kz:5000
+  # Repository of the image
+  repository: platform/sso/keycloak
+  # tag of the image
+  # WARNING: don't use latest tag in production!
+  tag: latest
+  # pull policy of the image
+  pullPolicy: IfNotPresent
+
+#
+# Service account settings
+#
+serviceAccount:
+  #
+  # Name of existing service account
+  #
+  name: default
+
+#
+# Overriding keycloak container command if needed
+# E.g. ["/opt/keycloak/bin/kc.sh", "start-dev"]
+#
+command: []
+
+#
+# Overriding default container args
+#
+args: []
+
+#
+# Keycloak resource requests and limits
+# ref: https://kubernetes.io/docs/user-guide/compute-resources/
+#
+resources:
+  limits: {}
+  requests: {}
+
+hostname: localhost
+
+#
+# Value of configuration
+# It will create new ConfigMap with this data
+#
+configuration: ""
+
+#
+# Name of the existing configmap with keycloak.conf inside
+# This value overrides configuration parameter
+#
+existingConfigmap: ""
+
+#
+# base path of keycloak
+#
+httpRelativePath: "/"
+
+# 
+# Posrts of keycloak inside container
+#
+# http - port of HTTP (plain text) endpoint (using only in development mode)
+# https - port of HTTP with TLS endpoint (using in production)
+#
+containerPorts:
+  http: 8080
+  https: 8443
+
+#
+# reverse Proxy mode edge, reencrypt, passthrough or none
+# ref: https://www.keycloak.org/server/reverseproxy
+#
+proxy: passthrough
+
+#
+# Settings of keycloak metrics
+#
+metrics:
+  #
+  # If true keycloak will collect it's metrics.
+  #
+  enabled: true
+
+#
+# TLS config. It's required to run keycloak in production mode.
+#
+tls:
+  #
+  # If enabled true tls certificates will be mount inside keycloak container
+  #
+  enabled: true
+  #
+  # Name of the secret with tls data.
+  #
+  existingSecret: ""
+  #
+  # Name of the certificate file inside existing secret
+  #
+  certificateFileKey: tls.crt
+  #
+  # Name of the key file inside existing secret
+  #
+  keyFileKey: tls.key
+
+#
+# Admin authorization config
+#
+auth:
+  #
+  # Name of the admin user
+  #
+  adminUser: admin
+  #
+  # Password of the admin user
+  #
+  adminPassword: ""
+  #
+  # Or existing secret which contains admin password
+  #
+  existingSecret: ""
+  #
+  # Key of the value of admin password secret
+  #
+  existingSecretPasswordKey: "password"
+
+#
+# Configuration of database connection
+#
+database:
+  #
+  # Host of the database
+  #
+  host: ""
+  #
+  # Port of the database
+  #
+  port: 5432
+  #
+  # Name of the database
+  #
+  name: postgres
+  #
+  # Name of database schema
+  #
+  schema: public
+  #
+  # Name of the database user
+  #
+  username: postgres
+  #
+  # Password of the database
+  #
+  password: ""
+  #
+  # Existing secret which contains database connectivity password
+  #
+  existingSecret: ""
+  #
+  # Key in the secret which contains password
+  #
+  existingSecretPasswordKey: ""
+
 #
 # Value to override default full qualified name of the recources
 #
@@ -23,66 +199,94 @@ namespaceOverride: ""
 commonLabels: {}
 
 #
-# Value of configuration
-# It will create new ConfigMap with this data
+# Common annotations to add to stateful sets
 #
-configuration: ""
+commonAnnotations: {}
 
 #
-# Name of the existing configmap with keycloak.conf inside
-# This value overrides configuration parameter
+# Count of replicas of keycloak
 #
-existingConfigmap: ""
+replicaCount: 1
 
 #
-# TLS config. It's required to run keycloak in production mode.
+# Update strategy for rolling update.
+# Define here whole object of kubernetes's update strategy.
+# ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 #
-tls:
-  #
-  # If enabled true tls certificates will be mount inside keycloak container
-  #
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate: {}
+
+#
+# List of labels which will be added only on pod
+#
+podLabels: {}
+#
+# List of labels which will be added only on pod
+#
+podAnnotations: {}
+
+## @param nodeSelector Node labels for pod assignment
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+## @param tolerations Tolerations for pod assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+##
+topologySpreadConstraints: []
+## @param priorityClassName Keycloak pods' Priority Class Name
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
+priorityClassName: ""
+## @param schedulerName Use an alternate scheduler, e.g. "stork".
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param terminationGracePeriodSeconds Seconds Keycloak pod needs to terminate gracefully
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+##
+terminationGracePeriodSeconds: ""
+## @param lifecycleHooks LifecycleHooks to set additional configuration at startup
+##
+lifecycleHooks: {}
+## Keycloak containers' Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param containerSecurityContext.enabled Enabled Keycloak containers' Security Context
+## @param containerSecurityContext.runAsUser Set Keycloak container's Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set Keycloak container's Security Context runAsNonRoot
+##
+containerSecurityContext:
   enabled: true
-
-  #
-  # Name of the secret with tls data.
-  # It should contain tls.crt, tls.key and ca.crt.
-  #
-  existingSecret: ""
-
-#
-# Admin authorization config
-#
-auth:
-  #
-  # Name of the admin user
-  #
-  adminUser: ""
-  #
-  # Password of the admin user
-  #
-  adminPassword: ""
-  #
-  # Or existing secret which contains admin password
-  #
-  existingSecret: ""
-  #
-  # Key of the value of admin password secret
-  #
-  existingSecretPasswordKey: "password"
-
-#
-# Configuration of database connection
-#
-database:
-  #
-  # Password of the database
-  #
-  password: ""
-  #
-  # Existing secret which contains database connectivity password
-  #
-  existingSecret: ""
-  #
-  # Key in the secret which contains password
-  #
-  existingSecretPasswordKey: ""
+  runAsUser: 1001
+  runAsNonRoot: true
+## @param extraEnvVars Extra environment variables to be set on Keycloak container
+## Example:
+## extraEnvVars:
+##   - name: FOO
+##     value: "bar"
+##
+extraEnvVars: []
+## Keycloak logging configuration
+## ref: https://www.keycloak.org/server/logging
+## @param logging.output Alternates between the default log output format or json format
+##
+logging:
+  output: default
+## Keycloak pods' SecurityContext
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enabled Keycloak pods' Security Context
+## @param podSecurityContext.fsGroup Set Keycloak pod's Security Context fsGroup
+##
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+## @param clusterDomain Default Kubernetes cluster domain
+##
+clusterDomain: cluster.local
+## @param podManagementPolicy Pod management policy for the Keycloak statefulset
+##
+podManagementPolicy: Parallel
