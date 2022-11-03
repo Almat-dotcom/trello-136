@@ -1,0 +1,11 @@
+annotations:
+  category: DeveloperTools
+apiVersion: v2
+appVersion: 19.0.3
+description: Keycloak is a high performance Java-based identity and access management solution. It lets developers add an authentication layer to their applications with minimum effort.
+home: https://www.keycloak.org
+name: keycloak
+sources:
+  - https://github.com/bitnami/containers/tree/main/bitnami/keycloak
+  - https://github.com/keycloak/keycloak
+version: 0.0.1

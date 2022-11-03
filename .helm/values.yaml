@@ -1,0 +1,88 @@
+
+#
+# Value to override default full qualified name of the recources
+#
+fullnameOverride: ""
+
+#
+# Value to override partial name of the recources
+#
+nameOverride: ""
+
+#
+# Value to override standard namespace
+#
+namespaceOverride: ""
+
+#
+# Common labels to add to all created objects
+# E.g.
+#    commonLabels:
+#      prometheus.io/scrape: true
+#
+commonLabels: {}
+
+#
+# Value of configuration
+# It will create new ConfigMap with this data
+#
+configuration: ""
+
+#
+# Name of the existing configmap with keycloak.conf inside
+# This value overrides configuration parameter
+#
+existingConfigmap: ""
+
+#
+# TLS config. It's required to run keycloak in production mode.
+#
+tls:
+  #
+  # If enabled true tls certificates will be mount inside keycloak container
+  #
+  enabled: true
+
+  #
+  # Name of the secret with tls data.
+  # It should contain tls.crt, tls.key and ca.crt.
+  #
+  existingSecret: ""
+
+#
+# Admin authorization config
+#
+auth:
+  #
+  # Name of the admin user
+  #
+  adminUser: ""
+  #
+  # Password of the admin user
+  #
+  adminPassword: ""
+  #
+  # Or existing secret which contains admin password
+  #
+  existingSecret: ""
+  #
+  # Key of the value of admin password secret
+  #
+  existingSecretPasswordKey: "password"
+
+#
+# Configuration of database connection
+#
+database:
+  #
+  # Password of the database
+  #
+  password: ""
+  #
+  # Existing secret which contains database connectivity password
+  #
+  existingSecret: ""
+  #
+  # Key in the secret which contains password
+  #
+  existingSecretPasswordKey: ""
