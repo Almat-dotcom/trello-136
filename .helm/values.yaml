@@ -13,16 +13,7 @@ global:
   storageClass: ""
 
 # Image of the keycloak
-image:
-  # Registry url
-  registry: nexus.kacd.kz:5000
-  # Repository of the image
-  repository: platform/sso/keycloak
-  # tag of the image
-  # WARNING: don't use latest tag in production!
-  tag: latest
-  # pull policy of the image
-  pullPolicy: IfNotPresent
+image: nexus.kacd.kz:5000/platform/sso/keycloak:0.3
 
 #
 # Service account settings
