@@ -57,8 +57,8 @@ spec:
       {{- end }}
       containers:
         - name: keycloak
-          image: {{ template "keycloak.image" . }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: {{ .Values.image }}
+          imagePullPolicy: IfNotPresent
           {{- if .Values.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
@@ -85,20 +85,18 @@ spec:
               value: "kubernetes"
             - name: KC_HTTP_ENABLED
               value: "true"
-            # - name: KC_HOSTNAME_STRICT
-            #   value: "false"
             - name: JAVA_OPTS_APPEND
               value: {{ printf "-Djgroups.dns.query=%s-headless.%s.svc.%s" (include "common.names.fullname" .) (include "common.names.namespace" .) .Values.clusterDomain | quote }}
             - name: KEYCLOAK_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ printf "%s" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
-                  key: admin-password
+                  name: {{ include "keycloak.auth.secret" . }}
+                  key: {{ include "keycloak.auth.secretKey" . }}
             - name: KC_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ printf "%s-db" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
-                  key: db-password
+                  name: {{ include "keycloak.database.secret" . }}
+                  key: {{ include "keycloak.database.secretKey" . }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

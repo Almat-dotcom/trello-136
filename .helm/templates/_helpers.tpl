@@ -23,6 +23,28 @@ Return admin password in base64 if it is present in .Values
 {{- end -}}
 
 {{/*
+Returns name of the admin password name
+*/}}
+{{- define "keycloak.auth.secret" -}}
+{{- if .Values.auth.existingSecret -}}
+    {{- .Values.auth.existingSecret -}}
+{{- else -}}
+    {{- printf "%s" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns key inside admin password secret
+*/}}
+{{- define "keycloak.auth.secretKey" -}}
+{{- if .Values.auth.existingSecret -}}
+    {{- .Values.auth.existingSecretPasswordKey -}}
+{{- else -}}
+    {{- "admin-password" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return database password in base64 if it is present in .Values
 */}}
 {{- define "keycloak.database.password" -}}
@@ -32,10 +54,35 @@ Return database password in base64 if it is present in .Values
 {{- end -}}
 
 {{/*
+Return database secret name
+*/}}
+{{- define "keycloak.database.secret" -}}
+{{- if .Values.database.existingSecret -}}
+    {{- .Values.database.existingSecret -}}
+{{- else -}}
+    {{- printf "%s-db" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns key inside database secret
+*/}}
+{{- define "keycloak.database.secretKey" -}}
+{{- if .Values.database.existingSecret -}}
+    {{- .Values.database.existingSecretPasswordKey -}}
+{{- else -}}
+    {{- "db-password" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "keycloak.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) -}}
+imagePullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+  - name: {{ . }}
+    {{- end }}
 {{- end -}}
 
 {{/*
