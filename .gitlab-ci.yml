@@ -30,6 +30,8 @@ build-docker:
     - key: kaniko-cache
       paths:
         - .cache/
+  tags:
+    - global_runner_2
        
 k8s-dev-deploy:
   stage: dev-deploy
