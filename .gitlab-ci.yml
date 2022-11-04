@@ -1,5 +1,6 @@
 stages:
   - build-docker
+  - dev-deploy
 
 build-docker:
   stage: build-docker
