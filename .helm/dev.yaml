@@ -25,7 +25,6 @@ tls:
 
 auth:
   adminUser: admin
-  adminPassword: admin
   existingSecret: "sso-keycloak-admin-password"
   existingSecretPasswordKey: password
 
