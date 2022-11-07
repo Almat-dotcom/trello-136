@@ -1,0 +1,6 @@
+default-themes
+controllers
+.helm
+gitignore
+*.md
+Dockerfile.dev

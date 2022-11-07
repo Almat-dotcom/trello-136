@@ -1,50 +1,10 @@
 stages:
-  - build-docker
-  - dev-deploy
+  - apps
 
-build-docker:
-  stage: build-docker
-  image: 
-    name: gcr.io/kaniko-project/executor:v1.9.1-debug
-    entrypoint: [""]
-  before_script:
-    - echo $KANIKO_DOCKER_CONFIG | base64 -d > /kaniko/.docker/config.json
-    - |-
-      /kaniko/warmer \
-        --cache-dir=${CI_PROJECT_DIR}/.cache \
-        --image=quay.io/keycloak/keycloak:20.0.0
-  script:
-    - |-
-      /kaniko/executor \
-        --cache=true \
-        --cache-dir=${CI_PROJECT_DIR}/.cache \
-        --cache-ttl=4320h \
-        --dockerfile=./Dockerfile \
-        --log-timestamp=true \
-        --reproducible=true \
-        --snapshot-mode=time \
-        --use-new-run=true \
-        --context=${CI_PROJECT_DIR} \
-        --destination=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/keycloak:${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
-  cache:
-    - key: kaniko-cache
-      paths:
-        - .cache/
-  tags:
-    - global_runner_2
-       
-k8s-dev-deploy:
-  stage: dev-deploy
-  image: nexus.kacd.kz:5000/core2471/docker-helm:master-632
-  only:
-    - dev
-  environment:
-    name: dev
-  before_script:
-    - export RELEASE_NAME="${CI_PROJECT_NAME}"
-    - mkdir -p /etc/deploy && export KUBECONFIG=/etc/deploy/config
-    - echo ${KUBE_K8S_DEV_CONFIG} | base64 -d > /etc/deploy/config
-  script:
-    - helm upgrade --install ${RELEASE_NAME} ./.helm --create-namespace --namespace="${CI_PROJECT_NAME}" -f ./.helm/dev.yaml --set image=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/keycloak:${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
-  tags:
-    - global_runner_2
+build-apps:
+  stage: apps
+  trigger:
+    include: apps/.gitlab-ci.yml
+  rules:
+    - changes:
+      - apps/*
