@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'kz.kacd.sso'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 sourceCompatibility = '17'
 
 configurations {
@@ -25,6 +25,10 @@ dependencies {
 	runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	annotationProcessor 'io.fabric8:crd-generator-apt:6.2.0'
+	implementation 'io.fabric8:kubernetes-client:6.2.0'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

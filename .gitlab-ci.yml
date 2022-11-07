@@ -5,6 +5,7 @@ build-apps:
   stage: apps
   trigger:
     include: apps/.gitlab-ci.yml
+    strategy: depend
   rules:
     - changes:
-      - apps/*
+      - apps/**/*

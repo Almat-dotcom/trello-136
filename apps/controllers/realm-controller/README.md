@@ -11,3 +11,17 @@
 
 Рекомендуется установить плагины:
 - Lombok
+
+## Custom Resource Definition
+
+CRD - манифест генерируется с классов Java автоматически.
+
+Для этого нужно выполнить:
+```shell
+./gradlew clea assemble
+```
+
+И в `build/classes/java/main/META-INF/fabric0` будет манифест
+CRD для деплоя в кластер kubernetes. Для того, чтобы он применялся
+в кластер, его нужно скопировать в директорию `apps/.helm/template`
+главной директории репозитория.
