@@ -1,0 +1,263 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: realms.sso.kacd.kz
+spec:
+  group: sso.kacd.kz
+  names:
+    kind: Realm
+    listKind: RealmList
+    plural: realms
+    singular: realm
+    shortNames:
+        - rlm
+  scope: Namespaced
+  versions:
+    - name: v1beta1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            displayName:
+              description: Diplayed name of the realm
+              type: string
+              example: Keycloak
+            requireSsl:
+              description: Mode of the ssl requirement
+              type: string
+              enum:
+                - all
+                - external
+                - none
+            login:
+              description: configuration of the login
+              type: object
+              properties:
+                loginScreen:
+                  description: Login screen config
+                  type: object
+                  properties:
+                    registration:
+                      description: Is user registration available
+                      type: boolean
+                      example: false
+                    forgotPassword:
+                      description: Is forgot password available
+                      type: boolean
+                      example: false
+                    rememberMe:
+                      description: Is remember me available
+                      type: boolean
+                      example: false
+                email:
+                  description: email settings
+                  type: object
+                  properties:
+                    emailAsUsername:
+                      description: Is email is a valid username
+                      type: boolean
+                      example: false
+                    loginWithEmail:
+                      description: Are users allowed to log in with email
+                      type: boolean
+                      example: false
+                    duplicateEmails:
+                      description: Is user's emails can be duplicated
+                      type: boolean
+                      example: true
+                    verifyEmail:
+                      description: Are users forced to verify their emails
+                      type: boolean
+                      example: false
+                info:
+                  description: User info settings
+                  type: object
+                  properties:
+                    editUsername:
+                      description: Are users allowed to edit usernames
+                      type: boolean
+                      example: true
+            email:
+              description: Email options
+              type: object
+              properties:
+                from:
+                  description: Email address of the sender
+                  type: string
+                  example: test@example.com
+                smtpHost:
+                  description: Host of smtp server
+                  type: string
+                  example: localhost
+                smtpPort:
+                  description: Port of smtp server
+                  type: string
+                encryption:
+                  description: Mode of encryption
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                      - ssl
+                      - startTls
+                authentication:
+                  description: authentication settings
+                  type: object
+                  properties:
+                    existingSecret:
+                      description: Name of the secret with authentication credentials
+                      type: string
+                    usernameKey:
+                      description: Name of the key where username is stored
+                      type: string
+                    passwordKet:
+                      description: Name of the key where password is stored
+                      type: string
+            themes:
+              description: Specify themes for realm
+              type: object
+              properties:
+                login:
+                  description: Theme of login page
+                  type: string
+                account:
+                  description: Theme of the account page
+                  type: string
+                admin:
+                  description: Theme of the admin console page
+                  type: string
+                email:
+                  description: Theme of the email
+                  type: string
+            events:
+              description: Configuration of the event logging
+              type: object
+              properties:
+                eventListeners:
+                  description: List of event listeners
+                  type: array
+                  items:
+                    type: string
+                  example: ["jboss-logging"]
+                userEvents:
+                  description: Config of user events
+                  type: object
+                  properties:
+                    saveEvents:
+                      description: If true user events will be enabled
+                      type: boolean
+                      example: false
+                    expiration:
+                      description: Duration of user events persist time (duration can be m(Minutest), h(Hours), d(Days))
+                      type: string
+                      example: 2d
+                    savedTypes:
+                      description: List of event types which will be saved. If empty and events active, it creates standard list of types.
+                      type: array
+                      items:
+                        type: string
+                      example: ["login", "login-error"]
+                adminEvents:
+                  description: Config of admin events
+                  type: object
+                  properties:
+                    saveEvents:
+                      description: If true admin events will be stored
+                      type: boolean
+                      example: false
+                    includeRepresentation:
+                      description: If true admin events will be stored with it's representations
+                      type: boolean
+                      example: false
+                    expiration:
+                      description: expiration of the admin events (duration can be m(Minutest), h(Hours), d(Days))
+                      type: string
+                      example: 2d
+            localization:
+              description: Localization settings
+              type: object
+              properties:
+                i17n:
+                  description: If true internationalization will be enabled
+                  type: boolean
+                  example: false
+                supportedLocales:
+                  description: List of supported locales
+                  type: array
+                  items:
+                    type: string
+                  example: ["en", "ru"]
+                defaultLocale:
+                  description: Default locale if no one is defined
+                  type: string
+                  example: en
+            security:
+              description: Config of additional security
+              type: object
+              properties:
+                bruteForce:
+                  description: Brute force detection config
+                  type: object
+                  properties:
+                    enabled:
+                      description: If true Brute force attempts will be detected
+                      type: boolean
+                      example: false
+                    maxLoginFailures:
+                      description: Count of login failures before lockout
+                      type: number
+                      example: 30
+                    permanentLockout:
+                      description: If true after brute force detection user will be locked permanently
+                      type: boolean
+                      example: false
+                    waitIncrement:
+                      description: How much time user should be locked out (duration can be m(Minutest), h(Hours), d(Days))
+                      type: string
+                      example: 2m
+                    maxWait:
+                      description: Maximum time of user lockout (duration can be m(Minutest), h(Hours), d(Days))
+                      type: string
+                      example: 15m
+                    failureResetTime:
+                      description: Time after which failure count will be reset (duration can be m(Minutest), h(Hours), d(Days))
+                      type: string
+                      example: 12h
+                    quickLoginMillis:
+                      description: If login failures happens too quickly user will be locked
+                      type: number
+                      example: 1000
+                    quickLoginWait:
+                      description: How long to wait after a quick login failure (duration can be m(Minutest), h(Hours), d(Days))
+                      type: string
+                      example: 1m
+            sessions:
+              description: Sessions config
+              type: object
+              properties:
+                sessionIdle:
+                  description: Session expiration if no refresh actions requested
+                  type: string
+                  example: 30m
+                sessionMax:
+                  description: Maximum lifetime of the session
+                  type: string
+                  example: 10h
+                offlineSessionIdle:
+                  description: Offline session lifetime when no refresh actions requested
+                  type: string
+                  example: 30d
+            tokens:
+              description: Settings of tokens
+              type: object
+              properties:
+                accessLifespan:
+                  description: "lifetime of the access token (It is recommended for this value to be shorter than the SSO session idle timeout: 30 minutes)"
+                  type: string
+                  example: 1m
+                oidcAccessLifespan:
+                  description: OIDC implicid flow access token lifetime
+                  type: string
+                  example: 15m
