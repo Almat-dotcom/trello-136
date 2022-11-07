@@ -25,6 +25,7 @@ dependencies {
 	runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 
 	annotationProcessor 'io.fabric8:crd-generator-apt:6.2.0'
 	implementation 'io.fabric8:kubernetes-client:6.2.0'

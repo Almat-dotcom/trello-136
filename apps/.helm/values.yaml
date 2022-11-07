@@ -167,6 +167,23 @@ database:
   existingSecretPasswordKey: ""
 
 #
+# Realm controller config
+#
+realmController:
+  #
+  # Image of the controller
+  #
+  image: nexus.kacd.kz:5000/platform/sso/realm-controller:0.1
+  #
+  # Annotations on pod
+  #
+  podAnnotations: []
+  #
+  # Labels on pod
+  #
+  podLabels: []
+
+#
 # Value to override default full qualified name of the recources
 #
 fullnameOverride: ""
