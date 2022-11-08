@@ -9,9 +9,15 @@ import kz.kacd.sso.realmcontroller.k8s.crd.model.security.SecuritySpec;
 import kz.kacd.sso.realmcontroller.k8s.crd.model.session.SessionsSpec;
 import kz.kacd.sso.realmcontroller.k8s.crd.model.themes.ThemesSpec;
 import kz.kacd.sso.realmcontroller.k8s.crd.model.token.TokensSpec;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class RealmSpec {
     public static final String SSL_ALL = "all";
     public static final String SSL_EXTERNAL = "external";

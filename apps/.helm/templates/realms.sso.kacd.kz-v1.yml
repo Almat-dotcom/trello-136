@@ -235,7 +235,7 @@ spec:
             type: object
           status:
             properties:
-              error:
+              state:
                 description: State of the realm application
                 enum:
                 - DETECTED

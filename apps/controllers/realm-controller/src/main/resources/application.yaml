@@ -1,1 +1,3 @@
-
+realm:
+  # Default namespace where controller should watch changes
+  namespace: test

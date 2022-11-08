@@ -1,16 +1,21 @@
 package kz.kacd.sso.realmcontroller.k8s;
 
+import io.fabric8.kubernetes.api.builder.Visitor;
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.MixedOperation;
+import io.fabric8.kubernetes.client.dsl.NamespaceableResource;
 import io.fabric8.kubernetes.client.dsl.NonNamespaceOperation;
 import io.fabric8.kubernetes.client.dsl.Resource;
 import kz.kacd.sso.realmcontroller.k8s.crd.Realm;
 import kz.kacd.sso.realmcontroller.k8s.crd.RealmList;
 
 import java.util.concurrent.Callable;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -40,5 +45,16 @@ public class TestClientUtils {
         var nonNamespaced = (NonNamespaceOperation<Realm, RealmList, Resource<Realm>>) mock(NonNamespaceOperation.class);
         given(realms.inNamespace(anyString())).willReturn(nonNamespaced);
         given(nonNamespaced.list()).will(invocation -> callback.call());
+    }
+
+    public static NamespaceableResource<Realm> mockRealmEdit(
+            KubernetesClient client,
+            Realm source,
+            Function<Realm, Realm> call
+    ) {
+        var resource = (NamespaceableResource<Realm>) mock(NamespaceableResource.class);
+        given(client.resource(any(Realm.class))).willReturn(resource);
+        given(resource.patchStatus()).will(invocation -> { call.apply(source); return source; });
+        return resource;
     }
 }

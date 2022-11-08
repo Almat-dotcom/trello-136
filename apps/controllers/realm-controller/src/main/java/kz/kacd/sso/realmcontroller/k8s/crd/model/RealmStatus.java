@@ -1,13 +1,19 @@
 package kz.kacd.sso.realmcontroller.k8s.crd.model;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class RealmStatus {
 
     @JsonPropertyDescription("State of the realm application")
-    private RealmState error;
+    private RealmState state;
     @JsonPropertyDescription("Additional message for state")
     private String message;
 

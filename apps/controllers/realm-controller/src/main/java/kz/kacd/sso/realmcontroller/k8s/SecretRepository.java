@@ -1,16 +1,13 @@
 package kz.kacd.sso.realmcontroller.k8s;
 
-import io.fabric8.kubernetes.api.model.ListOptions;
 import kz.kacd.sso.realmcontroller.k8s.model.K8sResponse;
 import kz.kacd.sso.realmcontroller.k8s.model.SecretData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Repository;
 
 /**
  * Repository which provides operations on secrets in k8s.
  */
-@Repository
 @Slf4j
 @RequiredArgsConstructor
 public class SecretRepository {
