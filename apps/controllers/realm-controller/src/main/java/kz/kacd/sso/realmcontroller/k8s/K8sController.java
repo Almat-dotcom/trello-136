@@ -1,6 +1,5 @@
 package kz.kacd.sso.realmcontroller.k8s;
 
-import kz.kacd.sso.realmcontroller.k8s.crd.model.RealmStatus;
 import kz.kacd.sso.realmcontroller.k8s.model.K8sRealm;
 import kz.kacd.sso.realmcontroller.k8s.model.KeycloakRealm;
 import kz.kacd.sso.realmcontroller.k8s.model.SecretData;
@@ -53,9 +52,9 @@ public class K8sController {
         } else if (result instanceof OperationResponse.Failure<List<KeycloakRealm>> f) {
             if (f.getKind() == OperationResponse.K8sFailures.NOT_FOUND) {
                 log.info("No realms found.");
-            } else {
-                throw new RuntimeException("Failed to fetch realms: " + f.getMessage());
+                return List.of();
             }
+            throw new RuntimeException("Failed to fetch realms: " + f.getMessage());
         }
 
         throw new RuntimeException("Invalid state! It should not happen!");
