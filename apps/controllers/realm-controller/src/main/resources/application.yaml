@@ -1,3 +1,9 @@
 realm:
   # Default namespace where controller should watch changes
-  namespace: test
+  namespace: sso
+  # URL to keycloak
+  keycloak: http://localhost
+  # Admin user of keycloak
+  user: admin
+  # Password of admin user of keycloak
+  password: test

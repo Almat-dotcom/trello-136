@@ -2,7 +2,7 @@ package kz.kacd.sso.realmcontroller.k8s;
 
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import kz.kacd.sso.realmcontroller.k8s.model.K8sResponse;
+import kz.kacd.sso.realmcontroller.model.OperationResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,7 +36,7 @@ class SecretRepositoryTest {
 
         var actual = secretRepository.find(name);
 
-        assertThat(actual).isInstanceOf(K8sResponse.Success.class);
+        assertThat(actual).isInstanceOf(OperationResponse.Success.class);
     }
 
     @Test
@@ -46,9 +46,9 @@ class SecretRepositoryTest {
 
         var actual = secretRepository.find(name);
 
-        assertThat(actual).isInstanceOf(K8sResponse.Failure.class);
-        var error = (K8sResponse.Failure<?>) actual;
-        assertThat(error.getKind()).isEqualTo(K8sResponse.K8sFailures.NOT_FOUND);
+        assertThat(actual).isInstanceOf(OperationResponse.Failure.class);
+        var error = (OperationResponse.Failure<?>) actual;
+        assertThat(error.getKind()).isEqualTo(OperationResponse.K8sFailures.NOT_FOUND);
     }
 
     @Test
@@ -60,8 +60,8 @@ class SecretRepositoryTest {
 
         var actual = secretRepository.find(name);
 
-        assertThat(actual).isInstanceOf(K8sResponse.Failure.class);
-        var error = (K8sResponse.Failure<?>) actual;
-        assertThat(error.getKind()).isEqualTo(K8sResponse.K8sFailures.INTERNAL_ERROR);
+        assertThat(actual).isInstanceOf(OperationResponse.Failure.class);
+        var error = (OperationResponse.Failure<?>) actual;
+        assertThat(error.getKind()).isEqualTo(OperationResponse.K8sFailures.INTERNAL_ERROR);
     }
 }

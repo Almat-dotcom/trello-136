@@ -23,7 +23,7 @@ class KeycloakRealmTest {
     @Test
     void should_reject_detected_state_change_if_status_is_not_null() {
         var source = testSource();
-        source.setStatus(RealmStatus.builder().state(RealmStatus.RealmState.APPLIED).build());
+        source.setStatus(RealmStatus.builder().state(RealmStatus.RealmState.APPLYING).build());
 
         var realm = new KeycloakRealm(source, null, KeycloakRealm.RealmAction.ADDED);
 

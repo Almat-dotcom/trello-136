@@ -41,6 +41,15 @@ spec:
           env:
             - name: REALM_NAMESPACE
               value: {{ include "common.names.namespace" . | quote }}
+            - name: REALM_USER
+              value: {{ .Values.auth.adminUser | quote }}
+            - name: REALM_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "keycloak.auth.secret" . }}
+                  key: {{ include "keycloak.auth.secretKey" . }}
+            - name: REALM_KEYCLOAK
+              value: {{ printf "http://%s.%s.svc.cluster.local" (include "common.names.fullname" .) (include "common.names.namespace" .) }}
           startupProbe:
             httpGet:
               path: /actuator/health

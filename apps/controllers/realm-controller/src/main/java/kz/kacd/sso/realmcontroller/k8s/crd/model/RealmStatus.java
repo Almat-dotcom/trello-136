@@ -16,6 +16,8 @@ public class RealmStatus {
     private RealmState state;
     @JsonPropertyDescription("Additional message for state")
     private String message;
+    @JsonPropertyDescription("Applied generation")
+    private String generation;
 
     public enum RealmState {
         /**

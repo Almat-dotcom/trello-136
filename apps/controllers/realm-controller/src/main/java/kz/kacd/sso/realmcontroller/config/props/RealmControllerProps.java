@@ -10,4 +10,7 @@ import org.springframework.stereotype.Component;
 public class RealmControllerProps {
 
     private String namespace;
+    private String keycloak;
+    private String user;
+    private String password;
 }

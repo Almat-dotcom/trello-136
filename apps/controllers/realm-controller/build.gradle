@@ -31,6 +31,8 @@ dependencies {
 	annotationProcessor 'io.fabric8:crd-generator-apt:6.2.0'
 	implementation 'io.fabric8:kubernetes-client:6.2.0'
 
+	implementation 'org.keycloak:keycloak-admin-client:20.0.0'
+
 	testImplementation 'io.projectreactor:reactor-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

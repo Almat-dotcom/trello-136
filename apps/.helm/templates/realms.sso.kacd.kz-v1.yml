@@ -22,6 +22,9 @@ spec:
               displayedName:
                 description: Displayed name of the realm
                 type: string
+              frontendUrl:
+                description: Host for specific realm
+                type: string
               requireSsl:
                 description: Mode of the ssl requirement
                 type: string
@@ -245,6 +248,9 @@ spec:
                 type: string
               message:
                 description: Additional message for state
+                type: string
+              generation:
+                description: Applied generation
                 type: string
             type: object
         type: object

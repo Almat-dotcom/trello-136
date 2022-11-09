@@ -25,6 +25,8 @@ public class RealmSpec {
 
     @JsonPropertyDescription("Displayed name of the realm")
     private String displayedName;
+    @JsonPropertyDescription("Host for specific realm")
+    private String frontendUrl;
     @JsonPropertyDescription("Mode of the ssl requirement")
     private String requireSsl;
     @JsonPropertyDescription("configuration of the login")

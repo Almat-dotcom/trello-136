@@ -6,7 +6,7 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import kz.kacd.sso.realmcontroller.k8s.crd.Realm;
 import kz.kacd.sso.realmcontroller.k8s.crd.RealmList;
 import kz.kacd.sso.realmcontroller.k8s.crd.model.RealmStatus;
-import kz.kacd.sso.realmcontroller.k8s.model.K8sResponse;
+import kz.kacd.sso.realmcontroller.model.OperationResponse;
 import kz.kacd.sso.realmcontroller.k8s.model.KeycloakRealm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.function.UnaryOperator;
 
 import static kz.kacd.sso.realmcontroller.k8s.TestClientUtils.mockRealmEdit;
 import static kz.kacd.sso.realmcontroller.k8s.TestClientUtils.mockRealmListResource;
@@ -49,7 +48,7 @@ class RealmRepositoryTest {
 
         var actual = realmRepository.list();
 
-        assertThat(actual).isInstanceOf(K8sResponse.Success.class);
+        assertThat(actual).isInstanceOf(OperationResponse.Success.class);
     }
 
     @Test
@@ -61,9 +60,9 @@ class RealmRepositoryTest {
 
         var actual = realmRepository.list();
 
-        assertThat(actual).isInstanceOf(K8sResponse.Failure.class);
-        var error = (K8sResponse.Failure<?>) actual;
-        assertThat(error.getKind()).isEqualTo(K8sResponse.K8sFailures.NOT_FOUND);
+        assertThat(actual).isInstanceOf(OperationResponse.Failure.class);
+        var error = (OperationResponse.Failure<?>) actual;
+        assertThat(error.getKind()).isEqualTo(OperationResponse.K8sFailures.NOT_FOUND);
     }
 
     @Test
@@ -74,9 +73,9 @@ class RealmRepositoryTest {
 
         var actual = realmRepository.list();
 
-        assertThat(actual).isInstanceOf(K8sResponse.Failure.class);
-        var error = (K8sResponse.Failure<?>) actual;
-        assertThat(error.getKind()).isEqualTo(K8sResponse.K8sFailures.INTERNAL_ERROR);
+        assertThat(actual).isInstanceOf(OperationResponse.Failure.class);
+        var error = (OperationResponse.Failure<?>) actual;
+        assertThat(error.getKind()).isEqualTo(OperationResponse.K8sFailures.INTERNAL_ERROR);
     }
 
     @Test
@@ -88,11 +87,16 @@ class RealmRepositoryTest {
                 RealmStatus.builder().state(RealmStatus.RealmState.APPLIED).build(),
                 KeycloakRealm.RealmAction.ADDED
         );
+        mockRealmListResource(client, () -> {
+            var res = new RealmList();
+            res.setItems(List.of(source));
+            return res;
+        });
         var res = mockRealmEdit(client, realm.source(), r -> r);
 
         var actual = realmRepository.save(realm);
 
-        assertThat(actual).isInstanceOf(K8sResponse.Success.class);
+        assertThat(actual).isInstanceOf(OperationResponse.Success.class);
         then(res).should().patchStatus();
     }
 }
