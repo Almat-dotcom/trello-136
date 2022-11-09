@@ -20,7 +20,7 @@ public class KeycloakClientFactory {
                 .realm("master")
                 .clientId("admin-cli")
                 .username(props.getUser())
-                .password(props.getPassword())
+                .password(props.getPassword().trim())
                 .build();
     }
 }
