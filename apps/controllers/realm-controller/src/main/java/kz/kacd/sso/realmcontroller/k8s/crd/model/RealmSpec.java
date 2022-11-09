@@ -3,6 +3,7 @@ package kz.kacd.sso.realmcontroller.k8s.crd.model;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import kz.kacd.sso.realmcontroller.k8s.crd.model.email.EmailSpec;
 import kz.kacd.sso.realmcontroller.k8s.crd.model.event.EventsSpec;
+import kz.kacd.sso.realmcontroller.k8s.crd.model.federation.FederationSpec;
 import kz.kacd.sso.realmcontroller.k8s.crd.model.localization.LocalizationSpec;
 import kz.kacd.sso.realmcontroller.k8s.crd.model.login.LoginSpec;
 import kz.kacd.sso.realmcontroller.k8s.crd.model.security.SecuritySpec;
@@ -45,4 +46,6 @@ public class RealmSpec {
     private SessionsSpec sessions;
     @JsonPropertyDescription("Settings of tokens")
     private TokensSpec tokens;
+    @JsonPropertyDescription("Settings of user federations")
+    private FederationSpec federations;
 }
