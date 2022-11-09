@@ -15,7 +15,7 @@ resources:
     cpu: "4"
   requests:
     memory: "1Gi"
-    cpu: "4"
+    cpu: "1"
 
 tls:
   enabled: true

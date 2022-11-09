@@ -50,6 +50,13 @@ spec:
                   key: {{ include "keycloak.auth.secretKey" . }}
             - name: REALM_KEYCLOAK
               value: {{ printf "http://%s.%s.svc.cluster.local" (include "common.names.fullname" .) (include "common.names.namespace" .) }}
+          resources:
+            requests:
+              memory: "5Mi"
+              cpu: "500m"
+            limits:
+              memory: "500Mi"
+              cpu: "1"
           startupProbe:
             httpGet:
               path: /actuator/health

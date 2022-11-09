@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: test-mail-secret
+  namespace: sso
+type: Opaque
+data:
+  password: dGVzdA==
+  username: dGVzdA==
+---
+apiVersion: sso.kacd.kz/v1beta1
+kind: Realm
+metadata:
+  name: test
+  namespace: sso
+spec:
+  displayedName: "Test Realm"
+  requireSsl: none
+  login:
+    loginScreen:
+      registration: true
+    email:
+      emailAsUsername: true
+      loginWithEmail: true
+    info: {}
+  email:
+    from: sso@kacd.kz
+    smtpHost: mail.kacd.kz
+    smtpPort: 5252
+    encryption: []
+    authentication:
+      existingSecret: test-mail-secret
+      usernameKey: username
+      passwordKey: password
+  themes: 
+    login: keycloak
+    account: keycloak
+    admin: keycloak
+    email: keycloak
+  events:
+    eventListeners: ["jboss-logging"]
+    userEvents:
+      saveEvents: true
+      expiration: 2d
+    adminEvents:
+      saveEvents: true
+      includeRepresentation: true
+  localization:
+    i17n: true
+    supportedLocales: ["en", "ru"]
+    defaultLocale: ru
+  security:
+    bruteForce:
+      enabled: true
+  sessions:
+    sessionIdle: 15m
+    sessionMax: 24h
+    offlineSessionIdle: 3h
+  tokens:
+    accessLifespan: 2m
+    oidcAccessLifespan: 2m
