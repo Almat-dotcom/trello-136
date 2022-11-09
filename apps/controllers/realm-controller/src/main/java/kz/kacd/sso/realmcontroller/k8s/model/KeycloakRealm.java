@@ -79,7 +79,7 @@ public record KeycloakRealm(
                 RealmStatus.builder()
                         .state(RealmStatus.RealmState.DETECTED)
                         .message(Messages.DETECTED)
-                        .generation(source.getMetadata().getGeneration().toString())
+                        .generation(generation())
                         .build(),
                 this.action
         );
@@ -96,7 +96,7 @@ public record KeycloakRealm(
                 RealmStatus.builder()
                         .state(RealmStatus.RealmState.APPLYING)
                         .message(Messages.APPLYING)
-                        .generation(source.getMetadata().getGeneration().toString())
+                        .generation(generation())
                         .build(),
                 this.action
         );
@@ -117,7 +117,7 @@ public record KeycloakRealm(
                 RealmStatus.builder()
                         .state(RealmStatus.RealmState.APPLIED)
                         .message(Messages.APPLIED)
-                        .generation(source.getMetadata().getGeneration().toString())
+                        .generation(generation())
                         .build(),
                 null
         );
@@ -136,7 +136,7 @@ public record KeycloakRealm(
                 RealmStatus.builder()
                         .state(RealmStatus.RealmState.FAILED)
                         .message(Messages.failed(e))
-                        .generation(source.getMetadata().getGeneration().toString())
+                        .generation(generation())
                         .build(),
                 this.action
         );
@@ -155,7 +155,7 @@ public record KeycloakRealm(
                 RealmStatus.builder()
                         .state(RealmStatus.RealmState.FAILED)
                         .message(Messages.failed(e))
-                        .generation(source.getMetadata().getGeneration().toString())
+                        .generation(generation())
                         .build(),
                 this.action
         );
@@ -165,6 +165,16 @@ public record KeycloakRealm(
         if (newStatus == null || newStatus.getState() != RealmStatus.RealmState.APPLYING) {
             throw new IllegalStateException("To be failed realm should be in applying state!");
         }
+    }
+
+    private String generation() {
+        if (
+                source.getMetadata() != null
+                    && source.getMetadata().getGeneration() != null
+        ) {
+            return source.getMetadata().getGeneration().toString();
+        }
+        return "";
     }
 
     private static final class Messages {
