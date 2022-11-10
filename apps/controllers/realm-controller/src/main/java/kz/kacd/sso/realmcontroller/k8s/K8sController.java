@@ -26,6 +26,10 @@ public class K8sController {
         return realms.watch()
                 .filter(KeycloakRealm::toApply)
                 .map(realm -> {
+                    if (realm.action() == KeycloakRealm.RealmAction.DELETED) {
+                        return new K8sRealm(realm, new HashMap<>(), null);
+                    }
+
                     try {
                         var secrets = findSecrets(realm);
                         return new K8sRealm(realm, secrets, null);
@@ -64,14 +68,32 @@ public class K8sController {
         var result = new HashMap<String, SecretData>();
         if (realm.source().getSpec().getEmail().getAuthentication() != null) {
             var secret = realm.source().getSpec().getEmail().getAuthentication().getExistingSecret();
-            var data = secrets.find(secret);
-            if (data instanceof OperationResponse.Success<SecretData> s) {
-                result.put(secret, s.getData());
-            } else {
-                throw new IllegalArgumentException("Invalid existing secret name in email spec!");
-            }
+            putSecret(result, secret);
+        }
+        if (
+                realm.source().getSpec().getFederations() != null
+                        && realm.source().getSpec().getFederations().getLdap() != null
+                        && realm.source().getSpec().getFederations().getLdap().getConnection().getAuth() != null
+        ) {
+            var secret = realm.source()
+                    .getSpec()
+                    .getFederations()
+                    .getLdap()
+                    .getConnection()
+                    .getAuth()
+                    .getExistingSecret();
+            putSecret(result, secret);
         }
         return result;
+    }
+
+    private void putSecret(Map<String, SecretData> target, String name) {
+        var data = secrets.find(name);
+        if (data instanceof OperationResponse.Success<SecretData> s) {
+            target.put(name, s.getData());
+        } else {
+            throw new IllegalArgumentException("Invalid existing secret name: " + name + "!");
+        }
     }
 
     public void save(KeycloakRealm realm) {

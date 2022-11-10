@@ -17,6 +17,7 @@ import java.util.Map;
 public class KeycloakRealmController {
 
     private final KeycloakRealmRepository repository;
+    private final KeycloakFederationController federations;
 
     public OperationResponse<Boolean> apply(KeycloakRealm realm, Map<String, SecretData> secrets) {
         log.info("Applying realm {} into keycloak ...", realm.getName());
@@ -35,8 +36,8 @@ public class KeycloakRealmController {
 
     private OperationResponse<Boolean> merge(
             OperationResponse<Realm> existingRes,
-            KeycloakRealm realm, Map<String,
-            SecretData> secrets
+            KeycloakRealm realm,
+            Map<String, SecretData> secrets
     ) {
         RealmBuilder keycloakRealm;
         if (existingRes instanceof OperationResponse.Success<Realm> s) {
@@ -46,7 +47,13 @@ public class KeycloakRealmController {
         } else {
             return existingRes.map(it -> true);
         }
-        return repository.save(keycloakRealm.buildFrom(realm, secrets)).map(it -> true);
+
+        var result = repository.save(keycloakRealm.buildFrom(realm, secrets));
+        if (result instanceof OperationResponse.Success<Realm> s) {
+            return federations.apply(s.getData(), realm.source().getSpec().getFederations(), secrets);
+        } else {
+            return result.map(it -> true);
+        }
     }
 
     private OperationResponse<Boolean> delete(OperationResponse<Realm> existingRes) {

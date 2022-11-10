@@ -10,6 +10,7 @@ import kz.kacd.sso.realmcontroller.k8s.crd.model.login.LoginEmailSpec;
 import kz.kacd.sso.realmcontroller.k8s.crd.model.login.LoginScreenSpec;
 import kz.kacd.sso.realmcontroller.k8s.crd.model.login.LoginSpec;
 import kz.kacd.sso.realmcontroller.k8s.crd.model.login.LoginUserInfoSpec;
+import kz.kacd.sso.realmcontroller.k8s.crd.model.security.BruteForceSpec;
 import kz.kacd.sso.realmcontroller.k8s.crd.model.security.SecuritySpec;
 import kz.kacd.sso.realmcontroller.k8s.crd.model.session.SessionsSpec;
 import kz.kacd.sso.realmcontroller.k8s.crd.model.themes.ThemesSpec;
@@ -17,13 +18,12 @@ import kz.kacd.sso.realmcontroller.k8s.crd.model.token.TokensSpec;
 import kz.kacd.sso.realmcontroller.k8s.model.KeycloakRealm;
 import kz.kacd.sso.realmcontroller.k8s.model.SecretData;
 import lombok.RequiredArgsConstructor;
+import org.keycloak.common.util.MultivaluedHashMap;
+import org.keycloak.representations.idm.ComponentExportRepresentation;
 import org.keycloak.representations.idm.RealmRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static kz.kacd.sso.realmcontroller.util.ValueUtils.defaulted;
 import static kz.kacd.sso.realmcontroller.util.ValueUtils.duration;
@@ -54,7 +54,7 @@ public class RealmBuilder {
     private RealmBuilder withNameAndSsl(String name, RealmSpec spec) {
         target.setDisplayName(defaulted(spec.getDisplayedName(), name));
         target.setDisplayNameHtml("<div class=\"kc-logo-text\"><span>" + target.getDisplayName() + "</span></div>");
-        target.setSslRequired(convertSsl(spec.getRequireSsl()));
+        target.setSslRequired(convertSsl(defaulted(spec.getRequireSsl(), RealmSpec.SSL_EXTERNAL)));
         return this;
     }
 
@@ -72,32 +72,56 @@ public class RealmBuilder {
     }
 
     private RealmBuilder withLogin(LoginSpec spec) {
-        return this.withLoginScreen(spec.getLoginScreen())
-                .withLoginEmail(spec.getEmail())
-                .withUserInfo(spec.getInfo());
+        var arg = spec;
+        if (spec == null) {
+            arg = new LoginSpec();
+        }
+
+        return this.withLoginScreen(arg.getLoginScreen())
+                .withLoginEmail(arg.getEmail())
+                .withUserInfo(arg.getInfo());
     }
 
     private RealmBuilder withLoginScreen(LoginScreenSpec spec) {
-        target.setRegistrationAllowed(defaulted(spec.getRegistration(), false));
-        target.setResetPasswordAllowed(defaulted(spec.getForgotPassword(), false));
-        target.setRememberMe(defaulted(spec.getRememberMe(), false));
+        var arg = spec;
+        if (spec == null) {
+            arg = new LoginScreenSpec();
+        }
+
+        target.setRegistrationAllowed(defaulted(arg.getRegistration(), false));
+        target.setResetPasswordAllowed(defaulted(arg.getForgotPassword(), false));
+        target.setRememberMe(defaulted(arg.getRememberMe(), false));
         return this;
     }
 
     private RealmBuilder withLoginEmail(LoginEmailSpec spec) {
-        target.setRegistrationEmailAsUsername(defaulted(spec.getEmailAsUsername(), false));
-        target.setLoginWithEmailAllowed(defaulted(spec.getLoginWithEmail(), true));
-        target.setDuplicateEmailsAllowed(defaulted(spec.getDuplicatesEmails(), false));
-        target.setVerifyEmail(defaulted(spec.getVerifyEmail(), false));
+        var arg = spec;
+        if (spec == null) {
+            arg = new LoginEmailSpec();
+        }
+
+        target.setRegistrationEmailAsUsername(defaulted(arg.getEmailAsUsername(), false));
+        target.setLoginWithEmailAllowed(defaulted(arg.getLoginWithEmail(), true));
+        target.setDuplicateEmailsAllowed(defaulted(arg.getDuplicatesEmails(), false));
+        target.setVerifyEmail(defaulted(arg.getVerifyEmail(), false));
         return this;
     }
 
     private RealmBuilder withUserInfo(LoginUserInfoSpec spec) {
-        target.setEditUsernameAllowed(defaulted(spec.getEditUsername(), false));
+        var arg = spec;
+        if (spec == null) {
+            arg = new LoginUserInfoSpec();
+        }
+
+        target.setEditUsernameAllowed(defaulted(arg.getEditUsername(), false));
         return this;
     }
 
     private RealmBuilder withEmail(EmailSpec spec, Map<String, SecretData> secrets) {
+        if (spec == null) {
+            return this;
+        }
+
         target.setSmtpServer(
                 new SMTPServerBuilder()
                         .withFrom(spec.getFrom())
@@ -110,68 +134,99 @@ public class RealmBuilder {
     }
 
     private RealmBuilder withThemes(ThemesSpec spec) {
-        target.setLoginTheme(spec.getLogin());
-        target.setAccountTheme(spec.getAccount());
-        target.setAdminTheme(spec.getAdmin());
-        target.setEmailTheme(spec.getEmail());
+        var arg = spec;
+        if (arg == null) {
+            arg = new ThemesSpec();
+        }
+
+        target.setLoginTheme(arg.getLogin());
+        target.setAccountTheme(arg.getAccount());
+        target.setAdminTheme(arg.getAdmin());
+        target.setEmailTheme(arg.getEmail());
         return this;
     }
 
     private RealmBuilder withEvents(EventsSpec spec) {
-        target.setEventsListeners(spec.getEventListeners());
-        return this.withUserEvents(spec.getUserEvents())
-                .withAdminEvents(spec.getAdminEvents());
+        var arg = spec;
+        if (spec == null) {
+            arg = new EventsSpec();
+        }
+
+        target.setEventsListeners(defaulted(arg.getEventListeners(), List.of("jboss-logging")));
+        return this.withUserEvents(arg.getUserEvents())
+                .withAdminEvents(arg.getAdminEvents());
     }
 
     private RealmBuilder withUserEvents(UserEventsSpec spec) {
-        target.setEventsEnabled(defaulted(spec.getSaveEvents(), false));
+        var arg = spec;
+        if (spec == null) {
+            arg = new UserEventsSpec();
+        }
+
+        target.setEventsEnabled(defaulted(arg.getSaveEvents(), false));
         if (target.isEventsEnabled()) {
-            target.setEventsExpiration(duration(defaulted(spec.getExpiration(), "7d")));
-            target.setEnabledEventTypes(defaulted(spec.getSavedTypes(), UserEventsSpec.DEFAULT_EVENTS));
+            target.setEventsExpiration(duration(defaulted(arg.getExpiration(), "7d")));
+            target.setEnabledEventTypes(defaulted(arg.getSavedTypes(), UserEventsSpec.DEFAULT_EVENTS));
         }
         return this;
     }
 
     private RealmBuilder withAdminEvents(AdminEventsSpec spec) {
-        target.setAdminEventsEnabled(defaulted(spec.getSaveEvents(), false));
-        target.setAdminEventsDetailsEnabled(defaulted(spec.getIncludeRepresentation(), false));
+        var arg = spec;
+        if (spec == null) {
+            arg = new AdminEventsSpec();
+        }
+
+        target.setAdminEventsEnabled(defaulted(arg.getSaveEvents(), false));
+        target.setAdminEventsDetailsEnabled(defaulted(arg.getIncludeRepresentation(), false));
         if (target.getAttributes() == null) {
             target.setAttributes(new HashMap<>());
         }
         target.getAttributes().put(
                 ADMIN_EVENTS_EXPIRATION,
-                duration(defaulted(spec.getExpiration(), "7d")).toString()
+                duration(defaulted(arg.getExpiration(), "7d")).toString()
         );
         return this;
     }
 
     private RealmBuilder withI17n(LocalizationSpec spec) {
-        target.setInternationalizationEnabled(defaulted(spec.getI17n(), false));
+        var arg = spec;
+        if (spec == null) {
+            arg = new LocalizationSpec();
+        }
+
+        target.setInternationalizationEnabled(defaulted(arg.getI17n(), false));
         if (target.isInternationalizationEnabled()) {
-            target.setSupportedLocales(new HashSet<>(spec.getSupportedLocales()));
-            target.setDefaultLocale(spec.getDefaultLocale());
+            target.setSupportedLocales(new HashSet<>(defaulted(arg.getSupportedLocales(), List.of())));
+            target.setDefaultLocale(defaulted(arg.getDefaultLocale(), "en"));
         }
         return this;
     }
 
     private RealmBuilder withSecurity(SecuritySpec spec) {
-        target.setBruteForceProtected(defaulted(spec.getBruteForce().getEnabled(), false));
+        var arg = spec;
+        if (spec == null) {
+            arg = new SecuritySpec();
+            arg.setBruteForce(new BruteForceSpec());
+        }
+
+        target.setBruteForceProtected(defaulted(arg.getBruteForce().getEnabled(), false));
         if (target.isBruteForceProtected()) {
-            target.setFailureFactor(defaulted(spec.getBruteForce().getMaxLoginFailures(), 30));
-            target.setPermanentLockout(defaulted(spec.getBruteForce().getPermanentLockout(), false));
+            target.setFailureFactor(defaulted(arg.getBruteForce().getMaxLoginFailures(), 30));
+            target.setPermanentLockout(defaulted(arg.getBruteForce().getPermanentLockout(), false));
             if (!target.isPermanentLockout()) {
                 target.setWaitIncrementSeconds(
-                        duration(defaulted(spec.getBruteForce().getWaitIncrement(), "15m")).intValue()
+                        duration(defaulted(arg.getBruteForce().getWaitIncrement(), "15m")).intValue()
                 );
                 target.setMaxFailureWaitSeconds(
-                        duration(defaulted(spec.getBruteForce().getMaxWait(), "1d")).intValue()
+                        duration(defaulted(arg.getBruteForce().getMaxWait(), "1d")).intValue()
                 );
                 target.setMaxDeltaTimeSeconds(
-                        duration(defaulted(spec.getBruteForce().getFailureResetTime(), "12h")).intValue()
+                        duration(defaulted(arg.getBruteForce().getFailureResetTime(), "12h")).intValue()
                 );
-                target.setQuickLoginCheckMilliSeconds(defaulted(spec.getBruteForce().getQuickLoginMillis(), 1_000L));
+                target.setQuickLoginCheckMilliSeconds(defaulted(arg.getBruteForce().getQuickLoginMillis(), 1_000L));
                 target.setMinimumQuickLoginWaitSeconds(
-                        duration(defaulted(spec.getBruteForce().getQuickLoginWait(), "5m")).intValue()
+                        duration(defaulted(arg.getBruteForce().getQuickLoginWait(), "5m")).intValue()
                 );
             }
         }
@@ -179,24 +234,34 @@ public class RealmBuilder {
     }
 
     private RealmBuilder withSessions(SessionsSpec spec) {
+        var arg = spec;
+        if (spec == null) {
+            arg = new SessionsSpec();
+        }
+
         target.setSsoSessionIdleTimeout(
-                duration(defaulted(spec.getSessionIdle(), "15m")).intValue()
+                duration(defaulted(arg.getSessionIdle(), "15m")).intValue()
         );
         target.setSsoSessionMaxLifespan(
-                duration(defaulted(spec.getSessionMax(), "1d")).intValue()
+                duration(defaulted(arg.getSessionMax(), "1d")).intValue()
         );
         target.setOfflineSessionIdleTimeout(
-                duration(defaulted(spec.getOfflineSessionIdle(), "2h")).intValue()
+                duration(defaulted(arg.getOfflineSessionIdle(), "2h")).intValue()
         );
         return this;
     }
 
     private RealmBuilder withTokens(TokensSpec spec) {
+        var arg = spec;
+        if (spec == null) {
+            arg = new TokensSpec();
+        }
+
         target.setAccessTokenLifespan(
-                duration(defaulted(spec.getAccessLifespan(), "15m")).intValue()
+                duration(defaulted(arg.getAccessLifespan(), "15m")).intValue()
         );
         target.setAccessTokenLifespanForImplicitFlow(
-                duration(defaulted(spec.getOidcAccessLifespan(), "15m")).intValue()
+                duration(defaulted(arg.getOidcAccessLifespan(), "15m")).intValue()
         );
         return this;
     }

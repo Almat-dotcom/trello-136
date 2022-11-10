@@ -8,6 +8,6 @@ import java.util.Map;
 
 public record SecretData(Map<String, String> data) {
     public String get(String key) {
-        return new String(Base64.getDecoder().decode(data.get(key)), StandardCharsets.UTF_8);
+        return new String(Base64.getDecoder().decode(data.get(key)), StandardCharsets.UTF_8).trim();
     }
 }

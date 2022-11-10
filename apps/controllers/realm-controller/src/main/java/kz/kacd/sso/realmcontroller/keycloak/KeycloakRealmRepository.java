@@ -22,6 +22,28 @@ public class KeycloakRealmRepository {
         }
     }
 
+    private OperationResponse<Realm> create(Realm realm) {
+        log.debug("Creating new realm {} ...", realm.getName());
+        try (var client = factory.create()) {
+            client.realms().create(realm.representation());
+            return find(realm.getName());
+        } catch (Exception e) {
+            log.error("Error on creating new realm!", e);
+            return OperationResponse.internalError(e.getMessage());
+        }
+    }
+
+    private OperationResponse<Realm> update(Realm realm) {
+        log.debug("Updating existing realm {} ...", realm.getName());
+        try (var client = factory.create()) {
+            client.realm(realm.getName()).update(realm.representation());
+            return find(realm.getName());
+        } catch (Exception e) {
+            log.error("Error on updating realm {} ...", realm.getName());
+            return OperationResponse.internalError(e.getMessage());
+        }
+    }
+
     public OperationResponse<Realm> find(String name) {
         log.debug("Finding realm with name {} ...", name);
         try (var client = factory.create()) {
@@ -37,35 +59,13 @@ public class KeycloakRealmRepository {
         }
     }
 
-    private OperationResponse<Realm> create(Realm realm) {
-        log.debug("Creating new realm {} ...", realm.getName());
-        try (var client = factory.create()) {
-            client.realms().create(realm.representation());
-            return OperationResponse.success(realm);
-        } catch (Exception e) {
-            log.error("Error on creating new realm!", e);
-            return OperationResponse.internalError(e.getMessage());
-        }
-    }
-
-    private OperationResponse<Realm> update(Realm realm) {
-        log.debug("Updating existing realm {} ...", realm.getName());
-        try (var client = factory.create()) {
-            client.realm(realm.getName()).update(realm.representation());
-            return OperationResponse.success(realm);
-        } catch (Exception e) {
-            log.error("Error on updating realm {} ...", realm.getName());
-            return OperationResponse.internalError(e.getMessage());
-        }
-    }
-
     public OperationResponse<Boolean> delete(Realm realm) {
         log.debug("Deleting realm {} ...", realm.getName());
         try (var client = factory.create()) {
             client.realm(realm.getName()).remove();
             return OperationResponse.success(true);
         } catch (Exception e) {
-            log.error("Error on deleting realm {} ...", realm.getName());
+            log.error("Error on deleting realm {} ...", realm.getName(), e);
             return OperationResponse.internalError(e.getMessage());
         }
     }

@@ -34,6 +34,10 @@ public class RealmController {
     }
 
     private void onNext(K8sRealm realm) {
+        if (realm.e() != null) {
+            k8s.save(realm.realm().detected().applying().failed(realm.e()));
+        }
+
         if (realm.realm().action() == KeycloakRealm.RealmAction.DELETED) {
             var res = keycloak.apply(realm.realm(), realm.secrets());
             if (res instanceof OperationResponse.Failure<Boolean> f) {

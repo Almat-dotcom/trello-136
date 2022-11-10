@@ -13,6 +13,16 @@ public class LdapSpec {
     private LdapVendors vendor;
     @JsonPropertyDescription("Ldap connection settings")
     private LdapConnectionSpec connection;
+    @JsonPropertyDescription("Properties of searching users in LDAP")
+    private LdapSearchingSpec searching;
+    @JsonPropertyDescription("Synchronizing settings")
+    private LdapSyncSpec sync;
+    @JsonPropertyDescription("Cache settings")
+    private LdapCacheSpec cache;
+    @JsonPropertyDescription("Advanced settings")
+    private LdapAdvancedSpec advanced;
+    @JsonPropertyDescription("Groups mapping settings")
+    private LdapGroupsMappingSpec groups;
 
     @Getter
     public enum LdapVendors {

@@ -1,8 +1,14 @@
 package kz.kacd.sso.realmcontroller.util;
 
-import java.util.List;
-
 public class ValueUtils {
+
+    public static String defaultedPeriod(Boolean active, String source, String defaultValue) {
+        if (!active) {
+            return "-1";
+        }
+
+        return duration(defaulted(source, defaultValue)).toString();
+    }
 
     public static <T> T defaulted(T source, T defaultValue) {
         if (source == null) {
@@ -14,7 +20,7 @@ public class ValueUtils {
 
     public static Long duration(String source) {
         if (source == null) {
-            return 0L;
+            return -1L;
         }
 
         return switch (source.charAt(source.length() - 1)) {
