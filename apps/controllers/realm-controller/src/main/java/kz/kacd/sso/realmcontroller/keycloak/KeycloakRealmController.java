@@ -18,6 +18,7 @@ public class KeycloakRealmController {
 
     private final KeycloakRealmRepository repository;
     private final KeycloakFederationController federations;
+    private final KeycloakFlowController flows;
 
     public OperationResponse<Boolean> apply(KeycloakRealm realm, Map<String, SecretData> secrets) {
         log.info("Applying realm {} into keycloak ...", realm.getName());
@@ -49,11 +50,18 @@ public class KeycloakRealmController {
         }
 
         var result = repository.save(keycloakRealm.buildFrom(realm, secrets));
-        if (result instanceof OperationResponse.Success<Realm> s) {
-            return federations.apply(s.getData(), realm.source().getSpec().getFederations(), secrets);
-        } else {
+        if (result instanceof OperationResponse.Failure) {
             return result.map(it -> true);
         }
+        var feds = federations.apply(
+                ((OperationResponse.Success<Realm>) result).getData(),
+                realm.source().getSpec().getFederations(),
+                secrets
+        );
+        if (feds instanceof OperationResponse.Failure) {
+            return feds.map(it -> true);
+        }
+        return flows.createRestrictedFlow(((OperationResponse.Success<Realm>) result).getData());
     }
 
     private OperationResponse<Boolean> delete(OperationResponse<Realm> existingRes) {
