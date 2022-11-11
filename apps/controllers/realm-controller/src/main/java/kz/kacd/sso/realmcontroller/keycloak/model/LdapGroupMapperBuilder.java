@@ -1,6 +1,6 @@
 package kz.kacd.sso.realmcontroller.keycloak.model;
 
-import kz.kacd.sso.realmcontroller.k8s.crd.model.federation.ldap.LdapGroupsMappingSpec;
+import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.federation.ldap.LdapGroupsMappingSpec;
 import org.keycloak.common.util.MultivaluedHashMap;
 import org.keycloak.representations.idm.ComponentRepresentation;
 

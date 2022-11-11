@@ -1,9 +1,9 @@
 package kz.kacd.sso.realmcontroller.keycloak;
 
-import kz.kacd.sso.realmcontroller.k8s.crd.model.federation.FederationSpec;
-import kz.kacd.sso.realmcontroller.k8s.crd.model.federation.ldap.LdapGroupsMappingSpec;
-import kz.kacd.sso.realmcontroller.k8s.crd.model.federation.ldap.LdapSearchingSpec;
-import kz.kacd.sso.realmcontroller.k8s.crd.model.federation.ldap.LdapSpec;
+import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.federation.FederationSpec;
+import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.federation.ldap.LdapGroupsMappingSpec;
+import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.federation.ldap.LdapSearchingSpec;
+import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.federation.ldap.LdapSpec;
 import kz.kacd.sso.realmcontroller.k8s.model.SecretData;
 import kz.kacd.sso.realmcontroller.keycloak.model.LdapAttributeMapperBuilder;
 import kz.kacd.sso.realmcontroller.keycloak.model.LdapBuilder;

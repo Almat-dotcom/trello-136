@@ -1,9 +1,9 @@
 package kz.kacd.sso.realmcontroller.k8s.model;
 
 import io.fabric8.kubernetes.api.model.ObjectMetaBuilder;
-import kz.kacd.sso.realmcontroller.k8s.crd.Realm;
-import kz.kacd.sso.realmcontroller.k8s.crd.model.RealmSpec;
-import kz.kacd.sso.realmcontroller.k8s.crd.model.RealmStatus;
+import kz.kacd.sso.realmcontroller.k8s.crd.realm.Realm;
+import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.RealmSpec;
+import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.RealmStatus;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

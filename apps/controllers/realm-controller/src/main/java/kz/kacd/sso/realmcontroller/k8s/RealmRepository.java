@@ -2,8 +2,8 @@ package kz.kacd.sso.realmcontroller.k8s;
 
 import io.fabric8.kubernetes.client.Watcher;
 import io.fabric8.kubernetes.client.WatcherException;
-import kz.kacd.sso.realmcontroller.k8s.crd.Realm;
-import kz.kacd.sso.realmcontroller.k8s.crd.RealmList;
+import kz.kacd.sso.realmcontroller.k8s.crd.realm.Realm;
+import kz.kacd.sso.realmcontroller.k8s.crd.realm.RealmList;
 import kz.kacd.sso.realmcontroller.model.OperationResponse;
 import kz.kacd.sso.realmcontroller.k8s.model.KeycloakRealm;
 import lombok.RequiredArgsConstructor;

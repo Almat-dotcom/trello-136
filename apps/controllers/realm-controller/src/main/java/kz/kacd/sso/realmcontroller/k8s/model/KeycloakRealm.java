@@ -1,8 +1,8 @@
 package kz.kacd.sso.realmcontroller.k8s.model;
 
 import io.fabric8.kubernetes.client.Watcher;
-import kz.kacd.sso.realmcontroller.k8s.crd.Realm;
-import kz.kacd.sso.realmcontroller.k8s.crd.model.RealmStatus;
+import kz.kacd.sso.realmcontroller.k8s.crd.realm.Realm;
+import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.RealmStatus;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

@@ -1,7 +1,7 @@
 package kz.kacd.sso.realmcontroller.keycloak.model;
 
-import kz.kacd.sso.realmcontroller.k8s.crd.model.email.EmailAuthSpec;
-import kz.kacd.sso.realmcontroller.k8s.crd.model.email.EmailSpec;
+import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.email.EmailAuthSpec;
+import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.email.EmailSpec;
 import kz.kacd.sso.realmcontroller.k8s.model.SecretData;
 
 import java.util.HashMap;

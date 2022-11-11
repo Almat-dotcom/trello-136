@@ -1,6 +1,5 @@
 package kz.kacd.sso.realmcontroller.k8s;
 
-import io.fabric8.kubernetes.api.builder.Visitor;
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.api.model.SecretList;
 import io.fabric8.kubernetes.client.KubernetesClient;
@@ -8,12 +7,11 @@ import io.fabric8.kubernetes.client.dsl.MixedOperation;
 import io.fabric8.kubernetes.client.dsl.NamespaceableResource;
 import io.fabric8.kubernetes.client.dsl.NonNamespaceOperation;
 import io.fabric8.kubernetes.client.dsl.Resource;
-import kz.kacd.sso.realmcontroller.k8s.crd.Realm;
-import kz.kacd.sso.realmcontroller.k8s.crd.RealmList;
+import kz.kacd.sso.realmcontroller.k8s.crd.realm.Realm;
+import kz.kacd.sso.realmcontroller.k8s.crd.realm.RealmList;
 
 import java.util.concurrent.Callable;
 import java.util.function.Function;
-import java.util.function.UnaryOperator;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
