@@ -89,7 +89,11 @@ public class LdapBuilder {
         );
         result.put(BATCH_SIZE, List.of(defaulted(spec.getSync().getBatch(), 1_000).toString()));
         bindCreds(result, spec, secrets);
-        result.put(CACHE_POLICY, List.of(defaulted(spec.getCache().getPolicy(), LdapCacheSpec.Policies.DEFAULT).name()));
+        var cache = spec.getCache();
+        if (spec.getCache() == null) {
+            cache = new LdapCacheSpec();
+        }
+        result.put(CACHE_POLICY, List.of(defaulted(cache.getPolicy(), LdapCacheSpec.Policies.DEFAULT).name()));
         result.put(
                 CHANGED_SYNC_PERIOD,
                 List.of(

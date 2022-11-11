@@ -32,6 +32,7 @@ import static kz.kacd.sso.realmcontroller.util.ValueUtils.duration;
 public class RealmBuilder {
 
     private static final String ADMIN_EVENTS_EXPIRATION = "adminEventsExpiration";
+    private static final String FRONT_END_URL = "frontendUrl";
 
     private final RealmRepresentation target;
 
@@ -55,6 +56,14 @@ public class RealmBuilder {
         target.setDisplayName(defaulted(spec.getDisplayedName(), name));
         target.setDisplayNameHtml("<div class=\"kc-logo-text\"><span>" + target.getDisplayName() + "</span></div>");
         target.setSslRequired(convertSsl(defaulted(spec.getRequireSsl(), RealmSpec.SSL_EXTERNAL)));
+        if (target.getAttributes() == null) {
+            target.setAttributes(new HashMap<>());
+        }
+        if (spec.getFrontendUrl() != null) {
+            target.getAttributes().put(FRONT_END_URL, spec.getFrontendUrl());
+        } else {
+            target.getAttributes().remove(FRONT_END_URL);
+        }
         return this;
     }
 
