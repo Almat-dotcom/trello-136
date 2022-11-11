@@ -112,6 +112,9 @@ spec:
                       type: string
                   type: object
                 type: array
+              allowedGroup:
+                description: Strict authentication only for users in group
+                type: string
             type: object
           status:
             properties:

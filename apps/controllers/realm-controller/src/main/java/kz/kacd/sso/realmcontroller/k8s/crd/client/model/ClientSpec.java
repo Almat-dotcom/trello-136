@@ -32,6 +32,8 @@ public class ClientSpec {
             "List of the roles which defined inside client."
     )
     private List<ClientRole> roles;
+    @JsonPropertyDescription("Strict authentication only for users in group")
+    private String allowedGroup;
 
     public enum AdditionalAttributes {
         MIDDLE_NAME,
