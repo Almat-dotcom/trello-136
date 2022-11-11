@@ -1,0 +1,18 @@
+
+hostname: internal-dev.k8s-dev.kacd.kz
+
+ldap:
+  url: ldap://10.10.128.3:389
+  existingSecret: internal-sso-ldap-creds
+  dnKey: "dn"
+  passwordKey: "password"
+  usersDn: "OU=OU_Users,DC=tstcsdepo,DC=net"
+  groupsDn: "OU=keycloak,OU=OU_Groups,DC=tstcsdepo,DC=net"
+
+ingress:
+  serviceName: sso-keycloak
+  tls: true
+  secrets:
+    - name: keycloak-tls
+      key: tls.key
+      certificate: tls.crt

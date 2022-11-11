@@ -1,5 +1,6 @@
 stages:
   - apps
+  - realms
 
 build-apps:
   stage: apps
@@ -9,3 +10,12 @@ build-apps:
   rules:
     - changes:
       - apps/**/*
+
+realms:
+  stage: realms
+  trigger:
+    include: realms/.gitlab-ci.yml
+    strategy: depend
+  rules:
+    - changes: 
+      - realms/**/*

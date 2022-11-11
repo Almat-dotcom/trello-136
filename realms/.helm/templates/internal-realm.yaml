@@ -1,0 +1,103 @@
+apiVersion: sso.kacd.kz/v1beta1
+kind: Realm
+metadata:
+  name: internal
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: intenral-realm
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  # Отображаемое имя на странице авторизации
+  displayedName: KCSD
+  # Базовый URL для доступа к реалму (Важно! Для админки динамически не изменяются хосты)
+  frontendUrl: {{ printf "https://%s" .Values.hostname }}
+  # Любые запросы могут быть по HTTP
+  requireSsl: none
+  login:
+    email:
+      # Для того, чтобы конфликтов с LDAP не было, разрешается дублирование email-ов
+      duplicatesEmails: true
+      # Из-за дублирования email-ов, запрещается вход через email
+      loginWithEmail: false
+  # Настройки SMTP сервера для рассылки
+  email:
+    from: sso@kacd.kz
+    smtpHost: mail.kacd.kz
+    smtpPort: 5252
+    encryption: []
+  # Настройки тем для модулей входа, админки, профиля и почтовой рассылки
+  themes: 
+    login: keycloak
+    account: keycloak
+    admin: keycloak
+    email: keycloak
+  events:
+    # Список слушателей событий. Стандартный слушатель для логирования событий.
+    eventListeners: ["jboss-logging"]
+    # Включить события пользователей и хранить их 7 дней
+    userEvents:
+      saveEvents: true
+      expiration: 7d
+    # Включить события администрирования и хранить их 7 дней
+    adminEvents:
+      saveEvents: true
+      includeRepresentation: true
+      expiration: 7d
+  # Локализация на 2 языка
+  localization:
+    i17n: true
+    supportedLocales: ["en", "ru"]
+    defaultLocale: ru
+  security:
+    # Включить защиту от взлома пароля по методу brute force
+    bruteForce:
+      enabled: true
+      maxLoginFailures: 5
+  # Настройки федераций пользователей
+  federations:
+    # Интеграция с LDAP
+    ldap:
+      displayedName: "Kacd LDAP integration"
+      vendor: ACTIVE_DIRECTORY
+      connection:
+        url: {{ .Values.ldap.url }}
+        auth: 
+          existingSecret: {{ .Values.ldap.existingSecret }}
+          dnKey: {{ .Values.ldap.dnKey }}
+          passwordKey: {{ .Values.ldap.passwordKey }}
+      searching:
+        # Мод доступа к пользователям и на чтение, и на запись
+        mode: RW
+        # DN для поиска пользователей
+        usersDn: {{ .Values.ldap.usersDn }}
+        # В атрибуте cn хранится как имя пользователя, так и id
+        username: cn
+        uuid: cn
+        # Рекурсивно искать пользователей не только в указанном DN, но и во всех под директориях
+        scope: SUBTREE
+      sync:
+        # Импортировать всех пользователей в БД keycloak
+        importUsers: true
+        # Не нужно синхронизировать регистрации, так как keycloak не дает возможности правильно распределить пользователей по подкаталогам
+        syncRegistrations: false
+        # Количество пользователей, что будут вставлены в одну транзакцию
+        batch: 1000
+        # Включить полную синхронизацию каждый 2 часа
+        fullSync: true
+        fullSyncPeriod: 2h
+        # А также синхронизировать всех измененных пользователей каждую минуту
+        changedSync: true
+        changedSyncPeriod: 1m
+      advanced:
+        # Доверять адресам почты, что записаны в LDAP
+        trustEmail: true
+      # Добавить маппинг групп с LDAP в режиме Read-Write
+      groups:
+        dn: {{ .Values.ldap.groupsDn }}
+        hierarchy: true
+        mode: RW
