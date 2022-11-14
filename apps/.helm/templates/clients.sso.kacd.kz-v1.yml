@@ -81,6 +81,17 @@ spec:
                     - CONFIDENTIAL
                     - BEARER_ONLY
                     type: string
+                  clientExistingSecret:
+                    description: "If type of the client is confidential, it requires\
+                      \ client_secret to log in. clientExistingSecret is name of secret\
+                      \ wich contains this secret value. If no one has specified,\
+                      \ client_secret will be generated randomly."
+                    type: string
+                  clientSecretKey:
+                    description: "If type of the client is confidential, it requires\
+                      \ client_secret to log in. clientSecretKey specifies key of\
+                      \ the clientExistingSecret data wich contains secret value."
+                    type: string
                 type: object
               ldap:
                 description: Settings of the ldap roles mappings if ldap is configured

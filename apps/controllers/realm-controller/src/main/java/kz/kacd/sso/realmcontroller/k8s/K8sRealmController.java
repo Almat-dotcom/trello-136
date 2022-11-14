@@ -1,5 +1,6 @@
 package kz.kacd.sso.realmcontroller.k8s;
 
+import kz.kacd.sso.realmcontroller.k8s.model.K8sAction;
 import kz.kacd.sso.realmcontroller.k8s.model.K8sRealm;
 import kz.kacd.sso.realmcontroller.k8s.model.KeycloakRealm;
 import kz.kacd.sso.realmcontroller.k8s.model.SecretData;
@@ -16,7 +17,7 @@ import java.util.Map;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class K8sController {
+public class K8sRealmController {
 
     private final RealmRepository realms;
     private final SecretRepository secrets;
@@ -26,7 +27,7 @@ public class K8sController {
         return realms.watch()
                 .filter(KeycloakRealm::toApply)
                 .map(realm -> {
-                    if (realm.action() == KeycloakRealm.RealmAction.DELETED) {
+                    if (realm.action() == K8sAction.DELETED) {
                         return new K8sRealm(realm, new HashMap<>(), null);
                     }
 

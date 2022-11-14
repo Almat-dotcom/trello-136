@@ -6,6 +6,7 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import kz.kacd.sso.realmcontroller.k8s.crd.realm.Realm;
 import kz.kacd.sso.realmcontroller.k8s.crd.realm.RealmList;
 import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.RealmStatus;
+import kz.kacd.sso.realmcontroller.k8s.model.K8sAction;
 import kz.kacd.sso.realmcontroller.model.OperationResponse;
 import kz.kacd.sso.realmcontroller.k8s.model.KeycloakRealm;
 import org.junit.jupiter.api.BeforeEach;
@@ -85,7 +86,7 @@ class RealmRepositoryTest {
         var realm = new KeycloakRealm(
                 source,
                 RealmStatus.builder().state(RealmStatus.RealmState.APPLIED).build(),
-                KeycloakRealm.RealmAction.ADDED
+                K8sAction.ADDED
         );
         mockRealmListResource(client, () -> {
             var res = new RealmList();

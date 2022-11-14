@@ -1,6 +1,5 @@
 package kz.kacd.sso.realmcontroller.k8s.model;
 
-import io.fabric8.kubernetes.client.Watcher;
 import kz.kacd.sso.realmcontroller.k8s.crd.realm.Realm;
 import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.RealmStatus;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 public record KeycloakRealm(
         Realm source,
         RealmStatus newStatus,
-        RealmAction action
+        K8sAction action
 ) {
 
     public KeycloakRealm {
@@ -23,15 +22,15 @@ public record KeycloakRealm(
     }
 
     private Boolean notIgnoredActions() {
-        return action != RealmAction.BOOKMARK && action != RealmAction.ERROR;
+        return action != K8sAction.BOOKMARK && action != K8sAction.ERROR;
     }
 
     private Boolean newRealm() {
-        return action == RealmAction.ADDED && status() == null;
+        return action == K8sAction.ADDED && status() == null;
     }
 
     private Boolean modified() {
-        return endStates() && changedGeneration() && action == RealmAction.MODIFIED;
+        return endStates() && changedGeneration() && action == K8sAction.MODIFIED;
     }
 
     private Boolean endStates() {
@@ -44,7 +43,7 @@ public record KeycloakRealm(
     }
 
     private Boolean deleted() {
-        return action == RealmAction.DELETED;
+        return action == K8sAction.DELETED;
     }
 
     public String getName() {
@@ -195,15 +194,4 @@ public record KeycloakRealm(
         }
     }
 
-    public enum RealmAction {
-        ADDED,
-        MODIFIED,
-        DELETED,
-        ERROR,
-        BOOKMARK;
-
-        public static RealmAction from(Watcher.Action source) {
-            return RealmAction.valueOf(source.name());
-        }
-    }
 }

@@ -15,6 +15,17 @@ public class CapabilitySpec {
                     "which can't authenticate users at all, so, it only can receive bearer tokens."
     )
     private Type type;
+    @JsonPropertyDescription(
+            "If type of the client is confidential, it requires client_secret to log in. " +
+                    "clientExistingSecret is name of secret wich contains this secret value. " +
+                    "If no one has specified, client_secret will be generated randomly."
+    )
+    private String clientExistingSecret;
+    @JsonPropertyDescription(
+            "If type of the client is confidential, it requires client_secret to log in. " +
+                    "clientSecretKey specifies key of the clientExistingSecret data wich contains secret value."
+    )
+    private String clientSecretKey;
 
     public enum Type {
         /**

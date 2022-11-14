@@ -1,5 +1,6 @@
 package kz.kacd.sso.realmcontroller.keycloak;
 
+import kz.kacd.sso.realmcontroller.k8s.model.K8sAction;
 import kz.kacd.sso.realmcontroller.k8s.model.KeycloakRealm;
 import kz.kacd.sso.realmcontroller.k8s.model.SecretData;
 import kz.kacd.sso.realmcontroller.keycloak.model.Realm;
@@ -23,11 +24,11 @@ public class KeycloakRealmController {
     public OperationResponse<Boolean> apply(KeycloakRealm realm, Map<String, SecretData> secrets) {
         log.info("Applying realm {} into keycloak ...", realm.getName());
         var existingRes = repository.find(realm.getName());
-        if (realm.action() == KeycloakRealm.RealmAction.DELETED) {
+        if (realm.action() == K8sAction.DELETED) {
             return delete(existingRes);
         } else if (
-                realm.action() == KeycloakRealm.RealmAction.ADDED
-                        || realm.action() == KeycloakRealm.RealmAction.MODIFIED
+                realm.action() == K8sAction.ADDED
+                        || realm.action() == K8sAction.MODIFIED
         ) {
             return merge(existingRes, realm, secrets);
         } else {

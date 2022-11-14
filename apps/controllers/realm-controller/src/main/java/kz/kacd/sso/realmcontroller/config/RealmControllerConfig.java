@@ -1,6 +1,7 @@
 package kz.kacd.sso.realmcontroller.config;
 
 import kz.kacd.sso.realmcontroller.config.props.RealmControllerProps;
+import kz.kacd.sso.realmcontroller.k8s.ClientRepository;
 import kz.kacd.sso.realmcontroller.k8s.K8sClientFactory;
 import kz.kacd.sso.realmcontroller.k8s.RealmRepository;
 import kz.kacd.sso.realmcontroller.k8s.SecretRepository;
@@ -23,5 +24,10 @@ public class RealmControllerConfig {
     @Bean
     public RealmRepository realmRepository() {
         return new RealmRepository(props.getNamespace(), k8sClientFactory);
+    }
+
+    @Bean
+    public ClientRepository clientRepository() {
+        return new ClientRepository(props.getNamespace(), k8sClientFactory);
     }
 }

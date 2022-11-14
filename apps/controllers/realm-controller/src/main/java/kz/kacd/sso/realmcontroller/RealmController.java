@@ -1,8 +1,8 @@
 package kz.kacd.sso.realmcontroller;
 
-import kz.kacd.sso.realmcontroller.k8s.K8sController;
+import kz.kacd.sso.realmcontroller.k8s.K8sRealmController;
+import kz.kacd.sso.realmcontroller.k8s.model.K8sAction;
 import kz.kacd.sso.realmcontroller.k8s.model.K8sRealm;
-import kz.kacd.sso.realmcontroller.k8s.model.KeycloakRealm;
 import kz.kacd.sso.realmcontroller.keycloak.KeycloakRealmController;
 import kz.kacd.sso.realmcontroller.model.OperationResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import javax.annotation.PostConstruct;
 @RequiredArgsConstructor
 public class RealmController {
 
-    private final K8sController k8s;
+    private final K8sRealmController k8s;
     private final KeycloakRealmController keycloak;
 
     @PostConstruct
@@ -38,7 +38,7 @@ public class RealmController {
             k8s.save(realm.realm().detected().applying().failed(realm.e()));
         }
 
-        if (realm.realm().action() == KeycloakRealm.RealmAction.DELETED) {
+        if (realm.realm().action() == K8sAction.DELETED) {
             var res = keycloak.apply(realm.realm(), realm.secrets());
             if (res instanceof OperationResponse.Failure<Boolean> f) {
                 log.warn("Cannot delete realm: {}", f.getMessage());

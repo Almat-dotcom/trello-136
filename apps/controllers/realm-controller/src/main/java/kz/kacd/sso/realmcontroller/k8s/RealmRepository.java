@@ -4,6 +4,7 @@ import io.fabric8.kubernetes.client.Watcher;
 import io.fabric8.kubernetes.client.WatcherException;
 import kz.kacd.sso.realmcontroller.k8s.crd.realm.Realm;
 import kz.kacd.sso.realmcontroller.k8s.crd.realm.RealmList;
+import kz.kacd.sso.realmcontroller.k8s.model.K8sAction;
 import kz.kacd.sso.realmcontroller.model.OperationResponse;
 import kz.kacd.sso.realmcontroller.k8s.model.KeycloakRealm;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +55,7 @@ public class RealmRepository {
             }
             return OperationResponse.success(
                     resource.getItems().stream()
-                            .map(it -> new KeycloakRealm(it, null, KeycloakRealm.RealmAction.MODIFIED))
+                            .map(it -> new KeycloakRealm(it, null, K8sAction.MODIFIED))
                             .toList()
             );
         } catch (Exception e) {
@@ -72,7 +73,7 @@ public class RealmRepository {
                 client.resources(Realm.class, RealmList.class).watch(new Watcher<>() {
                     @Override
                     public void eventReceived(Action action, Realm resource) {
-                        sink.next(new KeycloakRealm(resource, null, KeycloakRealm.RealmAction.from(action)));
+                        sink.next(new KeycloakRealm(resource, null, K8sAction.from(action)));
                     }
 
                     @Override
@@ -88,6 +89,6 @@ public class RealmRepository {
                 log.error("Error on watching realms!", e);
                 sink.error(e);
             }
-        }).doOnCancel(client::close);
+        }).doOnCancel(client::close).doOnComplete(client::close);
     }
 }

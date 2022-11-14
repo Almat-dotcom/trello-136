@@ -1,0 +1,22 @@
+stages:
+  - dev-deploy
+
+dev-deploy-realms:
+  stage: dev-deploy
+  image: nexus.kacd.kz:5000/core2471/docker-helm:master-632
+  only:
+    - dev
+  environment:
+    name: dev
+  before_script:
+    - cd clients
+    - export RELEASE_NAME="clients-${CI_PROJECT_NAME}"
+    - mkdir -p /etc/deploy && export KUBECONFIG=/etc/deploy/config
+    - echo ${KUBE_K8S_DEV_CONFIG} | base64 -d > /etc/deploy/config
+  script:
+    - |-
+      helm upgrade --install ${RELEASE_NAME} ./.helm \
+        --create-namespace --namespace="${CI_PROJECT_NAME}" \
+        -f ./.helm/dev.yaml
+  tags:
+    - global_runner_2

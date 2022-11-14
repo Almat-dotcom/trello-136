@@ -13,7 +13,7 @@ class KeycloakRealmTest {
 
     @Test
     void should_change_state_to_detected() {
-        var realm = new KeycloakRealm(testSource(), null, KeycloakRealm.RealmAction.ADDED);
+        var realm = new KeycloakRealm(testSource(), null, K8sAction.ADDED);
 
         var actual = realm.detected();
 
@@ -25,7 +25,7 @@ class KeycloakRealmTest {
         var source = testSource();
         source.setStatus(RealmStatus.builder().state(RealmStatus.RealmState.APPLYING).build());
 
-        var realm = new KeycloakRealm(source, null, KeycloakRealm.RealmAction.ADDED);
+        var realm = new KeycloakRealm(source, null, K8sAction.ADDED);
 
         assertThrows(
                 IllegalStateException.class,
@@ -35,7 +35,7 @@ class KeycloakRealmTest {
 
     @Test
     void should_change_state_to_applying() {
-        var realm = new KeycloakRealm(testSource(), null, KeycloakRealm.RealmAction.ADDED)
+        var realm = new KeycloakRealm(testSource(), null, K8sAction.ADDED)
                 .detected();
 
         var actual = realm.applying();
@@ -45,7 +45,7 @@ class KeycloakRealmTest {
 
     @Test
     void should_reject_applying_state_change_if_realm_is_not_detected() {
-        var realm = new KeycloakRealm(testSource(), null, KeycloakRealm.RealmAction.ADDED);
+        var realm = new KeycloakRealm(testSource(), null, K8sAction.ADDED);
 
         assertThrows(
                 IllegalStateException.class,
@@ -55,7 +55,7 @@ class KeycloakRealmTest {
 
     @Test
     void should_change_state_to_applied() {
-        var realm = new KeycloakRealm(testSource(), null, KeycloakRealm.RealmAction.ADDED)
+        var realm = new KeycloakRealm(testSource(), null, K8sAction.ADDED)
                 .detected()
                 .applying();
 
@@ -66,7 +66,7 @@ class KeycloakRealmTest {
 
     @Test
     void should_reject_applied_state_change_if_realm_is_not_in_applying_state() {
-        var realm = new KeycloakRealm(testSource(), null, KeycloakRealm.RealmAction.ADDED)
+        var realm = new KeycloakRealm(testSource(), null, K8sAction.ADDED)
                 .detected();
 
         assertThrows(
@@ -77,7 +77,7 @@ class KeycloakRealmTest {
 
     @Test
     void should_change_state_to_failed() {
-        var realm = new KeycloakRealm(testSource(), null, KeycloakRealm.RealmAction.ADDED)
+        var realm = new KeycloakRealm(testSource(), null, K8sAction.ADDED)
                 .detected()
                 .applying();
 
@@ -88,7 +88,7 @@ class KeycloakRealmTest {
 
     @Test
     void should_reject_failed_state_change_if_realm_is_not_in_applying_state() {
-        var realm = new KeycloakRealm(testSource(), null, KeycloakRealm.RealmAction.ADDED)
+        var realm = new KeycloakRealm(testSource(), null, K8sAction.ADDED)
                 .detected();
 
         assertThrows(
