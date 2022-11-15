@@ -1,4 +1,4 @@
-package kz.kacd.sso.realmcontroller.keycloak.model;
+package kz.kacd.sso.realmcontroller.keycloak.component.model;
 
 import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.federation.ldap.LdapGroupsMappingSpec;
 import org.keycloak.common.util.MultivaluedHashMap;
@@ -9,7 +9,7 @@ import java.util.List;
 import static kz.kacd.sso.realmcontroller.util.ValueUtils.defaulted;
 
 public class LdapGroupMapperBuilder {
-    private static final String PROVIDER_ID = "group-ldap-mapper";
+    public static final String PROVIDER_ID = "group-ldap-mapper";
     private static final String PROVIDER_TYPE = "org.keycloak.storage.ldap.mappers.LDAPStorageMapper";
     private static final String DROP_NON_EXISTING = "drop.non.existing.groups.during.sync";
     private static final String GROUP_NAME_ATTR = "group.name.ldap.attribute";

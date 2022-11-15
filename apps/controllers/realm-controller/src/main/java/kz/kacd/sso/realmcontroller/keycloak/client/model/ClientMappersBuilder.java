@@ -1,0 +1,80 @@
+package kz.kacd.sso.realmcontroller.keycloak.client.model;
+
+import org.keycloak.representations.idm.ProtocolMapperRepresentation;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+public class ClientMappersBuilder {
+    private static final String MIDDLE_NAME_NAME = "middleName";
+    private static final String OIDC = "openid-connect";
+    private static final String ATTR_MAPPER = "oidc-usermodel-attribute-mapper";
+    private static final String ADD_TO_ACCESS_TOKEN = "access.token.claim";
+    private static final String CLAIM_NAME = "claim.name";
+    private static final String ADD_TO_ID_TOKEN = "id.token.claim";
+    private static final String TYPE = "jsonType.label";
+    private static final String STRING = "String";
+    private static final String USER_ATTR = "user.attribute";
+    private static final String ADD_TO_USER_INFO = "userinfo.token.claim";
+    private static final String GROUPS_NAME = "group";
+    private static final String GROUP_MAPPER = "oidc-group-membership-mapper";
+    private static final String ADD_FULL_PATH = "full.path";
+    private static final String LOCALE_NAME = "locale";
+
+    private final List<ProtocolMapperRepresentation> target = new ArrayList<>();
+
+    public void withMiddleName() {
+        var result = new ProtocolMapperRepresentation();
+        result.setName(MIDDLE_NAME_NAME);
+        result.setProtocol(OIDC);
+        result.setProtocolMapper(ATTR_MAPPER);
+        result.setConfig(Map.of(
+                ADD_TO_ACCESS_TOKEN, "false",
+                CLAIM_NAME, MIDDLE_NAME_NAME,
+                ADD_TO_ID_TOKEN, "true",
+                TYPE, STRING,
+                USER_ATTR, MIDDLE_NAME_NAME,
+                ADD_TO_USER_INFO, "true"
+        ));
+
+        target.add(result);
+    }
+
+    public void withGroups() {
+        var result = new ProtocolMapperRepresentation();
+        result.setName(GROUPS_NAME);
+        result.setProtocol(OIDC);
+        result.setProtocolMapper(GROUP_MAPPER);
+        result.setConfig(Map.of(
+                ADD_TO_ACCESS_TOKEN, "true",
+                CLAIM_NAME, GROUPS_NAME,
+                ADD_TO_ID_TOKEN, "true",
+                ADD_TO_USER_INFO, "true",
+                ADD_FULL_PATH, "false"
+        ));
+
+        target.add(result);
+    }
+
+    public void withLocale() {
+        var result = new ProtocolMapperRepresentation();
+        result.setName(LOCALE_NAME);
+        result.setProtocol(OIDC);
+        result.setProtocolMapper(ATTR_MAPPER);
+        result.setConfig(Map.of(
+                ADD_TO_ACCESS_TOKEN, "false",
+                CLAIM_NAME, LOCALE_NAME,
+                ADD_TO_ID_TOKEN, "true",
+                TYPE, STRING,
+                USER_ATTR, LOCALE_NAME,
+                ADD_TO_USER_INFO, "true"
+        ));
+
+        target.add(result);
+    }
+
+    public List<ProtocolMapperRepresentation> build() {
+        return target;
+    }
+}

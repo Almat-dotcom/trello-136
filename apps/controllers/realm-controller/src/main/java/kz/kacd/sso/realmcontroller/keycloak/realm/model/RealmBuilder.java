@@ -1,4 +1,4 @@
-package kz.kacd.sso.realmcontroller.keycloak.model;
+package kz.kacd.sso.realmcontroller.keycloak.realm.model;
 
 import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.RealmSpec;
 import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.email.EmailSpec;
@@ -17,6 +17,7 @@ import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.themes.ThemesSpec;
 import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.token.TokensSpec;
 import kz.kacd.sso.realmcontroller.k8s.model.KeycloakRealm;
 import kz.kacd.sso.realmcontroller.k8s.model.SecretData;
+import kz.kacd.sso.realmcontroller.keycloak.Realm;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.representations.idm.RealmRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;

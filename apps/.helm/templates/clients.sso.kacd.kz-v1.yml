@@ -49,13 +49,6 @@ spec:
                     items:
                       type: string
                     type: array
-                  validLogoutRedirectUris:
-                    description: List of valid redirect uris after successful logout.
-                      If you want to use the same uris as validRedirectUris specify
-                      single '+' valued in this array.
-                    items:
-                      type: string
-                    type: array
                   webOrigins:
                     description: List of web origins which will be permitted to access
                       keycloak. It specifies CORS policies. You can just include single
@@ -116,7 +109,9 @@ spec:
                 description: List of the roles which defined inside client.
                 items:
                   properties:
-                    Name of the role. This name will be propagated into tokens.:
+                    name:
+                      description: Name of the role. This name will be propagated
+                        into tokens.
                       type: string
                     description:
                       description: Description of the role. It can be multiline string.

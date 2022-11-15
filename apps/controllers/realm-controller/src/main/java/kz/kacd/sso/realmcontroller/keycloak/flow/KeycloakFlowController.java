@@ -1,6 +1,6 @@
-package kz.kacd.sso.realmcontroller.keycloak;
+package kz.kacd.sso.realmcontroller.keycloak.flow;
 
-import kz.kacd.sso.realmcontroller.keycloak.model.Realm;
+import kz.kacd.sso.realmcontroller.keycloak.Realm;
 import kz.kacd.sso.realmcontroller.model.OperationResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ public class KeycloakFlowController {
     private final KeycloakFlowRepository repository;
 
     public OperationResponse<Boolean> createRestrictedFlow(Realm realm) {
-        log.debug("Creating restricted flow for realm {} ...", realm.getName());
+        log.debug("Creating restricted flow for realm {} ...", realm.name());
         var flowRes = repository.find(realm, Realm.RESTRICTED_AUTH_FLOW);
         if (flowRes instanceof OperationResponse.Failure<?> f) {
             if (f.getKind() == OperationResponse.K8sFailures.NOT_FOUND) {
@@ -40,5 +40,10 @@ public class KeycloakFlowController {
         } else {
             return flowRes.map(it -> true);
         }
+    }
+
+    public OperationResponse<AuthenticationFlowRepresentation> get(Realm realm, String alias) {
+        log.debug("Getting flow {} in realm {} ...", alias, realm.name());
+        return repository.find(realm, alias);
     }
 }

@@ -1,5 +1,6 @@
-package kz.kacd.sso.realmcontroller.keycloak.model;
+package kz.kacd.sso.realmcontroller.keycloak;
 
+import kz.kacd.sso.realmcontroller.keycloak.realm.model.RealmBuilder;
 import org.keycloak.representations.idm.RealmRepresentation;
 
 public record Realm(RealmRepresentation representation) {
@@ -12,7 +13,11 @@ public record Realm(RealmRepresentation representation) {
         return new RealmBuilder(rep);
     }
 
-    public String getName() {
+    public String id() {
+        return representation.getId();
+    }
+
+    public String name() {
         return representation.getRealm();
     }
 

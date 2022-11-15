@@ -1,6 +1,7 @@
-package kz.kacd.sso.realmcontroller.keycloak;
+package kz.kacd.sso.realmcontroller.keycloak.flow;
 
-import kz.kacd.sso.realmcontroller.keycloak.model.Realm;
+import kz.kacd.sso.realmcontroller.keycloak.KeycloakClientFactory;
+import kz.kacd.sso.realmcontroller.keycloak.Realm;
 import kz.kacd.sso.realmcontroller.model.OperationResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,13 +23,13 @@ public class KeycloakFlowRepository {
             String fromAlias,
             String toAlias
     ) {
-        log.debug("Creating new flow {} as a copy from {} in realm {} ...", toAlias, fromAlias, realm.getName());
+        log.debug("Creating new flow {} as a copy from {} in realm {} ...", toAlias, fromAlias, realm.name());
         try (var client = factory.create()) {
             var existing = find(realm, fromAlias);
             if (existing instanceof OperationResponse.Failure) {
                 return existing;
             }
-            var res = client.realm(realm.getName()).flows().copy(fromAlias, Map.of("newName", toAlias));
+            var res = client.realm(realm.name()).flows().copy(fromAlias, Map.of("newName", toAlias));
             if ((res.getStatus() / 100) == 2) {
                 return find(realm, toAlias);
             } else {
@@ -41,19 +42,19 @@ public class KeycloakFlowRepository {
     }
 
     public OperationResponse<AuthenticationFlowRepresentation> find(Realm realm, String alias) {
-        log.debug("Finding authentication flow in realm {} by alias {} ...", realm.getName(), alias);
+        log.debug("Finding authentication flow in realm {} by alias {} ...", realm.name(), alias);
         try (var client = factory.create()) {
-            var res = client.realm(realm.getName()).flows()
+            var res = client.realm(realm.name()).flows()
                     .getFlows()
                     .stream()
                     .filter(it -> it.getAlias() != null && it.getAlias().equals(alias))
                     .findFirst();
             if (res.isEmpty()) {
-                return OperationResponse.notFound("Auth flow " + alias + " not found in realm " + realm.getName());
+                return OperationResponse.notFound("Auth flow " + alias + " not found in realm " + realm.name());
             }
             return OperationResponse.success(res.get());
         } catch (Exception e) {
-            log.error("Error on retrieving flow {} in realm {}!", alias, realm.getName(), e);
+            log.error("Error on retrieving flow {} in realm {}!", alias, realm.name(), e);
             return OperationResponse.internalError(e.getMessage());
         }
     }
@@ -62,9 +63,9 @@ public class KeycloakFlowRepository {
             Realm realm,
             AuthenticationExecutionRepresentation execution
     ) {
-        log.debug("Adding execution {} on realm {} ...", execution.getAuthenticator(), realm.getName());
+        log.debug("Adding execution {} on realm {} ...", execution.getAuthenticator(), realm.name());
         try (var client = factory.create()) {
-            var res = client.realm(realm.getName()).flows().addExecution(execution);
+            var res = client.realm(realm.name()).flows().addExecution(execution);
             if (res.getStatus() / 100 == 2) {
                 return OperationResponse.success(true);
             } else {

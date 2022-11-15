@@ -1,6 +1,7 @@
-package kz.kacd.sso.realmcontroller.keycloak;
+package kz.kacd.sso.realmcontroller.keycloak.realm;
 
-import kz.kacd.sso.realmcontroller.keycloak.model.Realm;
+import kz.kacd.sso.realmcontroller.keycloak.KeycloakClientFactory;
+import kz.kacd.sso.realmcontroller.keycloak.Realm;
 import kz.kacd.sso.realmcontroller.model.OperationResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +15,8 @@ public class KeycloakRealmRepository {
     private final KeycloakClientFactory factory;
 
     public OperationResponse<Realm> save(Realm realm) {
-        log.debug("Saving realm {} ...", realm.getName());
-        if (find(realm.getName()) instanceof OperationResponse.Success<Realm>) {
+        log.debug("Saving realm {} ...", realm.name());
+        if (find(realm.name()) instanceof OperationResponse.Success<Realm>) {
             return update(realm);
         } else {
             return create(realm);
@@ -23,10 +24,10 @@ public class KeycloakRealmRepository {
     }
 
     private OperationResponse<Realm> create(Realm realm) {
-        log.debug("Creating new realm {} ...", realm.getName());
+        log.debug("Creating new realm {} ...", realm.name());
         try (var client = factory.create()) {
             client.realms().create(realm.representation());
-            return find(realm.getName());
+            return find(realm.name());
         } catch (Exception e) {
             log.error("Error on creating new realm!", e);
             return OperationResponse.internalError(e.getMessage());
@@ -34,12 +35,12 @@ public class KeycloakRealmRepository {
     }
 
     private OperationResponse<Realm> update(Realm realm) {
-        log.debug("Updating existing realm {} ...", realm.getName());
+        log.debug("Updating existing realm {} ...", realm.name());
         try (var client = factory.create()) {
-            client.realm(realm.getName()).update(realm.representation());
-            return find(realm.getName());
+            client.realm(realm.name()).update(realm.representation());
+            return find(realm.name());
         } catch (Exception e) {
-            log.error("Error on updating realm {} ...", realm.getName());
+            log.error("Error on updating realm {} ...", realm.name());
             return OperationResponse.internalError(e.getMessage());
         }
     }
@@ -60,12 +61,12 @@ public class KeycloakRealmRepository {
     }
 
     public OperationResponse<Boolean> delete(Realm realm) {
-        log.debug("Deleting realm {} ...", realm.getName());
+        log.debug("Deleting realm {} ...", realm.name());
         try (var client = factory.create()) {
-            client.realm(realm.getName()).remove();
+            client.realm(realm.name()).remove();
             return OperationResponse.success(true);
         } catch (Exception e) {
-            log.error("Error on deleting realm {} ...", realm.getName(), e);
+            log.error("Error on deleting realm {} ...", realm.name(), e);
             return OperationResponse.internalError(e.getMessage());
         }
     }

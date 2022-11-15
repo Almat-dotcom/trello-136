@@ -1,4 +1,4 @@
-package kz.kacd.sso.realmcontroller.keycloak.model;
+package kz.kacd.sso.realmcontroller.keycloak.component.model;
 
 import org.keycloak.common.util.MultivaluedHashMap;
 import org.keycloak.representations.idm.ComponentRepresentation;

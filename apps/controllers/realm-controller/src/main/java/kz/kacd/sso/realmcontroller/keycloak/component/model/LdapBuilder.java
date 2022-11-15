@@ -1,4 +1,4 @@
-package kz.kacd.sso.realmcontroller.keycloak.model;
+package kz.kacd.sso.realmcontroller.keycloak.component.model;
 
 import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.federation.ldap.*;
 import kz.kacd.sso.realmcontroller.k8s.model.SecretData;
@@ -12,7 +12,7 @@ import static kz.kacd.sso.realmcontroller.util.ValueUtils.defaulted;
 import static kz.kacd.sso.realmcontroller.util.ValueUtils.defaultedPeriod;
 
 public class LdapBuilder {
-    private static final String LDAP_PROVIDER_ID = "ldap";
+    public static final String LDAP_PROVIDER_ID = "ldap";
     private static final String LDAP_PROVIDER_TYPE = "org.keycloak.storage.UserStorageProvider";
     private static final String ALLOW_KERBEROS_AUTH = "allowKerberosAuthentication";
     private static final String AUTH_TYPE = "authType";

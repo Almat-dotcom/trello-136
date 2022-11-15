@@ -1,14 +1,15 @@
-package kz.kacd.sso.realmcontroller.keycloak;
+package kz.kacd.sso.realmcontroller.keycloak.component;
 
 import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.federation.FederationSpec;
 import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.federation.ldap.LdapGroupsMappingSpec;
 import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.federation.ldap.LdapSearchingSpec;
 import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.federation.ldap.LdapSpec;
 import kz.kacd.sso.realmcontroller.k8s.model.SecretData;
-import kz.kacd.sso.realmcontroller.keycloak.model.LdapAttributeMapperBuilder;
-import kz.kacd.sso.realmcontroller.keycloak.model.LdapBuilder;
-import kz.kacd.sso.realmcontroller.keycloak.model.LdapGroupMapperBuilder;
-import kz.kacd.sso.realmcontroller.keycloak.model.Realm;
+import kz.kacd.sso.realmcontroller.keycloak.component.model.LdapAttributeMapperBuilder;
+import kz.kacd.sso.realmcontroller.keycloak.component.model.LdapBuilder;
+import kz.kacd.sso.realmcontroller.keycloak.component.model.LdapGroupMapperBuilder;
+import kz.kacd.sso.realmcontroller.keycloak.component.model.LdapRoleMapperBuilder;
+import kz.kacd.sso.realmcontroller.keycloak.Realm;
 import kz.kacd.sso.realmcontroller.model.OperationResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -149,5 +150,48 @@ public class KeycloakFederationController {
                         .withSpec(spec)
                         .build()
         ).map(it -> true);
+    }
+
+
+    public OperationResponse<Boolean> importGroups(Realm realm) {
+        log.debug("Importing groups into keycloak ...");
+        var ldap = repository.find(realm, LdapBuilder.LDAP_PROVIDER_ID);
+        if (ldap instanceof OperationResponse.Failure<ComponentRepresentation>) {
+            return ldap.map(it -> true);
+        }
+        var groups = repository.find(
+                realm,
+                ((OperationResponse.Success<ComponentRepresentation>) ldap).getData().getId(),
+                LdapGroupMapperBuilder.PROVIDER_ID
+        );
+        if (groups instanceof OperationResponse.Failure<ComponentRepresentation>) {
+            return groups.map(it -> true);
+        }
+
+        return repository.sync(realm, ((OperationResponse.Success<ComponentRepresentation>) groups).getData(), true);
+    }
+
+    public OperationResponse<ComponentRepresentation> getLdap(Realm realm) {
+        return repository.find(realm, LdapBuilder.LDAP_PROVIDER_ID);
+    }
+
+    public OperationResponse<ComponentRepresentation> addLdapRoleMapper(
+            Realm realm,
+            String parentId,
+            String clientId,
+            String dn
+    ) {
+        log.debug("Adding ldap role mapper to realm {} and clientId {} ...", realm.name(), clientId);
+        return repository.save(
+                realm,
+                new LdapRoleMapperBuilder(parentId)
+                        .withClientAndDn(clientId, dn)
+                        .build()
+        );
+    }
+
+    public OperationResponse<Boolean> sync(Realm realm, ComponentRepresentation component, boolean reversed) {
+        log.debug("Syncing for components {} of realm {} ...", component.getName(), realm.name());
+        return repository.sync(realm, component, reversed);
     }
 }

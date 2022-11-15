@@ -22,11 +22,6 @@ public class ClientAccessSpec {
     )
     private List<String> validRedirectUris;
     @JsonPropertyDescription(
-            "List of valid redirect uris after successful logout. If you want to use the same uris as validRedirectUris" +
-                    " specify single '+' valued in this array."
-    )
-    private List<String> validLogoutRedirectUris;
-    @JsonPropertyDescription(
             "List of web origins which will be permitted to access keycloak. It specifies CORS policies." +
                     " You can just include single element '+' to include in this list all origins from validRedirectUris."
     )

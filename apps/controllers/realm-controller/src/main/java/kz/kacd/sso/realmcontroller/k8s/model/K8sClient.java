@@ -40,6 +40,10 @@ public record K8sClient(
         return action == K8sAction.DELETED && newStatus.getState() == ClientStatus.State.APPLIED;
     }
 
+    public String realmName() {
+        return source.getSpec().getRealm();
+    }
+
     public String name() {
         return source.getMetadata().getName();
     }
