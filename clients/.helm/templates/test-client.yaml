@@ -13,10 +13,7 @@ metadata:
   {{- end }}
 spec:
   displayedName: "My Test Client"
-  description: |-
-    This is very extensive description 
-    of the Test client. 
-    Please, I'm serious!
+  description: For test purposes only!
   realm: internal
   access:
     rootUrl: http://example.com
