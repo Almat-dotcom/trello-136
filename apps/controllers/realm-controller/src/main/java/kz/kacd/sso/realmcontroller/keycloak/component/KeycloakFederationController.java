@@ -5,17 +5,18 @@ import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.federation.ldap.LdapGroup
 import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.federation.ldap.LdapSearchingSpec;
 import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.federation.ldap.LdapSpec;
 import kz.kacd.sso.realmcontroller.k8s.model.SecretData;
+import kz.kacd.sso.realmcontroller.keycloak.Realm;
 import kz.kacd.sso.realmcontroller.keycloak.component.model.LdapAttributeMapperBuilder;
 import kz.kacd.sso.realmcontroller.keycloak.component.model.LdapBuilder;
 import kz.kacd.sso.realmcontroller.keycloak.component.model.LdapGroupMapperBuilder;
 import kz.kacd.sso.realmcontroller.keycloak.component.model.LdapRoleMapperBuilder;
-import kz.kacd.sso.realmcontroller.keycloak.Realm;
 import kz.kacd.sso.realmcontroller.model.OperationResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.representations.idm.ComponentRepresentation;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -188,6 +189,25 @@ public class KeycloakFederationController {
                         .withClientAndDn(clientId, dn)
                         .build()
         );
+    }
+
+    public OperationResponse<Boolean> deleteLdapRoleMapper(
+            Realm realm,
+            String client
+    ) {
+        var res = repository.findAll(realm, LdapRoleMapperBuilder.PROVIDER_ID);
+        if (res instanceof OperationResponse.Failure<List<ComponentRepresentation>>) {
+            return res.map(it -> true);
+        }
+        var mapper = ((OperationResponse.Success<List<ComponentRepresentation>>) res)
+                .getData()
+                .stream()
+                .filter(it -> it.getName().startsWith(client))
+                .findFirst();
+        if (mapper.isEmpty()) {
+            return OperationResponse.notFound("Mapper for client " + client + " in realm " + realm.name() + " not found!");
+        }
+        return repository.delete(realm, mapper.get().getId());
     }
 
     public OperationResponse<Boolean> sync(Realm realm, ComponentRepresentation component, boolean reversed) {

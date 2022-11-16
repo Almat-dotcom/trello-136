@@ -17,11 +17,11 @@ public class ClientStatus {
     @JsonPropertyDescription("Description of the state")
     private String message;
     @JsonPropertyDescription("Last applied generation")
-    private Integer generation;
+    private Long generation;
     @JsonPropertyDescription("Time of the last try to apply client")
     private String lastApplication;
     @JsonPropertyDescription("Time to backoff in seconds")
-    private Integer backoffSeconds;
+    private Long backoffSeconds;
 
     public enum State {
         /**

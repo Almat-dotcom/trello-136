@@ -1,6 +1,5 @@
 package kz.kacd.sso.realmcontroller;
 
-import kz.kacd.sso.realmcontroller.k8s.K8sClientController;
 import kz.kacd.sso.realmcontroller.k8s.K8sRealmController;
 import kz.kacd.sso.realmcontroller.k8s.model.K8sAction;
 import kz.kacd.sso.realmcontroller.k8s.model.K8sRealm;
@@ -19,7 +18,6 @@ import javax.annotation.PostConstruct;
 public class RealmController {
 
     private final K8sRealmController k8sRealms;
-    private final K8sClientController k8sClients;
     private final KeycloakRealmController keycloak;
 
     @PostConstruct
@@ -27,7 +25,7 @@ public class RealmController {
         log.info("Checking config for all realms ...");
         k8sRealms.all().forEach(this::onNext);
         log.info("Starting watch of realms ...");
-        k8sRealms.watch().subscribeOn(Schedulers.single())
+        k8sRealms.watch().subscribeOn(Schedulers.newSingle("realm-controller"))
                 .subscribe(
                         this::onNext,
                         this::onError,

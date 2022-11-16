@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.keycloak.representations.idm.ComponentRepresentation;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -112,6 +114,22 @@ public class KeycloakComponentRepository {
         }
     }
 
+    public OperationResponse<List<ComponentRepresentation>> findAll(Realm realm, String providerId) {
+        log.debug("Finding all components in realm {} with providerId {} ...", realm.name(), providerId);
+        try (var keycloak = factory.create()) {
+            var result = keycloak.realm(realm.name())
+                    .components()
+                    .query()
+                    .stream()
+                    .filter(it -> it.getParentId() != null && it.getProviderId().equals(providerId))
+                    .toList();
+            return OperationResponse.success(result);
+        } catch (Exception e) {
+            log.error("Error on listing all components {} in realm {}!", providerId, realm.name(), e);
+            return OperationResponse.internalError(e.getMessage());
+        }
+    }
+
     public OperationResponse<Boolean> sync(Realm realm, ComponentRepresentation component, boolean reversed) {
         log.debug("Syncing component {} in realm {} ...", component.getName(), realm.name());
         try {
@@ -119,6 +137,17 @@ public class KeycloakComponentRepository {
             return OperationResponse.success(true);
         } catch (Exception e) {
             log.error("Error on syncing component {} in realm {}!", component.getName(), realm.name(), e);
+            return OperationResponse.internalError(e.getMessage());
+        }
+    }
+
+    public OperationResponse<Boolean> delete(Realm realm, String id) {
+        log.debug("Deleting component {} in realm {} ...", id, realm.name());
+        try (var keycloak = factory.create()) {
+            keycloak.realm(realm.name()).components().component(id).remove();
+            return OperationResponse.success(true);
+        } catch (Exception e) {
+            log.error("Error on delete component {} in realm {}!", id, realm.name(), e);
             return OperationResponse.internalError(e.getMessage());
         }
     }

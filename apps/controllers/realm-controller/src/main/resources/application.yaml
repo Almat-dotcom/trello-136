@@ -7,7 +7,3 @@ realm:
   user: admin
   # Password of admin user of keycloak
   password: admin
-
-logging:
-  level:
-    root: debug

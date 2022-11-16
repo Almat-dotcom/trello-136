@@ -34,7 +34,7 @@ public class K8sClientController {
                         var secrets = findSecrets(it);
                         return OperationResponse.success(it.withSecrets(secrets));
                     } catch (Exception e) {
-                        return OperationResponse.internalError(e.getMessage());
+                        return OperationResponse.internalError(e.getMessage(), it);
                     }
                 });
     }
@@ -48,13 +48,14 @@ public class K8sClientController {
                     var secrets = findSecrets(it);
                     return OperationResponse.success(it.withSecrets(secrets));
                 } catch (Exception e) {
-                    return OperationResponse.<K8sClient>internalError(e.getMessage());
+                    return OperationResponse.<K8sClient>internalError(e.getMessage(), it);
                 }
             }).toList();
         } else if (result instanceof OperationResponse.Failure<?> f && f.getKind() == OperationResponse.K8sFailures.NOT_FOUND) {
             log.info("No clients found!");
             return List.of();
         } else {
+            assert result instanceof OperationResponse.Failure<?>;
             throw new RuntimeException(((OperationResponse.Failure<?>) result).getMessage());
         }
     }

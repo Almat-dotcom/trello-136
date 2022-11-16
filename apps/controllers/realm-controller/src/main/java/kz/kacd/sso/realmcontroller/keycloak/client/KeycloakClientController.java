@@ -42,6 +42,7 @@ public class KeycloakClientController {
      */
     public OperationResponse<Client> apply(Realm realm, K8sClient source) {
         if (source.action() == K8sAction.DELETED) {
+            federations.deleteLdapRoleMapper(realm, source.name());
             return repository.delete(realm.name(), source.name()).map(it -> null);
         }
 

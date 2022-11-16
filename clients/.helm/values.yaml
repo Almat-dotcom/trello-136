@@ -1,0 +1,14 @@
+#
+# Override namespace of the release
+#
+namespaceOverride: ""
+
+#
+# Sets common labels on all objects created
+#
+commonLabels: {}
+
+#
+# Sets common annotations on all objects created
+#
+commonAnnotations: {}

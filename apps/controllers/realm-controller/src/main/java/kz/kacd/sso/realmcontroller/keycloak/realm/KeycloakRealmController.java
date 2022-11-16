@@ -82,7 +82,11 @@ public class KeycloakRealmController {
     public OperationResponse<Boolean> applyClient(K8sClient client) {
         var realm = repository.find(client.realmName());
         if (realm instanceof OperationResponse.Success<Realm> s) {
-            return clients.apply(s.getData(), client).map(it -> true);
+            var result = clients.apply(s.getData(), client).map(it -> true);
+            if (result instanceof OperationResponse.Failure<Boolean> f) {
+                return OperationResponse.internalError(f.getMessage());
+            }
+            return result;
         } else {
             return realm.map(it -> true);
         }

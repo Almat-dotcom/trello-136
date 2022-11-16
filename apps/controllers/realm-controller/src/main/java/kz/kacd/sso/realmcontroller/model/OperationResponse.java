@@ -17,19 +17,27 @@ public abstract sealed class OperationResponse<T> permits OperationResponse.Succ
     }
 
     public static <T> OperationResponse<T> notFound(String message) {
-        return new Failure<>(K8sFailures.NOT_FOUND, message);
+        return new Failure<>(K8sFailures.NOT_FOUND, message, null);
     }
 
     public static <T> OperationResponse<T> internalError(String message) {
-        return new Failure<>(K8sFailures.INTERNAL_ERROR, message);
+        return new Failure<>(K8sFailures.INTERNAL_ERROR, message, null);
+    }
+
+    public static <T> OperationResponse<T> internalError(String message, T data) {
+        return new Failure<>(K8sFailures.INTERNAL_ERROR, message, data);
     }
 
     public <R> OperationResponse<R> map(Function<T, R> f) {
         if (this instanceof OperationResponse.Success<T> s) {
             return success(f.apply(s.data));
         }
-        var failure = (Failure<?>) this;
-        return new Failure<>(failure.kind, failure.message);
+        var failure = (Failure<T>) this;
+        R newData = null;
+        if (failure.data != null) {
+            newData = f.apply(failure.data);
+        }
+        return new Failure<>(failure.kind, failure.message, newData);
     }
 
     /**
@@ -49,6 +57,8 @@ public abstract sealed class OperationResponse<T> permits OperationResponse.Succ
     public static final class Failure<T> extends OperationResponse<T> {
         private final K8sFailures kind;
         private final String message;
+
+        private final T data;
     }
 
     public enum K8sFailures {

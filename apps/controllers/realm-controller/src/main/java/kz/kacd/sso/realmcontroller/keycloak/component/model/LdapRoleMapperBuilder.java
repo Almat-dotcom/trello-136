@@ -7,7 +7,7 @@ import java.util.List;
 
 public class LdapRoleMapperBuilder {
 
-    private static final String PROVIDER_ID = "role-ldap-mapper";
+    public static final String PROVIDER_ID = "role-ldap-mapper";
     private static final String PROVIDER_TYPE = "org.keycloak.storage.ldap.mappers.LDAPStorageMapper";
     private static final String ROLE_NAME_IN_USER_ATTR = "membership.user.ldap.attribute";
     private static final String ROLE_NAME_ATTR = "role.name.ldap.attribute";
