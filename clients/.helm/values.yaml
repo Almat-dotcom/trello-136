@@ -12,3 +12,12 @@ commonLabels: {}
 # Sets common annotations on all objects created
 #
 commonAnnotations: {}
+
+#
+# Settings for test client
+#
+testClient:
+  #
+  # Distinguished name to search roles
+  #
+  rolesDn: ""

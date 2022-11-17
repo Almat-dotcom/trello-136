@@ -1,0 +1,2 @@
+testClient:
+  rolesDn: OU=test-client,OU=OU_Roles,DC=tstcsdepo,DC=net

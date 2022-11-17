@@ -23,7 +23,7 @@ spec:
     webOrigins:
       - "+"
   ldap:
-    dn: OU=test-client,OU=OU_Roles,DC=tstcsdepo,DC=net
+    dn: {{ .Values.testClient.rolesDn }}
   attributes: ["MIDDLE_NAME", "LOCALE", "GROUPS"]
   roles:
     - name: ultra-user
