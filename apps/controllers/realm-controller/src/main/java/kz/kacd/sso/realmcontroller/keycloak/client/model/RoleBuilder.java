@@ -1,9 +1,9 @@
 package kz.kacd.sso.realmcontroller.keycloak.client.model;
 
+import kz.kacd.sso.realmcontroller.keycloak.Realm;
 import org.keycloak.representations.idm.RoleRepresentation;
 
 public class RoleBuilder {
-    public static final String RESTRICTED = "restricted-access";
 
     private final RoleRepresentation target = new RoleRepresentation();
 
@@ -12,7 +12,7 @@ public class RoleBuilder {
     }
 
     public static RoleBuilder restricted() {
-        return new RoleBuilder(RESTRICTED);
+        return new RoleBuilder(Realm.RESTRICTED_ROLE);
     }
 
     public RoleBuilder forClient(Client client) {

@@ -5,16 +5,19 @@ import kz.kacd.sso.realmcontroller.keycloak.Realm;
 import kz.kacd.sso.realmcontroller.model.OperationResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.keycloak.representations.idm.AuthenticationExecutionRepresentation;
-import org.keycloak.representations.idm.AuthenticationFlowRepresentation;
+import org.keycloak.admin.client.Keycloak;
+import org.keycloak.representations.idm.*;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class KeycloakFlowRepository {
+    public static final String REQUIRED = "REQUIRED";
 
     private final KeycloakClientFactory factory;
 
@@ -59,7 +62,7 @@ public class KeycloakFlowRepository {
         }
     }
 
-    public OperationResponse<Boolean> addExecutor(
+    public OperationResponse<String> addExecutor(
             Realm realm,
             AuthenticationExecutionRepresentation execution
     ) {
@@ -67,7 +70,8 @@ public class KeycloakFlowRepository {
         try (var client = factory.create()) {
             var res = client.realm(realm.name()).flows().addExecution(execution);
             if (res.getStatus() / 100 == 2) {
-                return OperationResponse.success(true);
+                var location = res.getHeaderString(HttpHeaders.LOCATION).split("/");
+                return OperationResponse.success(location[location.length - 1]);
             } else {
                 return OperationResponse.internalError("Unsuccessful response " + res.getStatus() + "!");
             }
@@ -75,5 +79,51 @@ public class KeycloakFlowRepository {
             log.error("Error on updating flow!", e);
             return OperationResponse.internalError(e.getMessage());
         }
+    }
+
+    public OperationResponse<Boolean> addExecutorConfig(
+            Realm realm,
+            String authenticatorId,
+            AuthenticatorConfigRepresentation config
+    ) {
+        try (var client = factory.create()) {
+            client.realm(realm.name()).flows().newExecutionConfig(authenticatorId, config);
+            return OperationResponse.success(true);
+        } catch (Exception e) {
+            log.error("Error on adding executor config!", e);
+            return OperationResponse.internalError(e.getMessage());
+        }
+    }
+
+    public OperationResponse<Boolean> markFormsAsRequired(
+            Realm realm,
+            AuthenticationFlowRepresentation flow
+    ) {
+        log.debug("Marking forms flow as required execution for flow {} in realm {} ...", flow.getAlias(), realm.name());
+        try (var client = factory.create()) {
+            var formsRes = findForms(client, realm, flow);
+            if (formsRes.isEmpty()) {
+                return OperationResponse.internalError("Cannot find form res inside " + flow.getAlias() + " flow!");
+            }
+            var forms = formsRes.get();
+            forms.setRequirement(REQUIRED);
+            client.realm(realm.name()).flows().updateExecutions(flow.getAlias(), forms);
+            return OperationResponse.success(true);
+        } catch (Exception e) {
+            log.error("Error on marking forms for flow {} in realm {} as required!", flow.getAlias(), realm.name(), e);
+            return OperationResponse.internalError(e.getMessage());
+        }
+    }
+
+    private Optional<AuthenticationExecutionInfoRepresentation> findForms(
+            Keycloak keycloak,
+            Realm realm,
+            AuthenticationFlowRepresentation flow
+    ) {
+        log.debug("Finding forms flow for flow {} in realm {} ...", flow.getAlias(), realm.name());
+        return keycloak.realm(realm.name()).flows().getExecutions(flow.getAlias())
+                .stream()
+                .filter(it -> it.getDisplayName() != null && it.getDisplayName().endsWith("forms"))
+                .findFirst();
     }
 }

@@ -157,7 +157,7 @@ public class KeycloakClientController {
         }
 
         if (source.spec().getAllowedGroup() != null) {
-            return repository.getRole(realm, client, RoleBuilder.RESTRICTED);
+            return repository.getRole(realm, client, Realm.RESTRICTED_ROLE);
         } else {
             return OperationResponse.success(null);
         }
