@@ -15,7 +15,6 @@ metadata:
     {{- if .Values.ingress.annotations }}
     {{- include "common.tplvalues.render" (dict "value" .Values.ingress.annotations "context" $) | nindent 4 }}
     {{- end }}
-    nginx.ingress.kubernetes.io/rewrite-target: /realms/internal/$1
 spec:
   {{- if .Values.ingress.ingressClassName }}
   ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
@@ -24,14 +23,7 @@ spec:
     - host: {{ .Values.hostname }}
       http:
         paths:
-        - path: /realms/internal/(.*)
-          pathType: Prefix
-          backend:
-            service:
-              name: {{ .Values.ingress.serviceName }}
-              port:
-                name: http
-        - path: /(.*)
+        - path: /
           pathType: Prefix
           backend:
             service:
