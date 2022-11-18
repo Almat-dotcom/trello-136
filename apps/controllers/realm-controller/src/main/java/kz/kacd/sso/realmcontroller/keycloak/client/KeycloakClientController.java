@@ -114,6 +114,8 @@ public class KeycloakClientController {
         source.spec().getAttributes()
                 .forEach(it -> {
                     switch (it) {
+                        case FIRST_NAME -> builder.withFirstName();
+                        case LAST_NAME -> builder.withLastName();
                         case MIDDLE_NAME -> builder.withMiddleName();
                         case GROUPS -> builder.withGroups();
                         case LOCALE -> builder.withLocale();

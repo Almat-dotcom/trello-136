@@ -36,6 +36,8 @@ public class ClientSpec {
     private String allowedGroup;
 
     public enum AdditionalAttributes {
+        FIRST_NAME,
+        LAST_NAME,
         MIDDLE_NAME,
         GROUPS,
         LOCALE

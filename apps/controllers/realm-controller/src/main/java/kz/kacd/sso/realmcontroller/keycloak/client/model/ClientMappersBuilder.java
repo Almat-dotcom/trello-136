@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 public class ClientMappersBuilder {
+    private static final String FIRST_NAME_NAME = "firstName";
+    private static final String LAST_NAME_NAME = "lastName";
+    private static final String MODEL_MAPPER = "oidc-usermodel-property-mapper";
     private static final String MIDDLE_NAME_NAME = "middleName";
     private static final String OIDC = "openid-connect";
     private static final String ATTR_MAPPER = "oidc-usermodel-attribute-mapper";
@@ -23,6 +26,40 @@ public class ClientMappersBuilder {
     private static final String LOCALE_NAME = "locale";
 
     private final List<ProtocolMapperRepresentation> target = new ArrayList<>();
+
+    public void withFirstName() {
+        var result = new ProtocolMapperRepresentation();
+        result.setName(FIRST_NAME_NAME);
+        result.setProtocol(OIDC);
+        result.setProtocolMapper(MODEL_MAPPER);
+        result.setConfig(Map.of(
+                ADD_TO_ACCESS_TOKEN, "false",
+                CLAIM_NAME, FIRST_NAME_NAME,
+                ADD_TO_ID_TOKEN, "true",
+                TYPE, STRING,
+                USER_ATTR, FIRST_NAME_NAME,
+                ADD_TO_USER_INFO, "true"
+        ));
+
+        target.add(result);
+    }
+
+    public void withLastName() {
+        var result = new ProtocolMapperRepresentation();
+        result.setName(LAST_NAME_NAME);
+        result.setProtocol(OIDC);
+        result.setProtocolMapper(MODEL_MAPPER);
+        result.setConfig(Map.of(
+                ADD_TO_ACCESS_TOKEN, "false",
+                CLAIM_NAME, LAST_NAME_NAME,
+                ADD_TO_ID_TOKEN, "true",
+                TYPE, STRING,
+                USER_ATTR, LAST_NAME_NAME,
+                ADD_TO_USER_INFO, "true"
+        ));
+
+        target.add(result);
+    }
 
     public void withMiddleName() {
         var result = new ProtocolMapperRepresentation();
