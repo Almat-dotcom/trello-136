@@ -16,7 +16,7 @@ spec:
   description: For test purposes only!
   realm: internal
   access:
-    rootUrl: http://example.com
+    rootUrl: http://localhost
     homeUrl: /account
     validRedirectUris:
       - "/account/*"
@@ -30,4 +30,4 @@ spec:
       description: This is ultra ultra user
     - name: simple-user
       description: This is simple simple user
-  allowedGroup: admin
+  allowedGroup: test-client
