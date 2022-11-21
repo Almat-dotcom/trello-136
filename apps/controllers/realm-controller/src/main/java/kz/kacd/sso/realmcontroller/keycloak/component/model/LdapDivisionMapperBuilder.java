@@ -6,7 +6,7 @@ import org.keycloak.representations.idm.ComponentRepresentation;
 import java.util.List;
 
 public class LdapDivisionMapperBuilder {
-    private static final String PROVIDER_ID = "user-attribute-ldap-mapper";
+    private static final String PROVIDER_ID = "ldap-user-division-mapper";
     private static final String PROVIDER_TYPE = "org.keycloak.storage.ldap.mappers.LDAPStorageMapper";
     public static final String USER_MODEL_ATTRIBUTE = "user.model.attribute";
     public static final String DN_ATTRIBUTE = "ldap.dn.attribute";
