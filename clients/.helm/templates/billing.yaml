@@ -1,0 +1,30 @@
+apiVersion: sso.kacd.kz/v1beta1
+kind: Client
+metadata:
+  name: billing
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: intenral-realm
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  displayedName: Billing
+  description: App of billing
+  realm: internal
+  access:
+    rootUrl: http://localhost
+    homeUrl: /account
+    validRedirectUris:
+      - "/account/*"
+    webOrigins:
+      - "+"
+  ldap:
+    dn: {{ .Values.billing.rolesDn }}
+  attributes: ["FIRST_NAME", "LAST_NAME", "MIDDLE_NAME", "LOCALE", "GROUPS", "DIVISION"]
+  roles:
+    - name: "02. Правление"
+      description: "Указывает, является ли пользователь начальником или замом"

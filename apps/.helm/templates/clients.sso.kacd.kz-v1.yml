@@ -105,6 +105,7 @@ spec:
                   - MIDDLE_NAME
                   - GROUPS
                   - LOCALE
+                  - DIVISION
                   type: string
                 type: array
               roles:

@@ -14,6 +14,12 @@ commonLabels: {}
 commonAnnotations: {}
 
 #
+# Settings for billing client
+#
+billing:
+  rolesDn: ""
+
+#
 # Settings for test client
 #
 testClient:

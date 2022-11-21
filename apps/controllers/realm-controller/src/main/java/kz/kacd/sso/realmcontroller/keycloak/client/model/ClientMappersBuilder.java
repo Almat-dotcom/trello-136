@@ -10,7 +10,7 @@ public class ClientMappersBuilder {
     private static final String FIRST_NAME_NAME = "firstName";
     private static final String LAST_NAME_NAME = "lastName";
     private static final String MODEL_MAPPER = "oidc-usermodel-property-mapper";
-    private static final String MIDDLE_NAME_NAME = "middleName";
+    private static final String MIDDLE_NAME_NAME = "middle_name";
     private static final String OIDC = "openid-connect";
     private static final String ATTR_MAPPER = "oidc-usermodel-attribute-mapper";
     private static final String ADD_TO_ACCESS_TOKEN = "access.token.claim";
@@ -68,7 +68,7 @@ public class ClientMappersBuilder {
         result.setProtocol(OIDC);
         result.setProtocolMapper(ATTR_MAPPER);
         result.setConfig(Map.of(
-                ADD_TO_ACCESS_TOKEN, "false",
+                ADD_TO_ACCESS_TOKEN, "true",
                 CLAIM_NAME, MIDDLE_NAME_NAME,
                 ADD_TO_ID_TOKEN, "true",
                 TYPE, STRING,
@@ -118,7 +118,7 @@ public class ClientMappersBuilder {
         result.setProtocol(OIDC);
         result.setProtocolMapper(ATTR_MAPPER);
         result.setConfig(Map.of(
-                ADD_TO_ACCESS_TOKEN, "false",
+                ADD_TO_ACCESS_TOKEN, "true",
                 CLAIM_NAME, DIVISION_NAME,
                 ADD_TO_ID_TOKEN, "true",
                 TYPE, STRING,
