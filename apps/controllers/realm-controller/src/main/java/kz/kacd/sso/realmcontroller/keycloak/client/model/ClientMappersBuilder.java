@@ -24,6 +24,7 @@ public class ClientMappersBuilder {
     private static final String GROUP_MAPPER = "oidc-group-membership-mapper";
     private static final String ADD_FULL_PATH = "full.path";
     private static final String LOCALE_NAME = "locale";
+    private static final String DIVISION_NAME = "division";
 
     private final List<ProtocolMapperRepresentation> target = new ArrayList<>();
 
@@ -105,6 +106,23 @@ public class ClientMappersBuilder {
                 ADD_TO_ID_TOKEN, "true",
                 TYPE, STRING,
                 USER_ATTR, LOCALE_NAME,
+                ADD_TO_USER_INFO, "true"
+        ));
+
+        target.add(result);
+    }
+
+    public void withDivision() {
+        var result = new ProtocolMapperRepresentation();
+        result.setName(DIVISION_NAME);
+        result.setProtocol(OIDC);
+        result.setProtocolMapper(ATTR_MAPPER);
+        result.setConfig(Map.of(
+                ADD_TO_ACCESS_TOKEN, "false",
+                CLAIM_NAME, DIVISION_NAME,
+                ADD_TO_ID_TOKEN, "true",
+                TYPE, STRING,
+                USER_ATTR, DIVISION_NAME,
                 ADD_TO_USER_INFO, "true"
         ));
 

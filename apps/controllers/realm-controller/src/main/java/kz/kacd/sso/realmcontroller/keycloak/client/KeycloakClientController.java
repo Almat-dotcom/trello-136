@@ -119,6 +119,7 @@ public class KeycloakClientController {
                         case MIDDLE_NAME -> builder.withMiddleName();
                         case GROUPS -> builder.withGroups();
                         case LOCALE -> builder.withLocale();
+                        case DIVISION -> builder.withDivision();
                     }
                 });
 

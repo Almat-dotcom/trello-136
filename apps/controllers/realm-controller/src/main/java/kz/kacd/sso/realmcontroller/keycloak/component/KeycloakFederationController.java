@@ -6,10 +6,7 @@ import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.federation.ldap.LdapSearc
 import kz.kacd.sso.realmcontroller.k8s.crd.realm.model.federation.ldap.LdapSpec;
 import kz.kacd.sso.realmcontroller.k8s.model.SecretData;
 import kz.kacd.sso.realmcontroller.keycloak.Realm;
-import kz.kacd.sso.realmcontroller.keycloak.component.model.LdapAttributeMapperBuilder;
-import kz.kacd.sso.realmcontroller.keycloak.component.model.LdapBuilder;
-import kz.kacd.sso.realmcontroller.keycloak.component.model.LdapGroupMapperBuilder;
-import kz.kacd.sso.realmcontroller.keycloak.component.model.LdapRoleMapperBuilder;
+import kz.kacd.sso.realmcontroller.keycloak.component.model.*;
 import kz.kacd.sso.realmcontroller.model.OperationResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +23,7 @@ public class KeycloakFederationController {
     private static final String MIDDLE_NAME = "middle name";
     private static final String FIRST_NAME = "first name";
     private static final String LAST_NAME = "last name";
+    private static final String DIVISION = "division";
 
     private final KeycloakComponentRepository repository;
 
@@ -75,6 +73,10 @@ public class KeycloakFederationController {
         var lastName = saveLdapLastName(realm, parent, spec.getSearching().getMode());
         if (lastName instanceof OperationResponse.Failure) {
             return lastName;
+        }
+        var division = saveDivision(realm, parent);
+        if (division instanceof OperationResponse.Failure) {
+            return division;
         }
         var group = saveLdapGroup(realm, parent, spec.getGroups());
         if (group instanceof OperationResponse.Failure) {
@@ -136,6 +138,19 @@ public class KeycloakFederationController {
                                 mode == LdapSearchingSpec.Modes.R,
                                 true
                         )
+                        .build()
+        ).map(it -> true);
+    }
+
+    private OperationResponse<Boolean> saveDivision(
+            Realm realm,
+            ComponentRepresentation parent
+    ) {
+        return repository.save(
+                realm,
+                new LdapDivisionMapperBuilder(parent)
+                        .withName(DIVISION)
+                        .withAttributeMapping("distinguishedName", "division")
                         .build()
         ).map(it -> true);
     }

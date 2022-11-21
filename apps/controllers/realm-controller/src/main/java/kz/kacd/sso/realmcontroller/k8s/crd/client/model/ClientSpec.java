@@ -40,6 +40,7 @@ public class ClientSpec {
         LAST_NAME,
         MIDDLE_NAME,
         GROUPS,
-        LOCALE
+        LOCALE,
+        DIVISION
     }
 }
