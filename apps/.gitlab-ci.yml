@@ -71,7 +71,7 @@ build-docker-keycloak:
     - key: extensions
       policy: pull
       paths:
-        - build-extensions
+        - apps/build-extensions
   tags:
     - global_runner_2
 
