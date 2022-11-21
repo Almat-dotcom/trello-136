@@ -15,7 +15,7 @@ build-ldap-extension:
     - export MAVEN_OPTS="-Dmaven.repo.local=${CI_PROJECT_DIR}/${PROJECT_DIR}/.m2"
   script:
     - mvn clean package
-    - curl -v --user '${NEXUS_RAW_REPO}' --upload-file ./target/ldap-mappers.jar ${NEXUS_REPO}
+    - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./target/ldap-mappers.jar ${NEXUS_REPO}
   cache:
     - key: m2
       paths:
@@ -31,7 +31,7 @@ cache-artifacts:
     - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_PIPELINE_ID}"
     - mkdir apps/build-extensions
   script:
-    - curl -sL --user '${NEXUS_RAW_REPO}' "${NEXUS_REPO}/ldap-mappers.jar" -o apps/build-extensions/ldap-mappers.jar
+    - curl -sL --user "${NEXUS_RAW_REPO}" "${NEXUS_REPO}/ldap-mappers.jar" -o apps/build-extensions/ldap-mappers.jar
   cache:
     - key: extensions
       policy: push
