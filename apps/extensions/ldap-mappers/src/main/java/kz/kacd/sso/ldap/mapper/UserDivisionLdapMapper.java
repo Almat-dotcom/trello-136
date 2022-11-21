@@ -61,7 +61,7 @@ public class UserDivisionLdapMapper extends AbstractLDAPStorageMapper {
             @Override
             public String getFirstAttribute(String name) {
                 if (name.equalsIgnoreCase(userModelAttrName)) {
-                    return ldapUser.getAttributeAsString(ldapAttrName);
+                    return getUserDivision(ldapUser);
                 } else {
                     return super.getFirstAttribute(name);
                 }
@@ -70,11 +70,11 @@ public class UserDivisionLdapMapper extends AbstractLDAPStorageMapper {
             @Override
             public Stream<String> getAttributeStream(String name) {
                 if (name.equalsIgnoreCase(userModelAttrName)) {
-                    Collection<String> ldapAttrValue = ldapUser.getAttributeAsSet(ldapAttrName);
-                    if (ldapAttrValue == null) {
+                    String value = getUserDivision(ldapUser);
+                    if (value == null) {
                         return Stream.empty();
                     } else {
-                        return ldapAttrValue.stream();
+                        return Stream.of(value);
                     }
                 } else {
                     return super.getAttributeStream(name);
@@ -90,9 +90,9 @@ public class UserDivisionLdapMapper extends AbstractLDAPStorageMapper {
                     return attrs;
                 }
 
-                Set<String> allLdapAttrValues = ldapUser.getAttributeAsSet(ldapAttrName);
-                if (allLdapAttrValues != null) {
-                    attrs.put(userModelAttrName, new ArrayList<>(allLdapAttrValues));
+                String ldapAttr = getUserDivision(ldapUser);
+                if (ldapAttr != null) {
+                    attrs.put(userModelAttrName, Collections.singletonList(ldapAttr));
                 }
                 return attrs;
             }
@@ -100,7 +100,7 @@ public class UserDivisionLdapMapper extends AbstractLDAPStorageMapper {
             @Override
             public String getEmail() {
                 if (UserModel.EMAIL.equalsIgnoreCase(userModelAttrName)) {
-                    return ldapUser.getAttributeAsString(ldapAttrName);
+                    return getUserDivision(ldapUser);
                 } else {
                     return super.getEmail();
                 }
@@ -127,7 +127,7 @@ public class UserDivisionLdapMapper extends AbstractLDAPStorageMapper {
             @Override
             public String getLastName() {
                 if (UserModel.LAST_NAME.equalsIgnoreCase(userModelAttrName)) {
-                    return ldapUser.getAttributeAsString(ldapAttrName);
+                    return getUserDivision(ldapUser);
                 } else {
                     return super.getLastName();
                 }
@@ -136,7 +136,7 @@ public class UserDivisionLdapMapper extends AbstractLDAPStorageMapper {
             @Override
             public String getFirstName() {
                 if (UserModel.FIRST_NAME.equalsIgnoreCase(userModelAttrName)) {
-                    return ldapUser.getAttributeAsString(ldapAttrName);
+                    return getUserDivision(ldapUser);
                 } else {
                     return super.getFirstName();
                 }
@@ -185,9 +185,5 @@ public class UserDivisionLdapMapper extends AbstractLDAPStorageMapper {
 
     private String getDnAttribute() {
         return mapperModel.getConfig().getFirst(DN_ATTRIBUTE);
-    }
-
-    private void setUserProperty(Property<Object> prop, UserModel user, String value) {
-
     }
 }
