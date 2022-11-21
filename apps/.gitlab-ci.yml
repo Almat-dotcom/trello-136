@@ -1,6 +1,44 @@
 stages:
+  - prebuild
+  - cache
   - build-docker
   - dev-deploy
+
+build-ldap-extension:
+  stage: prebuild
+  image: maven:3-eclipse-temurin-17-alpine
+  before_script:
+    - apk add curl
+    - export PROJECT_DIR="apps/extensions/ldap-mappers"
+    - cd ${PROJECT_DIR}
+    - export NEXUS_REPO="https://kacd.nexus.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_PIPELINE_ID}/ldap-mappers.jar"
+    - export MAVEN_OPTS="-Dmaven.repo.local=${CI_PROJECT_DIR}/${PROJECT_DIR}/.m2"
+  script:
+    - mvn clean package
+    - curl -v --user '${NEXUS_RAW_REPO}' --upload-file ./target/ldap-mappers.jar ${NEXUS_REPO}
+  cache:
+    - key: m2
+      paths:
+        - apps/extensions/ldap-mappers/.m2
+  tags:
+    - global_runner_2
+
+cache-artifacts:
+  stage: cache
+  image: alpine:latest
+  before_script:
+    - apk add curl
+    - export NEXUS_REPO="https://kacd.nexus.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_PIPELINE_ID}"
+    - mkdir apps/build-extensions
+  script:
+    - curl -sL --user '${NEXUS_RAW_REPO}' "${NEXUS_REPO}/ldap-mappers.jar" -o apps/build-extensions/ldap-mappers.jar
+  cache:
+    - key: extensions
+      policy: push
+      paths:
+        - apps/build-extensions
+  tags:
+    - global_runner_2
 
 build-docker-keycloak:
   stage: build-docker
@@ -30,6 +68,10 @@ build-docker-keycloak:
     - key: kaniko-cache-keycloak
       paths:
         - .cache/
+    - key: extensions
+      policy: pull
+      paths:
+        - build-extensions
   tags:
     - global_runner_2
 

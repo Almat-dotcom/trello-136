@@ -13,6 +13,8 @@ WORKDIR /opt/keycloak
 RUN curl -sL https://github.com/aerogear/keycloak-metrics-spi/releases/download/2.5.3/keycloak-metrics-spi-2.5.3.jar -o /opt/keycloak/providers/keycloak-metrics-spi.jar \
     && curl -sL https://github.com/sventorben/keycloak-restrict-client-auth/releases/download/v20.0.0/keycloak-restrict-client-auth.jar -o /opt/keycloak/providers/keycloak-restrict-client-auth.jar
 
+COPY build-extensions/ldap-mappers.jar /opt/keycloak/providers/ldap-mappers.jar
+
 COPY ./themes/build /opt/keycloak/themes
 
 RUN /opt/keycloak/bin/kc.sh build

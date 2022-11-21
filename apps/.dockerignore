@@ -4,3 +4,4 @@ controllers
 gitignore
 *.md
 Dockerfile.dev
+extensions
