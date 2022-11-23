@@ -50,9 +50,10 @@ yarn start
 
 Любое изменение в коде будет пораждать Hot-Reaload.
 
-# Тестирование
+# Тестирование с реальным keycloak
 
-И далее выполнить для **Linux**:
+Для тестирования необходимо снова собрать проект. Для ускорении сборки можно воспользоваться следующими командами:
+для **Linux**:
 ```shell
 docker container run -v $PWD:/app:rw --privileged --rm --entrypoint="/bin/sh" nexus.kacd.kz:5000/devops-utils/keycloakify-build-image:latest -c "cd /app && yarn keycloak"
 ```
@@ -61,3 +62,10 @@ docker container run -v $PWD:/app:rw --privileged --rm --entrypoint="/bin/sh" ne
 ```batch
 docker container run -v ${pwd}:/app:rw --privileged --rm --entrypoint="/bin/sh" nexus.kacd.kz:5000/devops-utils/keycloakify-build-image:latest -c "cd /app && yarn keycloak"
 ```
+
+И затем выполнить:
+```shell
+docker compose -f keycloak.yaml up
+```
+
+Как только в консоле появится надпись "DO NOT use this configuration in production", вы можете перейти по ссылке http://localhost:8080/realms/Test/account и на странице нажать "Sign in". Тестовый пользователь - test:test
