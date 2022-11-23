@@ -54,7 +54,7 @@ const Terms = memo(
 		return (
 			<Template
 				{...{ kcContext, i18n, ...props }}
-				doFetchDefaultThemeResources={true}
+				doFetchDefaultThemeResources={false}
 				displayMessage={false}
 				headerNode={msg("termsTitle")}
 				formNode={

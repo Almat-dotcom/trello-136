@@ -1,3 +1,6 @@
+# maven
+.m2
+
 # Logs
 logs
 *.log
