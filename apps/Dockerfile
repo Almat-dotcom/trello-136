@@ -15,8 +15,6 @@ RUN curl -sL https://github.com/aerogear/keycloak-metrics-spi/releases/download/
 
 COPY build-extensions/ldap-mappers.jar /opt/keycloak/providers/ldap-mappers.jar
 
-COPY ./themes/build /opt/keycloak/themes
-
 RUN /opt/keycloak/bin/kc.sh build
 
 FROM quay.io/keycloak/keycloak:20.0.0
