@@ -11,6 +11,8 @@ export type Props = {
     kcContext: KcContext;
 };
 
+// Base component of Keycloak Application
+// which render on keycloak page.
 export default function KcApp({ kcContext }: Props) {
     const i18n = useI18n({ kcContext });
 
@@ -19,11 +21,19 @@ export default function KcApp({ kcContext }: Props) {
         return null;
     }
 
+    // In default Kc props there are lots of theme.properties 
+    // values with predefined classes names.
+    // You can just override preexisting classes and use it
+    // inside your components and override classes inside default components.
+    // Just define css classes inside ./KcApp.css and set it in props.
     const props = {
         i18n,
         ...defaultKcProps,
         // NOTE: The classes are defined in ./KcApp.css
-        "kcHeaderWrapperClass": "my-color my-font",
+        "kcLoginClass": "login-page",
+        "kcHeaderClass": "login-header",
+        "kcHeaderWrapperClass": "header-wrapper",
+        "kcFormCardClass": "login-card"
     };
 
     return (

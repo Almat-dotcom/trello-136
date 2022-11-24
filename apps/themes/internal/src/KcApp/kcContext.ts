@@ -8,7 +8,7 @@ export const { kcContext } = getKcContext({
         {
             "pageId": "login.ftl",
             "locale": {
-                "currentLanguageTag": "ru",
+                "currentLanguageTag": "kz",
 				"supported": [{
 					"url": "mockurl-ru",
 					"label": "Русский",
@@ -27,6 +27,7 @@ export const { kcContext } = getKcContext({
 				"showResetCredentials": true,
 			},
 			"realm": {
+				"displayName": "KCSD",
 				"registrationAllowed": true,
 				"rememberMe": true
 			},
