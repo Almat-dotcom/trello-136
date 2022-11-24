@@ -69,3 +69,4 @@ docker compose -f keycloak.yaml up
 ```
 
 Как только в консоле появится надпись "DO NOT use this configuration in production", вы можете перейти по ссылке http://localhost:8080/realms/Test/account и на странице нажать "Sign in". Тестовый пользователь - test:test
+

@@ -7,11 +7,13 @@ stages:
 build-ldap-extension:
   stage: prebuild
   image: maven:3-eclipse-temurin-17-alpine
+  only:
+    - dev
   before_script:
     - apk add curl
     - export PROJECT_DIR="apps/extensions/ldap-mappers"
     - cd ${PROJECT_DIR}
-    - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_PIPELINE_ID}/ldap-mappers.jar"
+    - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/ldap-mappers.jar"
     - export MAVEN_OPTS="-Dmaven.repo.local=${CI_PROJECT_DIR}/${PROJECT_DIR}/.m2"
   script:
     - mvn clean package
@@ -26,9 +28,11 @@ build-ldap-extension:
 cache-artifacts:
   stage: cache
   image: alpine:latest
+  only:
+    - dev
   before_script:
     - apk add curl
-    - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_PIPELINE_ID}"
+    - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}"
     - mkdir apps/build-extensions
   script:
     - curl -sL --user "${NEXUS_RAW_REPO}" "${NEXUS_REPO}/ldap-mappers.jar" -o apps/build-extensions/ldap-mappers.jar
@@ -45,6 +49,8 @@ build-docker-keycloak:
   image: 
     name: gcr.io/kaniko-project/executor:v1.9.1-debug
     entrypoint: [""]
+  only:
+    - dev
   before_script:
     - echo $KANIKO_DOCKER_CONFIG | base64 -d > /kaniko/.docker/config.json
     - |-
@@ -63,7 +69,7 @@ build-docker-keycloak:
         --snapshot-mode=time \
         --use-new-run=true \
         --context=${CI_PROJECT_DIR}/apps \
-        --destination=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/keycloak:${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+        --destination=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/keycloak:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA}
   cache:
     - key: kaniko-cache-keycloak
       paths:
@@ -80,6 +86,8 @@ build-docker-realm-controller:
   image: 
     name: gcr.io/kaniko-project/executor:v1.9.1-debug
     entrypoint: [""]
+  only:
+    - dev
   before_script:
     - echo $KANIKO_DOCKER_CONFIG | base64 -d > /kaniko/.docker/config.json
     - |-
@@ -98,7 +106,7 @@ build-docker-realm-controller:
         --snapshot-mode=time \
         --use-new-run=true \
         --context=${CI_PROJECT_DIR}/apps/controllers/realm-controller \
-        --destination=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/realm-controller:${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+        --destination=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/realm-controller:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA}
   cache:
     - key: kaniko-cache-realm-controller
       paths:
@@ -123,7 +131,7 @@ k8s-dev-deploy:
       helm upgrade --install ${RELEASE_NAME} ./.helm \
         --create-namespace --namespace="${CI_PROJECT_NAME}" \
         -f ./.helm/dev.yaml \
-        --set image=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/keycloak:${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID} \
-        --set realmController.image=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/realm-controller:${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+        --set image=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/keycloak:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA} \
+        --set realmController.image=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/realm-controller:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA}
   tags:
     - global_runner_2

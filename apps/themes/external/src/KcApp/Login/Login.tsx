@@ -1,6 +1,6 @@
 import { memo } from "react";
 import type { KcProps } from "keycloakify";
-import { kcContext, KcContext } from "KcApp/kcContext";
+import type { KcContext } from "KcApp/kcContext";
 import type { I18n } from "KcApp/i18n";
 import { clsx } from "keycloakify/lib/tools/clsx";
 
