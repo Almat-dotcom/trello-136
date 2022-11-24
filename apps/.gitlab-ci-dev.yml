@@ -37,7 +37,7 @@ build-external-theme:
   script:
     - yarn install --frozen-lockfile
     - yarn keycloak
-    - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./build-keycloak/target/external-keycloak-theme-1.0.6.jar ${NEXUS_REPO}
+    - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./build_keycloak/target/external-keycloak-theme-1.0.6.jar ${NEXUS_REPO}
   cache:
     - key: node_modules_external
       paths:
@@ -57,7 +57,7 @@ build-internal-theme:
   script:
     - yarn install --frozen-lockfile
     - yarn keycloak
-    - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./build-keycloak/target/internal-keycloak-theme-1.0.6.jar ${NEXUS_REPO}
+    - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./build_keycloak/target/internal-keycloak-theme-1.0.6.jar ${NEXUS_REPO}
   cache:
     - key: node_modules_internal
       paths:
