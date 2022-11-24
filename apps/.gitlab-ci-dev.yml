@@ -25,6 +25,46 @@ build-ldap-extension:
   tags:
     - global_runner_2
 
+build-external-theme:
+  stage: build
+  image: 
+    name: nexus.kacd.kz:5000/devops-utils/keycloakify-build-image:latest
+    entrypoint: [""]
+  before_script:
+    - export PROJECT_DIR="apps/themes/external"
+    - cd ${PROJECT_DIR}
+    - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/external-keycloak-theme.jar"
+  script:
+    - yarn install --frozen-lockfile
+    - yarn keycloak
+    - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./build-keycloak/target/external-keycloak-theme-1.0.6.jar ${NEXUS_REPO}
+  cache:
+    - key: node_modules_external
+      paths:
+        - apps/themes/external/node_modules
+  tags:
+    - global_runner_2
+
+build-internal-theme:
+  stage: build
+  image: 
+    name: nexus.kacd.kz:5000/devops-utils/keycloakify-build-image:latest
+    entrypoint: [""]
+  before_script:
+    - export PROJECT_DIR="apps/themes/internal"
+    - cd ${PROJECT_DIR}
+    - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/internal-keycloak-theme.jar"
+  script:
+    - yarn install --frozen-lockfile
+    - yarn keycloak
+    - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./build-keycloak/target/internal-keycloak-theme-1.0.6.jar ${NEXUS_REPO}
+  cache:
+    - key: node_modules_internal
+      paths:
+        - apps/themes/internal/node_modules
+  tags:
+    - global_runner_2
+
 cache-artifacts:
   stage: cache
   image: alpine:latest
@@ -36,6 +76,8 @@ cache-artifacts:
     - mkdir apps/build-extensions
   script:
     - curl -sL --user "${NEXUS_RAW_REPO}" "${NEXUS_REPO}/ldap-mappers.jar" -o apps/build-extensions/ldap-mappers.jar
+    - curl -sL --user "${NEXUS_RAW_REPO}" "${NEXUS_REPO}/internal-keycloak-theme.jar" -o apps/build-extensions/internal-keycloak-theme.jar
+    - curl -sL --user "${NEXUS_RAW_REPO}" "${NEXUS_REPO}/external-keycloak-theme.jar" -o apps/build-extensions/external-keycloak-theme.jar
   cache:
     - key: extensions
       policy: push

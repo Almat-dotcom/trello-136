@@ -19,7 +19,7 @@ build-ldap-extension:
   script:
     - mvn clean package
   cache:
-    - key: m2
+    - key: m2-mr
       paths:
         - apps/extensions/ldap-mappers/.m2
   rules:
