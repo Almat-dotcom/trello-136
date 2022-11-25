@@ -25,6 +25,27 @@ build-ldap-extension:
   tags:
     - global_runner_2
 
+build-external-extension:
+  stage: prebuild
+  image: maven:3-eclipse-temurin-17-alpine
+  only:
+    - dev
+  before_script:
+    - apk add curl
+    - export PROJECT_DIR="apps/extensions/external-extensions"
+    - cd ${PROJECT_DIR}
+    - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/external-extensions.jar"
+    - export MAVEN_OPTS="-Dmaven.repo.local=${CI_PROJECT_DIR}/${PROJECT_DIR}/.m2"
+  script:
+    - mvn clean package
+    - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./target/external-extensions.jar ${NEXUS_REPO}
+  cache:
+    - key: m2
+      paths:
+        - apps/extensions/external-extensions/.m2
+  tags:
+    - global_runner_2
+
 build-external-theme:
   stage: prebuild
   image: 
@@ -76,6 +97,7 @@ cache-artifacts:
     - mkdir apps/build-extensions
   script:
     - curl -sL --user "${NEXUS_RAW_REPO}" "${NEXUS_REPO}/ldap-mappers.jar" -o apps/build-extensions/ldap-mappers.jar
+    - curl -sL --user "${NEXUS_RAW_REPO}" "${NEXUS_REPO}/external-extensions.jar" -o apps/build-extensions/external-extensions.jar
     - curl -sL --user "${NEXUS_RAW_REPO}" "${NEXUS_REPO}/internal-keycloak-theme.jar" -o apps/build-extensions/internal-keycloak-theme.jar
     - curl -sL --user "${NEXUS_RAW_REPO}" "${NEXUS_REPO}/external-keycloak-theme.jar" -o apps/build-extensions/external-keycloak-theme.jar
   cache:
