@@ -1,0 +1,67 @@
+apiVersion: sso.kacd.kz/v1beta1
+kind: Realm
+metadata:
+  name: external
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: intenral-realm
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  # Отображаемое имя на странице авторизации
+  displayedName: KCSD
+  # Базовый URL для доступа к реалму (Важно! Для админки динамически не изменяются хосты)
+  frontendUrl: {{ printf "https://%s" .Values.hostname.external }}
+  # Любые запросы могут быть по HTTP
+  requireSsl: none
+  login:
+    loginScreen:
+      # Регистрация разрешена
+      registration: true
+      # Восстановление пароля включено
+      forgotPassword: true
+      # Запомни меня включено
+      rememberMe: true
+    email:
+      # Из-за дублирования email-ов, запрещается вход через email
+      loginWithEmail: true
+      # Обязательно Email должен быть подтвержден
+      verifyEmail: true
+  # Настройки SMTP сервера для рассылки
+  email:
+    from: sso@kacd.kz
+    smtpHost: mail.kacd.kz
+    smtpPort: 5252
+    encryption: []
+  # Настройки тем для модулей входа, админки, профиля и почтовой рассылки
+  themes: 
+    login: external
+    account: keycloak
+    admin: keycloak
+    email: external
+  events:
+    # Список слушателей событий. Стандартный слушатель для логирования событий.
+    eventListeners: ["jboss-logging"]
+    # Включить события пользователей и хранить их 7 дней
+    userEvents:
+      saveEvents: true
+      expiration: 7d
+    # Включить события администрирования и хранить их 7 дней
+    adminEvents:
+      saveEvents: true
+      includeRepresentation: true
+      expiration: 7d
+  # Локализация на 2 языка
+  localization:
+    i17n: true
+    supportedLocales: ["en", "ru", "kz"]
+    defaultLocale: ru
+  security:
+    # Включить защиту от взлома пароля по методу brute force
+    bruteForce:
+      enabled: true
+      maxLoginFailures: 3

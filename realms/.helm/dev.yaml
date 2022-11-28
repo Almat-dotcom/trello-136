@@ -1,5 +1,7 @@
 
-hostname: internal-dev.k8s-dev.kacd.kz
+hostname:
+  internal: internal-dev.k8s-dev.kacd.kz
+  external: external-dev.k8s-dev.kacd.kz
 
 ldap:
   url: ldap://10.10.128.3:389

@@ -15,7 +15,7 @@ spec:
   # Отображаемое имя на странице авторизации
   displayedName: KCSD
   # Базовый URL для доступа к реалму (Важно! Для админки динамически не изменяются хосты)
-  frontendUrl: {{ printf "https://%s" .Values.hostname }}
+  frontendUrl: {{ printf "https://%s" .Values.hostname.internal }}
   # Любые запросы могут быть по HTTP
   requireSsl: none
   login:
@@ -32,10 +32,10 @@ spec:
     encryption: []
   # Настройки тем для модулей входа, админки, профиля и почтовой рассылки
   themes: 
-    login: keycloak
+    login: internal
     account: keycloak
     admin: keycloak
-    email: keycloak
+    email: internal
   events:
     # Список слушателей событий. Стандартный слушатель для логирования событий.
     eventListeners: ["jboss-logging"]

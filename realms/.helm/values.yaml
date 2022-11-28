@@ -1,8 +1,10 @@
 
 #
-# Hostname of the realm
+# Hostnames of realms
 #
-hostname: internal.localhost
+hostname: 
+  internal: internal.localhost
+  external: external.localhost
 
 #
 # Settings of LDAP
