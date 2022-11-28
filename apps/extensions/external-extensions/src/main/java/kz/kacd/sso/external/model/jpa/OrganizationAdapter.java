@@ -1,0 +1,193 @@
+package kz.kacd.sso.external.model.jpa;
+
+import kz.kacd.sso.external.model.OrganizationModel;
+import kz.kacd.sso.external.model.PositionModel;
+import kz.kacd.sso.external.model.jpa.entity.OrganizationEntity;
+import kz.kacd.sso.external.model.jpa.entity.OrganizationMemberEntity;
+import kz.kacd.sso.external.model.jpa.entity.PositionEntity;
+import org.jboss.logging.Logger;
+import org.keycloak.models.KeycloakSession;
+import org.keycloak.models.RealmModel;
+import org.keycloak.models.UserModel;
+import org.keycloak.models.jpa.JpaModel;
+import org.keycloak.models.utils.KeycloakModelUtils;
+
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import java.time.LocalDateTime;
+import java.util.stream.Stream;
+
+public class OrganizationAdapter implements OrganizationModel, JpaModel<OrganizationEntity> {
+    private static final Logger log = Logger.getLogger(OrganizationAdapter.class);
+
+    private final KeycloakSession keycloakSession;
+    private final OrganizationEntity entity;
+    private final AdaptersFactory adaptersFactory;
+    private final EntityManager em;
+    private final RealmModel realm;
+
+    private UserModel createdBy;
+
+    public OrganizationAdapter(
+            KeycloakSession keycloakSession,
+            OrganizationEntity entity,
+            AdaptersFactory adaptersFactory,
+            EntityManager em,
+            RealmModel realm
+    ) {
+        this.keycloakSession = keycloakSession;
+        this.entity = entity;
+        this.adaptersFactory = adaptersFactory;
+        this.em = em;
+        this.realm = realm;
+    }
+
+    @Override
+    public String getId() {
+        return entity.getId();
+    }
+
+    @Override
+    public String getBin() {
+        return entity.getBin();
+    }
+
+    @Override
+    public void setBin(String bin) {
+        entity.setUpdatedAt(LocalDateTime.now());
+        entity.setBin(bin);
+    }
+
+    @Override
+    public String getName() {
+        return entity.getName();
+    }
+
+    @Override
+    public void setName(String name) {
+        entity.setUpdatedAt(LocalDateTime.now());
+        entity.setName(name);
+    }
+
+    @Override
+    public String getDisplayName() {
+        return entity.getDisplayName();
+    }
+
+    @Override
+    public void setDisplayName(String displayName) {
+        entity.setUpdatedAt(LocalDateTime.now());
+        entity.setDisplayName(displayName);
+    }
+
+    @Override
+    public boolean enabled() {
+        return entity.getEnabled();
+    }
+
+    @Override
+    public void enable() {
+        entity.setUpdatedAt(LocalDateTime.now());
+        entity.setEnabled(true);
+    }
+
+    @Override
+    public void disable() {
+        entity.setUpdatedAt(LocalDateTime.now());
+        entity.setEnabled(false);
+    }
+
+    @Override
+    public RealmModel getRealm() {
+        return realm;
+    }
+
+    @Override
+    public UserModel getCreatedBy() {
+        if (createdBy != null) {
+            return createdBy;
+        }
+
+        createdBy = keycloakSession.users().getUserById(realm, entity.getCreatedBy());
+        return createdBy;
+    }
+
+    @Override
+    public LocalDateTime getCreatedAt() {
+        return entity.getCreatedAt();
+    }
+
+    @Override
+    public LocalDateTime getUpdatedAt() {
+        return entity.getUpdatedAt();
+    }
+
+    @Override
+    public Stream<PositionModel> getPositions() {
+        return entity.getMembers().stream().map(it -> adaptersFactory.create(keycloakSession, it, realm));
+    }
+
+    @Override
+    public PositionModel getPosition(UserModel user) {
+        return entity.getMembers().stream().filter(it -> it.getUserId().equals(user.getId()))
+                .map(it -> adaptersFactory.create(keycloakSession, it, realm))
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public PositionModel requestPosition(String positionName, UserModel user) {
+        log.debug("Requesting position " + positionName + " for user " + user.getId());
+        PositionEntity position = findPosition(positionName);
+        if (position == null) {
+            log.warn("Wrong position name " + positionName);
+            return null;
+        }
+
+        OrganizationMemberEntity member = new OrganizationMemberEntity(
+                KeycloakModelUtils.generateId(),
+                user.getId(),
+                entity,
+                position
+        );
+        em.persist(member);
+        em.flush();
+        entity.getMembers().add(member);
+
+        return adaptersFactory.create(keycloakSession, member, realm);
+    }
+
+    private PositionEntity findPosition(String positionName) {
+        TypedQuery<PositionEntity> query = em.createNamedQuery("PositionEntity.getPositionByName", PositionEntity.class);
+        query.setParameter("name", positionName);
+        return query.getResultStream().findFirst().orElse(null);
+    }
+
+    @Override
+    public void confirmPosition(PositionModel position) {
+        log.debug("Confirming position " + position.getId());
+        setConfirmed(position, true);
+    }
+
+    @Override
+    public void revokePosition(PositionModel position) {
+        log.debug("Revoking position " + position.getId());
+        setConfirmed(position, false);
+    }
+
+    @Override
+    public void removePosition(PositionModel position) {
+        log.debug("Removing position " + position.getId());
+        em.remove(em.find(OrganizationMemberEntity.class, position.getId()));
+    }
+
+    private void setConfirmed(PositionModel position, boolean confirmed) {
+        OrganizationMemberEntity member = em.find(OrganizationMemberEntity.class, position.getId());
+        member.setConfirmed(confirmed);
+    }
+
+    @Override
+    public OrganizationEntity getEntity() {
+        return entity;
+    }
+}

@@ -1,0 +1,297 @@
+{
+	"info": {
+		"_postman_id": "fb01dcd0-706d-4cda-90a9-08bddd580d00",
+		"name": "External Organization Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "List organizations",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/realms/master/orgs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"realms",
+						"master",
+						"orgs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new org",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"bin\": \"12345678912\",\r\n    \"name\": \"My favourite org\",\r\n    \"displayName\": \"My favourite org\",\r\n    \"enabled\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/realms/master/orgs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"realms",
+						"master",
+						"orgs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get single org",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/realms/master/orgs/12345678912",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"realms",
+						"master",
+						"orgs",
+						"12345678912"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit Org",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"bin\": \"12345678912\",\r\n    \"name\": \"My favourite org\",\r\n    \"displayName\": \"My favourite org UPDATED\",\r\n    \"enabled\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/realms/master/orgs/12345678912",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"realms",
+						"master",
+						"orgs",
+						"12345678912"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove Org",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/realms/master/orgs/12345678912",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"realms",
+						"master",
+						"orgs",
+						"12345678912"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get members",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/realms/master/orgs/12345678912/members",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"realms",
+						"master",
+						"orgs",
+						"12345678912",
+						"members"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get single member",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/realms/master/orgs/12345678912/members/19010857-9577-4288-8f21-5b59cf513ef6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"realms",
+						"master",
+						"orgs",
+						"12345678912",
+						"members",
+						"19010857-9577-4288-8f21-5b59cf513ef6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Revoke member",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/realms/master/orgs/12345678912/members/8e3802c8-56c8-4eb6-9a83-b86ad5553727/revoke",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"realms",
+						"master",
+						"orgs",
+						"12345678912",
+						"members",
+						"8e3802c8-56c8-4eb6-9a83-b86ad5553727",
+						"revoke"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Confirm member",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/realms/master/orgs/12345678912/members/8e3802c8-56c8-4eb6-9a83-b86ad5553727/confirm",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"realms",
+						"master",
+						"orgs",
+						"12345678912",
+						"members",
+						"8e3802c8-56c8-4eb6-9a83-b86ad5553727",
+						"confirm"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "accessTokenUrl",
+				"value": "http://localhost:8080/realms/master/protocol/openid-connect/token",
+				"type": "string"
+			},
+			{
+				"key": "scope",
+				"value": "openid",
+				"type": "string"
+			},
+			{
+				"key": "password",
+				"value": "admin",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "admin",
+				"type": "string"
+			},
+			{
+				"key": "clientId",
+				"value": "admin-cli",
+				"type": "string"
+			},
+			{
+				"key": "grant_type",
+				"value": "password_credentials",
+				"type": "string"
+			},
+			{
+				"key": "client_authentication",
+				"value": "body",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
