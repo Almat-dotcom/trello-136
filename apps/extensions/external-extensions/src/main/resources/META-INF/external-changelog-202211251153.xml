@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.2.xsd">
+
+    <changeSet id="202211251153-1" author="valyayevd">
+        <createTable tableName="ext_organization" remarks="Юридические лица внешнего реалма">
+            <column name="ID" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="ext_organization_pk"/>
+            </column>
+            <column name="BIN" type="VARCHAR(12)" remarks="БИН">
+                <constraints unique="true" uniqueConstraintName="ext_organization_bin_uk"/>
+            </column>
+            <column name="NAME" type="VARCHAR(511)" remarks="Имя для админки"/>
+            <column name="DISPLAY_NAME" type="VARCHAR(2000)" remarks="Полное наименование для админки"/>
+            <column name="ENABLED" type="BOOLEAN" defaultValueBoolean="true"
+                    remarks="Если true, то все пользователи этой организации могут входить в систему">
+                <constraints nullable="false"/>
+            </column>
+            <column name="REALM_ID" type="VARCHAR(255)" remarks="Идентификатор реалма">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)" remarks="Идентификатор первого руководителя">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATED_AT" type="TIMESTAMP" remarks="Дата и время последней модификации">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_AT" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="202211251153-2" author="valyayevd">
+        <createTable tableName="ext_position" remarks="Роль пользователя в организации">
+            <column name="ID" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="ext_position_pk"/>
+            </column>
+            <column name="NAME" type="VARCHAR(36)" remarks="Уникальное имя для идентификации">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DESCRIPTION" type="VARCHAR(255)" remarks="Описание для админки"/>
+        </createTable>
+
+        <insert tableName="ext_position">
+            <column name="ID">0235b59b-38c0-41a3-a731-3fb7e5d1f017</column>
+            <column name="NAME">HEAD</column>
+            <column name="DESCRIPTION">Первый руководитель</column>
+        </insert>
+        <insert tableName="ext_position">
+            <column name="ID">3535c3b5-2fbb-4fcc-bfbc-13126fb747c6</column>
+            <column name="NAME">EMPLOYEE</column>
+            <column name="DESCRIPTION">Сотрудник</column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="202211251153-3" author="valyayevd">
+        <createTable tableName="ext_organization_member" remarks="Сотрудник организации">
+            <column name="ID" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="ext_organization_member_pk"/>
+            </column>
+            <column name="USER_ID" type="VARCHAR(255)">
+                <constraints nullable="false" foreignKeyName="ext_organization_member_user_fk"
+                             references="USER_ENTITY(ID)"/>
+            </column>
+            <column name="ORGANIZATION_ID" type="VARCHAR(36)">
+                <constraints nullable="false" foreignKeyName="ext_organization_member_organization_fk"
+                             references="ext_organization(id)"/>
+            </column>
+            <column name="POSITION_ID" type="VARCHAR(36)">
+                <constraints nullable="false" foreignKeyName="ext_organization_member_position_fk"
+                             references="ext_position(id)"/>
+            </column>
+            <column name="CONFIRMED" type="BOOLEAN" defaultValueBoolean="false"
+                    remarks="Если true, то пользователь подтвержден как сотрудник организации">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_AT" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addUniqueConstraint tableName="ext_organization_member" columnNames="USER_ID,ORGANIZATION_ID"/>
+    </changeSet>
+
+</databaseChangeLog>
