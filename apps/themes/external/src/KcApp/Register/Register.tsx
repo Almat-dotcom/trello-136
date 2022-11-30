@@ -63,8 +63,8 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                                 onChange={onLegalRoleChanged}
                             >
                                 <option value="" disabled>{msgStr("doCheckRole")}</option>
-                                <option value="physical">{msgStr("head")}</option>
-                                <option value="legal">{msgStr("employee")}</option>
+                                <option value="head">{msgStr("head")}</option>
+                                <option value="employee">{msgStr("employee")}</option>
                             </select>
                         </div>
                     </div>
