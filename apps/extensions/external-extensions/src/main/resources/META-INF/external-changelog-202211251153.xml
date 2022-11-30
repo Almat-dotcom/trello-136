@@ -61,8 +61,7 @@
                 <constraints nullable="false" primaryKey="true" primaryKeyName="ext_organization_member_pk"/>
             </column>
             <column name="USER_ID" type="VARCHAR(255)">
-                <constraints nullable="false" foreignKeyName="ext_organization_member_user_fk"
-                             references="USER_ENTITY(ID)"/>
+                <constraints nullable="false"/>
             </column>
             <column name="ORGANIZATION_ID" type="VARCHAR(36)">
                 <constraints nullable="false" foreignKeyName="ext_organization_member_organization_fk"
