@@ -1,8 +1,118 @@
-
-.my-color {
-	color: red;
+body {
+	font-family: "Work Sans";
 }
 
-.my-font {
-	font-family: 'Work Sans';
+.login-page {
+    padding-top: 20px;
+}
+
+.login-header {
+	text-align: center;
+	overflow: visible;
+	white-space: nowrap;
+	margin-bottom: 40px;
+}
+
+.header-wrapper {
+	color: #7f0000;
+	text-transform: uppercase;
+	font-size: 20pt;
+}
+
+.login-card {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+	background-color: white;
+	margin: 0 auto;
+	max-width: 500px;
+	padding: 20px 40px 30px 40px;
+
+	-webkit-box-shadow: 0px 0px 8px 0px rgba(34, 60, 80, 0.2);
+	-moz-box-shadow: 0px 0px 8px 0px rgba(34, 60, 80, 0.2);
+	box-shadow: 0px 0px 8px 0px rgba(34, 60, 80, 0.2);
+}
+
+.login-card-header {
+	width: 100%;
+	padding: 4px 12px 12px 12px;
+	margin: 0px 12px 24px 12px;
+
+	text-align: center;
+	font-size: larger;
+	font-weight: 400;
+
+	border: none;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+.login-form-group {
+	width: 100%;
+	padding: 4px;
+}
+
+.login-form-control {
+	width: 100%;
+
+	padding: 8px 12px 8px 12px;
+	margin: 0px;
+
+	border: 2px solid #e0e0e0;
+	border-radius: 4px;
+}
+
+.login-form-control:hover,
+.login-form-control:active,
+.login-form-control:focus {
+	border: 2px solid #7f0000;
+}
+
+.form-buttons {
+	display: flex;
+	justify-content: flex-end;
+
+	width: 100%;
+
+	padding: 24px 0px 24px 0px;
+}
+
+.btn-primary {
+	width: 100%;
+	padding: 8px 24px 8px 24px;
+
+	cursor: pointer;
+
+	color: white;
+
+	background: #7f0000;
+	border: none;
+	border-radius: 6px;
+}
+
+.remember-me-wrapper {
+	display: flex;
+	align-items: center;
+
+	padding: 8px 0px 8px 0px;
+}
+
+.remember-me-checkbox {
+	accent-color: #7f0000;
+}
+
+.btn-primary:hover {
+	background: #630000;
+}
+
+.login-options {
+	display: flex;
+	justify-content: center;
+
+	width: 100%;
+
+	padding: 36px 24px 36px 24px;
+
+	background-color: #f5f5f5;
 }

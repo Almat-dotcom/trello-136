@@ -6,7 +6,7 @@ import java.util.UUID;
 
 @NamedQuery(
         name = "OrganizationMemberEntity.getOrganizationMembershipsByUserId",
-        query = "select m from OrganizationMemberEntity m where m.userId = :userId and m.realmId = :realmId"
+        query = "select m from OrganizationMemberEntity m where m.userId = :userId and m.organization.realmId = :realmId"
 )
 @Entity
 @Table(name = "ext_organization_member")

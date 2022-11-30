@@ -5,6 +5,7 @@ import org.keycloak.models.UserModel;
 public interface PositionModel {
 
     String HEAD = "HEAD";
+    String EMPLOYEE = "EMPLOYEE";
 
     String getId();
 

@@ -3,6 +3,7 @@ package kz.kacd.sso.external.resource;
 import com.google.auto.service.AutoService;
 import kz.kacd.sso.external.model.OrganizationModel;
 import kz.kacd.sso.external.model.OrganizationProvider;
+import kz.kacd.sso.external.model.PositionModel;
 import kz.kacd.sso.external.resource.common.OrganizationAdminAuth;
 import org.jboss.logging.Logger;
 import org.keycloak.Config;
@@ -12,6 +13,8 @@ import org.keycloak.models.utils.PostMigrationEvent;
 import org.keycloak.services.managers.RealmManager;
 import org.keycloak.services.resource.RealmResourceProvider;
 import org.keycloak.services.resource.RealmResourceProviderFactory;
+
+import java.util.stream.Collectors;
 
 /**
  * Resource provider factory for organization admin resource.
@@ -67,7 +70,7 @@ public class OrganizationResourceProviderFactory implements RealmResourceProvide
                         log.debug("You need to provide some implementation of organization event handling!");
                     } else if (event instanceof OrganizationModel.OrganizationRemovedEvent) {
                         log.debug("Organization removed event captured.");
-                        log.debug("You need to provide some implementation of organization event handling!");
+                        postOrganizationRemoved((OrganizationModel.OrganizationRemovedEvent) event);
                     }
                 }
         );
@@ -156,7 +159,23 @@ public class OrganizationResourceProviderFactory implements RealmResourceProvide
         RealmModel realm = event.getRealm();
         UserModel user = event.getUser();
         orgs.getUserOrganizations(realm, user)
-                .forEach(org -> org.removePosition(org.getPosition(user)));
+                .forEach(organization -> {
+                    if (organization.getPosition(user).getName().equals(PositionModel.HEAD)) {
+                        orgs.removeOrganization(realm, organization.getId());
+                    } else {
+                        organization.removePosition(organization.getPosition(user));
+                    }
+                });
+    }
+
+    private void postOrganizationRemoved(OrganizationModel.OrganizationRemovedEvent event) {
+        event.getOrganization().getPositions()
+                .forEach(position -> {
+                    UserModel user = event.getKeycloakSession().users().getUserById(event.getRealm(), position.getId());
+                    if (user != null) {
+                        user.setEnabled(false);
+                    }
+                });
     }
 
     @Override
