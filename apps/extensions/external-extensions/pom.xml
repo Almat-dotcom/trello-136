@@ -76,7 +76,24 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- override jackson version for version problem. is this still an issue? todo -->
+        <!-- Kalkan signature libraries -->
+        <dependency>
+            <groupId>org.apache.santuario</groupId>
+            <artifactId>xmlsec</artifactId>
+            <version>1.5.8</version>
+        </dependency>
+        <dependency>
+            <groupId>kz.gov.pki.kalkan</groupId>
+            <artifactId>kalkancrypt_xmldsig</artifactId>
+            <version>0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>kz.gov.pki.kalkan</groupId>
+            <artifactId>kalkancrypt</artifactId>
+            <version>0.7</version>
+        </dependency>
+
+        <!-- override jackson version for version problem. -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
@@ -133,6 +150,23 @@
         <finalName>external-extensions</finalName>
 
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>

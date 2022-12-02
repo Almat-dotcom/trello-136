@@ -36,9 +36,10 @@ build-external-extension:
     - cd ${PROJECT_DIR}
     - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/external-extensions.jar"
     - export MAVEN_OPTS="-Dmaven.repo.local=${CI_PROJECT_DIR}/${PROJECT_DIR}/.m2"
+    - chmod +x ./lib/install.sh && ./lib/install.sh
   script:
     - mvn clean package
-    - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./target/external-extensions.jar ${NEXUS_REPO}
+    - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./target/external-extensions-jar-with-dependencies.jar ${NEXUS_REPO}
   cache:
     - key: m2
       paths:

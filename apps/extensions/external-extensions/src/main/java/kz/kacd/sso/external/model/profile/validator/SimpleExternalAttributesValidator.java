@@ -2,7 +2,7 @@ package kz.kacd.sso.external.model.profile.validator;
 
 import kz.kacd.sso.external.model.page.ExternalRegistrationPage;
 import kz.kacd.sso.external.model.profile.ExternalAttributes;
-import kz.kacd.sso.external.model.profile.ExternalMessages;
+import kz.kacd.sso.external.model.page.ExternalMessages;
 import org.keycloak.authentication.forms.RegistrationPage;
 import org.keycloak.services.messages.Messages;
 import org.keycloak.validate.ValidationError;

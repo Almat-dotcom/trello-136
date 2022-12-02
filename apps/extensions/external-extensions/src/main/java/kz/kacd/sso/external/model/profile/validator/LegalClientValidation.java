@@ -4,7 +4,7 @@ import kz.kacd.sso.external.model.OrganizationModel;
 import kz.kacd.sso.external.model.OrganizationProvider;
 import kz.kacd.sso.external.model.page.ExternalRegistrationPage;
 import kz.kacd.sso.external.model.profile.ExternalAttributes;
-import kz.kacd.sso.external.model.profile.ExternalMessages;
+import kz.kacd.sso.external.model.page.ExternalMessages;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.validate.ValidationError;

@@ -1,4 +1,4 @@
-package kz.kacd.sso.external.flow;
+package kz.kacd.sso.external.flow.register;
 
 import kz.kacd.sso.external.model.profile.ExternalUserProfile;
 import kz.kacd.sso.external.model.profile.ExternalUserProfileProvider;
