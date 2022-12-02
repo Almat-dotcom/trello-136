@@ -35,6 +35,7 @@ build-external-extension:
     - export PROJECT_DIR="apps/extensions/external-extensions"
     - cd ${PROJECT_DIR}
     - export MAVEN_OPTS="-Dmaven.repo.local=${CI_PROJECT_DIR}/${PROJECT_DIR}/.m2"
+    - chmod +x ./lib/install.sh && ./lib/install.sh
   script:
     - mvn clean package
   cache:

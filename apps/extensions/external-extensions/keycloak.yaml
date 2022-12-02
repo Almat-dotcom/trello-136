@@ -13,7 +13,7 @@ services:
       - KC_DB_USERNAME=postgres
       - KC_LOG_LEVEL=debug
     volumes:
-      - ./target/external-extensions.jar:/opt/keycloak/providers/external-extensions.jar:rw
+      - ./target/external-extensions-jar-with-dependencies.jar:/opt/keycloak/providers/external-extensions.jar:rw
       # - ./realm.json:/opt/keycloak/data/import/realm.json
     ports:
       - 8080:8080

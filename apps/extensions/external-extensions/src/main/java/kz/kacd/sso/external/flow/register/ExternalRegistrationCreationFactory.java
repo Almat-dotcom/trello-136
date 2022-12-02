@@ -1,7 +1,6 @@
-package kz.kacd.sso.external.flow;
+package kz.kacd.sso.external.flow.register;
 
 import com.google.auto.service.AutoService;
-import java.util.Collections;
 import org.keycloak.Config;
 import org.keycloak.authentication.FormAction;
 import org.keycloak.authentication.FormActionFactory;
@@ -10,11 +9,12 @@ import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
 import org.keycloak.provider.ProviderConfigProperty;
 
+import java.util.Collections;
 import java.util.List;
 
 @AutoService(FormActionFactory.class)
-public class ExternalRegistrationProfileFactory implements FormActionFactory {
-    public static final String PROVIDER_ID = "external-registration-profile-action";
+public class ExternalRegistrationCreationFactory implements FormActionFactory {
+    public static final String PROVIDER_ID = "external-user-creation";
 
     private static final AuthenticationExecutionModel.Requirement[] REQUIREMENT_CHOICES =
             new AuthenticationExecutionModel.Requirement[] {
@@ -24,7 +24,7 @@ public class ExternalRegistrationProfileFactory implements FormActionFactory {
 
     @Override
     public String getDisplayType() {
-        return "External profile validation";
+        return "Create External User Profile";
     }
 
     @Override
@@ -49,7 +49,7 @@ public class ExternalRegistrationProfileFactory implements FormActionFactory {
 
     @Override
     public String getHelpText() {
-        return "Validates external profile after registration form submit";
+        return "Creates user profile on registration";
     }
 
     @Override
@@ -59,22 +59,22 @@ public class ExternalRegistrationProfileFactory implements FormActionFactory {
 
     @Override
     public FormAction create(KeycloakSession session) {
-        return new ExternalRegistrationProfile();
+        return new ExternalRegistrationCreation();
     }
 
     @Override
     public void init(Config.Scope config) {
-        // There is no config
+        // No config
     }
 
     @Override
     public void postInit(KeycloakSessionFactory factory) {
-        // There is nothing to do after init
+        // No post init actions
     }
 
     @Override
     public void close() {
-        // There is nothing to close
+        // Nothing to close
     }
 
     @Override

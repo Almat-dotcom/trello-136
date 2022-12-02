@@ -1,4 +1,4 @@
-package kz.kacd.sso.external.model.profile;
+package kz.kacd.sso.external.model.page;
 
 public class ExternalMessages {
 
@@ -15,6 +15,9 @@ public class ExternalMessages {
     public static final String INVALID_LEGAL_ROLE = "invalidLegalRole";
     public static final String DUPLICATE_IIN = "duplicateIin";
     public static final String DUPLICATE_BIN = "duplicateBin";
+    public static final String MISSING_EDS = "missingEds";
+    public static final String INVALID_EDS = "invalidEds";
+    public static final String REQUIRED_CONFIRM_OF_MEMBER = "requiredLegalMemberConfirmation";
 
     private ExternalMessages() {
     }
