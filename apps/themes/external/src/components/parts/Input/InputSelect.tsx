@@ -52,13 +52,14 @@ const InputSelect = ({ fieldName, label, options, value, error, onValueChange }:
             <div id="floating_outlined" className={(!changed && error ? "border-red-600" : "border-gray-300") + " flex w-full text-gray-900 rounded-lg border-2 dark:text-white dark:border-gray-600 dark:focus:border-primary focus:ring-0 focus:border-primary peer"}>
                 <input
                     className="h-full w-full appearance-none peer block cursor-pointer px-2.5 py-1 pt-4 bg-transparent focus:outline-none"
-                    id={fieldName}
-                    name={fieldName}
+                    id={fieldName + "_label"}
+                    name={fieldName + "_label"}
                     value={current.label}
                     onChange={() => { }}
                     onClick={() => setExpanded(!expanded)}
                     readOnly
                 />
+                <input type="hidden" id={fieldName} name={fieldName} value={current.value} onChange={() => {}}/>
                 <div>
                     <button
                         type="button"
