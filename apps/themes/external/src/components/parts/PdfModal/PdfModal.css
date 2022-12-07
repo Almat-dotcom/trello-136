@@ -1,0 +1,22 @@
+.reactMarkDown {
+    margin-left: 2.5rem;
+    margin-right: 2.5rem;
+
+    font-family: "Roboto";
+}
+
+.reactMarkDown h2 {
+    font-weight: bold;
+}
+
+.reactMarkDown ul {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    list-style: disc outside none;
+  }
+  
+  .reactMarkDown ul li {
+    margin-left: 2em;
+    display: list-item;
+    text-align: -webkit-match-parent;
+  }
