@@ -32,7 +32,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
-      serviceAccountName: {{ default "default" .Values.serviceAccount.name }}
+      serviceAccountName: {{ printf "%s-sa" (include "common.names.fullname" .) }}
       {{- include "keycloak.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
@@ -84,6 +84,10 @@ spec:
             - name: KC_CACHE_STACK
               value: "kubernetes"
             - name: KC_HTTP_ENABLED
+              value: "true"
+            - name: KC_LOG_CONSOLE_OUTPUT
+              value: "json"
+            - name: ENABLED_K8S
               value: "true"
             - name: JAVA_OPTS_APPEND
               value: {{ printf "-Djgroups.dns.query=%s-headless.%s.svc.%s" (include "common.names.fullname" .) (include "common.names.namespace" .) .Values.clusterDomain | quote }}

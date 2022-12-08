@@ -1,5 +1,6 @@
 package kz.kacd.sso.ldap.mapper;
 
+import com.google.auto.service.AutoService;
 import org.keycloak.component.ComponentModel;
 import org.keycloak.models.RealmModel;
 import org.keycloak.provider.ProviderConfigProperty;
@@ -9,9 +10,11 @@ import org.keycloak.storage.ldap.LDAPStorageProvider;
 import org.keycloak.storage.ldap.mappers.AbstractLDAPStorageMapper;
 import org.keycloak.storage.ldap.mappers.AbstractLDAPStorageMapperFactory;
 import org.keycloak.storage.ldap.mappers.LDAPConfigDecorator;
+import org.keycloak.storage.ldap.mappers.LDAPStorageMapperFactory;
 
 import java.util.List;
 
+@AutoService(LDAPStorageMapperFactory.class)
 public class UserDivisionLdapMapperFactory extends AbstractLDAPStorageMapperFactory implements LDAPConfigDecorator {
 
     public static final String PROVIDER_ID = "ldap-user-division-mapper";
