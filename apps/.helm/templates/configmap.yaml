@@ -26,6 +26,7 @@ data:
   KC_HTTPS_CERTIFICATE_FILE: {{ printf "/opt/kacd/keycloak/certs/%s" .Values.tls.certificateFileKey }}
   KC_HTTPS_CERTIFICATE_KEY_FILE: {{ printf "/opt/kacd/keycloak/certs/%s" .Values.tls.keyFileKey }}
   KC_HTTPS_PORT: {{ .Values.containerPorts.https | quote }}
+  MASTER_REALM_ENABLED: {{ .Values.enabledMasterRealm }}
   {{- if .Values.logging }}
   KEYCLOAK_LOG_OUTPUT: {{ .Values.logging.output | quote }}
   {{- end }}

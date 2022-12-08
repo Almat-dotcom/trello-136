@@ -1,3 +1,4 @@
+{{- if .Values.realmController.enabled -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -28,7 +29,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
-      serviceAccountName: {{ printf "%s-realm-controller-sa" (include "common.names.fullname" .) }}
+      serviceAccountName: {{ printf "%s-sa" (include "common.names.fullname" .) }}
       {{- include "keycloak.imagePullSecrets" . | nindent 6 }}
       containers:
         - name: controller
@@ -73,3 +74,4 @@ spec:
             httpGet:
               path: /actuator/health
               port: http
+{{- end }}

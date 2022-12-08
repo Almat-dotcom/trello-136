@@ -9,6 +9,8 @@ replicaCount: 3
 
 hostname: sso-dev.k8s-dev.kacd.kz
 
+enabledMasterRealm: "true"
+
 resources:
   limits: 
     memory: "4Gi"

@@ -9,11 +9,11 @@ mock-step:
   tags:
     - global_runner_2
 
-build-ldap-extension:
+build-common-extension:
   stage: build
   image: maven:3-eclipse-temurin-17-alpine
   before_script:
-    - export PROJECT_DIR="apps/extensions/ldap-mappers"
+    - export PROJECT_DIR="apps/extensions/common-extensions"
     - cd ${PROJECT_DIR}
     - export MAVEN_OPTS="-Dmaven.repo.local=${CI_PROJECT_DIR}/${PROJECT_DIR}/.m2"
   script:
@@ -21,10 +21,10 @@ build-ldap-extension:
   cache:
     - key: m2-mr
       paths:
-        - apps/extensions/ldap-mappers/.m2
+        - apps/extensions/common-extensions/.m2
   rules:
     - changes:
-      - apps/extensions/ldap-mappers/**/*
+      - apps/extensions/common-extensions/**/*
   tags:
     - global_runner_2
 

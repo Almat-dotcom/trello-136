@@ -1,4 +1,0 @@
-#
-# Ldap storage mappers
-#
-kz.kacd.sso.ldap.mapper.UserDivisionLdapMapperFactory

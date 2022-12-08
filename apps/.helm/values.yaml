@@ -62,6 +62,11 @@ existingConfigmap: ""
 #
 httpRelativePath: "/"
 
+#
+# Is master realm enabled
+#
+enabledMasterRealm: "false"
+
 # 
 # Posrts of keycloak inside container
 #
@@ -170,6 +175,7 @@ database:
 # Realm controller config
 #
 realmController:
+  enabled: false
   #
   # Image of the controller
   #
