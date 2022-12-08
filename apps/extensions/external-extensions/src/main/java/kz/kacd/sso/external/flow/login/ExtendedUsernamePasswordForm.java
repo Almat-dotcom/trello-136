@@ -1,11 +1,13 @@
 package kz.kacd.sso.external.flow.login;
 
+import kz.kacd.sso.external.model.page.ExternalRegistrationPage;
 import org.jboss.logging.Logger;
 import org.keycloak.authentication.AuthenticationFlowContext;
 import org.keycloak.authentication.Authenticator;
 import org.keycloak.authentication.FlowStatus;
 import org.keycloak.authentication.authenticators.browser.UsernamePasswordForm;
 import org.keycloak.models.UserModel;
+import org.keycloak.services.managers.AuthenticationManager;
 
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -45,6 +47,13 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
 
             @Override
             public void action(AuthenticationFlowContext context) {
+                String iin = context.getHttpRequest().getDecodedFormParameters()
+                        .getFirst(AuthenticationManager.FORM_USERNAME);
+                context.getHttpRequest().getDecodedFormParameters()
+                        .putSingle(
+                                AuthenticationManager.FORM_USERNAME,
+                                iin + "-" + ExternalRegistrationPage.CLIENT_PHYSICAL
+                        );
                 ExtendedUsernamePasswordForm.super.action(context);
             }
         });
