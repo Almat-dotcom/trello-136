@@ -47,17 +47,41 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
 
             @Override
             public void action(AuthenticationFlowContext context) {
-                String iin = context.getHttpRequest().getDecodedFormParameters()
-                        .getFirst(AuthenticationManager.FORM_USERNAME);
-                context.getHttpRequest().getDecodedFormParameters()
-                        .putSingle(
-                                AuthenticationManager.FORM_USERNAME,
-                                iin + "-" + ExternalRegistrationPage.CLIENT_PHYSICAL
-                        );
+                String username = extractUsername(context);
+                boolean isIin = isIin(username);
+                if (isIin) {
+                    rewriteContextUsername(context, username);
+                }
+
                 ExtendedUsernamePasswordForm.super.action(context);
+
+                if (isIin) {
+                    rewriteContextIin(context, username);
+                }
             }
         });
         return extendedAlternatives;
+    }
+
+    private String extractUsername(AuthenticationFlowContext context) {
+        return context.getHttpRequest().getDecodedFormParameters().getFirst(AuthenticationManager.FORM_USERNAME);
+    }
+
+    private boolean isIin(String username) {
+        return username.length() == 12 && username.matches("\\d+");
+    }
+
+    private void rewriteContextUsername(AuthenticationFlowContext context, String iin) {
+        String username = iin + "-" + ExternalRegistrationPage.CLIENT_PHYSICAL;
+        setUsername(context, username);
+    }
+
+    private void rewriteContextIin(AuthenticationFlowContext context, String iin) {
+        setUsername(context, iin);
+    }
+
+    private void setUsername(AuthenticationFlowContext context, String username) {
+        context.getHttpRequest().getDecodedFormParameters().putSingle(AuthenticationManager.FORM_USERNAME, username);
     }
 
     @Override
