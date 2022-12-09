@@ -21,7 +21,7 @@ resources:
 
 tls:
   enabled: true
-  existingSecret: keycloak-tls
+  existingSecret: keycloak-fake-tls
   certificateFileKey: tls.crt
   keyFileKey: tls.key
 
