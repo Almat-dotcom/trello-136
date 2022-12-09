@@ -7,7 +7,7 @@ image: nexus.kacd.kz:5000/valyayev/test/keycloak:0.3
 
 replicaCount: 3
 
-hostname: sso-dev.k8s-dev.kacd.kz
+hostname: sso-dev.kacd.kz
 
 enabledMasterRealm: "true"
 
@@ -47,7 +47,7 @@ service:
 
 ingress:
   enabled: true
-  hostname: sso-dev.k8s-dev.kacd.kz
+  hostname: sso-dev.kacd.kz
   tls: true
   secrets:
     - name: keycloak-tls
