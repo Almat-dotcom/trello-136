@@ -37,9 +37,9 @@ spec:
               name: {{ .Values.ingress.serviceName }}
               port:
                 name: http
+  {{- if and .Values.ingress.tls }}
   tls:
-  {{- if and .Values.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.ingress.annotations )) .Values.ingress.secrets .Values.ingress.selfSigned) }}
     - hosts:
-        - {{ (tpl .Values.hostname.internal .) | quote }}
-      secretName: {{ printf "%s-tls" (tpl .Values.hostname.internal .) }}
+        - {{ (tpl .Values.hostname.external .) | quote }}
+      secretName: {{ .Values.ingress.secretName }}
   {{- end }}

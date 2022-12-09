@@ -14,7 +14,4 @@ ldap:
 ingress:
   serviceName: sso-keycloak
   tls: true
-  secrets:
-    - name: keycloak-tls
-      key: tls.key
-      certificate: tls.crt
+  secretName: keycloak-tls
