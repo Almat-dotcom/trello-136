@@ -183,7 +183,7 @@ public class K8sFederationAdapter implements K8sFederation {
         log.warnf("Federation %s is failed: %s", getName(), K8sFederationMessages.error(e));
 
         FederationStatus newStatus = new FederationStatus();
-        newStatus.setState(FederationStatus.State.BACK_OFF);
+        newStatus.setState(FederationStatus.State.FAILED);
         newStatus.setMessage(K8sFederationMessages.error(e));
         newStatus.setGeneration(sourceGeneration);
         newStatus.setLastApplication(LocalDateTime.now().toString());
