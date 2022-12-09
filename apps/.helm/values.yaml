@@ -107,11 +107,11 @@ tls:
   #
   # Name of the certificate file inside existing secret
   #
-  certificateFileKey: tls.crt
+  certificateFileKey: server.crt
   #
   # Name of the key file inside existing secret
   #
-  keyFileKey: tls.key
+  keyFileKey: server.key
 
 #
 # Admin authorization config

@@ -49,10 +49,7 @@ ingress:
   enabled: true
   hostname: sso-dev.kacd.kz
   tls: true
-  secrets:
-    - name: keycloak-tls
-      key: tls.key
-      certificate: tls.crt
+  secretName: keycloak-tls
 
 realmController:
   image: nexus.kacd.kz:5000/platform/sso/realm-controller:dev-1377
