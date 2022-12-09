@@ -9,6 +9,8 @@ public interface K8sRealm {
 
     Long STANDARD_BACKOFF = 600L;
 
+    String REALM_LABEL = "kz-kacd-realm-name";
+
     String getName();
 
     RealmSpec getSpec();

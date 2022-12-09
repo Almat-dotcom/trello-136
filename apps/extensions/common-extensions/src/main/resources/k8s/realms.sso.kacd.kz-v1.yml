@@ -89,8 +89,14 @@ spec:
                       usernameKey:
                         description: Name of the key where username is stored
                         type: string
+                      usernamePlainValue:
+                        description: Plain value of username (This way is not recommended)
+                        type: string
                       passwordKey:
                         description: Name of the key where password is stored
+                        type: string
+                      passwordPlainValue:
+                        description: Plain value of password (This way is not recommended)
                         type: string
                     type: object
                 type: object
@@ -342,7 +348,7 @@ spec:
                       notRecentlyUsed:
                         description: "number of passwords of the user which will be saved to restrict user \
                           type same password"
-                        type: string
+                        type: number
                       passwordBlacklist:
                         description: List of the passwords in lower case separated by new line which will be banned
                         type: string
