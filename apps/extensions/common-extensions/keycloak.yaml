@@ -11,7 +11,7 @@ services:
       - KC_DB_PASSWORD=keycloak
       - KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak
       - KC_DB_USERNAME=postgres
-      - KC_LOG_LEVEL=debug
+      - KC_LOG_LEVEL=info
       - MASTER_REALM_ENABLED=true
       - ENABLED_K8S=true
     volumes:
