@@ -74,6 +74,7 @@ public class ExternalRegistrationBuilder extends AbstractFlowBuilder {
 
     private void addExecution(AuthenticationFlowModel parent, AuthenticationExecutionModel source, String authenticator) {
         AuthenticationExecutionModel target = new AuthenticationExecutionModel();
+        target.setRequirement(AuthenticationExecutionModel.Requirement.REQUIRED);
         target.setAuthenticatorFlow(false);
         target.setAuthenticator(authenticator);
         target.setPriority(source.getPriority());
