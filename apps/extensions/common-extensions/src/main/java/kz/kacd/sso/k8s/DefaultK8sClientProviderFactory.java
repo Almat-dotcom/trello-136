@@ -28,7 +28,7 @@ public class DefaultK8sClientProviderFactory implements K8sClientProviderFactory
 
     @Override
     public void close() {
-        INSTANCE.close();
+        INSTANCE.getClient().close();
     }
 
     @Override

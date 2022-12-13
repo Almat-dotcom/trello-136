@@ -21,6 +21,6 @@ public class DefaultK8sClientProvider implements K8sClientProvider {
 
     @Override
     public void close() {
-        client.close();
+        // Nothing to close
     }
 }

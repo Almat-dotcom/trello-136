@@ -1,6 +1,5 @@
 package kz.kacd.sso.file;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import kz.kacd.sso.v1.Realm;
 import org.keycloak.models.KeycloakSession;
@@ -8,7 +7,6 @@ import org.keycloak.models.KeycloakSessionFactory;
 import org.keycloak.provider.ProviderEvent;
 
 import java.io.File;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 public class DefaultFileImportResourceProvider implements FileImportResourceProvider {
