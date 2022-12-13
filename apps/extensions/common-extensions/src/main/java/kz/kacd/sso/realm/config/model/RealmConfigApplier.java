@@ -44,6 +44,7 @@ public class RealmConfigApplier {
         applySecurity(source.getSecurity());
         applySession(source.getSessions());
         applyTokens(source.getTokens());
+        applyPasswordPolicy(source.getAuthentication());
 
         return model;
     }
@@ -210,5 +211,13 @@ public class RealmConfigApplier {
 
         model.setAccessTokenLifespan(duration(defaulted(source.getAccessLifespan(), "15m")).intValue());
         model.setAccessTokenLifespanForImplicitFlow(duration(defaulted(source.getOidcAccessLifespan(), "15m")).intValue());
+    }
+
+    private void applyPasswordPolicy(Authentication spec) {
+        if (spec == null || spec.getPasswordPolicy() == null) {
+            return;
+        }
+
+        model.setPasswordPolicy(new PasswordPolicyBuilder(session, model).build(spec.getPasswordPolicy()));
     }
 }

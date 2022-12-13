@@ -22,3 +22,6 @@ spec:
         - en
         - ru
       defaultLocale: ru
+  authentication:
+    passwordPolicy:
+      minimumLength: 8

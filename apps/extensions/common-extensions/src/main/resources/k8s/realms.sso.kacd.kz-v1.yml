@@ -344,34 +344,32 @@ spec:
                     properties:
                       expiration:
                         description: number of days after which password will be expired
-                        type: number
+                        type: integer
                       notRecentlyUsed:
                         description: "number of passwords of the user which will be saved to restrict user \
                           type same password"
-                        type: number
+                        type: integer
                       passwordBlacklist:
                         description: List of the passwords in lower case separated by new line which will be banned
                         type: string
                       minimumLength:
                         description: Minimum length of chars of password
-                        type: string
+                        type: integer
                       regexp:
                         description: Regular expression which forced password to match with
-                        items:
-                          type: string
-                        type: array
+                        type: string
                       countOfSpecialChars:
                         description: Number of special characters in password
-                        type: number
+                        type: integer
                       uppercaseChars:
                         description: Number of uppercase characters in password
-                        type: number
+                        type: integer
                       lowercaseChars:
                         description: Number of lowercase characters in password
-                        type: number
+                        type: integer
                       numberOfDigits:
                         description: Number of digits in password
-                        type: number
+                        type: integer
                     type: object
                 type: object
             type: object
