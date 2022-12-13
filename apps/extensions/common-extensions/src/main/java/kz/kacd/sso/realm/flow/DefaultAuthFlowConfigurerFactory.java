@@ -24,19 +24,7 @@ public class DefaultAuthFlowConfigurerFactory implements AuthFlowConfigurerFacto
 
     @Override
     public void postInit(KeycloakSessionFactory factory) {
-        factory.register(event -> {
-            if (event instanceof PostMigrationEvent) {
-                try {
-                    KeycloakSession session = ((PostMigrationEvent) event).getFactory().create();
-                    session.getTransactionManager().begin();
-                    RealmModel realm = session.realms().getRealmByName("master");
-                    create(session).configurePredefinedFlows(realm);
-                    session.getTransactionManager().commit();
-                } catch (Exception e) {
-                    Logger.getLogger("ERROR").error("", e);
-                }
-            }
-        });
+        // Nothing to post init
     }
 
     @Override

@@ -1,6 +1,6 @@
 package kz.kacd.sso.realm.config.model;
 
-import kz.kacd.sso.k8s.realm.K8sRealm;
+import kz.kacd.sso.v1.RealmSpec;
 import kz.kacd.sso.v1.realmspec.*;
 import kz.kacd.sso.v1.realmspec.events.AdminEvents;
 import kz.kacd.sso.v1.realmspec.events.UserEvents;
@@ -34,26 +34,26 @@ public class RealmConfigApplier {
         this.session = session;
     }
 
-    public RealmModel apply(K8sRealm source) {
+    public RealmModel apply(String name, RealmSpec source) {
         model.setEnabled(true);
-        applyNameAndSsl(source);
-        applyLogin(source.getSpec().getLogin());
-        applyEmail(source.getSpec().getEmail());
-        applyThemes(source.getSpec().getThemes());
-        applyEvents(source.getSpec().getEvents());
-        applySecurity(source.getSpec().getSecurity());
-        applySession(source.getSpec().getSessions());
-        applyTokens(source.getSpec().getTokens());
+        applyNameAndSsl(name, source);
+        applyLogin(source.getLogin());
+        applyEmail(source.getEmail());
+        applyThemes(source.getThemes());
+        applyEvents(source.getEvents());
+        applySecurity(source.getSecurity());
+        applySession(source.getSessions());
+        applyTokens(source.getTokens());
 
         return model;
     }
 
-    private void applyNameAndSsl(K8sRealm source) {
-        model.setDisplayName(defaulted(source.getSpec().getDisplayedName(), source.getName()));
+    private void applyNameAndSsl(String name, RealmSpec source) {
+        model.setDisplayName(defaulted(source.getDisplayedName(), name));
         model.setDisplayNameHtml(model.getDisplayName());
-        model.setSslRequired(convertSsl(defaulted(source.getSpec().getRequireSsl(), "none")));
-        if (source.getSpec().getFrontendUrl() != null) {
-            model.setAttribute(FRONT_END_URL, source.getSpec().getFrontendUrl());
+        model.setSslRequired(convertSsl(defaulted(source.getRequireSsl(), "none")));
+        if (source.getFrontendUrl() != null) {
+            model.setAttribute(FRONT_END_URL, source.getFrontendUrl());
         } else {
             model.removeAttribute(FRONT_END_URL);
         }
@@ -204,6 +204,10 @@ public class RealmConfigApplier {
     }
 
     private void applyTokens(Tokens source) {
+        if (source == null) {
+            return;
+        }
+
         model.setAccessTokenLifespan(duration(defaulted(source.getAccessLifespan(), "15m")).intValue());
         model.setAccessTokenLifespanForImplicitFlow(duration(defaulted(source.getOidcAccessLifespan(), "15m")).intValue());
     }

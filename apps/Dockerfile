@@ -18,7 +18,7 @@ COPY build-extensions/external-extensions.jar /opt/keycloak/providers/external-e
 COPY build-extensions/internal-keycloak-theme.jar /opt/keycloak/providers/internal-keycloak-theme.jar
 COPY build-extensions/external-keycloak-theme.jar /opt/keycloak/providers/external-keycloak-theme.jar
 
-RUN /opt/keycloak/bin/kc.sh build
+RUN /opt/keycloak/bin/kc.sh build && mkdir -p /opt/keycloak/.kacd/import
 
 FROM quay.io/keycloak/keycloak:20.0.0
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
