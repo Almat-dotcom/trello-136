@@ -147,6 +147,11 @@ spec:
               mountPath: /opt/kacd/keycloak/certs
               readOnly: true
             {{- end }}
+            {{- if .Values.initialSetup }}
+            - name: realms
+              mountPath: /opt/keycloak/.kacd/import
+              readOnly: true
+            {{- end }}
       volumes:
         {{- if or .Values.configuration .Values.existingConfigmap }}
         - name: keycloak-config
@@ -158,4 +163,9 @@ spec:
           secret:
             secretName: {{ .Values.tls.existingSecret }}
             defaultMode: 420
+        {{- end }}
+        {{- if .Values.initialSetup }}
+        - name: realms
+          configMap:
+            name: {{ printf "%s-realms" (include "common.names.fullname" .) }}
         {{- end }}

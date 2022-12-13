@@ -1,4 +1,4 @@
-{{- if .Values.realmController.enabled -}}
+{{- if and .Values.realmController.enabled (not .Values.initialSetup) -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
