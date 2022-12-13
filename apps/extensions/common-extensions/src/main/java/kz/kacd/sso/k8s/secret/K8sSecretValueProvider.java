@@ -4,7 +4,11 @@ import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import org.jboss.logging.Logger;
 
+import java.nio.charset.StandardCharsets;
+import java.util.AbstractMap;
+import java.util.Base64;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class K8sSecretValueProvider implements SecretValueProvider {
     private static final Logger log = Logger.getLogger(K8sSecretValueProvider.class);
@@ -35,11 +39,18 @@ public class K8sSecretValueProvider implements SecretValueProvider {
         meta.setName(name);
         meta.setLabels(labels);
 
+        Map<String, String> targetData = data.entrySet().stream().map(
+                it -> new AbstractMap.SimpleEntry<>(
+                        it.getKey(),
+                        Base64.getEncoder().encodeToString(it.getValue().getBytes(StandardCharsets.UTF_8))
+                )
+        ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
         io.fabric8.kubernetes.api.model.Secret secret = new io.fabric8.kubernetes.api.model.Secret();
         secret.setApiVersion("v1");
         secret.setKind("Secret");
         secret.setMetadata(meta);
-        secret.setData(data);
+        secret.setData(targetData);
 
         secret = client.resource(secret).createOrReplace();
         return new SecretAdapter(secret);
