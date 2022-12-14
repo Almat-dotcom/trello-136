@@ -8,6 +8,7 @@ import org.keycloak.Config;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
 import org.keycloak.models.RealmModel;
+import org.keycloak.provider.ProviderEvent;
 
 @AutoService(FederationConfigurerFactory.class)
 public class DefaultFederationConfigurerFactory implements FederationConfigurerFactory {
@@ -46,6 +47,22 @@ public class DefaultFederationConfigurerFactory implements FederationConfigurerF
         federations.findByRealm(realm.getName()).forEach(it ->
                 configurer.configure(realm, it.getSpec())
         );
+
+        session.getKeycloakSessionFactory().publish(federationsConfigured(event));
+    }
+
+    private ProviderEvent federationsConfigured(KeycloakRealmConfigurer.KeycloakRealmConfigured source) {
+        return new FederationConfigurer.FederationsConfigured() {
+            @Override
+            public KeycloakSession getSession() {
+                return source.getSession();
+            }
+
+            @Override
+            public RealmModel getRealm() {
+                return source.getRealm();
+            }
+        };
     }
 
     @Override

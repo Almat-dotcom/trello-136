@@ -187,6 +187,9 @@ spec:
                         description: If true all emails in ldap will be trusted
                           by keycloak
                         type: boolean
+                      realmManagementRolesDn:
+                        description: DN for roles of realm management
+                        type: string
                     type: object
                   groups:
                     description: Settings of group mapping

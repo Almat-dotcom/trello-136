@@ -8,10 +8,8 @@ import kz.kacd.sso.v1.federationspec.ldap.*;
 import org.keycloak.common.util.MultivaluedHashMap;
 import org.keycloak.component.ComponentModel;
 import org.keycloak.models.KeycloakSession;
-import org.keycloak.representations.idm.ComponentRepresentation;
 
 import java.util.Collections;
-import java.util.List;
 
 import static kz.kacd.sso.util.ValueUtils.defaulted;
 import static kz.kacd.sso.util.ValueUtils.defaultedPeriod;
@@ -48,7 +46,6 @@ public class LdapBuilder {
     private static final String UUID_ATTR = "uuidLDAPAttribute";
     private static final String VALIDATE_PASSWORD = "validatePasswordPolicy";
     private static final String VENDOR = "vendor";
-    private static final String FILTER = "customUserSearchFilter";
 
     private final String realmId;
     private final KeycloakSession session;

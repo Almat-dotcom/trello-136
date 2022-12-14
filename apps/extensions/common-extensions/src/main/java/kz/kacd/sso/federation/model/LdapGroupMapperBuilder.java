@@ -3,7 +3,6 @@ package kz.kacd.sso.federation.model;
 import kz.kacd.sso.v1.federationspec.ldap.Groups;
 import org.keycloak.common.util.MultivaluedHashMap;
 import org.keycloak.component.ComponentModel;
-import org.keycloak.representations.idm.ComponentRepresentation;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,7 +55,7 @@ public class LdapGroupMapperBuilder {
     }
 
     private ComponentModel withSpec(Groups spec, String dn, String path) {
-        ComponentModel result = init();
+        ComponentModel result = init(dn);
 
         MultivaluedHashMap<String, String> config = new MultivaluedHashMap<>();
         config.put(
@@ -98,10 +97,12 @@ public class LdapGroupMapperBuilder {
         }
     }
 
-    private ComponentModel init() {
+    private ComponentModel init(String dn) {
+        String ou = dn.split(",")[0].trim().replace("OU=", "");
+
         ComponentModel result = new ComponentModel();
         result.setParentId(parent.getId());
-        result.setName("LDAP groups");
+        result.setName(ou + " LDAP groups");
         result.setProviderId(PROVIDER_ID);
         result.setProviderType(PROVIDER_TYPE);
         return result;

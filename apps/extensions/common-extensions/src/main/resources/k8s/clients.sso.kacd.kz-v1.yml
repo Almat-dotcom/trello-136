@@ -21,7 +21,7 @@ spec:
               displayedName:
                 description: Name to be displayed in admin console
                 type: string
-              description:
+              displayedDescription:
                 description: Full specified description of the client. Can be multiline
                   string
                 type: string
@@ -119,7 +119,7 @@ spec:
                       description: Name of the role. This name will be propagated
                         into tokens.
                       type: string
-                    description:
+                    roleDescription:
                       description: Description of the role. It can be multiline string.
                       type: string
                   type: object

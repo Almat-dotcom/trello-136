@@ -1,15 +1,13 @@
 package kz.kacd.sso.federation;
 
-import kz.kacd.sso.federation.model.LdapAttributeMapperBuilder;
-import kz.kacd.sso.federation.model.LdapBuilder;
-import kz.kacd.sso.federation.model.LdapDivisionMapperBuilder;
-import kz.kacd.sso.federation.model.LdapGroupMapperBuilder;
+import kz.kacd.sso.federation.model.*;
 import kz.kacd.sso.v1.FederationSpec;
 import kz.kacd.sso.v1.federationspec.ldap.Searching;
 import org.jboss.logging.Logger;
 import org.keycloak.component.ComponentModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
+import org.keycloak.provider.ProviderEvent;
 
 public class DefaultFederationConfigurer implements FederationConfigurer {
     private static final Logger log = Logger.getLogger(DefaultFederationConfigurer.class);
@@ -26,8 +24,26 @@ public class DefaultFederationConfigurer implements FederationConfigurer {
         configureLdap(realm, spec);
     }
 
+    @Override
+    public ComponentModel findLdap(RealmModel realm) {
+        return realm.getComponentsStream()
+                .filter(it -> it.getProviderId().equals(LdapBuilder.LDAP_PROVIDER_ID))
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public void addRoleMapping(RealmModel realm, ComponentModel parent, String client, String dn) {
+        ComponentModel mapper =
+                new LdapRoleMapperBuilder(parent.getId())
+                        .withClientAndDn(client, dn)
+                        .build();
+        realm.addComponentModel(mapper);
+        session.getKeycloakSessionFactory().publish(groupsMapperCreated(mapper, true));
+    }
+
     private void configureLdap(RealmModel realm, FederationSpec spec) {
-        if (spec == null) {
+        if (spec == null || spec.getLdap() == null) {
             return;
         }
 
@@ -48,6 +64,9 @@ public class DefaultFederationConfigurer implements FederationConfigurer {
         addLastName(realm, ldap, readOnly);
         addDivision(realm, ldap);
         addGroups(realm, ldap, spec);
+        if (!readOnly) {
+            addRealmManagementRolesMapper(realm, ldap, spec.getLdap().getAdvanced().getRealmManagementRolesDn());
+        }
     }
 
     private void addMiddleName(RealmModel realm, ComponentModel parent, boolean readOnly) {
@@ -109,7 +128,36 @@ public class DefaultFederationConfigurer implements FederationConfigurer {
         new LdapGroupMapperBuilder(parent)
                 .withSpec(spec.getLdap().getGroups())
                 .build()
-                .forEach(realm::addComponentModel);
+                .forEach(it -> {
+                    realm.addComponentModel(it);
+                    session.getKeycloakSessionFactory().publish(groupsMapperCreated(it, false));
+                });
+    }
+
+    private void addRealmManagementRolesMapper(RealmModel realm, ComponentModel parent, String dn) {
+        ComponentModel component =
+                new LdapRoleMapperBuilder(parent.getParentId()).withClientAndDn("realm-management", dn).build();
+        realm.addComponentModel(component);
+        session.getKeycloakSessionFactory().publish(groupsMapperCreated(component, true));
+    }
+
+    private ProviderEvent groupsMapperCreated(ComponentModel component, boolean syncToLdap) {
+        return new GroupsOrRolesMapperConfigured() {
+            @Override
+            public KeycloakSession getSession() {
+                return session;
+            }
+
+            @Override
+            public ComponentModel getMapper() {
+                return component;
+            }
+
+            @Override
+            public boolean syncToLdap() {
+                return syncToLdap;
+            }
+        };
     }
 
     @Override
