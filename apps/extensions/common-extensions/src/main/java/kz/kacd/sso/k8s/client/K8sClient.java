@@ -10,6 +10,8 @@ public interface K8sClient {
 
     String getName();
 
+    String getRealm();
+
     ClientSpec getSpec();
 
     ClientStatus getStatus();

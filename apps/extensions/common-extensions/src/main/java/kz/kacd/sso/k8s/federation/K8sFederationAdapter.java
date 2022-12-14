@@ -2,6 +2,7 @@ package kz.kacd.sso.k8s.federation;
 
 import kz.kacd.sso.k8s.federation.model.K8sFederationMessages;
 import kz.kacd.sso.k8s.federation.repository.K8sFederationRepository;
+import kz.kacd.sso.k8s.realm.K8sRealm;
 import kz.kacd.sso.v1.Federation;
 import kz.kacd.sso.v1.FederationSpec;
 import kz.kacd.sso.v1.FederationStatus;
@@ -19,6 +20,7 @@ public class K8sFederationAdapter implements K8sFederation {
     private final K8sFederationRepository repository;
 
     private final String name;
+    private final String realm;
     private final String sourceGeneration;
     private final FederationSpec spec;
     private FederationStatus status;
@@ -27,6 +29,7 @@ public class K8sFederationAdapter implements K8sFederation {
         this.keycloakSession = session;
         this.repository = repository;
         this.name = source.getMetadata().getName();
+        this.realm = source.getMetadata().getLabels().get(K8sRealm.REALM_LABEL);
         this.sourceGeneration = source.getMetadata().getGeneration().toString();
         this.spec = source.getSpec();
         this.status = source.getStatus();
@@ -35,6 +38,11 @@ public class K8sFederationAdapter implements K8sFederation {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String getRealm() {
+        return realm;
     }
 
     @Override

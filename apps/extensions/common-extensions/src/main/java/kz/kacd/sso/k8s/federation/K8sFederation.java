@@ -10,6 +10,8 @@ public interface K8sFederation {
 
     String getName();
 
+    String getRealm();
+
     FederationSpec getSpec();
 
     FederationStatus getStatus();

@@ -2,6 +2,7 @@ package kz.kacd.sso.k8s.client;
 
 import kz.kacd.sso.k8s.client.model.K8sClientMessages;
 import kz.kacd.sso.k8s.client.repository.K8sClientRepository;
+import kz.kacd.sso.k8s.realm.K8sRealm;
 import kz.kacd.sso.v1.Client;
 import kz.kacd.sso.v1.ClientSpec;
 import kz.kacd.sso.v1.ClientStatus;
@@ -19,6 +20,7 @@ public class K8sClientAdapter implements K8sClient {
     private final K8sClientRepository repository;
 
     private final String name;
+    private final String realm;
     private final String sourceGeneration;
     private final ClientSpec spec;
     private ClientStatus status;
@@ -27,6 +29,7 @@ public class K8sClientAdapter implements K8sClient {
         this.keycloakSession = session;
         this.repository = repository;
         this.name = source.getMetadata().getName();
+        this.realm = source.getMetadata().getLabels().get(K8sRealm.REALM_LABEL);
         this.sourceGeneration = source.getMetadata().getGeneration().toString();
         this.spec = source.getSpec();
         this.status = source.getStatus();
@@ -35,6 +38,11 @@ public class K8sClientAdapter implements K8sClient {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String getRealm() {
+        return realm;
     }
 
     @Override
