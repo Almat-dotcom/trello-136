@@ -24,12 +24,12 @@ public class K8sRealmProviderSpi implements Spi {
 
     @Override
     public Class<? extends Provider> getProviderClass() {
-        return K8sClientProvider.class;
+        return K8sRealmProvider.class;
     }
 
     @Override
     public Class<? extends ProviderFactory<?>> getProviderFactoryClass() {
-        return K8sClientProviderFactory.class;
+        return K8sRealmProviderFactory.class;
     }
 
     @Override

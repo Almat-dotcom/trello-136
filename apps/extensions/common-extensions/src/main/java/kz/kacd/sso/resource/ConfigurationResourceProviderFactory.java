@@ -2,7 +2,6 @@ package kz.kacd.sso.resource;
 
 import com.google.auto.service.AutoService;
 import kz.kacd.sso.resource.common.ConfigAdminAuth;
-import kz.kacd.sso.v1.realmspec.authentication.Flows;
 import org.jboss.logging.Logger;
 import org.keycloak.Config;
 import org.keycloak.models.*;
@@ -14,9 +13,8 @@ import org.keycloak.services.resource.RealmResourceProviderFactory;
 
 @AutoService(RealmResourceProviderFactory.class)
 public class ConfigurationResourceProviderFactory implements RealmResourceProviderFactory {
-    private static final Logger log = Logger.getLogger(ConfigurationResourceProviderFactory.class);
-
     public static final String PROVIDER_ID = "k8s-config";
+    private static final Logger log = Logger.getLogger(ConfigurationResourceProviderFactory.class);
 
     @Override
     public RealmResourceProvider create(KeycloakSession session) {

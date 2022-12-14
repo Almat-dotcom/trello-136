@@ -47,7 +47,7 @@ public class DefaultAdminProvider implements AdminClientProvider {
 
         ClientModel realmManagement = session.clients().getClientByClientId(realm, "realm-management");
         RoleModel role = realmManagement.getRolesStream()
-                .filter(it -> it.getName().equals("manage-realm"))
+                .filter(it -> it.getName().equals(ADMIN_CLIENT))
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("Cannot find realm-management role!"));
         sa.grantRole(role);
