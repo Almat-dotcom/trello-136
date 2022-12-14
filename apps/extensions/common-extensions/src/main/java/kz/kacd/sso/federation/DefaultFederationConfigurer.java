@@ -39,7 +39,7 @@ public class DefaultFederationConfigurer implements FederationConfigurer {
                         .withClientAndDn(client, dn)
                         .build();
         realm.addComponentModel(mapper);
-        session.getKeycloakSessionFactory().publish(groupsMapperCreated(mapper, true));
+        session.getKeycloakSessionFactory().publish(groupsMapperCreated(realm, parent, mapper, true));
     }
 
     private void configureLdap(RealmModel realm, FederationSpec spec) {
@@ -130,7 +130,7 @@ public class DefaultFederationConfigurer implements FederationConfigurer {
                 .build()
                 .forEach(it -> {
                     realm.addComponentModel(it);
-                    session.getKeycloakSessionFactory().publish(groupsMapperCreated(it, false));
+                    session.getKeycloakSessionFactory().publish(groupsMapperCreated(realm, parent, it, false));
                 });
     }
 
@@ -138,10 +138,10 @@ public class DefaultFederationConfigurer implements FederationConfigurer {
         ComponentModel component =
                 new LdapRoleMapperBuilder(parent.getParentId()).withClientAndDn("realm-management", dn).build();
         realm.addComponentModel(component);
-        session.getKeycloakSessionFactory().publish(groupsMapperCreated(component, true));
+        session.getKeycloakSessionFactory().publish(groupsMapperCreated(realm, parent, component, true));
     }
 
-    private ProviderEvent groupsMapperCreated(ComponentModel component, boolean syncToLdap) {
+    private ProviderEvent groupsMapperCreated(RealmModel realm, ComponentModel ldap, ComponentModel component, boolean syncToLdap) {
         return new GroupsOrRolesMapperConfigured() {
             @Override
             public KeycloakSession getSession() {
@@ -156,6 +156,16 @@ public class DefaultFederationConfigurer implements FederationConfigurer {
             @Override
             public boolean syncToLdap() {
                 return syncToLdap;
+            }
+
+            @Override
+            public RealmModel getRealm() {
+                return realm;
+            }
+
+            @Override
+            public ComponentModel getLdap() {
+                return ldap;
             }
         };
     }

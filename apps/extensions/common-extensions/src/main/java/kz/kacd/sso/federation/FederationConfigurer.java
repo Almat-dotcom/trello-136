@@ -18,6 +18,10 @@ public interface FederationConfigurer extends Provider {
     interface GroupsOrRolesMapperConfigured extends ProviderEvent {
         KeycloakSession getSession();
 
+        RealmModel getRealm();
+
+        ComponentModel getLdap();
+
         ComponentModel getMapper();
 
         boolean syncToLdap();
