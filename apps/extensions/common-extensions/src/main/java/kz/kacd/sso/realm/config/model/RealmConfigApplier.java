@@ -142,7 +142,7 @@ public class RealmConfigApplier {
             return;
         }
 
-        model.setEventsListeners(defaulted(new HashSet<>(source.getEventListeners()), Collections.emptySet()));
+        model.setEventsListeners(new HashSet<>(defaulted(source.getEventListeners(), Collections.emptyList())));
         applyUserEvents(source.getUserEvents());
         applyAdminEvents(source.getAdminEvents());
     }
@@ -155,7 +155,7 @@ public class RealmConfigApplier {
         model.setEventsEnabled(defaulted(source.getSaveEvents(), false));
         if (model.isEventsEnabled()) {
             model.setEventsExpiration(duration(defaulted(source.getExpiration(), "7d")));
-            model.setEnabledEventTypes(defaulted(new HashSet<>(source.getSavedTypes()), Collections.emptySet()));
+            model.setEnabledEventTypes(new HashSet<>(defaulted(source.getSavedTypes(), Collections.emptyList())));
         }
     }
 
