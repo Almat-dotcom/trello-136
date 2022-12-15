@@ -4,6 +4,7 @@ import com.google.auto.service.AutoService;
 import org.keycloak.Config;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
+import org.keycloak.models.utils.KeycloakModelUtils;
 
 @AutoService(FederationSynchronizerFactory.class)
 public class DefaultFederationSynchronizerFactory implements FederationSynchronizerFactory {
@@ -29,12 +30,18 @@ public class DefaultFederationSynchronizerFactory implements FederationSynchroni
     }
 
     private void sync(FederationConfigurer.GroupsOrRolesMapperConfigured event) {
-        KeycloakSession session = event.getSession();
-        if (event.syncToLdap()) {
-            create(session).syncToLdap(event.getRealm(), event.getLdap(), event.getMapper());
-        } else {
-            create(session).syncToKeycloak(event.getRealm(), event.getLdap(), event.getMapper());
-        }
+        KeycloakSessionFactory factory = event.getSession().getKeycloakSessionFactory();
+        KeycloakModelUtils.runJobInTransaction(
+                factory,
+                session -> {
+                    session.getContext().setRealm(event.getRealm());
+                    if (event.syncToLdap()) {
+                        create(session).syncToLdap(event.getRealm(), event.getLdap(), event.getMapper());
+                    } else {
+                        create(session).syncToKeycloak(event.getRealm(), event.getLdap(), event.getMapper());
+                    }
+                }
+        );
     }
 
     @Override
