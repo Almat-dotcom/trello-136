@@ -39,8 +39,6 @@ public class DefaultFederationConfigurer implements FederationConfigurer {
                         .withClientAndDn(client, dn)
                         .build();
         realm.addComponentModel(mapper);
-        session.getTransactionManager().commit();
-        session.getTransactionManager().begin();
         session.getKeycloakSessionFactory().publish(groupsMapperCreated(realm, parent, mapper, true));
     }
 
@@ -132,8 +130,6 @@ public class DefaultFederationConfigurer implements FederationConfigurer {
                 .build()
                 .forEach(it -> {
                     realm.addComponentModel(it);
-                    session.getTransactionManager().commit();
-                    session.getTransactionManager().begin();
                     session.getKeycloakSessionFactory().publish(groupsMapperCreated(realm, parent, it, false));
                 });
     }
