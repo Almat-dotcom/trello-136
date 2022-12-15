@@ -8,6 +8,7 @@ import org.keycloak.storage.ldap.mappers.AbstractLDAPStorageMapper;
 import org.keycloak.storage.ldap.mappers.AbstractLDAPStorageMapperFactory;
 import org.keycloak.storage.ldap.mappers.LDAPStorageMapper;
 import org.keycloak.storage.ldap.mappers.membership.group.GroupLDAPStorageMapper;
+import org.keycloak.storage.ldap.mappers.membership.role.RoleLDAPStorageMapper;
 import org.keycloak.storage.user.SynchronizationResult;
 
 public class DefaultFederationSynchronizer implements FederationSynchronizer {
@@ -20,8 +21,8 @@ public class DefaultFederationSynchronizer implements FederationSynchronizer {
 
     @Override
     public void syncToKeycloak(RealmModel realm, ComponentModel ldap, ComponentModel component) {
-        LDAPStorageMapper mapper = session.getProvider(AbstractLDAPStorageMapper.class, ldap.getId());
-        
+        GroupLDAPStorageMapper mapper = session.getComponentProvider(GroupLDAPStorageMapper.class, ldap.getId());
+
         SynchronizationResult result = mapper.syncDataFromFederationProviderToKeycloak(realm);
         if (result.getFailed() != 0) {
             throw new IllegalStateException("Failed to sync mapping to keycloak");
@@ -30,7 +31,7 @@ public class DefaultFederationSynchronizer implements FederationSynchronizer {
 
     @Override
     public void syncToLdap(RealmModel realm, ComponentModel ldap, ComponentModel component) {
-        LDAPStorageMapper mapper = session.getProvider(AbstractLDAPStorageMapper.class, ldap.getId());
+        RoleLDAPStorageMapper mapper = session.getComponentProvider(RoleLDAPStorageMapper.class, ldap.getId());
 
         SynchronizationResult result = mapper.syncDataFromKeycloakToFederationProvider(realm);
         if (result.getFailed() != 0) {
