@@ -34,9 +34,9 @@ public class DefaultFederationSynchronizerFactory implements FederationSynchroni
                 event.getSession().getKeycloakSessionFactory(),
                 session -> {
                     if (event.syncToLdap()) {
-                        create(event.getSession()).syncToLdap(event.getRealm(), event.getLdap(), event.getMapper());
+                        create(session).syncToLdap(event.getRealm(), event.getLdap(), event.getMapper());
                     } else {
-                        create(event.getSession()).syncToKeycloak(event.getRealm(), event.getLdap(), event.getMapper());
+                        create(session).syncToKeycloak(event.getRealm(), event.getLdap(), event.getMapper());
                     }
                 }
         );
