@@ -4,7 +4,6 @@ import org.keycloak.component.ComponentModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.storage.UserStorageProvider;
-import org.keycloak.storage.ldap.LDAPStorageProvider;
 import org.keycloak.storage.ldap.mappers.LDAPStorageMapper;
 import org.keycloak.storage.user.SynchronizationResult;
 
@@ -18,8 +17,11 @@ public class DefaultFederationSynchronizer implements FederationSynchronizer {
 
     @Override
     public void syncToKeycloak(RealmModel realm, ComponentModel ldap, ComponentModel component) {
-        session.getComponentProvider(UserStorageProvider.class, ldap.getId());
-        LDAPStorageMapper mapper = session.getComponentProvider(LDAPStorageMapper.class, component.getId());
+        ComponentModel ldapFound = realm.getComponent(ldap.getId());
+        ComponentModel mapperFound = realm.getComponent(component.getId());
+
+        session.getProvider(UserStorageProvider.class, ldapFound);
+        LDAPStorageMapper mapper = session.getProvider(LDAPStorageMapper.class, mapperFound);
 
         SynchronizationResult result = mapper.syncDataFromFederationProviderToKeycloak(realm);
         if (result.getFailed() != 0) {
@@ -29,8 +31,11 @@ public class DefaultFederationSynchronizer implements FederationSynchronizer {
 
     @Override
     public void syncToLdap(RealmModel realm, ComponentModel ldap, ComponentModel component) {
-        session.getComponentProvider(UserStorageProvider.class, ldap.getId());
-        LDAPStorageMapper mapper = session.getComponentProvider(LDAPStorageMapper.class, component.getId());
+        ComponentModel ldapFound = realm.getComponent(ldap.getId());
+        ComponentModel mapperFound = realm.getComponent(component.getId());
+
+        session.getProvider(UserStorageProvider.class, ldapFound);
+        LDAPStorageMapper mapper = session.getProvider(LDAPStorageMapper.class, mapperFound);
 
         SynchronizationResult result = mapper.syncDataFromKeycloakToFederationProvider(realm);
         if (result.getFailed() != 0) {

@@ -16,7 +16,7 @@ public class SecretAdapter implements Secret {
 
     private Map<String, String> decode(Map<String, String> source) {
         return source.entrySet().stream()
-                .map(entry -> new AbstractMap.SimpleEntry<>(entry.getKey(), base64Decode(entry.getValue())))
+                .map(entry -> new AbstractMap.SimpleEntry<>(entry.getKey(), base64Decode(entry.getValue()).trim()))
                 .collect(Collectors.toMap(
                         AbstractMap.SimpleEntry::getKey,
                         AbstractMap.SimpleEntry::getValue
