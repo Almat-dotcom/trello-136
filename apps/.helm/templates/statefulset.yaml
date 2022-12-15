@@ -89,6 +89,8 @@ spec:
               value: "json"
             - name: ENABLED_K8S
               value: "true"
+            - name: K8S_NAMESPACE
+              value: {{ include "common.names.namespace" . | quote }}
             - name: JAVA_OPTS_APPEND
               value: {{ printf "-Djgroups.dns.query=%s-headless.%s.svc.%s" (include "common.names.fullname" .) (include "common.names.namespace" .) .Values.clusterDomain | quote }}
             - name: KEYCLOAK_ADMIN_PASSWORD

@@ -1,8 +1,6 @@
 package kz.kacd.sso.k8s.realm;
 
 import com.google.auto.service.AutoService;
-import kz.kacd.sso.k8s.K8sClientProvider;
-import kz.kacd.sso.k8s.K8sClientProviderFactory;
 import kz.kacd.sso.k8s.K8sConfig;
 import org.keycloak.provider.Provider;
 import org.keycloak.provider.ProviderFactory;
