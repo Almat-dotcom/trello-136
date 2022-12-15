@@ -63,8 +63,8 @@ public class ConfigurationResource extends BaseConfigAdminResource {
 
             return Response.ok(ModelToRepresentation.toBriefRepresentation(realm)).build();
         } catch (Exception e) {
-            log.infof("Error on configuring realm %s!", name, e);
-            if (initialStatus.getState() == RealmStatus.State.BACK_OFF) {
+            log.error("Error on configuring realm!", e);
+            if (initialStatus != null && initialStatus.getState() == RealmStatus.State.BACK_OFF) {
                 spec.failed(e);
             } else {
                 spec.toBackOff(e);
@@ -101,8 +101,8 @@ public class ConfigurationResource extends BaseConfigAdminResource {
                     .success();
             return Response.ok().build();
         } catch (Exception e) {
-            log.errorf("Error on configuring federation %s!", name, e);
-            if (initial.getState() == FederationStatus.State.BACK_OFF) {
+            log.error("Error on configuring federation!", e);
+            if (initial != null && initial.getState() == FederationStatus.State.BACK_OFF) {
                 spec.failed(e);
             } else {
                 spec.backoff(e);
@@ -138,8 +138,8 @@ public class ConfigurationResource extends BaseConfigAdminResource {
                     .success();
             return Response.ok().build();
         } catch (Exception e) {
-            log.errorf("Error on configuring client %s!", name, e);
-            if (initial.getState() == ClientStatus.State.BACKOFF) {
+            log.error("Error on configuring client!", e);
+            if (initial != null && initial.getState() == ClientStatus.State.BACKOFF) {
                 spec.failed(e);
             } else {
                 spec.backoff(e);
