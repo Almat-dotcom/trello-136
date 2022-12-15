@@ -18,6 +18,7 @@ public class DefaultFederationSynchronizer implements FederationSynchronizer {
 
     @Override
     public void syncToKeycloak(RealmModel realm, ComponentModel ldap, ComponentModel component) {
+        session.getComponentProvider(UserStorageProvider.class, ldap.getId());
         LDAPStorageMapper mapper = session.getComponentProvider(LDAPStorageMapper.class, component.getId());
 
         SynchronizationResult result = mapper.syncDataFromFederationProviderToKeycloak(realm);
@@ -28,6 +29,7 @@ public class DefaultFederationSynchronizer implements FederationSynchronizer {
 
     @Override
     public void syncToLdap(RealmModel realm, ComponentModel ldap, ComponentModel component) {
+        session.getComponentProvider(UserStorageProvider.class, ldap.getId());
         LDAPStorageMapper mapper = session.getComponentProvider(LDAPStorageMapper.class, component.getId());
 
         SynchronizationResult result = mapper.syncDataFromKeycloakToFederationProvider(realm);
