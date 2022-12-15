@@ -34,7 +34,7 @@ public class DefaultFederationSynchronizerFactory implements FederationSynchroni
         KeycloakModelUtils.runJobInTransaction(
                 factory,
                 session -> {
-                    session.getContext().setRealm(event.getRealm());
+                    session.getContext().setRealm(session.realms().getRealm(event.getRealm().getId()));
                     if (event.syncToLdap()) {
                         create(session).syncToLdap(event.getRealm(), event.getLdap(), event.getMapper());
                     } else {
