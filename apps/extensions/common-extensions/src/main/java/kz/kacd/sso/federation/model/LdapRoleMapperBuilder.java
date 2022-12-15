@@ -2,6 +2,7 @@ package kz.kacd.sso.federation.model;
 
 import org.keycloak.common.util.MultivaluedHashMap;
 import org.keycloak.component.ComponentModel;
+import org.keycloak.models.utils.KeycloakModelUtils;
 import org.keycloak.representations.idm.ComponentRepresentation;
 
 import java.util.Collections;
@@ -28,6 +29,7 @@ public class LdapRoleMapperBuilder {
     private final ComponentModel target = new ComponentModel();
 
     public LdapRoleMapperBuilder(String parentId) {
+        target.setId(KeycloakModelUtils.generateId());
         target.setParentId(parentId);
         target.setProviderId(PROVIDER_ID);
         target.setProviderType(PROVIDER_TYPE);
