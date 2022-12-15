@@ -5,20 +5,19 @@ import kz.kacd.sso.federation.FederationConfigurer;
 import kz.kacd.sso.k8s.K8sConfig;
 import kz.kacd.sso.k8s.secret.Secret;
 import kz.kacd.sso.k8s.secret.SecretValueProvider;
+import kz.kacd.sso.realm.flow.AuthFlowConstants;
 import kz.kacd.sso.v1.ClientSpec;
 import kz.kacd.sso.v1.clientspec.*;
 import org.jboss.logging.Logger;
 import org.keycloak.component.ComponentModel;
-import org.keycloak.models.ClientModel;
-import org.keycloak.models.KeycloakSession;
-import org.keycloak.models.RealmModel;
-import org.keycloak.models.RoleModel;
+import org.keycloak.models.*;
 import org.keycloak.services.managers.ClientManager;
 import org.keycloak.services.managers.RealmManager;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 import static kz.kacd.sso.util.ValueUtils.defaulted;
 
@@ -51,6 +50,7 @@ public class DefaultClientConfigurer implements ClientConfigurer {
         addRoles(target, client.getRoles());
         addLdap(realm, target, client.getLdap());
         addMappers(target, client.getAttributes());
+        setAllowedGroup(realm, target, client.getAllowedGroup());
     }
 
     private ClientModel create(RealmModel realm, String clientId) {
@@ -168,6 +168,25 @@ public class DefaultClientConfigurer implements ClientConfigurer {
         }
 
         attrs.forEach(kind -> client.addProtocolMapper(ProtocolMapperFactory.create(kind)));
+    }
+
+    private void setAllowedGroup(RealmModel realm, ClientModel client, String group) {
+        if (group == null || group.isEmpty()) {
+            return;
+        }
+
+        Optional<GroupModel> allowedGroup = realm.getGroupsStream()
+                .filter(it -> it.getName().equals(group))
+                .findFirst();
+        if (!allowedGroup.isPresent()) {
+            return;
+        }
+
+        RoleModel restricted = client.addRole("restricted-access");
+        restricted.setDescription("Role to restrict access to client");
+        allowedGroup.get().grantRole(restricted);
+        AuthenticationFlowModel flow = realm.getFlowByAlias(AuthFlowConstants.RESTRICTED_BROWSER);
+        client.setAuthenticationFlowBindingOverride("browser", flow.getId());
     }
 
     @Override
