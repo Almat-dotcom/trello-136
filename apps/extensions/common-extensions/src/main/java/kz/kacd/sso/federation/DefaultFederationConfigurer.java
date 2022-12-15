@@ -49,9 +49,17 @@ public class DefaultFederationConfigurer implements FederationConfigurer {
             return;
         }
 
-        ComponentModel ldap = realm.addComponentModel(
-                new LdapBuilder(realm.getId(), session).buildFrom(spec.getLdap())
-        );
+        ComponentModel source = new LdapBuilder(realm.getId(), session).buildFrom(spec.getLdap());
+        ComponentModel ldap = realm.getComponentsStream().filter(it ->
+                it.getName() != null && it.getName().equals(spec.getLdap().getDisplayedName())
+        ).findFirst().orElse(null);
+        if (ldap == null) {
+            ldap = realm.addComponentModel(source);
+        } else {
+            source.setId(ldap.getId());
+            realm.updateComponent(source);
+            ldap = source;
+        }
         addMappers(realm, ldap, spec);
     }
 
