@@ -3,6 +3,7 @@ package kz.kacd.sso.federation;
 import org.keycloak.component.ComponentModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
+import org.keycloak.storage.ldap.LDAPStorageProvider;
 import org.keycloak.storage.ldap.mappers.membership.group.GroupLDAPStorageMapper;
 import org.keycloak.storage.ldap.mappers.membership.role.RoleLDAPStorageMapper;
 import org.keycloak.storage.user.SynchronizationResult;
@@ -17,6 +18,9 @@ public class DefaultFederationSynchronizer implements FederationSynchronizer {
 
     @Override
     public void syncToKeycloak(RealmModel realm, ComponentModel ldap, ComponentModel component) {
+        if (session.getComponentProvider(LDAPStorageProvider.class, ldap.getId()) == null) {
+            throw new IllegalStateException("Cannot find ldap user storage provider!");
+        }
         GroupLDAPStorageMapper mapper = session.getComponentProvider(GroupLDAPStorageMapper.class, component.getId());
 
         SynchronizationResult result = mapper.syncDataFromFederationProviderToKeycloak(realm);
