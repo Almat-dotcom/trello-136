@@ -2,8 +2,10 @@ package kz.kacd.sso.federation;
 
 import com.google.auto.service.AutoService;
 import org.keycloak.Config;
+import org.keycloak.component.ComponentModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
+import org.keycloak.models.RealmModel;
 import org.keycloak.models.utils.KeycloakModelUtils;
 
 @AutoService(FederationSynchronizerFactory.class)
@@ -34,11 +36,14 @@ public class DefaultFederationSynchronizerFactory implements FederationSynchroni
         KeycloakModelUtils.runJobInTransaction(
                 factory,
                 session -> {
-                    session.getContext().setRealm(session.realms().getRealm(event.getRealm().getId()));
+                    RealmModel realm = session.realms().getRealm(event.getRealm().getId());
+                    session.getContext().setRealm(event.getRealm());
+                    ComponentModel ldap = realm.getComponent(event.getLdap().getId());
+                    ComponentModel mapper = realm.getComponent(event.getMapper().getId());
                     if (event.syncToLdap()) {
-                        create(session).syncToLdap(event.getRealm(), event.getLdap(), event.getMapper());
+                        create(session).syncToLdap(realm, ldap, mapper);
                     } else {
-                        create(session).syncToKeycloak(event.getRealm(), event.getLdap(), event.getMapper());
+                        create(session).syncToKeycloak(realm, ldap, mapper);
                     }
                 }
         );
