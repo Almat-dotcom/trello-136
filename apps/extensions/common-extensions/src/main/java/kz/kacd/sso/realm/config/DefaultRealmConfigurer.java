@@ -83,12 +83,12 @@ public class DefaultRealmConfigurer implements KeycloakRealmConfigurer {
 
         AuthFlowConfigurer flows = session.getProvider(AuthFlowConfigurer.class);
         flows.configurePredefinedFlows(realm);
-        if (config.getBrowser().equals(Flows.Browser.RESTRICTED)) {
+        if (config.getBrowser() != null && config.getBrowser().equals(Flows.Browser.RESTRICTED)) {
             realm.setBrowserFlow(flows.findFlow(realm, AuthFlowConstants.RESTRICTED_BROWSER));
         } else if (config.getBrowser().equals(Flows.Browser.EXTERNAL)) {
             realm.setBrowserFlow(flows.findFlow(realm, AuthFlowConstants.EXTERNAL_LOGIN));
         }
-        if (config.getRegistration().equals(Flows.Registration.EXTERNAL)) {
+        if (config.getRegistration() != null && config.getRegistration().equals(Flows.Registration.EXTERNAL)) {
             realm.setRegistrationFlow(flows.findFlow(realm, AuthFlowConstants.EXTERNAL_REGISTRATION));
         }
     }
