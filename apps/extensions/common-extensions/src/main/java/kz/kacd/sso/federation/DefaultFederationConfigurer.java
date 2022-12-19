@@ -144,12 +144,19 @@ public class DefaultFederationConfigurer implements FederationConfigurer {
                     session.getTransactionManager().begin();
                     session.getKeycloakSessionFactory().publish(groupsMapperCreated(realm, parent, it, false));
                 });
+        session.getTransactionManager().begin();
     }
 
     private void addRealmManagementRolesMapper(RealmModel realm, ComponentModel parent, String dn) {
+        if (dn == null || dn.isEmpty()) {
+            return;
+        }
+
         ComponentModel component =
                 new LdapRoleMapperBuilder(parent.getId()).withClientAndDn("realm-management", dn).build();
         realm.addComponentModel(component);
+        session.getTransactionManager().commit();
+        session.getTransactionManager().begin();
         session.getKeycloakSessionFactory().publish(groupsMapperCreated(realm, parent, component, true));
     }
 
