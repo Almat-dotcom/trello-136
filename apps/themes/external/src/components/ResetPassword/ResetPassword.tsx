@@ -10,17 +10,17 @@ import { ChangeEvent, memo, useRef, useState } from "react";
 type KcContext_ResetPassword = Extract<KcContext, { pageId: "login-reset-password.ftl" }>;
 
 const ResetPassword = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext_ResetPassword; i18n: I18n; } & KcProps) => {
-    const { url, message, messagesPerField, auth } = kcContext;
+    const { url, message, auth } = kcContext;
     const { msg, msgStr, advancedMsgStr } = i18n;
 
     const [username, setUsername] = useState(auth?.attemptedUsername ?? "");
-    const [error, setError] = useState(messagesPerField.get("error") ?? undefined);
+    const [error, setError] = useState(getError(kcContext, "username") ?? undefined);
 
     const onUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
         setUsername(event.target.value);
     }
 
-    const formRef = useRef<HTMLFormElement>();
+    const formRef = useRef<HTMLFormElement>(null);
 
     const onSubmit = () => {
         if (username.length === 0) {
@@ -43,13 +43,13 @@ const ResetPassword = memo(({ kcContext, i18n, ...props }: { kcContext: KcContex
                 </div>
 
                 <div className="mt-4">
-                    <form id="kc-reset-password-form" action={url.loginAction} method="post">
+                    <form id="kc-reset-password-form" ref={formRef} action={url.loginAction} method="post">
                         <InputField
                             fieldName="username"
                             label={msgStr("usernameOrEmail")}
                             type="text"
                             value={username}
-                            error={advancedMsgStr(error) ?? error}
+                            error={advancedMsgStr(error ?? "") ?? error}
                             onChange={onUsernameChange}
                         />
 
@@ -73,5 +73,13 @@ const ResetPassword = memo(({ kcContext, i18n, ...props }: { kcContext: KcContex
         </LayoutWithCarousel>
     );
 });
+
+const getError = (kcContext: KcContext_ResetPassword, field: string): string | undefined => {
+    try {
+        return kcContext.messagesPerField.printIfExists(field, undefined);
+    } catch (error) {
+        return undefined;
+    }
+}
 
 export default ResetPassword;
