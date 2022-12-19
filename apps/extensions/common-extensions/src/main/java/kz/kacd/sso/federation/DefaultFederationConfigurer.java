@@ -7,6 +7,7 @@ import org.jboss.logging.Logger;
 import org.keycloak.component.ComponentModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
+import org.keycloak.models.utils.KeycloakModelUtils;
 import org.keycloak.provider.ProviderEvent;
 
 public class DefaultFederationConfigurer implements FederationConfigurer {
@@ -144,7 +145,6 @@ public class DefaultFederationConfigurer implements FederationConfigurer {
                     session.getTransactionManager().begin();
                     session.getKeycloakSessionFactory().publish(groupsMapperCreated(realm, parent, it, false));
                 });
-        session.getTransactionManager().begin();
     }
 
     private void addRealmManagementRolesMapper(RealmModel realm, ComponentModel parent, String dn) {
@@ -152,12 +152,18 @@ public class DefaultFederationConfigurer implements FederationConfigurer {
             return;
         }
 
-        ComponentModel component =
-                new LdapRoleMapperBuilder(parent.getId()).withClientAndDn("realm-management", dn).build();
-        realm.addComponentModel(component);
-        session.getTransactionManager().commit();
-        session.getTransactionManager().begin();
-        session.getKeycloakSessionFactory().publish(groupsMapperCreated(realm, parent, component, true));
+        KeycloakModelUtils.runJobInTransaction(
+                session.getKeycloakSessionFactory(),
+                keycloakSession -> {
+                    RealmModel model = keycloakSession.realms().getRealm(realm.getId());
+                    ComponentModel component =
+                            new LdapRoleMapperBuilder(parent.getId()).withClientAndDn("realm-management", dn).build();
+                    model.addComponentModel(component);
+                    keycloakSession.getTransactionManager().commit();
+                    keycloakSession.getTransactionManager().begin();
+                    keycloakSession.getKeycloakSessionFactory().publish(groupsMapperCreated(model, parent, component, true));
+                }
+        );
     }
 
     private ProviderEvent groupsMapperCreated(RealmModel realm, ComponentModel ldap, ComponentModel component, boolean syncToLdap) {
