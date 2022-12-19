@@ -28,7 +28,7 @@ public class K8sClientSpecProviderSpi implements Spi {
 
     @Override
     public Class<? extends ProviderFactory<?>> getProviderFactoryClass() {
-        return K8sFederationProviderFactory.class;
+        return K8sClientSpecProviderFactory.class;
     }
 
     @Override
