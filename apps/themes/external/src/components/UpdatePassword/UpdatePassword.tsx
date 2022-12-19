@@ -35,7 +35,7 @@ const UpdatePassword = memo(({ kcContext, i18n, ...props }: { kcContext: KcConte
                 </div>
 
                 <div className="mt-4">
-                    <form id="kc-update-password" action={url.loginAction} method="post">
+                    <form id="kc-update-password" ref={formRef} action={url.loginAction} method="post">
                         <input className="hidden" id="username" name="username" type="text" readOnly value={username} onChange={() => { }} />
                         <input className="hidden" id="password" name="password" type="password"/>
                         <InputField
