@@ -99,7 +99,7 @@ public class ConfigurationResource extends BaseConfigAdminResource {
                     .resourcePath(session.getContext().getUri())
                     .representation(spec.getSpec())
                     .success();
-            return Response.ok().build();
+            return Response.ok(spec.getSpec()).build();
         } catch (Exception e) {
             log.error("Error on configuring federation!", e);
             if (initial != null && initial.getState() == FederationStatus.State.BACK_OFF) {
@@ -136,7 +136,7 @@ public class ConfigurationResource extends BaseConfigAdminResource {
                     .resourcePath(session.getContext().getUri())
                     .representation(spec.getSpec())
                     .success();
-            return Response.ok().build();
+            return Response.ok(spec.getSpec()).build();
         } catch (Exception e) {
             log.error("Error on configuring client!", e);
             if (initial != null && initial.getState() == ClientStatus.State.BACKOFF) {
