@@ -148,7 +148,7 @@ public class DefaultFederationConfigurer implements FederationConfigurer {
 
     private void addRealmManagementRolesMapper(RealmModel realm, ComponentModel parent, String dn) {
         ComponentModel component =
-                new LdapRoleMapperBuilder(parent.getParentId()).withClientAndDn("realm-management", dn).build();
+                new LdapRoleMapperBuilder(parent.getId()).withClientAndDn("realm-management", dn).build();
         realm.addComponentModel(component);
         session.getKeycloakSessionFactory().publish(groupsMapperCreated(realm, parent, component, true));
     }
