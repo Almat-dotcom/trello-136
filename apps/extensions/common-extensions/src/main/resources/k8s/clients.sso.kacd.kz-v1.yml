@@ -130,7 +130,7 @@ spec:
                   name:
                     description: Unique name of the scope
                     type: string
-                  description:
+                  scopeDescription:
                     description: Human friendly description of the scope
                     type: string
                 type: object

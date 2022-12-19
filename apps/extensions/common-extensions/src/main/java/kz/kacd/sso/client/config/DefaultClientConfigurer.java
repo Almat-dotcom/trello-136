@@ -138,7 +138,8 @@ public class DefaultClientConfigurer implements ClientConfigurer {
             return;
         }
 
-        realm.addClientScope(scope.getName());
+        ClientScopeModel model = realm.addClientScope(scope.getName());
+        model.setDescription(scope.getScopeDescription());
     }
 
     private void addRoles(ClientModel client, List<Roles> roles) {
