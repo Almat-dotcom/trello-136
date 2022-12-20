@@ -1,4 +1,8 @@
-README.md
-build
-gradlew.bat
-.gitignore
+Dockerfile
+*.md
+target
+.mvn
+mvnw
+mvnw.bat
+.idea
+.cache

@@ -1,44 +1,27 @@
-#
-# Main image with execution user created
-#
-FROM amazoncorretto:17-alpine3.16-jdk as run
+FROM quay.io/quarkus/quarkus-micro-image:1.0 AS run
+WORKDIR /work/
 
-RUN adduser -H -u 1000 -D realm
+RUN chown 1001 /work \
+    && chmod "g+rwX" /work \
+    && chown 1001:root /work
 
-#
-# Image to build app
-#
-FROM amazoncorretto:17-alpine3.16-jdk as build
-
+FROM quay.io/quarkus/ubi-quarkus-mandrel-builder-image:22.3-java17 AS build
 WORKDIR /build
+USER root
+RUN microdnf install maven -y
 
-# Copiyng base files to save dependencies
-COPY gradle gradle
-COPY gradlew gradlew
-COPY settings.gradle settings.gradle
-COPY build.gradle build.gradle
-COPY .build/Main.java src/main/java/Main.java
-COPY .build/Main.java src/test/java/Main.java
-# Saving dependencies and remove extra classes
-RUN ./gradlew clean build --no-daemon -i --stacktrace || true \
-        && rm -rf src
+COPY ./pom.xml ${WORKDIR}
+RUN mvn verify clean --fail-never
 
-# Building app
 COPY . .
-RUN ./gradlew clean build --no-daemon -i --stacktrace
+RUN mvn quarkus:build -Pnative
 
-#
-# Packaging final image
-#
 FROM run
+WORKDIR /work/
 
-# Copiyng artifact of the build
-COPY --from=build --chown=1000:1000 /build/build/libs/realm-controller-0.0.1.jar /home/realm/app.jar
+COPY --from=build --chown=1001:root /build/target/*-runner /work/application
 
-# Exposing standard execution port
 EXPOSE 8080
-# SU to execution user
-USER 1000
+USER 1001
 
-# Running app
-ENTRYPOINT ["java", "-jar", "/home/realm/app.jar"]
+CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]

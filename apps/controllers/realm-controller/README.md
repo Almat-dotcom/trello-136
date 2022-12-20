@@ -1,27 +1,60 @@
-# Realm controller
+# realm-controller Project
 
-Контроллер kubernetes, который следит за ресурсами кастомного типа Realm и применяет настройки на реалм Keycloak сервер.
+This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
-## Разработка
+If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
 
-Для разработки необходимо:
-- jdk 17
+## Running the application in dev mode
 
-Перед началом разработки необходимо выполнить `./gradlew build`, чтобы загрузить все зависимости и скомпилировать весь код.
-
-Рекомендуется установить плагины:
-- Lombok
-
-## Custom Resource Definition
-
-CRD - манифест генерируется с классов Java автоматически.
-
-Для этого нужно выполнить:
-```shell
-./gradlew clea assemble
+You can run your application in dev mode that enables live coding using:
+```shell script
+./mvnw compile quarkus:dev
 ```
 
-И в `build/classes/java/main/META-INF/fabric0` будет манифест
-CRD для деплоя в кластер kubernetes. Для того, чтобы он применялся
-в кластер, его нужно скопировать в директорию `apps/.helm/template`
-главной директории репозитория.
+> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
+
+## Packaging and running the application
+
+The application can be packaged using:
+```shell script
+./mvnw package
+```
+It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
+Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+
+The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+
+If you want to build an _über-jar_, execute the following command:
+```shell script
+./mvnw package -Dquarkus.package.type=uber-jar
+```
+
+The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+
+## Creating a native executable
+
+You can create a native executable using: 
+```shell script
+./mvnw package -Pnative
+```
+
+Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
+```shell script
+./mvnw package -Pnative -Dquarkus.native.container-build=true
+```
+
+You can then execute your native executable with: `./target/realm-controller-1.0.0-runner`
+
+If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
+
+## Related Guides
+
+- OpenID Connect Client ([guide](https://quarkus.io/guides/security-openid-connect-client)): Get and refresh access tokens from OpenID Connect providers
+- Micrometer Registry Prometheus ([guide](https://quarkus.io/guides/micrometer)): Enable Prometheus support for Micrometer
+- REST Client Classic ([guide](https://quarkus.io/guides/rest-client)): Call REST services
+- OpenID Connect Client Filter ([guide](https://quarkus.io/guides/security-openid-connect-client)): Use JAX-RS Client filter to get and refresh access tokens with OpenId Connect Client and send them as HTTP Authorization Bearer tokens
+- Kubernetes Client ([guide](https://quarkus.io/guides/kubernetes-client)): Interact with Kubernetes and develop Kubernetes Operators
+- OpenID Connect Token Propagation ([guide](https://quarkus.io/guides/security-openid-connect-client)): Use JAX-RS Client filter to propagate the incoming Bearer access token or token acquired from Authorization Code Flow as HTTP Authorization Bearer token
+- Logging JSON ([guide](https://quarkus.io/guides/logging#json-logging)): Add JSON formatter for console logging
+- SmallRye Health ([guide](https://quarkus.io/guides/microprofile-health)): Monitor service health
+- Micrometer metrics ([guide](https://quarkus.io/guides/micrometer)): Instrument the runtime and your application with dimensional metrics using Micrometer.
