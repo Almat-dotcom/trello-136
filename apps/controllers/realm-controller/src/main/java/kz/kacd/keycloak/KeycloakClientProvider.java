@@ -8,7 +8,6 @@ import kz.kacd.keycloak.model.KeycloakClientCredentials;
 import kz.kacd.sso.v1.Realm;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
-import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.client.ClientBuilder;
@@ -30,14 +29,14 @@ public class KeycloakClientProvider {
     }
 
     public KeycloakClient getForRealm(Realm realm) {
-        String name = realm.getMetadata().getName();
-        String url = getUrl(realm);
-        OidcClient auth = createOidcClient(name, url, credentialsProvider.find(name));
-        OIDCClientFilter filter = new OIDCClientFilter(auth);
-        ResteasyClient http = (ResteasyClient) ClientBuilder.newBuilder()
+        var name = realm.getMetadata().getName();
+        var url = getUrl(realm);
+        var auth = createOidcClient(name, url, credentialsProvider.find(name));
+        var filter = new OIDCClientFilter(auth);
+        var http = (ResteasyClient) ClientBuilder.newBuilder()
                 .register(filter)
                 .build();
-        ResteasyWebTarget target = http.target(url + "/realms/" + name);
+        var target = http.target(url + "/realms/" + name);
         return target.proxy(KeycloakClient.class);
     }
 
@@ -50,7 +49,7 @@ public class KeycloakClientProvider {
     }
 
     private OidcClient createOidcClient(String realmName, String url, KeycloakClientCredentials credentials) {
-        OidcClientConfig config = new OidcClientConfig();
+        var config = new OidcClientConfig();
         config.setId(realmName);
         config.setAuthServerUrl(url + "/realms/" + realmName);
         config.setClientId(credentials.id());

@@ -24,7 +24,7 @@ public class ClientCredentialsProvider {
     }
 
     public KeycloakClientCredentials find(String realmName) {
-        Secret secret = client.secrets().inNamespace(namespace).withName(realmName + "-admin-client").get();
+        var secret = client.secrets().inNamespace(namespace).withName(realmName + "-admin-client").get();
         if (secret == null) {
             throw new IllegalStateException("Cannot find secret " + realmName + "-admin-client in namespace " + namespace + "!");
         }
