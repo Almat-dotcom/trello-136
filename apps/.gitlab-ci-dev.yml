@@ -158,7 +158,8 @@ build-docker-realm-controller:
     - |-
       /kaniko/warmer \
         --cache-dir=${CI_PROJECT_DIR}/.cache \
-        --image=amazoncorretto:17-alpine3.16-jdk
+        --image=quay.io/quarkus/quarkus-micro-image:1.0 \
+        --image=quay.io/quarkus/ubi-quarkus-mandrel-builder-image:22.3-java17
   script:
     - |-
       /kaniko/executor \

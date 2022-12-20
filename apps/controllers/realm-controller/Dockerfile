@@ -11,7 +11,7 @@ USER root
 RUN microdnf install maven -y
 
 COPY ./pom.xml ${WORKDIR}
-RUN mvn verify clean --fail-never
+RUN mvn quarkus:go-offline --fail-never
 
 COPY . .
 RUN mvn quarkus:build -Pnative
