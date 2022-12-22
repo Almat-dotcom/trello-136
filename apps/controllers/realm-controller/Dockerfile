@@ -14,7 +14,7 @@ COPY ./pom.xml ${WORKDIR}
 RUN mvn quarkus:go-offline --fail-never
 
 COPY . .
-RUN mvn quarkus:build -Pnative
+RUN mvn install -Dnative
 
 FROM run
 WORKDIR /work/

@@ -40,17 +40,10 @@ spec:
               containerPort: 8080
               protocol: TCP
           env:
-            - name: REALM_NAMESPACE
+            - name: REALM_CONTROLLER_NAMESPACE
               value: {{ include "common.names.namespace" . | quote }}
-            - name: REALM_USER
-              value: {{ .Values.auth.adminUser | quote }}
-            - name: REALM_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "keycloak.auth.secret" . }}
-                  key: {{ include "keycloak.auth.secretKey" . }}
-            - name: REALM_KEYCLOAK
-              value: {{ printf "http://%s.%s.svc.cluster.local" (include "common.names.fullname" .) (include "common.names.namespace" .) }}
+            - name: REALM_CONTROLLER_KEYCLOAK_DEFAULT_UR
+              value: {{ printf "https://%s" .Values.hostname }}
           resources:
             requests:
               memory: "5Mi"
@@ -60,18 +53,16 @@ spec:
               cpu: "1"
           startupProbe:
             httpGet:
-              path: /actuator/health
+              path: /q/health
               port: http
-            initialDelaySeconds: 2
-            failureThreshold: 30
-            periodSeconds: 5
+            periodSeconds: 1
           livenessProbe:
             httpGet:
-              path: /actuator/health
+              path: /q/health
               port: http
             periodSeconds: 5
           readinessProbe:
             httpGet:
-              path: /actuator/health
+              path: /q/health
               port: http
 {{- end }}

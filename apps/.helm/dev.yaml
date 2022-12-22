@@ -11,13 +11,13 @@ hostname: sso-dev.kacd.kz
 
 enabledMasterRealm: "true"
 
-resources:
-  limits: 
-    memory: "4Gi"
-    cpu: "4"
-  requests:
-    memory: "1Gi"
-    cpu: "1"
+# resources:
+#   limits: 
+#     memory: "4Gi"
+#     cpu: "4"
+#   requests:
+#     memory: "1Gi"
+#     cpu: "1"
 
 tls:
   enabled: true
@@ -33,7 +33,7 @@ auth:
 database:
   host: psql-dev.kacd.kz
   name: keycloak
-  schema: auth
+  schema: public
   username: keycloak
   existingSecret: sso-keycloak-database-password
   existingSecretPasswordKey: password
@@ -52,4 +52,5 @@ ingress:
   secretName: keycloak-tls
 
 realmController:
+  enabled: true
   image: nexus.kacd.kz:5000/platform/sso/realm-controller:dev-1377
