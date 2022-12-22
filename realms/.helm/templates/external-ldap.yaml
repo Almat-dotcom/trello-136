@@ -1,0 +1,60 @@
+{{- if .Values.external.enabled }}
+apiVersion: sso.kacd.kz/v1
+kind: Federation
+metadata:
+  name: external-ldap
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: internal-realm
+    kz-kacd-realm-name: external
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  ldap:
+    displayedName: "Kacd LDAP integration"
+    vendor: ACTIVE_DIRECTORY
+    connection:
+      url: {{ .Values.external.ldap.url }}
+    auth: 
+      existingSecret: {{ .Values.external.ldap.existingSecret }}
+      dnKey: {{ .Values.external.ldap.dnKey }}
+      passwordKey: {{ .Values.external.ldap.passwordKey }}
+    searching:
+      # Мод доступа к пользователям и на чтение, и на запись
+      mode: RW
+      # DN для поиска пользователей
+      usersDn: {{ .Values.external.ldap.usersDn }}
+      # В атрибуте cn хранится как имя пользователя, так и id
+      username: cn
+      uuid: cn
+      # Рекурсивно искать пользователей не только в указанном DN, но и во всех под директориях
+      scope: SUBTREE
+    sync:
+      # Импортировать всех пользователей в БД keycloak
+      importUsers: true
+      # Не нужно синхронизировать регистрации, так как keycloak не дает возможности правильно распределить пользователей по подкаталогам
+      syncRegistrations: false
+      # Количество пользователей, что будут вставлены в одну транзакцию
+      batch: 1000
+      # Включить полную синхронизацию каждый 2 часа
+      fullSync: true
+      fullSyncPeriod: 48h
+      # А также синхронизировать всех измененных пользователей каждую минуту
+      changedSync: true
+      changedSyncPeriod: 1h
+    advanced:
+      # Доверять адресам почты, что записаны в LDAP
+      trustEmail: true
+      realmManagementRolesDn: {{ .Values.external.ldap.realmManagementRolesDn }}
+    # Добавить маппинг групп с LDAP в режиме Read-Write
+    groups:
+      mappings:
+        - dn: {{ .Values.external.ldap.groupsDn }}
+          path: /
+      hierarchy: true
+      mode: RW
+{{- end }}

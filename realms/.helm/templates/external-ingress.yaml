@@ -12,34 +12,34 @@ metadata:
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
-    {{- if .Values.ingress.annotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.ingress.annotations "context" $) | nindent 4 }}
+    {{- if .Values.external.ingress.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.external.ingress.annotations "context" $) | nindent 4 }}
     {{- end }}
 spec:
-  {{- if .Values.ingress.ingressClassName }}
-  ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
+  {{- if .Values.external.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.external.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
-    - host: {{ .Values.hostname.external }}
+    - host: {{ .Values.external.hostname }}
       http:
         paths:
         - path: /realms/external
           pathType: Prefix
           backend:
             service:
-              name: {{ .Values.ingress.serviceName }}
+              name: {{ .Values.external.ingress.serviceName }}
               port:
                 name: http
         - path: /resources
           pathType: Prefix
           backend:
             service:
-              name: {{ .Values.ingress.serviceName }}
+              name: {{ .Values.external.ingress.serviceName }}
               port:
                 name: http
-  {{- if and .Values.ingress.tls }}
+  {{- if and .Values.external.ingress.tls }}
   tls:
     - hosts:
-        - {{ (tpl .Values.hostname.external .) | quote }}
-      secretName: {{ .Values.ingress.secretName }}
+        - {{ (tpl .Values.external.hostname .) | quote }}
+      secretName: {{ .Values.external.ingress.secretName }}
   {{- end }}

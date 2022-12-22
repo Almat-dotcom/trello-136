@@ -1,17 +1,29 @@
+internal:
+  hostname: internal-dev.kacd.kz
+  ldap:
+    url: ldap://10.10.128.3:389
+    existingSecret: internal-sso-ldap-creds
+    dnKey: "dn"
+    passwordKey: "password"
+    usersDn: "OU=OU_Users,DC=tstcsdepo,DC=net"
+    groupsDn: "OU=keycloak,OU=OU_Groups,DC=tstcsdepo,DC=net"
+    managementRolesDn: "OU=internal-realm-management,OU=OU_Roles,DC=tstcsdepo,DC=net"
+  ingress:
+    serviceName: sso-keycloak
+    tls: true
+    secretName: keycloak-tls
 
-hostname:
-  internal: internal-dev.kacd.kz
-  external: external-dev.kacd.kz
-
-ldap:
-  url: ldap://10.10.128.3:389
-  existingSecret: internal-sso-ldap-creds
-  dnKey: "dn"
-  passwordKey: "password"
-  usersDn: "OU=OU_Users,DC=tstcsdepo,DC=net"
-  groupsDn: "OU=keycloak,OU=OU_Groups,DC=tstcsdepo,DC=net"
-
-ingress:
-  serviceName: sso-keycloak
-  tls: true
-  secretName: keycloak-tls
+external:
+  hostname: external-dev.kacd.kz
+  ldap:
+    url: ldap://10.10.128.3:389
+    existingSecret: internal-sso-ldap-creds
+    dnKey: "dn"
+    passwordKey: "password"
+    usersDn: "OU=OU_Users,DC=tstcsdepo,DC=net"
+    groupsDn: "OU=keycloak,OU=OU_Groups,DC=tstcsdepo,DC=net"
+    managementRolesDn: "OU=external-realm-management,OU=OU_Roles,DC=tstcsdepo,DC=net"
+  ingress:
+    serviceName: sso-keycloak
+    tls: true
+    secretName: keycloak-tls

@@ -1,0 +1,63 @@
+{{- if .Values.internal.enabled }}
+apiVersion: sso.kacd.kz/v1
+kind: Realm
+metadata:
+  name: internal
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: intenral-realm
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+    # Отображаемое имя на странице авторизации
+  displayedName: KCSD
+  # Базовый URL для доступа к реалму (Важно! Для админки динамически не изменяются хосты)
+  frontendUrl: {{ printf "https://%s" .Values.internal.hostname }}
+  # Любые запросы могут быть по HTTP
+  requireSsl: none
+  login:
+    email:
+      # Для того, чтобы конфликтов с LDAP не было, разрешается дублирование email-ов
+      duplicatesEmails: true
+      # Из-за дублирования email-ов, запрещается вход через email
+      loginWithEmail: false
+  # Настройки SMTP сервера для рассылки
+  email:
+    from: sso@kacd.kz
+    displayedName: KCSD
+    smtpHost: mail.kacd.kz
+    smtpPort: 5252
+    encryption: []
+  # Настройки тем для модулей входа, админки, профиля и почтовой рассылки
+  themes: 
+    login: internal
+    account: keycloak
+    admin: keycloak
+    email: internal
+    # Локализация на 2 языка
+    localization:
+      i18n: true
+      supportedLocales: ["en", "ru"]
+      defaultLocale: ru
+  events:
+    # Список слушателей событий. Стандартный слушатель для логирования событий.
+    eventListeners: ["jboss-logging"]
+    # Включить события пользователей и хранить их 7 дней
+    userEvents:
+      saveEvents: true
+      expiration: 7d
+    # Включить события администрирования и хранить их 7 дней
+    adminEvents:
+      saveEvents: true
+      includeRepresentation: true
+      expiration: 7d
+  security:
+    # Включить защиту от взлома пароля по методу brute force
+    bruteForce:
+      enabled: true
+      maxLoginFailures: 5
+{{- end }}
