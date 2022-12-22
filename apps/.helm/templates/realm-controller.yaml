@@ -42,6 +42,8 @@ spec:
           env:
             - name: REALM_CONTROLLER_NAMESPACE
               value: {{ include "common.names.namespace" . | quote }}
+            - name: QUARKUS_OPERATOR_SDK_NAMESPACES
+              value: {{ include "common.names.namespace" . | quote }}
             - name: REALM_CONTROLLER_KEYCLOAK_DEFAULT_UR
               value: {{ printf "https://%s" .Values.hostname }}
           resources:
