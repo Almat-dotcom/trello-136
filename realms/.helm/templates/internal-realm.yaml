@@ -55,6 +55,11 @@ spec:
       saveEvents: true
       includeRepresentation: true
       expiration: 7d
+  sessions:
+    client: {}
+    offline: {}
+    sso: {}
+  tokens: {}
   security:
     # Включить защиту от взлома пароля по методу brute force
     bruteForce:

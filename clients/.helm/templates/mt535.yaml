@@ -1,4 +1,4 @@
-apiVersion: sso.kacd.kz
+apiVersion: sso.kacd.kz/v1
 kind: Client
 metadata:
   name: mt535
@@ -23,3 +23,4 @@ spec:
     - "+"
   capability:
     type: PUBLIC
+  roles: []

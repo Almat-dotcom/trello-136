@@ -67,6 +67,11 @@ spec:
     bruteForce:
       enabled: true
       maxLoginFailures: 3
+  sessions:
+    client: {}
+    offline: {}
+    sso: {}
+  tokens: {}
   authentication:
     flows:
       browser: EXTERNAL

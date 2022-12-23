@@ -1,4 +1,4 @@
-apiVersion: sso.kacd.kz
+apiVersion: sso.kacd.kz/v1
 kind: Client
 metadata:
   name: lk-shell-front
@@ -36,3 +36,4 @@ spec:
   - CLIENT_TYPE
   - IIN
   - EMAIL_VERIFIED
+  roles: []
