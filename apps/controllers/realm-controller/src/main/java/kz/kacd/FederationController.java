@@ -35,7 +35,7 @@ public class FederationController implements Reconciler<Federation> {
                 log.warn("Cannot find realm for federation {}!", resource.getMetadata().getName());
                 return UpdateControl.noUpdate();
             }
-            var res = clientProvider.getForRealm(realm).updateFederation(realm.getMetadata().getName());
+            var res = clientProvider.getForRealm(realm).updateFederation(resource.getMetadata().getName());
             log.info("Updated federation {} with status {}.", resource.getMetadata().getName(), res.getStatus());
         }
 
