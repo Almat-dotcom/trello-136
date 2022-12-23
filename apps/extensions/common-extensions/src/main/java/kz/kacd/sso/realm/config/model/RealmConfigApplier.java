@@ -8,6 +8,9 @@ import kz.kacd.sso.v1.realmspec.login.Email;
 import kz.kacd.sso.v1.realmspec.login.LoginScreen;
 import kz.kacd.sso.v1.realmspec.security.BruteForce;
 import kz.kacd.sso.v1.realmspec.security.Headers;
+import kz.kacd.sso.v1.realmspec.sessions.Client;
+import kz.kacd.sso.v1.realmspec.sessions.Offline;
+import kz.kacd.sso.v1.realmspec.sessions.Sso;
 import kz.kacd.sso.v1.realmspec.themes.Localization;
 import org.keycloak.common.enums.SslRequired;
 import org.keycloak.models.KeycloakSession;
@@ -197,16 +200,21 @@ public class RealmConfigApplier {
     }
 
     private void applySession(Sessions source) {
-        if (source == null) {
-            return;
+        Sessions spec = source;
+        if (spec == null) {
+            spec = new Sessions();
+            spec.setClient(new Client());
+            spec.setOffline(new Offline());
+            spec.setSso(new Sso());
         }
 
         new SessionsConfigurer(source).configure(model);
     }
 
     private void applyTokens(Tokens source) {
-        if (source == null) {
-            return;
+        Tokens spec = source;
+        if (spec == null) {
+            spec = new Tokens();
         }
 
         model.setAccessTokenLifespan(duration(defaulted(source.getAccessLifespan(), "15m")).intValue());
