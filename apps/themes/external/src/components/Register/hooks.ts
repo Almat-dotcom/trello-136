@@ -126,7 +126,7 @@ const isNotEmptyOnLegal = (legal: () => boolean) => (value: string): string | un
 
 const isBinIinOnLegal = (legal: () => boolean) => (value: string): string | undefined => legal() ? isBinIin(value) : undefined
 
-const isBinIin = (value: string): string | undefined => isNotEmpty(value) ?? is12CharsAndNumeric(value);
+const isBinIin = (value: string): string | undefined => isNotEmpty(value) || is12CharsAndNumeric(value);
 
 const is12CharsAndNumeric = (value: string): string | undefined => value.length !== 12 || isNaN(+value) ? "only12Digits" : undefined;
 

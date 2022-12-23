@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEvent, useRef, useState } from "react";
+import { ChangeEvent, MouseEvent, useRef, useState, KeyboardEvent } from "react";
 import InputContainer from "./InputContainer";
 import Visibility from "./visibility.svg";
 import VisibilityOff from "./visibility_off.svg";
@@ -10,17 +10,19 @@ type InputFieldProps = {
     value: string,
     error?: string,
     readOnly?: boolean,
-    onChange: (event: ChangeEvent<HTMLInputElement>) => void
+    maxLength?: number,
+    onChange: (event: ChangeEvent<HTMLInputElement>) => void,
+    onEnter?: () => void
 }
 
-const InputField = ({ fieldName, label, type, value, error, readOnly, onChange }: InputFieldProps) => {
-    const [ changed, setChanged ] = useState(false)
-    const [ switched, setSwitched ] = useState(false)
+const InputField = ({ fieldName, label, type, value, error, readOnly, maxLength, onChange, onEnter }: InputFieldProps) => {
+    const [ memError, setMemError ] = useState<string | undefined>(undefined);
+    const [ switched, setSwitched ] = useState(false);
     
     const inputRef = useRef<HTMLInputElement>(null)
 
     const onInputChanged = (event: ChangeEvent<HTMLInputElement>) => {
-        setChanged(true)
+        setMemError(error)
         onChange(event)
     }
 
@@ -28,18 +30,26 @@ const InputField = ({ fieldName, label, type, value, error, readOnly, onChange }
         setSwitched(!switched)
     }
 
+    const onKeyPressed = (event: KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter' && onEnter) {
+            onEnter();
+        }
+    }
+
     return (
-        <InputContainer onFocus={() => inputRef?.current?.focus()} name={fieldName} label={label} error={changed ? undefined : error}>
+        <InputContainer onFocus={() => inputRef?.current?.focus()} name={fieldName} label={label} error={error && memError === error ? undefined : error}>
             <input 
                 ref={inputRef}
                 type={ type === "password" && switched ? "text" : type }
                 id={fieldName} 
                 name={fieldName}
-                className={ ( !changed && error ? "border-red-600" : "border-gray-300" ) + " block px-2.5 py-1 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-2 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary focus:outline-none focus:ring-0 focus:border-primary peer"}
+                className={ ( error && memError !== error ? "border-red-600" : "border-gray-300" ) + " block px-2.5 py-1 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-2 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary focus:outline-none focus:ring-0 focus:border-primary peer"}
                 placeholder=" "
                 readOnly={readOnly}
+                maxLength={maxLength}
                 value={value}
                 onChange={onInputChanged}
+                onKeyDown={onKeyPressed}
             />
             {type === "password" ? (
                 <div className="absolute right-0 z-30 inset-y-1 flex items-center px-4 ">

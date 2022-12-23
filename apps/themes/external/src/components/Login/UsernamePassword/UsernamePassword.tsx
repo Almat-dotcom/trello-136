@@ -18,14 +18,16 @@ const UsernamePassword = ({ kcContext, i18n, hidden, onFormSubmit }: { kcContext
                 type="text"
                 error={advancedMsgStr(getError("username") ?? "") ?? getError("username")}
                 value={username}
-                onChange={(e) => { setUsername(e.target.value) }} />
+                onChange={(e) => { setUsername(e.target.value) }} 
+                onEnter={onSubmit}/>
             <InputField
                 fieldName="password"
                 label={msgStr("password")}
                 type="password"
                 error={advancedMsgStr(getError("password") ?? "") ?? getError("password")}
                 value={password}
-                onChange={(e) => { setPassword(e.target.value) }} />
+                onChange={(e) => { setPassword(e.target.value) }} 
+                onEnter={onSubmit} />
 
             <div className="flex items-center justify-between">
                 {realm.rememberMe && (

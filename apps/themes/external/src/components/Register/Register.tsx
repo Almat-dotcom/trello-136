@@ -100,6 +100,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                         type="text"
                         value={fields.bin.value}
                         error={error(fields.bin.error)}
+                        maxLength={12}
                         onChange={(event) => fields.bin.onChange(event.target.value)}
                     />
                 ) : null}
@@ -109,6 +110,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                     type="text"
                     value={fields.iin.value}
                     error={error(fields.iin.error)}
+                    maxLength={12}
                     onChange={(event) => fields.iin.onChange(event.target.value)}
                 />
                 <InputField

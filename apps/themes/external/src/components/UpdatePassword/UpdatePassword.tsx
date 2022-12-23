@@ -45,6 +45,7 @@ const UpdatePassword = memo(({ kcContext, i18n, ...props }: { kcContext: KcConte
                             value={password}
                             error={advancedMsgStr(passwordError ?? "") ?? passwordError}
                             onChange={(event) => onPasswordChange(event.target.value)}
+                            onEnter={onSubmit}
                         />
                         <InputField
                             fieldName="password-confirm"
@@ -53,6 +54,7 @@ const UpdatePassword = memo(({ kcContext, i18n, ...props }: { kcContext: KcConte
                             value={passwordConfirm}
                             error={advancedMsgStr(passwordConfirmError ?? "") ?? passwordConfirmError}
                             onChange={(event) => onConfirmChange(event.target.value)}
+                            onEnter={onSubmit}
                         />
 
                         <div>

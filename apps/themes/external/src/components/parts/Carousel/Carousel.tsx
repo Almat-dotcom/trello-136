@@ -49,7 +49,7 @@ const Carousel = () => {
                 <button className="ml-4 p-2 rounded-full transition-colors hover:bg-orange-100" onClick={() => prev()}>
                     <img className="ml-0.5" src={ArrowBack} alt="arrow_back" />
                 </button>
-                <PrimeCarousel value={data} numVisible={1} numScroll={1} page={page} showNavigators={false}
+                <PrimeCarousel autoplayInterval={60 * 1000} value={data} numVisible={1} numScroll={1} page={page} showNavigators={false}
                     itemTemplate={productTemplate} header={""} />
                 <button className="mr-4 p-2 rounded-full transition-colors hover:bg-orange-100" onClick={() => next()}>
                     <img src={ArrowForward} alt="arrow_back" />

@@ -51,10 +51,11 @@ const ResetPassword = memo(({ kcContext, i18n, ...props }: { kcContext: KcContex
                             value={username}
                             error={advancedMsgStr(error ?? "") ?? error}
                             onChange={onUsernameChange}
+                            onEnter={onSubmit}
                         />
 
                         <div>
-                            <Button severity="primary" type="button" onClick={() => onSubmit()}>{msgStr("doSubmit")}</Button>
+                            <Button severity="primary" type="button" onClick={onSubmit}>{msgStr("doSubmit")}</Button>
                         </div>
 
                         <p
