@@ -40,7 +40,7 @@ public class K8sFederationRepository {
         FederationList list = client.resources(Federation.class, FederationList.class)
                 .inNamespace(K8sConfig.NAMESPACE)
                 .list();
-        Optional<Federation> result = list.getItems().stream().findFirst();
+        Optional<Federation> result = list.getItems().stream().filter(it -> it.getMetadata().getName().equals(name)).findFirst();
         return result.orElse(null);
     }
 

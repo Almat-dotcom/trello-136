@@ -38,7 +38,7 @@ public class K8sClientRepository {
     public Client find(String name) {
         log.debugf("Finding federation in kubernetes %s ...", name);
         ClientList list = client.resources(Client.class, ClientList.class).inNamespace(K8sConfig.NAMESPACE).list();
-        Optional<Client> result = list.getItems().stream().findFirst();
+        Optional<Client> result = list.getItems().stream().filter(it -> it.getMetadata().getName().equals(name)).findFirst();
         return result.orElse(null);
     }
 
