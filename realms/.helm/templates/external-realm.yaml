@@ -74,12 +74,6 @@ spec:
     passwordPolicy:
       expiration: 30
       notRecentlyUsed: 7
-      passwordBlacklist: -|
-        qwerty
-        password
-        p@ssword
-        12345678
-        qwerty12
       minimumLength: 8
       countOfSpecialChars: 1
       uppercaseChars: 1
