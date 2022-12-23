@@ -7,8 +7,12 @@ import Alert from "components/parts/Alert";
 import Button from "components/parts/Button";
 import { KcContext_Registration, useRegisterPage } from "./hooks";
 import PdfModal from "components/parts/PdfModal";
-import Consent1 from "./consent1.md";
-import Consent2 from "./consent2.md";
+import PaRu from "./pa_ru.md";
+import PaKz from "./pa_kz.md";
+import PaEn from "./pa_en.md";
+import LkRu from "./lk_ru.md";
+import LkKz from "./lk_kz.md";
+import LkEn from "./lk_en.md";
 
 const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext_Registration; i18n: I18n; } & KcProps) => {
     const { url, message } = kcContext;
@@ -19,6 +23,26 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
     const { fields, legal, buttonDisabled, concents, onSubmit } = useRegisterPage(kcContext, () => formRef.current?.submit())
 
     const error = (key?: string) => key ? advancedMsgStr(key) ?? key : undefined
+
+    const collectingConsent = (lang?: string) => {
+        if (lang === "ru") {
+            return PaRu;
+        }
+        if (lang === "kz") {
+            return PaKz;
+        }
+        return PaEn;
+    }
+
+    const privateConsent = (lang?: string) => {
+        if (lang === "ru") {
+            return LkRu;
+        }
+        if (lang === "kz") {
+            return LkKz;
+        }
+        return LkEn;
+    }
 
     return (
         <Layout kcContext={kcContext} i18n={i18n}>
@@ -130,7 +154,12 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                     onChange={(event) => fields.passwordConfirm.onChange(event.target.value)}
                 />
 
-                <PdfModal kcContext={kcContext} url={Consent1} shown={concents.concent1Shown} onClosed={() => concents.tuggleConcent1()} />
+                <PdfModal
+                    kcContext={kcContext}
+                    url={collectingConsent(kcContext.locale?.currentLanguageTag)}
+                    shown={concents.concent1Shown}
+                    onClosed={concents.tuggleConcent1}
+                />
                 <div className="flex flex-row items-start justify-start mt-4">
                     <div className="flex items-center h-5">
                         <input
@@ -143,13 +172,13 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                         />
                     </div>
                     <div className="text-sm ml-3">
-                        <button type="button" className="bg-none border-none font-medium text-start text-blue-500 hover:underline" onClick={() => concents.tuggleConcent1()}>
+                        <button type="button" className="bg-none border-none font-medium text-start text-blue-500 hover:underline" onClick={concents.tuggleConcent1}>
                             {msgStr("concentOnCollectingData")}
                         </button>
                     </div>
                 </div>
 
-                <PdfModal kcContext={kcContext} url={Consent2} shown={concents.concent2Shown} onClosed={() => concents.tuggleConcent2()} />
+                <PdfModal kcContext={kcContext} url={privateConsent(kcContext.locale?.currentLanguageTag)} shown={concents.concent2Shown} onClosed={concents.tuggleConcent2} />
                 <div className="flex flex-row items-start justify-start mt-4">
                     <div className="flex items-center h-5">
                         <input
@@ -162,7 +191,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                         />
                     </div>
                     <div className="text-sm ml-3">
-                        <button type="button" className="bg-none border-none font-medium text-start text-blue-500 hover:underline" onClick={() => concents.tuggleConcent2()}>
+                        <button type="button" className="bg-none border-none font-medium text-start text-blue-500 hover:underline" onClick={concents.tuggleConcent2}>
                             {msgStr("concentLK")}
                         </button>
                     </div>

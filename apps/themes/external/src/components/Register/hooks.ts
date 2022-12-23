@@ -56,14 +56,14 @@ export const useRegisterPage = (kcContext: KcContext_Registration, onFormSubmit:
         concents: {
             concent1: concent1,
             concent1Shown: concent1Shown,
-            tuggleConcent1: () => setConcent1Shown(!concent1Shown),
-            onConcent1Clicked: () => setConcent1(!concent1),
+            tuggleConcent1: function () { setConcent1Shown(!concent1Shown) },
+            onConcent1Clicked: function () { setConcent1(!concent1) },
             concent2: concent2,
             concent2Shown: concent2Shown,
-            tuggleConcent2: () => setConcent2Shown(!concent2Shown),
-            onConcent2Clicked: () => setConcent2(!concent2),
+            tuggleConcent2: function () { setConcent2Shown(!concent2Shown) },
+            onConcent2Clicked: function () { setConcent2(!concent2) },
         },
-        onSubmit: () => {
+        onSubmit: function() {
             const typeValid = fields.clientType.validate();
             const legalValid = fields.legalRole.validate();
             const lastValid = fields.lastName.validate();
@@ -113,7 +113,7 @@ const useField = (validator: (value: string) => string | undefined, changeCallBa
             }
             return !result;
         },
-        onChange: (newValue) => {
+        onChange: function(newValue) {
             if (newValue !== value) {
                 setValue(newValue);
                 changeCallBack(newValue)
