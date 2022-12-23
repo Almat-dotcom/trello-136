@@ -14,15 +14,14 @@ import org.keycloak.models.*;
 import org.keycloak.services.managers.ClientManager;
 import org.keycloak.services.managers.RealmManager;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static kz.kacd.sso.util.ValueUtils.defaulted;
 
 public class DefaultClientConfigurer implements ClientConfigurer {
     private static final Logger log = Logger.getLogger(DefaultClientConfigurer.class);
+
+    private static final String POST_LOGOUT_URIS = "post.logout.redirect.uris";
 
     private final KeycloakSession session;
 
@@ -70,7 +69,9 @@ public class DefaultClientConfigurer implements ClientConfigurer {
 
         client.setRootUrl(spec.getRootUrl());
         client.setBaseUrl(spec.getHomeUrl());
-        client.setRedirectUris(new HashSet<>(defaulted(spec.getValidRedirectUris(), Collections.emptyList())));
+        Set<String> uris = new HashSet<>(defaulted(spec.getValidRedirectUris(), Collections.emptyList()));
+        client.setRedirectUris(uris);
+        client.setAttribute(POST_LOGOUT_URIS, String.join("##", uris));
         client.setWebOrigins(new HashSet<>(defaulted(spec.getWebOrigins(), Collections.emptySet())));
     }
 
