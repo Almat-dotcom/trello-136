@@ -1,16 +1,16 @@
 stages:
-  - mr
-  - dev
+- mr
+- dev
 
 check_apps:
   stage: mr
   trigger:
-    include: 
-      - local: "apps/.gitlab-ci-mr.yml"
+    include:
+    - local: "apps/.gitlab-ci-mr.yml"
     strategy: depend
   except:
-    - master
-    - dev
+  - master
+  - dev
 
 build-apps:
   stage: dev
@@ -18,19 +18,19 @@ build-apps:
     include: apps/.gitlab-ci-dev.yml
     strategy: depend
   rules:
-    - if: $CI_COMMIT_BRANCH == "dev"
-      changes:
-      - apps/**/*
+  - if: $CI_COMMIT_BRANCH == "dev"
+    changes:
+    - apps/**/*
 
-# realms:
-#   stage: dev
-#   trigger:
-#     include: realms/.gitlab-ci-dev.yml
-#     strategy: depend
-#   rules:
-#     - if: $CI_COMMIT_BRANCH == "dev"
-#       changes: 
-#       - realms/**/*
+realms:
+  stage: dev
+  trigger:
+    include: realms/.gitlab-ci-dev.yml
+    strategy: depend
+  rules:
+  - if: $CI_COMMIT_BRANCH == "dev"
+    changes:
+    - realms/**/*
 
 # clients:
 #   stage: dev
