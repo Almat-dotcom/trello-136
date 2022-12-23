@@ -42,6 +42,7 @@ public class DefaultClientConfigurer implements ClientConfigurer {
         }
 
         target.setEnabled(true);
+        target.setProtocol("openid-connect");
         setDisplayProps(target, clientId, client);
         setAccess(target, client.getAccess());
         setCapability(target, client.getCapability());
@@ -144,6 +145,9 @@ public class DefaultClientConfigurer implements ClientConfigurer {
     }
 
     private void addRoles(ClientModel client, List<Roles> roles) {
+        if (roles == null) {
+            return;
+        }
         roles.forEach(it -> {
             RoleModel role = client.addRole(it.getName());
             role.setDescription(it.getRoleDescription());

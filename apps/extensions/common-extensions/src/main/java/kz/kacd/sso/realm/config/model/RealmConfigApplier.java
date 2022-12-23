@@ -208,7 +208,7 @@ public class RealmConfigApplier {
             spec.setSso(new Sso());
         }
 
-        new SessionsConfigurer(source).configure(model);
+        new SessionsConfigurer(spec).configure(model);
     }
 
     private void applyTokens(Tokens source) {
@@ -217,8 +217,8 @@ public class RealmConfigApplier {
             spec = new Tokens();
         }
 
-        model.setAccessTokenLifespan(duration(defaulted(source.getAccessLifespan(), "15m")).intValue());
-        model.setAccessTokenLifespanForImplicitFlow(duration(defaulted(source.getOidcAccessLifespan(), "15m")).intValue());
+        model.setAccessTokenLifespan(duration(defaulted(spec.getAccessLifespan(), "15m")).intValue());
+        model.setAccessTokenLifespanForImplicitFlow(duration(defaulted(spec.getOidcAccessLifespan(), "15m")).intValue());
     }
 
     private void applyPasswordPolicy(Authentication spec) {

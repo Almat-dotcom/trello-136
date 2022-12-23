@@ -34,6 +34,7 @@ public class DefaultAdminProvider implements AdminClientProvider {
 
         result = session.clients().addClient(realm, ADMIN_CLIENT);
         result.setDescription("Root client to manage realm.");
+        result.setProtocol("openid-connect");
         result.setPublicClient(false);
         result.setBearerOnly(false);
         result.setSecret(SecretGenerator.getInstance().randomString());

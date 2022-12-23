@@ -18,9 +18,18 @@ public class SessionsConfigurer {
     }
 
     public void configure(RealmModel realm) {
+        configureBase(realm);
         configureSso(realm, source.getSso());
         configureClient(realm, source.getClient());
         configureOffline(realm, source.getOffline());
+    }
+
+    private void configureBase(RealmModel realm) {
+        realm.setAccessCodeLifespan(duration("15s").intValue());
+        realm.setAccessCodeLifespanLogin(duration("15s").intValue());
+        realm.setAccessCodeLifespanUserAction(duration("5m").intValue());
+        realm.setActionTokenGeneratedByUserLifespan(duration("5m").intValue());
+        realm.setActionTokenGeneratedByAdminLifespan(duration("12h").intValue());
     }
 
     private void configureSso(RealmModel realm, Sso source) {
@@ -30,8 +39,8 @@ public class SessionsConfigurer {
     }
 
     private void configureClient(RealmModel realm, Client source) {
-        realm.setClientSessionIdleTimeout(duration(defaulted(source.getSessionIdle(), "10s")).intValue());
-        realm.setClientSessionMaxLifespan(duration(defaulted(source.getSessionMax(), "5m")).intValue());
+        realm.setClientSessionIdleTimeout(duration(defaulted(source.getSessionIdle(), "15m")).intValue());
+        realm.setClientSessionMaxLifespan(duration(defaulted(source.getSessionMax(), "15m")).intValue());
     }
 
     private void configureOffline(RealmModel realm, Offline source) {

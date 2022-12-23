@@ -36,7 +36,7 @@ public class K8sRealmRepository {
     public Realm find(String name) {
         log.debugf("Finding realm in kubernetes %s ...", name);
         RealmList list = client.resources(Realm.class, RealmList.class).inNamespace(K8sConfig.NAMESPACE).list();
-        Optional<Realm> result = list.getItems().stream().findFirst();
+        Optional<Realm> result = list.getItems().stream().filter(it -> it.getMetadata().getName().equals(name)).findFirst();
         return result.orElse(null);
     }
 }
