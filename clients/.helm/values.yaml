@@ -13,17 +13,3 @@ commonLabels: {}
 #
 commonAnnotations: {}
 
-#
-# Settings for billing client
-#
-billing:
-  rolesDn: ""
-
-#
-# Settings for test client
-#
-testClient:
-  #
-  # Distinguished name to search roles
-  #
-  rolesDn: ""

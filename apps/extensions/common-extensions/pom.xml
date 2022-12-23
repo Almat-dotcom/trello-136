@@ -14,7 +14,7 @@
     <artifactId>ldap-mappers</artifactId>
 
     <properties>
-        <keycloak.version>20.0.0</keycloak.version>
+        <keycloak.version>20.0.2</keycloak.version>
         <fabric8.k8s.version>6.2.0</fabric8.k8s.version>
 
         <maven.compiler.source>17</maven.compiler.source>

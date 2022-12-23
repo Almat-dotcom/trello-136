@@ -1,5 +1,0 @@
-billing:
-  rolesDn: OU=test_distribution,OU=OU_Roles,DC=tstcsdepo,DC=net
-
-testClient:
-  rolesDn: OU=test-client,OU=OU_Roles,DC=tstcsdepo,DC=net

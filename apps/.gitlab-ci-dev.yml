@@ -1,203 +1,203 @@
 stages:
-  - prebuild
-  - cache
-  - build-docker
-  - dev-deploy
+- prebuild
+- cache
+- build-docker
+- dev-deploy
 
 build-common-extension:
   stage: prebuild
   image: maven:3-eclipse-temurin-17-alpine
   only:
-    - dev
+  - dev
   before_script:
-    - apk add curl
-    - export PROJECT_DIR="apps/extensions/common-extensions"
-    - cd ${PROJECT_DIR}
-    - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/common-extensions.jar"
-    - export MAVEN_OPTS="-Dmaven.repo.local=${CI_PROJECT_DIR}/${PROJECT_DIR}/.m2"
+  - apk add curl
+  - export PROJECT_DIR="apps/extensions/common-extensions"
+  - cd ${PROJECT_DIR}
+  - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/common-extensions.jar"
+  - export MAVEN_OPTS="-Dmaven.repo.local=${CI_PROJECT_DIR}/${PROJECT_DIR}/.m2"
   script:
-    - mvn clean package
-    - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./target/common-extensions-jar-with-dependencies.jar ${NEXUS_REPO}
+  - mvn clean package
+  - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./target/common-extensions-jar-with-dependencies.jar ${NEXUS_REPO}
   cache:
-    - key: m2
-      paths:
-        - apps/extensions/common-extensions/.m2
+  - key: m2
+    paths:
+    - apps/extensions/common-extensions/.m2
   tags:
-    - global_runner_2
+  - global_runner_2
 
 build-external-extension:
   stage: prebuild
   image: maven:3-eclipse-temurin-17-alpine
   only:
-    - dev
+  - dev
   before_script:
-    - apk add curl
-    - export PROJECT_DIR="apps/extensions/external-extensions"
-    - cd ${PROJECT_DIR}
-    - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/external-extensions.jar"
-    - export MAVEN_OPTS="-Dmaven.repo.local=${CI_PROJECT_DIR}/${PROJECT_DIR}/.m2"
-    - chmod +x ./lib/install.sh && ./lib/install.sh
+  - apk add curl
+  - export PROJECT_DIR="apps/extensions/external-extensions"
+  - cd ${PROJECT_DIR}
+  - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/external-extensions.jar"
+  - export MAVEN_OPTS="-Dmaven.repo.local=${CI_PROJECT_DIR}/${PROJECT_DIR}/.m2"
+  - chmod +x ./lib/install.sh && ./lib/install.sh
   script:
-    - mvn clean package
-    - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./target/external-extensions-jar-with-dependencies.jar ${NEXUS_REPO}
+  - mvn clean package
+  - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./target/external-extensions-jar-with-dependencies.jar ${NEXUS_REPO}
   cache:
-    - key: m2
-      paths:
-        - apps/extensions/external-extensions/.m2
+  - key: m2
+    paths:
+    - apps/extensions/external-extensions/.m2
   tags:
-    - global_runner_2
+  - global_runner_2
 
 build-external-theme:
   stage: prebuild
-  image: 
+  image:
     name: nexus.kacd.kz:5000/devops-utils/keycloakify-build-image:latest
     entrypoint: [""]
   before_script:
-    - export PROJECT_DIR="apps/themes/external"
-    - cd ${PROJECT_DIR}
-    - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/external-keycloak-theme.jar"
+  - export PROJECT_DIR="apps/themes/external"
+  - cd ${PROJECT_DIR}
+  - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/external-keycloak-theme.jar"
   script:
-    - yarn install --frozen-lockfile
-    - yarn keycloak
-    - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./build_keycloak/target/external-keycloak-theme-1.0.6.jar ${NEXUS_REPO}
+  - yarn install --frozen-lockfile
+  - yarn keycloak
+  - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./build_keycloak/target/external-keycloak-theme-1.0.6.jar ${NEXUS_REPO}
   cache:
-    - key: node_modules_external
-      paths:
-        - apps/themes/external/node_modules
+  - key: node_modules_external
+    paths:
+    - apps/themes/external/node_modules
   tags:
-    - global_runner_2
+  - global_runner_2
 
 build-internal-theme:
   stage: prebuild
-  image: 
+  image:
     name: nexus.kacd.kz:5000/devops-utils/keycloakify-build-image:latest
     entrypoint: [""]
   before_script:
-    - export PROJECT_DIR="apps/themes/internal"
-    - cd ${PROJECT_DIR}
-    - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/internal-keycloak-theme.jar"
+  - export PROJECT_DIR="apps/themes/internal"
+  - cd ${PROJECT_DIR}
+  - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/internal-keycloak-theme.jar"
   script:
-    - yarn install --frozen-lockfile
-    - yarn keycloak
-    - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./build_keycloak/target/internal-keycloak-theme-1.0.6.jar ${NEXUS_REPO}
+  - yarn install --frozen-lockfile
+  - yarn keycloak
+  - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./build_keycloak/target/internal-keycloak-theme-1.0.6.jar ${NEXUS_REPO}
   cache:
-    - key: node_modules_internal
-      paths:
-        - apps/themes/internal/node_modules
+  - key: node_modules_internal
+    paths:
+    - apps/themes/internal/node_modules
   tags:
-    - global_runner_2
+  - global_runner_2
 
 cache-artifacts:
   stage: cache
   image: alpine:latest
   only:
-    - dev
+  - dev
   before_script:
-    - apk add curl
-    - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}"
-    - mkdir apps/build-extensions
+  - apk add curl
+  - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}"
+  - mkdir apps/build-extensions
   script:
-    - curl -sL --user "${NEXUS_RAW_REPO}" "${NEXUS_REPO}/common-extensions.jar" -o apps/build-extensions/common-extensions.jar
-    - curl -sL --user "${NEXUS_RAW_REPO}" "${NEXUS_REPO}/external-extensions.jar" -o apps/build-extensions/external-extensions.jar
-    - curl -sL --user "${NEXUS_RAW_REPO}" "${NEXUS_REPO}/internal-keycloak-theme.jar" -o apps/build-extensions/internal-keycloak-theme.jar
-    - curl -sL --user "${NEXUS_RAW_REPO}" "${NEXUS_REPO}/external-keycloak-theme.jar" -o apps/build-extensions/external-keycloak-theme.jar
+  - curl -sL --user "${NEXUS_RAW_REPO}" "${NEXUS_REPO}/common-extensions.jar" -o apps/build-extensions/common-extensions.jar
+  - curl -sL --user "${NEXUS_RAW_REPO}" "${NEXUS_REPO}/external-extensions.jar" -o apps/build-extensions/external-extensions.jar
+  - curl -sL --user "${NEXUS_RAW_REPO}" "${NEXUS_REPO}/internal-keycloak-theme.jar" -o apps/build-extensions/internal-keycloak-theme.jar
+  - curl -sL --user "${NEXUS_RAW_REPO}" "${NEXUS_REPO}/external-keycloak-theme.jar" -o apps/build-extensions/external-keycloak-theme.jar
   cache:
-    - key: extensions
-      policy: push
-      paths:
-        - apps/build-extensions
+  - key: extensions
+    policy: push
+    paths:
+    - apps/build-extensions
   tags:
-    - global_runner_2
+  - global_runner_2
 
 build-docker-keycloak:
   stage: build-docker
-  image: 
+  image:
     name: gcr.io/kaniko-project/executor:v1.9.1-debug
     entrypoint: [""]
   only:
-    - dev
+  - dev
   before_script:
-    - echo $KANIKO_DOCKER_CONFIG | base64 -d > /kaniko/.docker/config.json
-    - |-
-      /kaniko/warmer \
-        --cache-dir=${CI_PROJECT_DIR}/.cache \
-        --image=quay.io/keycloak/keycloak:20.0.0
+  - echo $KANIKO_DOCKER_CONFIG | base64 -d > /kaniko/.docker/config.json
+  - |-
+    /kaniko/warmer \
+      --cache-dir=${CI_PROJECT_DIR}/.cache \
+      --image=quay.io/keycloak/keycloak:20.0.2
   script:
-    - |-
-      /kaniko/executor \
-        --cache=true \
-        --cache-dir=${CI_PROJECT_DIR}/.cache \
-        --cache-ttl=4320h \
-        --dockerfile=./apps/Dockerfile \
-        --log-timestamp=true \
-        --reproducible=true \
-        --snapshot-mode=time \
-        --use-new-run=true \
-        --context=${CI_PROJECT_DIR}/apps \
-        --destination=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/keycloak:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA}
+  - |-
+    /kaniko/executor \
+      --cache=true \
+      --cache-dir=${CI_PROJECT_DIR}/.cache \
+      --cache-ttl=4320h \
+      --dockerfile=./apps/Dockerfile \
+      --log-timestamp=true \
+      --reproducible=true \
+      --snapshot-mode=time \
+      --use-new-run=true \
+      --context=${CI_PROJECT_DIR}/apps \
+      --destination=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/keycloak:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA}
   cache:
-    - key: kaniko-cache-keycloak
-      paths:
-        - .cache/
-    - key: extensions
-      policy: pull
-      paths:
-        - apps/build-extensions
+  - key: kaniko-cache-keycloak
+    paths:
+    - .cache/
+  - key: extensions
+    policy: pull
+    paths:
+    - apps/build-extensions
   tags:
-    - global_runner_2
+  - global_runner_2
 
 build-docker-realm-controller:
   stage: build-docker
-  image: 
+  image:
     name: gcr.io/kaniko-project/executor:v1.9.1-debug
     entrypoint: [""]
   only:
-    - dev
+  - dev
   before_script:
-    - echo $KANIKO_DOCKER_CONFIG | base64 -d > /kaniko/.docker/config.json
-    - |-
-      /kaniko/warmer \
-        --cache-dir=${CI_PROJECT_DIR}/.cache \
-        --image=quay.io/quarkus/quarkus-micro-image:1.0 \
-        --image=quay.io/quarkus/ubi-quarkus-mandrel-builder-image:22.3-java17
+  - echo $KANIKO_DOCKER_CONFIG | base64 -d > /kaniko/.docker/config.json
+  - |-
+    /kaniko/warmer \
+      --cache-dir=${CI_PROJECT_DIR}/.cache \
+      --image=quay.io/quarkus/quarkus-micro-image:1.0 \
+      --image=quay.io/quarkus/ubi-quarkus-mandrel-builder-image:22.3-java17
   script:
-    - |-
-      /kaniko/executor \
-        --cache=true \
-        --cache-dir=${CI_PROJECT_DIR}/.cache \
-        --cache-ttl=4320h \
-        --dockerfile=./apps/controllers/realm-controller/Dockerfile \
-        --log-timestamp=true \
-        --reproducible=true \
-        --snapshot-mode=time \
-        --use-new-run=true \
-        --context=${CI_PROJECT_DIR}/apps/controllers/realm-controller \
-        --destination=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/realm-controller:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA}
+  - |-
+    /kaniko/executor \
+      --cache=true \
+      --cache-dir=${CI_PROJECT_DIR}/.cache \
+      --cache-ttl=4320h \
+      --dockerfile=./apps/controllers/realm-controller/Dockerfile \
+      --log-timestamp=true \
+      --reproducible=true \
+      --snapshot-mode=time \
+      --use-new-run=true \
+      --context=${CI_PROJECT_DIR}/apps/controllers/realm-controller \
+      --destination=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/realm-controller:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA}
   cache:
-    - key: kaniko-cache-realm-controller
-      paths:
-        - .cache/
+  - key: kaniko-cache-realm-controller
+    paths:
+    - .cache/
   tags:
-    - global_runner_2
-       
+  - global_runner_2
+
 k8s-dev-deploy:
   stage: dev-deploy
   image: nexus.kacd.kz:5000/core2471/docker-helm:master-632
   only:
-    - dev
+  - dev
   environment:
     name: dev
   before_script:
-    - cd apps
-    - export RELEASE_NAME="${CI_PROJECT_NAME}"
-    - mkdir -p /etc/deploy && export KUBECONFIG=/etc/deploy/config
-    - echo ${KUBE_K8S_DEV_CONFIG} | base64 -d > /etc/deploy/config
+  - cd apps
+  - export RELEASE_NAME="${CI_PROJECT_NAME}"
+  - mkdir -p /etc/deploy && export KUBECONFIG=/etc/deploy/config
+  - echo ${KUBE_K8S_DEV_CONFIG} | base64 -d > /etc/deploy/config
   script:
-    - |-
-      helm upgrade --install ${RELEASE_NAME} ./.helm \
-        --create-namespace --namespace="${CI_PROJECT_NAME}" \
-        -f ./.helm/dev.yaml \
-        --set image=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/keycloak:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA} \
-        --set realmController.image=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/realm-controller:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA}
+  - |-
+    helm upgrade --install ${RELEASE_NAME} ./.helm \
+      --create-namespace --namespace="${CI_PROJECT_NAME}" \
+      -f ./.helm/dev.yaml \
+      --set image=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/keycloak:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA} \
+      --set realmController.image=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/realm-controller:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA}
   tags:
-    - global_runner_2
+  - global_runner_2

@@ -1,10 +1,11 @@
-apiVersion: sso.kacd.kz/v1beta1
+apiVersion: sso.kacd.kz
 kind: Client
 metadata:
-  name: billing
+  name: mt535
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: intenral-realm
+    kz-kacd-realm-name: internal
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -12,19 +13,13 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  displayedName: Billing
-  description: App of billing
-  realm: internal
+  displayedName: MT 535
+  displayedDescription: Автоматизация процесса сверки по выпискам c YO (MT535)
   access:
-    rootUrl: http://localhost
-    homeUrl: /account
     validRedirectUris:
-      - "/account/*"
+    - http://localhost:8082/*
+    - http://10.10.125.4:8085/*
     webOrigins:
-      - "+"
-  ldap:
-    dn: {{ .Values.billing.rolesDn }}
-  attributes: ["FIRST_NAME", "LAST_NAME", "MIDDLE_NAME", "LOCALE", "GROUPS", "DIVISION"]
-  roles:
-    - name: "02. Правление"
-      description: "Указывает, является ли пользователь начальником или замом"
+    - "+"
+  capability:
+    type: PUBLIC

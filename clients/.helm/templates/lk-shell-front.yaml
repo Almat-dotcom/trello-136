@@ -1,0 +1,38 @@
+apiVersion: sso.kacd.kz
+kind: Client
+metadata:
+  name: lk-shell-front
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: intenral-realm
+    kz-kacd-realm-name: external
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  displayedName: LK Shell Front-End
+  displayedDescription: "Фронт приложение Личного кабинета KSCD"
+  access:
+    validRedirectUris:
+    - https://kacd-lk-shell.k8s-dev.kacd.kz/*
+    - http://localhost:4200/*
+    - http://kacd-lk-shell.k8s-dev.kacd.kz/*
+    webOrigins:
+    - https://kacd-lk-shell.k8s-dev.kacd.kz
+    - http://localhost:4200
+    - http://kacd-lk-shell.k8s-dev.kacd.kz
+  capability:
+    type: PUBLIC
+  attributes:
+  - FIRST_NAME
+  - LAST_NAME
+  - MIDDLE_NAME
+  - GROUPS
+  - LOCALE
+  - ORG
+  - CLIENT_TYPE
+  - IIN
+  - EMAIL_VERIFIED

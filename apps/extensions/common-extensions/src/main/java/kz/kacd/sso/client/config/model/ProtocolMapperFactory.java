@@ -95,7 +95,7 @@ public class ProtocolMapperFactory {
     }
 
     private static ProtocolMapperModel clientType() {
-        return attributeMapper("clientType");
+        return attributeMapper("clientType", true);
     }
 
     private static ProtocolMapperModel iin() {
@@ -103,17 +103,21 @@ public class ProtocolMapperFactory {
     }
 
     private static ProtocolMapperModel attributeMapper(String attribute) {
+        return attributeMapper(attribute, false);
+    }
+
+    private static ProtocolMapperModel attributeMapper(String attribute, boolean addToAccessToken) {
         ProtocolMapperModel result = new ProtocolMapperModel();
         result.setName(attribute);
         result.setProtocol(OIDC);
         result.setProtocolMapper(ATTR_MAPPER);
-        result.setConfig(attributeMapperConfig(attribute));
+        result.setConfig(attributeMapperConfig(attribute, addToAccessToken));
         return result;
     }
 
-    private static Map<String, String> attributeMapperConfig(String attribute) {
+    private static Map<String, String> attributeMapperConfig(String attribute, boolean addToAccessToken) {
         Map<String, String> result = new HashMap<>();
-        result.put(ADD_TO_ACCESS_TOKEN, Boolean.FALSE.toString());
+        result.put(ADD_TO_ACCESS_TOKEN, Boolean.toString(addToAccessToken));
         result.put(CLAIM_NAME, attribute);
         result.put(ADD_TO_ID_TOKEN, Boolean.TRUE.toString());
         result.put(TYPE, STRING);
