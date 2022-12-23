@@ -7,8 +7,6 @@ import kz.kacd.sso.v1.Realm;
 import kz.kacd.sso.v1.RealmStatus;
 import org.jboss.logging.Logger;
 
-import java.util.Optional;
-
 public class K8sRealmRepository {
     private static final Logger log = Logger.getLogger(K8sRealmRepository.class);
 
@@ -35,8 +33,6 @@ public class K8sRealmRepository {
 
     public Realm find(String name) {
         log.debugf("Finding realm in kubernetes %s ...", name);
-        RealmList list = client.resources(Realm.class, RealmList.class).inNamespace(K8sConfig.NAMESPACE).list();
-        Optional<Realm> result = list.getItems().stream().filter(it -> it.getMetadata().getName().equals(name)).findFirst();
-        return result.orElse(null);
+        return client.resources(Realm.class, RealmList.class).inNamespace(K8sConfig.NAMESPACE).withName(name).get();
     }
 }

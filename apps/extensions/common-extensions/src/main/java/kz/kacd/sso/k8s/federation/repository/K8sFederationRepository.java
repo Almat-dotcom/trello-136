@@ -37,11 +37,10 @@ public class K8sFederationRepository {
 
     public Federation find(String name) {
         log.debugf("Finding federation in kubernetes %s ...", name);
-        FederationList list = client.resources(Federation.class, FederationList.class)
+        return client.resources(Federation.class, FederationList.class)
                 .inNamespace(K8sConfig.NAMESPACE)
-                .list();
-        Optional<Federation> result = list.getItems().stream().filter(it -> it.getMetadata().getName().equals(name)).findFirst();
-        return result.orElse(null);
+                .withName(name)
+                .get();
     }
 
     public List<Federation> findByRealm(String realmName) {

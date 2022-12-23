@@ -84,6 +84,7 @@ public class ConfigurationResource extends BaseConfigAdminResource {
         K8sFederationProvider k8s = session.getProvider(K8sFederationProvider.class);
         K8sFederation spec = k8s.findByName(name);
         if (spec == null || spec.getRealm() == null || !spec.getRealm().equals(session.getContext().getRealm().getName())) {
+            log.infof("Federation %s with realm %s not found!", name, session.getContext().getRealm().getName());
             throw new NotFoundException("Federation " + name + " not found for this realm!");
         }
         FederationStatus initial = spec.getStatus();
@@ -122,6 +123,7 @@ public class ConfigurationResource extends BaseConfigAdminResource {
         K8sClientSpecProvider k8s = session.getProvider(K8sClientSpecProvider.class);
         K8sClient spec = k8s.findByName(name);
         if (spec == null || spec.getRealm() == null || !spec.getRealm().equals(session.getContext().getRealm().getName())) {
+            log.infof("Client %s with realm %s not found!", name, session.getContext().getRealm().getName());
             throw new NotFoundException("Client " + name + " for current realm not found!");
         }
         ClientStatus initial = spec.getStatus();
