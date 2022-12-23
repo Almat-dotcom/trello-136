@@ -15,7 +15,7 @@ metadata:
   {{- end }}
 spec:
   ldap:
-    displayedName: "Kacd LDAP integration"
+    displayedName: "External Kacd LDAP integration"
     vendor: ACTIVE_DIRECTORY
     connection:
       url: {{ .Values.external.ldap.url }}
