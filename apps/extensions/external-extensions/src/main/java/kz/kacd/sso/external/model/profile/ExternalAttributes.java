@@ -18,6 +18,9 @@ public class ExternalAttributes {
     }
 
     public String username() {
+        if (residency() == null || residency().equals(ExternalRegistrationPage.NON_RESIDENT)) {
+            return email().toLowerCase();
+        }
         return iin() + "-" + clientType();
     }
 

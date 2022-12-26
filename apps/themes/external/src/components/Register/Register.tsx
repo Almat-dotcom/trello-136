@@ -20,7 +20,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
 
     const formRef = useRef<HTMLFormElement>(null);
 
-    const { fields, legal, buttonDisabled, concents, onSubmit } = useRegisterPage(kcContext, () => formRef.current?.submit())
+    const { fields, legal, resident, buttonDisabled, concents, onSubmit } = useRegisterPage(kcContext, () => formRef.current?.submit())
 
     const error = (key?: string) => key ? advancedMsgStr(key) ?? key : undefined
 
@@ -55,6 +55,20 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                     <p className="mt-3 mb-4 text-slate-900 text-2xl font-bold">{msgStr("registerTitle")}</p>
                 </div>
 
+                <InputSelect
+                    fieldName="residency"
+                    label={msgStr("residency")}
+                    options={[{
+                        value: "resident",
+                        label: msgStr("resident")
+                    }, {
+                        value: "non-resident",
+                        label: msgStr("nonResident")
+                    }]}
+                    value={fields.residency.value}
+                    error={error(fields.residency.error)}
+                    onValueChange={(option) => { fields.residency.onChange(option.value) }}
+                />
                 <InputSelect
                     fieldName="clientType"
                     label={msgStr("clientType")}
@@ -117,7 +131,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                     error={error(fields.email.error)}
                     onChange={(event) => { fields.email.onChange(event.target.value) }}
                 />
-                {legal ? (
+                {legal && resident ? (
                     <InputField
                         fieldName="bin"
                         label={msgStr("bin")}
@@ -128,15 +142,17 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                         onChange={(event) => fields.bin.onChange(event.target.value)}
                     />
                 ) : null}
-                <InputField
-                    fieldName="iin"
-                    label={msgStr("iin")}
-                    type="text"
-                    value={fields.iin.value}
-                    error={error(fields.iin.error)}
-                    maxLength={12}
-                    onChange={(event) => fields.iin.onChange(event.target.value)}
-                />
+                {resident ? (
+                    <InputField
+                        fieldName="iin"
+                        label={msgStr("iin")}
+                        type="text"
+                        value={fields.iin.value}
+                        error={error(fields.iin.error)}
+                        maxLength={12}
+                        onChange={(event) => fields.iin.onChange(event.target.value)}
+                    />
+                ) : null}
                 <InputField
                     fieldName="password"
                     label={msgStr("password")}

@@ -4,6 +4,7 @@ type ExtendedRegister = KcContextBase.RegisterCommon & {
 	pageId: "register.ftl";
         register: {
             formData: {
+				residency?: string;
 				clientType?: string;
 				legalRole?: string;
                 firstName?: string;

@@ -29,5 +29,8 @@ export const en = {
     "error-empty": "Please specify value",
     "only12Digits": "Can contain only 12 digits",
     "concentOnCollectingData": "Я даю согласие на сбор и обработку персональных данных",
-    "concentLK": "Я даю согласие на использование личного кабинета"
+    "concentLK": "Я даю согласие на использование личного кабинета",
+    "residency": "Residency",
+    "resident": "Resident",
+    "nonResident": "Non-resident"
 }
