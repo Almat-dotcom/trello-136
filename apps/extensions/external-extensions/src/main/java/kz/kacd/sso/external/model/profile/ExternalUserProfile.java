@@ -71,7 +71,12 @@ public class ExternalUserProfile {
         RealmModel realm = session.getContext().getRealm();
 
         OrganizationProvider provider = session.getProvider(OrganizationProvider.class);
-        OrganizationModel org = provider.getOrganizationByBin(realm, bin());
+        OrganizationModel org;
+        if (residency() != null && residency().equals(ExternalRegistrationPage.NON_RESIDENT)) {
+            org = provider.getUserOrganizations(realm, user).findAny().orElse(null);
+        } else {
+            org = provider.getOrganizationByBin(realm, bin());
+        }
 
         if (org == null && !ExternalRegistrationPage.ROLE_HEAD.equals(legalRole())) {
             throw new IllegalStateException(
