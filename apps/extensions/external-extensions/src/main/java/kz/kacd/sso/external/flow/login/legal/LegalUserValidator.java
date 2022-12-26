@@ -23,7 +23,8 @@ public class LegalUserValidator implements AuthenticatorValidator {
     @Override
     public Error validate(UserModel user, KeycloakSession session, AuthenticationFlowContext context) {
         log.debugf("Validating user %s ...", user.getUsername());
-        if (!user.getFirstAttribute(ExternalRegistrationPage.FIELD_CLIENT_TYPE).equals(ExternalRegistrationPage.CLIENT_LEGAL)) {
+        String clientType = user.getFirstAttribute(ExternalRegistrationPage.FIELD_CLIENT_TYPE);
+        if (clientType == null || !clientType.equals(ExternalRegistrationPage.CLIENT_LEGAL)) {
             log.debugf("User %s is not legal.", user.getUsername());
             return null;
         }

@@ -48,4 +48,8 @@ public class ExternalAttributes {
     public String legalRole() {
         return attributes.get(ExternalRegistrationPage.FIELD_LEGAL_ROLE);
     }
+
+    public String residency() {
+        return attributes.get(ExternalRegistrationPage.FIELD_RESIDENCY);
+    }
 }

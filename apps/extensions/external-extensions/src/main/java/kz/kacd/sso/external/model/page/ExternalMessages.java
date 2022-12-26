@@ -18,6 +18,8 @@ public class ExternalMessages {
     public static final String MISSING_EDS = "missingEds";
     public static final String INVALID_EDS = "invalidEds";
     public static final String REQUIRED_CONFIRM_OF_MEMBER = "requiredLegalMemberConfirmation";
+    public static final String MISSING_RESIDENCY = "missingResidency";
+    public static final String INVALID_RESIDENCY = "invalidResidency";
 
     private ExternalMessages() {
     }

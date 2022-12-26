@@ -27,6 +27,7 @@ public class SimpleExternalAttributesValidator {
         validateClientType(attributes.clientType(), listener);
         validateBin(attributes.bin(), listener);
         validateLegalRole(attributes.legalRole(), listener);
+        validateResidency(attributes.residency(), listener);
     }
 
     private void validateEmail(String email, Consumer<ValidationError> listener) {
@@ -41,7 +42,6 @@ public class SimpleExternalAttributesValidator {
 
     private void validateIin(String iin, Consumer<ValidationError> listener) {
         if (iin == null || iin.isEmpty()) {
-            listener.accept(error(ExternalRegistrationPage.FIELD_IIN, ExternalMessages.MISSING_IIN));
             return;
         }
         if (iin.length() != 12 || !iin.matches("\\d+")) {
@@ -115,6 +115,19 @@ public class SimpleExternalAttributesValidator {
                         && !value.equals(ExternalRegistrationPage.ROLE_EMPLOYEE))
         ) {
             listener.accept(error(ExternalRegistrationPage.FIELD_LEGAL_ROLE, ExternalMessages.INVALID_LEGAL_ROLE));
+        }
+    }
+
+    private void validateResidency(String value, Consumer<ValidationError> listener) {
+        if (value == null || value.isEmpty()) {
+            listener.accept(error(ExternalRegistrationPage.FIELD_RESIDENCY, ExternalMessages.MISSING_RESIDENCY));
+            return;
+        }
+        if (
+                !value.equals(ExternalRegistrationPage.RESIDENT)
+                    && !value.equals(ExternalRegistrationPage.NON_RESIDENT)
+        ) {
+            listener.accept(error(ExternalRegistrationPage.FIELD_RESIDENCY, ExternalMessages.INVALID_RESIDENCY));
         }
     }
 

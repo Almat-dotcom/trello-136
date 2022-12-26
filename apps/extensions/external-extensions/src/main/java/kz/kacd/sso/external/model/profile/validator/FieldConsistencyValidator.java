@@ -20,14 +20,26 @@ public class FieldConsistencyValidator {
         if (attributes.clientType().equals(ExternalRegistrationPage.CLIENT_LEGAL)) {
             validateLegalClient(attributes);
         }
+        if (attributes.residency().equals(ExternalRegistrationPage.RESIDENT)) {
+            validateResident(attributes);
+        }
     }
 
     private void validateLegalClient(ExternalAttributes attributes) {
-        if (attributes.bin() == null || attributes.bin().isEmpty()) {
+        if (
+                attributes.residency().equals(ExternalRegistrationPage.RESIDENT)
+                        && (attributes.bin() == null || attributes.bin().isEmpty())
+        ) {
             listener.accept(error(ExternalRegistrationPage.FIELD_BIN, ExternalMessages.MISSING_BIN));
         }
         if (attributes.legalRole() == null || attributes.legalRole().isEmpty()) {
             listener.accept(error(ExternalRegistrationPage.FIELD_LEGAL_ROLE, ExternalMessages.MISSING_LEGAL_ROLE));
+        }
+    }
+
+    private void validateResident(ExternalAttributes attributes) {
+        if (attributes.iin() == null || attributes.iin().isEmpty()) {
+            listener.accept(error(ExternalRegistrationPage.FIELD_IIN, ExternalMessages.MISSING_IIN));
         }
     }
 

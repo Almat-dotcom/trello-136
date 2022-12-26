@@ -13,12 +13,16 @@ public class ExternalRegistrationPage extends RegistrationPage {
     public static final String FIELD_MIDDLE_NAME = "middleName";
     public static final String FIELD_BIN = "bin";
     public static final String FIELD_IIN = "iin";
+    public static final String FIELD_RESIDENCY = "residency";
 
     public static final String CLIENT_PHYSICAL = "physical";
     public static final String CLIENT_LEGAL = "legal";
 
     public static final String ROLE_HEAD = "head";
     public static final String ROLE_EMPLOYEE = "employee";
+
+    public static final String RESIDENT = "resident";
+    public static final String NON_RESIDENT = "non-resident";
 
     private final LoginFormsProvider form;
 
@@ -36,5 +40,6 @@ public class ExternalRegistrationPage extends RegistrationPage {
         form.setAttribute(FIELD_MIDDLE_NAME, "");
         form.setAttribute(FIELD_BIN, "");
         form.setAttribute(FIELD_IIN, "");
+        form.setAttribute(FIELD_RESIDENCY, "");
     }
 }

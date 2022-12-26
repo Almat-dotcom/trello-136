@@ -59,6 +59,7 @@ public class ExternalUserProfile {
         user.setAttribute(ExternalRegistrationPage.FIELD_CLIENT_TYPE, Collections.singletonList(clientType()));
         user.setAttribute(ExternalRegistrationPage.FIELD_MIDDLE_NAME, Collections.singletonList(middleName()));
         user.setAttribute(ExternalRegistrationPage.FIELD_IIN, Collections.singletonList(iin()));
+        user.setAttribute(ExternalRegistrationPage.FIELD_RESIDENCY, Collections.singletonList(residency()));
 
         if (ExternalRegistrationPage.CLIENT_LEGAL.equals(clientType())) {
             processLegalClient();
@@ -129,5 +130,9 @@ public class ExternalUserProfile {
 
     public String legalRole() {
         return attributes.legalRole();
+    }
+
+    public String residency() {
+        return attributes.residency();
     }
 }
