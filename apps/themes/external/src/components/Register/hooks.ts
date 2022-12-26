@@ -1,5 +1,4 @@
 import { KcContext } from "lib/kc";
-import { traceDeprecation } from "process";
 import { useState } from "react";
 
 export type KcContext_Registration = Extract<KcContext, { pageId: "register.ftl" }>;
