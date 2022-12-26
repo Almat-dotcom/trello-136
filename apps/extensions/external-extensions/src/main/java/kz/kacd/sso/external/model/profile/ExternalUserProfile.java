@@ -72,12 +72,15 @@ public class ExternalUserProfile {
 
         OrganizationProvider provider = session.getProvider(OrganizationProvider.class);
         OrganizationModel org;
-        if (residency() != null && residency().equals(ExternalRegistrationPage.NON_RESIDENT)) {
-            org = provider.getUserOrganizations(realm, user).findAny().orElse(null);
-        } else {
+        if (
+                residency() != null
+                        && legalRole() != null
+                        && legalRole().equals(ExternalRegistrationPage.ROLE_EMPLOYEE)
+        ) {
             org = provider.getOrganizationByBin(realm, bin());
+        } else {
+            org = provider.getUserOrganizations(realm, user).findAny().orElse(null);
         }
-
         if (org == null && !ExternalRegistrationPage.ROLE_HEAD.equals(legalRole())) {
             throw new IllegalStateException(
                     "Illegal organization creation request! Only head of company can register new legal!"
