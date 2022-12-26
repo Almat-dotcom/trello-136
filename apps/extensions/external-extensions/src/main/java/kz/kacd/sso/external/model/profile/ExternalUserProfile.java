@@ -72,11 +72,7 @@ public class ExternalUserProfile {
 
         OrganizationProvider provider = session.getProvider(OrganizationProvider.class);
         OrganizationModel org;
-        if (
-                residency() != null
-                        && legalRole() != null
-                        && legalRole().equals(ExternalRegistrationPage.ROLE_EMPLOYEE)
-        ) {
+        if (resident() || nonResidentEmployee()) {
             org = provider.getOrganizationByBin(realm, bin());
         } else {
             org = provider.getUserOrganizations(realm, user).findAny().orElse(null);
@@ -107,6 +103,18 @@ public class ExternalUserProfile {
 
         log.debugf("Requesting employee position for user %s in org %s ...", username(), bin());
         org.requestPosition(PositionModel.EMPLOYEE, user);
+    }
+
+    private boolean resident() {
+        return residency() != null && residency().equals(ExternalRegistrationPage.RESIDENT);
+    }
+
+    private boolean nonResidentEmployee() {
+        return residency() != null
+                && residency().equals(ExternalRegistrationPage.NON_RESIDENT)
+                && clientType().equals(ExternalRegistrationPage.CLIENT_LEGAL)
+                && legalRole() != null
+                && legalRole().equals(ExternalRegistrationPage.ROLE_EMPLOYEE);
     }
 
     public String email() {
