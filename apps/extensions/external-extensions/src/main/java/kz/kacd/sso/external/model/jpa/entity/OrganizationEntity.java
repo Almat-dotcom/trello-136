@@ -13,6 +13,10 @@ import java.util.Set;
         name = "OrganizationEntity.getOrgByRealmId",
         query = "select o from OrganizationEntity o where o.realmId = :realmId"
 )
+@NamedNativeQuery(
+        name = "OrganizationEntity.nextBin",
+        query = "select nextval('{h-schema}ext_nonresident_org_code')"
+)
 @Entity
 @Table(
         name = "ext_organization",

@@ -82,7 +82,12 @@ public class ExternalUserProfile {
         if (org == null) {
             log.debugf("Registering new organization %s with user %s ...", bin(), username());
             org = provider.createOrganization(realm, user);
-            org.setBin(bin());
+
+            if (residency().equals(ExternalRegistrationPage.NON_RESIDENT)) {
+                org.setBin(provider.generateNonResidentOrganizationBin());
+            } else {
+                org.setBin(bin());
+            }
             return;
         }
 

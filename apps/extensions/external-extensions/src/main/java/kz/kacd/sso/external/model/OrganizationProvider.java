@@ -27,4 +27,6 @@ public interface OrganizationProvider extends Provider {
     }
 
     boolean removeOrganization(RealmModel realm, String id);
+
+    String generateNonResidentOrganizationBin();
 }

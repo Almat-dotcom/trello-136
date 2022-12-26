@@ -98,6 +98,7 @@ public class OrganizationResourceProviderFactory implements RealmResourceProvide
                                 }
                             }
                         });
+        log.infof("NEW BIN: %s", session.getProvider(OrganizationProvider.class).generateNonResidentOrganizationBin());
     }
 
     private void realmPostCreate(RealmModel.RealmPostCreateEvent event) {

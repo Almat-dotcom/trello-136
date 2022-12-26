@@ -5,6 +5,8 @@ import kz.kacd.sso.external.model.OrganizationProvider;
 import kz.kacd.sso.external.model.PositionModel;
 import kz.kacd.sso.external.model.jpa.entity.OrganizationEntity;
 import kz.kacd.sso.external.model.jpa.entity.OrganizationMemberEntity;
+import org.hibernate.boot.archive.scan.spi.ClassDescriptor;
+import org.hibernate.metamodel.model.domain.internal.EntityTypeImpl;
 import org.jboss.logging.Logger;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
@@ -12,8 +14,12 @@ import org.keycloak.models.UserModel;
 import org.keycloak.models.utils.KeycloakModelUtils;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.persistence.metamodel.EntityType;
+import java.math.BigInteger;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.stream.Stream;
 
 public class JpaOrganizationProvider implements OrganizationProvider {
@@ -125,6 +131,14 @@ public class JpaOrganizationProvider implements OrganizationProvider {
         keycloakSession.getKeycloakSessionFactory().publish(removedEvent(realm, org));
         em.flush();
         return true;
+    }
+
+    @Override
+    public String generateNonResidentOrganizationBin() {
+        log.debug("Generating new bin for non-resident organization ...");
+        Query query = em.createNamedQuery("OrganizationEntity.nextBin");
+        Long id = ((BigInteger) query.getSingleResult()).longValue();
+        return String.format("NR%010d", id);
     }
 
     @Override

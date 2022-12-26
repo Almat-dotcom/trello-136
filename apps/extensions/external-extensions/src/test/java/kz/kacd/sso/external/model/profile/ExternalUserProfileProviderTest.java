@@ -192,6 +192,7 @@ class ExternalUserProfileProviderTest {
 
     private MultivaluedMap<String, String> toForm(String email, String username, String firstName, String lastName) {
         MultivaluedMap<String, String> result = new MultivaluedHashMap<>();
+        result.put(ExternalRegistrationPage.FIELD_RESIDENCY, Collections.singletonList(ExternalRegistrationPage.RESIDENT));
         result.put(RegistrationPage.FIELD_EMAIL, Collections.singletonList(email));
         result.put(ExternalRegistrationPage.FIELD_IIN, Collections.singletonList(username));
         result.put(RegistrationPage.FIELD_FIRST_NAME, Collections.singletonList(firstName));
