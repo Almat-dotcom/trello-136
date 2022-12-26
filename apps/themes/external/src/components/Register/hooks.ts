@@ -1,4 +1,5 @@
 import { KcContext } from "lib/kc";
+import { traceDeprecation } from "process";
 import { useState } from "react";
 
 export type KcContext_Registration = Extract<KcContext, { pageId: "register.ftl" }>;
@@ -39,6 +40,7 @@ type RegisterForm = {
     fields: RegisterFields,
     legal: boolean,
     resident: boolean,
+    head: boolean,
     buttonDisabled: boolean,
     concents: Concents,
     onSubmit: () => void
@@ -47,15 +49,17 @@ type RegisterForm = {
 export const useRegisterPage = (kcContext: KcContext_Registration, onFormSubmit: () => void): RegisterForm => {
     const [legal, setLegal] = useState(kcContext.register.formData.clientType === 'legal');
     const [resident, setResident] = useState(kcContext.register.formData.residency === 'resident');
+    const [head, setHead] = useState(kcContext.register.formData.legalRole === "head");
     const [concent1, setConcent1] = useState(false);
     const [concent1Shown, setConcent1Shown] = useState(false);
     const [concent2, setConcent2] = useState(false);
     const [concent2Shown, setConcent2Shown] = useState(false);
-    const fields = useRegisterFields(kcContext, legal, (value) => setLegal(value), resident, (value) => setResident(value));
+    const fields = useRegisterFields(kcContext, legal, (value) => setLegal(value), resident, (value) => setResident(value), head, (value) => setHead(value));
     return {
         fields: fields,
         legal: legal,
         resident: resident,
+        head: head,
         buttonDisabled: !concent1 || !concent2,
         concents: {
             concent1: concent1,
@@ -92,7 +96,9 @@ const useRegisterFields = (
     legal: boolean,
     onLegalChanged: (legal: boolean) => void,
     resident: boolean,
-    onResidentChanged: (resident: boolean) => void
+    onResidentChanged: (resident: boolean) => void,
+    head: boolean,
+    onRoleChanged: (head: boolean) => void
 ): RegisterFields => {
     const { register } = kcContext;
     const { formData } = register;
@@ -100,12 +106,12 @@ const useRegisterFields = (
     return {
         residency: useField(isNotEmpty, (value) => { onResidentChanged(value === 'resident') }, residency, extractError(kcContext, "residency")),
         clientType: useField(isNotEmpty, (value) => { onLegalChanged(value === 'legal') }, clientType, extractError(kcContext, "clientType")),
-        legalRole: useField(isNotEmptyOnLegal(() => legal), () => { }, legalRole, extractError(kcContext, "legalRole")),
+        legalRole: useField(isNotEmptyOnLegal(() => legal), (value) => { onRoleChanged(value === 'head') }, legalRole, extractError(kcContext, "legalRole")),
         lastName: useField(isNotEmpty, () => { }, lastName, extractError(kcContext, "lastName")),
         firstName: useField(isNotEmpty, () => { }, firstName, extractError(kcContext, "firstName")),
         middleName: useField(allAllowed, () => { }, middleName, extractError(kcContext, "middleName")),
         email: useField(isNotEmpty, () => { }, email, extractError(kcContext, "email")),
-        bin: useField(isBinIinOnLegalAndResident(() => legal, () => resident), () => { }, bin, extractError(kcContext, "bin")),
+        bin: useField(isBinIinOnLegalAndResident(() => legal, () => resident, () => head), () => { }, bin, extractError(kcContext, "bin")),
         iin: useField(isBinIinOnResident(() => resident), () => { }, iin, extractError(kcContext, "iin")),
         password: useField(isNotEmpty, () => { }, undefined, extractError(kcContext, "password")),
         passwordConfirm: useField(isNotEmpty, () => { }, undefined, extractError(kcContext, "password-confirm"))
@@ -136,7 +142,15 @@ const useField = (validator: (value: string) => string | undefined, changeCallBa
 
 const isNotEmptyOnLegal = (legal: () => boolean) => (value: string): string | undefined => legal() ? isNotEmpty(value) : undefined;
 
-const isBinIinOnLegalAndResident = (legal: () => boolean, resident: () => boolean) => (value: string): string | undefined => legal() ? isBinIinOnResident(resident)(value) : undefined
+const isBinIinOnLegalAndResident = (legal: () => boolean, resident: () => boolean, head: () => boolean) => 
+    (value: string): string | undefined => legal() ? isValidBinOrCode(resident, head)(value) : undefined;
+
+const isValidBinOrCode = (resident: () => boolean, head: () => boolean) =>
+    (value: string): string | undefined => resident() ? isBinIinOnResident(resident)(value) : isValidOrgCode(head)(value);
+
+const isValidOrgCode = (head: () => boolean) => (value: string): string | undefined => head() ? undefined : is12CharsAndStartsWithNR(value);
+
+const is12CharsAndStartsWithNR = (value: string): string | undefined => value.length !== 12 || !value.startsWith("NR") ? "invalidOrgCode" : undefined;
 
 const isBinIinOnResident = (resident: () => boolean) => (value: string): string | undefined => resident() ? isNotEmpty(value) || is12CharsAndNumeric(value) : undefined;
 

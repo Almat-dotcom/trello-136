@@ -20,7 +20,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
 
     const formRef = useRef<HTMLFormElement>(null);
 
-    const { fields, legal, resident, buttonDisabled, concents, onSubmit } = useRegisterPage(kcContext, () => formRef.current?.submit())
+    const { fields, legal, resident, head, buttonDisabled, concents, onSubmit } = useRegisterPage(kcContext, () => formRef.current?.submit())
 
     const error = (key?: string) => key ? advancedMsgStr(key) ?? key : undefined
 
@@ -131,10 +131,10 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                     error={error(fields.email.error)}
                     onChange={(event) => { fields.email.onChange(event.target.value) }}
                 />
-                {legal && resident ? (
+                {legal && (resident || !head) ? (
                     <InputField
                         fieldName="bin"
-                        label={msgStr("bin")}
+                        label={resident ? msgStr("bin") : msgStr("orgCode")}
                         type="text"
                         value={fields.bin.value}
                         error={error(fields.bin.error)}

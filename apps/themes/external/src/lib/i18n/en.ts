@@ -32,5 +32,7 @@ export const en = {
     "concentLK": "Я даю согласие на использование личного кабинета",
     "residency": "Residency",
     "resident": "Resident",
-    "nonResident": "Non-resident"
+    "nonResident": "Non-resident",
+    "orgCode": "Organization code",
+    "invalidOrgCode": "Organization code should be 12 characters and start with NR"
 }
