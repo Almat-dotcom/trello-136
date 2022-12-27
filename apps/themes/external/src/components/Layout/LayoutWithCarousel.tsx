@@ -1,4 +1,5 @@
 import Carousel from "components/parts/Carousel";
+import Footer from "components/parts/Footer";
 import Lang from "components/parts/Lang";
 import { I18n } from "lib/i18n";
 import { KcContext } from "lib/kc";
@@ -40,6 +41,7 @@ const LayoutWithCarousel = ({ children, kcContext, i18n, ...props }: { children:
                     </div>
                 </div>
             </div>
+            <Footer i18n={i18n} />
         </div>
     );
 }

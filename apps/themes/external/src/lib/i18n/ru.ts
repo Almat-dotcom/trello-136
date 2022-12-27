@@ -148,5 +148,10 @@ export const ru = {
     "invalidEds": "Your EDS is invalid. It can be expired or rejected.",
     "requiredLegalMemberConfirmation": "You has registered as employee of the organization. Please contact with CEO to confirm your account.",
     "missingResidency": "Выберите тип резидентства",
-    "invalidResidency": "Выберите тип резидентства"
+    "invalidResidency": "Выберите тип резидентства",
+    "goToSite": "Перейти на сайт",
+    "checkDoc": "Проверить документ",
+    "copyright": "Все права защищены, 2022",
+    "contacts": "Контакты",
+    "address": "Адрес"
 }

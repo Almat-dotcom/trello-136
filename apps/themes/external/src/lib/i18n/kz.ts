@@ -148,5 +148,10 @@ export const kz = {
     "invalidEds": "Your EDS is invalid. It can be expired or rejected.",
     "requiredLegalMemberConfirmation": "You has registered as employee of the organization. Please contact with CEO to confirm your account.",
     "missingResidency": "Резиденттік түрін таңдаңыз",
-    "invalidResidency": "Резиденттік түрін таңдаңыз"
+    "invalidResidency": "Резиденттік түрін таңдаңыз",
+    "goToSite": "Сайтқа өту",
+    "checkDoc": "Құжатты тексеру",
+    "copyright": "Барлық құқықтар қорғалған, 2022",
+    "contacts": "Контактілер",
+    "address": "Мекенжайы"
 }
