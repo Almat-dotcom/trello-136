@@ -17,7 +17,7 @@ const LayoutWithCarousel = ({ children, kcContext, i18n, ...props }: { children:
     return (
         <div className="bg-white">
             <div className="flex justify-center items-stretch min-h-screen">
-                <div className="hidden bg-gradient-to-tr from-back-dark to-back-light lg:block lg:w-2/3">
+                <div className="hidden bg-gradient-to-tr from-back-dark to-back-light lg:block lg:w-3/5">
                     <div className="flex flex-col items-center justify-between p-4">
                         <div className="w-full">
                             <Logo />
@@ -30,7 +30,7 @@ const LayoutWithCarousel = ({ children, kcContext, i18n, ...props }: { children:
                         <div></div>
                     </div>
                 </div>
-                <div className="flex flex-col justify-between w-full max-w-md px-6 mx-auto lg:w-1/3">
+                <div className="flex flex-col justify-between w-full max-w-md px-6 mx-auto lg:w-2/5">
                     <div className="flex justify-between lg:justify-end p-2">
                         <div className="block lg:hidden"><Logo /></div>
                         <Lang current={currentLanguageTag} langs={supported} i18n={i18n} />

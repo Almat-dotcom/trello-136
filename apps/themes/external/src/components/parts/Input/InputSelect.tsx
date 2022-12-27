@@ -49,7 +49,7 @@ const InputSelect = ({ fieldName, label, options, value, error, onValueChange }:
 
     return (
         <InputContainer label={label} name={fieldName} error={changed ? undefined : error} onFocus={() => { }}>
-            <div id="floating_outlined" className={(!changed && error ? "border-red-600" : "border-gray-300") + " flex w-full text-gray-900 rounded-lg border-2 dark:text-white dark:border-gray-600 dark:focus:border-primary focus:ring-0 focus:border-primary peer"}>
+            <div id="floating_outlined" className="flex w-full text-gray-900 focus:ring-0 peer">
                 <input
                     className="h-full w-full appearance-none peer block cursor-pointer px-2.5 py-1 pt-4 bg-transparent focus:outline-none"
                     id={fieldName + "_label"}
@@ -69,7 +69,7 @@ const InputSelect = ({ fieldName, label, options, value, error, onValueChange }:
                         <img alt="expand" src={expanded ? ExpandLess : ExpandMore} />
                     </button>
                 </div>
-                <div className={(expanded ? "absolute" : "hidden") + " shadow top-full z-40 w-full lef-0 rounded max-h-select overflow-y-auto"} >
+                <div className={(expanded ? "absolute" : "hidden") + " shadow-lg top-full z-40 w-full lef-0 border-2 border-gray-200 rounded max-h-select overflow-y-auto"} >
                     <div className="flex flex-col w-full">
                         {choices}
                     </div>

@@ -41,7 +41,7 @@ const UsernamePassword = ({ kcContext, i18n, hidden, onFormSubmit }: { kcContext
                             />
                         </div>
                         <div className="text-sm ml-3">
-                            <label htmlFor="rememberMe" className="font-medium text-gray-400">{msgStr("rememberMe")}</label>
+                            <label htmlFor="rememberMe" className="font-medium text-gray-500">{msgStr("rememberMe")}</label>
                         </div>
                     </div>
                 )}
@@ -49,7 +49,7 @@ const UsernamePassword = ({ kcContext, i18n, hidden, onFormSubmit }: { kcContext
                 {realm.resetPasswordAllowed && (
                     <a
                         href={url.loginResetCredentialsUrl}
-                        className="text-sm text-gray-400 focus:text-primary hover:text-primary hover:underline"
+                        className="text-sm text-secondary-dark font-semibold underline"
                     >{msgStr("doForgotPassword")}</a>
                 )}
             </div>

@@ -43,7 +43,7 @@ const InputField = ({ fieldName, label, type, value, error, readOnly, maxLength,
                 type={ type === "password" && switched ? "text" : type }
                 id={fieldName} 
                 name={fieldName}
-                className={ ( error && memError !== error ? "border-red-600" : "border-gray-300" ) + " block px-2.5 py-1 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-2 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary focus:outline-none focus:ring-0 focus:border-primary peer"}
+                className="block px-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary focus:outline-none focus:ring-0 focus:border-primary peer"
                 placeholder=" "
                 readOnly={readOnly}
                 maxLength={maxLength}

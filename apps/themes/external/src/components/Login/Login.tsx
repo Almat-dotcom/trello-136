@@ -22,7 +22,7 @@ const Login = memo(({ kcContext, i18n, ...props }: { kcContext: KcContextLogin; 
 
     return (
         <LayoutWithCarousel kcContext={kcContext} i18n={i18n}>
-            <div>
+            <div className="px-0 lg:px-4">
                 <div className="text-center">
                     {message && (
                         <Alert i18n={i18n} type={message.type} message={message.summary} />
@@ -43,12 +43,12 @@ const Login = memo(({ kcContext, i18n, ...props }: { kcContext: KcContextLogin; 
                     </form>
 
                     <p 
-                        className="mt-6 text-sm text-center text-gray-400"
+                        className="mt-6 text-sm text-center text-gray-500"
                     >
                         {msgStr("noAccount")}
                         <a 
                             href={url.registrationUrl} 
-                            className="ml-4 text-blue-500 hover:text-primary focus:outline-none focus:underline hover:underline"
+                            className="ml-4 text-sm text-secondary-dark font-semibold underline"
                         >
                             {msgStr("doRegister")}
                         </a>

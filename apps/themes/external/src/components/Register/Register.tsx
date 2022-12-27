@@ -188,7 +188,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                         />
                     </div>
                     <div className="text-sm ml-3">
-                        <button type="button" className="bg-none border-none font-medium text-start text-blue-500 hover:underline" onClick={concents.tuggleConcent1}>
+                        <button type="button" className="bg-none border-none text-start text-sm text-secondary-dark font-semibold underline" onClick={concents.tuggleConcent1}>
                             {msgStr("concentOnCollectingData")}
                         </button>
                     </div>
@@ -207,19 +207,21 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                         />
                     </div>
                     <div className="text-sm ml-3">
-                        <button type="button" className="bg-none border-none font-medium text-start text-blue-500 hover:underline" onClick={concents.tuggleConcent2}>
+                        <button type="button" className="bg-none border-none text-start text-sm text-secondary-dark font-semibold underline" onClick={concents.tuggleConcent2}>
                             {msgStr("concentLK")}
                         </button>
                     </div>
                 </div>
 
-                <Button severity="primary" type="button" disabled={buttonDisabled} onClick={() => onSubmit()}>{msgStr("doRegister")}</Button>
+                <div className="mx-12">
+                    <Button severity="primary" type="button" disabled={buttonDisabled} onClick={() => onSubmit()}>{msgStr("doRegister")}</Button>
+                </div>
                 <p
                     className="mt-6 mb-6 text-sm text-center text-gray-400"
                 >
                     <a
                         href={url.loginUrl}
-                        className="ml-4 text-blue-500 hover:text-primary focus:outline-none focus:underline hover:underline"
+                        className="ml-4 text-sm text-secondary-dark font-semibold underline"
                     >
                         {msg("backToLogin")}
                     </a>
