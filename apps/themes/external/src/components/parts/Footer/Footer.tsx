@@ -7,8 +7,8 @@ const Footer = ({ i18n }: { i18n: I18n }) => {
         <div className="flex flex-col-reverse md:flex-row items-center md:items-stretch md:justify-between w-full px-1 md:px-8 lg:px-24 xl:px-44 py-8 md:py-12 bg-slate-800">
             <div className="flex flex-col justify-between w-64 md:w-auto">
                 <div className="mb-20 text-white text-sm">
-                    <div className="inline-block mr-4"><a className="underline" href="#">{msgStr("goToSite")}</a></div>
-                    <div className="inline-block"><a className="underline" href="#">{msgStr("checkDoc")}</a></div>
+                    <div className="inline-block mr-4"><a className="underline" href="/oops">{msgStr("goToSite")}</a></div>
+                    <div className="inline-block"><a className="underline" href="/oops">{msgStr("checkDoc")}</a></div>
                 </div>
                 <div>
                     <span className="text-slate-500 text-sm">{"© " + msgStr("copyright")}</span>
