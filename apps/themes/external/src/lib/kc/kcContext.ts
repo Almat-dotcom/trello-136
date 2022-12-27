@@ -63,7 +63,7 @@ export const { kcContext } = getKcContext<ExtendedContextExtended>({
 				"internationalizationEnabled": true
 			},
 			"locale": {
-                "currentLanguageTag": "ru",
+                "currentLanguageTag": "en",
 				"supported": [{
 					"url": "mockurl-kz",
 					"label": "locale_kz",

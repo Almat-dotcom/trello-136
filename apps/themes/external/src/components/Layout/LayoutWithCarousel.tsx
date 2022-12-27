@@ -14,7 +14,7 @@ const LayoutWithCarousel = ({ children, kcContext, i18n, ...props }: { children:
     const { currentLanguageTag, supported } = locale ?? { currentLanguageTag: "en", supported: [] }
 
     return (
-        <div className="bg-white font-serif">
+        <div className="bg-white">
             <div className="flex justify-center items-stretch min-h-screen">
                 <div className="hidden bg-gradient-to-tr from-back-dark to-back-light lg:block lg:w-2/3">
                     <div className="flex flex-col items-center justify-between p-4">

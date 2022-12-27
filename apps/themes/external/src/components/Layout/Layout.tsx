@@ -7,7 +7,7 @@ const Layout = ({ children, kcContext, i18n, ...props }: { children: any, kcCont
     const { locale } = kcContext
     const { currentLanguageTag, supported } = locale ?? { currentLanguageTag: "en", supported: [] }
     return (
-        <div className="bg-gradient-to-tr from-back-dark to-back-light font-serif">
+        <div className="bg-gradient-to-tr from-back-dark to-back-light">
             <div className="flex justify-between items-stretch min-h-screen p-2">
                 <div className="hidden lg:block">
                     <Logo />
