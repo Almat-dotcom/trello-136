@@ -109,6 +109,7 @@ spec:
                   - CLIENT_TYPE
                   - IIN
                   - EMAIL_VERIFIED
+                  - RESIDENCY
                   type: string
                 type: array
               roles:

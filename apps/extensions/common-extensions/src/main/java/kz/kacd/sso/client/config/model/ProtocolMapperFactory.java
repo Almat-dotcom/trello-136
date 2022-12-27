@@ -46,6 +46,8 @@ public class ProtocolMapperFactory {
                 return iin();
             case EMAIL_VERIFIED:
                 return emailVerified();
+            case RESIDENCY:
+                return residency();
         }
         return null;
     }
@@ -80,6 +82,10 @@ public class ProtocolMapperFactory {
         result.put(USER_ATTR, field);
         result.put(ADD_TO_USER_INFO, Boolean.TRUE.toString());
         return result;
+    }
+
+    private static ProtocolMapperModel residency() {
+        return attributeMapper("residency");
     }
 
     private static ProtocolMapperModel middleName() {
