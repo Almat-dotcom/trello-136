@@ -29,12 +29,12 @@ spec:
     scopeDescription: Разрешение на взаимодействие с sso-lk-integration для редактирования профилей внешних пользователей
   roles:
   - name: update-org-meta
-    description: Обновлять метаданные организации
+    roleDescription: Обновлять метаданные организации
   - name: list-org-positions
-    description: Запрашивать список пользователей в организации
+    roleDescription: Запрашивать список пользователей в организации
   - name: manage-org-position
-    description: Утверждать или отзывать позиции в организации
+    roleDescription: Утверждать или отзывать позиции в организации
   - name: update-user-profile
-    description: Изменять профиль пользователя
+    roleDescription: Изменять профиль пользователя
   - name: manage-user-roles
-    description: Добавлять и изменять роли пользователя
+    roleDescription: Добавлять и изменять роли пользователя
