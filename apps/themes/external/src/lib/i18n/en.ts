@@ -153,5 +153,6 @@ export const en = {
     "checkDoc": "Verify document",
     "copyright": "All rights reserved, 2022",
     "contacts": "Contacts",
-    "address": "Location"
+    "address": "Location",
+    "allNews": "All news"
 }

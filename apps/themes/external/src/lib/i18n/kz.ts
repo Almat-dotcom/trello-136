@@ -153,5 +153,6 @@ export const kz = {
     "checkDoc": "Құжатты тексеру",
     "copyright": "Барлық құқықтар қорғалған, 2022",
     "contacts": "Контактілер",
-    "address": "Мекенжайы"
+    "address": "Мекенжайы",
+    "allNews": "All news"
 }

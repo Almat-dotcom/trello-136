@@ -14,24 +14,24 @@ const VerifyEmail = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext_
     return (
         <LayoutWithCarousel kcContext={kcContext} i18n={i18n}>
             <div>
-            <div className="text-center">
+                <div className="text-center">
                     {message && (
                         <Alert i18n={i18n} type={message.type} message={message.summary} />
                     )}
 
-                    <p className="mt-3 text-slate-900 text-2xl font-bold">{msgStr("emailVerifyTitle")}</p>
+                    <p className="my-8 text-slate-900 text-2xl font-bold">{msgStr("emailVerifyTitle")}</p>
                 </div>
-                <p className="mb-4">
+                <p className="mb-4 text-slate-800">
                     {msgStr("emailVerifyInstruction1", user?.email ?? "")}
                 </p>
-                <p className="text-gray-600">
+                <p className="text-slate-800">
                     {msgStr("emailVerifyInstruction2")}
                 </p>
 
-                <p className="text-gray-600">
+                <p className="mb-32 text-slate-800">
                     <a
                         href={url.loginAction}
-                        className="font-bold text-blue-700 hover:text-primary hover:underline"
+                        className="font-bold text-secondary-dark font-semibold underline"
                     >{msgStr("doClickHere")}</a> {msgStr("emailVerifyInstruction3")}
                 </p>
             </div>

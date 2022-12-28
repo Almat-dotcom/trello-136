@@ -14,7 +14,7 @@ const InputContainer = ({ children, name, label, error, onFocus }: InputContaine
                 {children}
                 <label
                     htmlFor={name}
-                    style={{ top: "0.9rem" }}
+                    style={{ top: "0.95rem" }}
                     className={`absolute text-sm ${error ? "text-red-600" : "text-gray-500"} duration-300 transform -translate-y-4 scale-75 origin-[0] cursor-text bg-white px-2 peer-focus:px-2 ${error ? "peer-focus:text-red-600" : "peer-focus:text-gray-500"} peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1`}
                     onClick={() => onFocus()}
                 >{label}</label>

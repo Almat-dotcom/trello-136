@@ -153,5 +153,6 @@ export const ru = {
     "checkDoc": "Проверить документ",
     "copyright": "Все права защищены, 2022",
     "contacts": "Контакты",
-    "address": "Адрес"
+    "address": "Адрес",
+    "allNews": "All news"
 }

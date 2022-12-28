@@ -24,7 +24,7 @@ const LayoutWithCarousel = ({ children, kcContext, i18n, ...props }: { children:
                         </div>
 
                         <div className="flex items-center justify-center w-full">
-                            <Carousel />
+                            <Carousel i18n={i18n} />
                         </div>
 
                         <div></div>

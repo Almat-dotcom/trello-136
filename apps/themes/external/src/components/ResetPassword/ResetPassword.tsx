@@ -39,7 +39,7 @@ const ResetPassword = memo(({ kcContext, i18n, ...props }: { kcContext: KcContex
                         <Alert i18n={i18n} type={message.type} message={message.summary} />
                     )}
 
-                    <p className="mt-3 text-slate-900 text-2xl font-bold">{msgStr("emailForgotTitle")}</p>
+                    <p className="my-6 text-slate-900 text-2xl font-bold">{msgStr("emailForgotTitle")}</p>
                 </div>
 
                 <div className="mt-4">
@@ -63,7 +63,7 @@ const ResetPassword = memo(({ kcContext, i18n, ...props }: { kcContext: KcContex
                         >
                             <a
                                 href={url.loginUrl}
-                                className="ml-4 text-blue-500 hover:text-primary focus:outline-none focus:underline hover:underline"
+                                className="ml-4 text-sm text-secondary-dark font-semibold underline"
                             >
                                 {msg("backToLogin")}
                             </a>

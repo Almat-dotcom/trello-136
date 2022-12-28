@@ -17,18 +17,18 @@ const LoginExpired = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                         <Alert i18n={i18n} type={message.type} message={message.summary} />
                     )}
 
-                    <p className="mt-3 text-slate-900 text-2xl font-bold">{msgStr("pageExpiredTitle")}</p>
+                    <p className="my-6 text-slate-900 text-2xl font-bold">{msgStr("pageExpiredTitle")}</p>
                 </div>
 
                 <div className="mt-4">
-                    <p className="text-gray-600">
-                        {msgStr("pageExpiredMsg1")} <a href={url.loginRestartFlowUrl} className="font-bold text-blue-700 hover:text-primary hover:underline">{msgStr("doClickHere")}</a>
+                    <p className="text-slate-900">
+                        {msgStr("pageExpiredMsg1")} <a href={url.loginRestartFlowUrl} className="font-bold text-secondary-dark underline">{msgStr("doClickHere")}</a>
                     </p>
                 </div>
 
-                <div className="mt-4">
-                    <p className="text-gray-600">
-                        {msgStr("pageExpiredMsg2")} <a href={url.loginUrl} className="font-bold text-blue-700 hover:text-primary hover:underline">{msgStr("doClickHere")}</a>
+                <div className="mt-4 mb-48">
+                    <p className="text-slate-900">
+                        {msgStr("pageExpiredMsg2")} <a href={url.loginUrl} className="font-bold text-secondary-dark underline">{msgStr("doClickHere")}</a>
                     </p>
                 </div>
             </div>

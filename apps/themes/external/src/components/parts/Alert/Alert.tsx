@@ -43,7 +43,7 @@ const Alert = ({ type, message, i18n }: { type: "success" | "warning" | "error" 
         }
     }
 
-    const messages = message.split('<br>').map((it) => <span className="font-bold">{advancedMsgStr(message) || message}</span>);
+    const messages = message.split('<br>').map((it, i) => <span key={i} className="font-bold">{advancedMsgStr(message) || message}</span>);
 
     return (
         <div className={`flex items-center px-2 py-3 ${bg} ${border} border-l-4 ${color} text-sm text-left`}>

@@ -15,7 +15,7 @@ const Layout = ({ children, kcContext, i18n, ...props }: { children: any, kcCont
                         <Logo />
                     </div>
 
-                    <div className="flex flex-col items-center lg:block bg-white w-full lg:w-1/2 xl:w-2/5 shadow-none lg:shadow-lg mt-0 sm:m-4 lg:mt-16 px-6 md:px-24 pt-4 lg:pt-10 pb-6">
+                    <div className="flex flex-col items-center lg:block bg-white w-full lg:w-1/2 xl:w-2/5 border-2 border-slate-100 rounded-none lg:rounded-md shadow-none lg:shadow-lg mt-0 sm:m-4 lg:mt-16 px-6 md:px-24 pt-4 lg:pt-10 pb-6">
                         <div className="flex justify-between w-full lg:hidden mb-4">
                             <Logo />
                             <Lang current={currentLanguageTag} langs={supported} i18n={i18n} />

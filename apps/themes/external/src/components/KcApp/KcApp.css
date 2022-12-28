@@ -5,3 +5,17 @@
 body {
 	font-family: "Roboto";
 }
+
+.p-carousel-indicator .p-link {
+	background-color: rgb(203 213 225) !important;
+	border-radius: 9999px !important;
+	width: 0.5rem !important;
+}
+
+.p-carousel .p-carousel-indicators .p-carousel-indicator.p-highlight button {
+	background-color: #0E4956 !important;
+}
+
+.p-carousel-indicators {
+	padding-left: 2.5rem !important;
+}
