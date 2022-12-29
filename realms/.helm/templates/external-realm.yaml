@@ -67,21 +67,35 @@ spec:
     bruteForce:
       enabled: true
       maxLoginFailures: 3
+  # Настройки сессий
   sessions:
     client: {}
     offline: {}
     sso: {}
+  # Настройки токенов
   tokens: {}
+  # Настройки аутентификации
   authentication:
+    # Потоки аутентификации
     flows:
+      # При входе в систему через браузер
       browser: EXTERNAL
+      # При регистрации нового пользователя
       registration: EXTERNAL
+    # Политики паролей
     passwordPolicy:
+      # Срок пароля истекает через 30 дней
       expiration: 30
+      # Новый пароль не должен совпадать как минимум с 7 предыдущими паролями
       notRecentlyUsed: 7
+      # Минимальная длина пароля должна быть 8 символов
       minimumLength: 8
+      # Пароль должен содержать как минимум 1 спец символ
       countOfSpecialChars: 1
+      # Пароль должен содержать как минимум 1 символ в верхнем регистре
       uppercaseChars: 1
+      # Пароль должен содержать как минимум 1 символ в нижнем регистре
       lowercaseChars: 1
+      # Пароль должен содержать как минимум 1 цифру
       numberOfDigits: 1
 {{- end }}
