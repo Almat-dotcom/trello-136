@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -16,6 +16,8 @@
     <properties>
         <keycloak.version>20.0.2</keycloak.version>
         <fabric8.k8s.version>6.2.0</fabric8.k8s.version>
+
+        <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
 
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -147,6 +149,12 @@
 
         <plugins>
             <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.9.1.2184</version>
+            </plugin>
+
+            <plugin>
                 <groupId>io.fabric8</groupId>
                 <artifactId>java-generator-maven-plugin</artifactId>
                 <version>${fabric8.k8s.version}</version>
@@ -169,9 +177,11 @@
                 <configuration>
                     <archive>
                         <!-- This is required since we need to add the jboss module references
-                             to the resulting jar -->
+                             to
+                        the resulting jar -->
                         <manifestEntries>
-                            <!-- Adding explicit dependencies to avoid class-loading issues at runtime -->
+                            <!-- Adding explicit dependencies to avoid class-loading issues at
+                            runtime -->
                             <Dependencies>
                                 <![CDATA[org.keycloak.keycloak-common,org.keycloak.keycloak-core,org.keycloak.keycloak-server-spi,org.keycloak.keycloak-server-spi-private,org.keycloak.keycloak-admin-client,org.apache.httpcomponents,org.keycloak.keycloak-services,org.keycloak.keycloak-saml-core,org.keycloak.keycloak-saml-core-public,org.jboss.logging,javax.api,javax.jms.api,javax.transaction.api,com.google.guava,com.fasterxml.jackson.core.jackson-core,com.fasterxml.jackson.core.jackson-annotations,com.fasterxml.jackson.core.jackson-databind,com.googlecode.owasp-java-html-sanitizer,org.apache.commons.io,org.bouncycastle,org.jboss.resteasy.resteasy-jaxrs,org.keycloak.keycloak-ldap-federation]]></Dependencies>
                         </manifestEntries>

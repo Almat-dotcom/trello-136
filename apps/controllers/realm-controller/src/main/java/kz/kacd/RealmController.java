@@ -4,7 +4,6 @@ import io.javaoperatorsdk.operator.api.reconciler.Context;
 import io.javaoperatorsdk.operator.api.reconciler.ControllerConfiguration;
 import io.javaoperatorsdk.operator.api.reconciler.Reconciler;
 import io.javaoperatorsdk.operator.api.reconciler.UpdateControl;
-import kz.kacd.keycloak.KeycloakClient;
 import kz.kacd.keycloak.KeycloakClientProvider;
 import kz.kacd.sso.v1.Realm;
 import kz.kacd.sso.v1.RealmStatus;

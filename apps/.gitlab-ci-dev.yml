@@ -1,12 +1,19 @@
 stages:
+# Build all extensions
 - prebuild
+# Cache extensions inside local directory
 - cache
+# Build all docker images
 - build-docker
+# deploy to dev env
 - dev-deploy
 
+# Building basic extension for keycloak
 build-common-extension:
   stage: prebuild
   image: maven:3-eclipse-temurin-17-alpine
+  variables:
+    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
   only:
   - dev
   before_script:
@@ -15,16 +22,21 @@ build-common-extension:
   - cd ${PROJECT_DIR}
   - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/common-extensions.jar"
   - export MAVEN_OPTS="-Dmaven.repo.local=${CI_PROJECT_DIR}/${PROJECT_DIR}/.m2"
+  - export SONAR_USER_HOME="${CI_PROJECT_DIR}/${PROJECT_DIR}/.sonar"
+  - export SONAR_TOKEN="${SONAR_TOKEN_COMMON_EXTENSIONS}"
   script:
   - mvn clean package
+  - mvn verify sonar:sonar -Dsonar.projectKey=sso-common-extension
   - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./target/common-extensions-jar-with-dependencies.jar ${NEXUS_REPO}
   cache:
   - key: m2
     paths:
     - apps/extensions/common-extensions/.m2
+    - apps/extensions/common-extensions/.sonar
   tags:
   - global_runner_2
 
+# Building external extension for keycloak
 build-external-extension:
   stage: prebuild
   image: maven:3-eclipse-temurin-17-alpine
@@ -47,6 +59,7 @@ build-external-extension:
   tags:
   - global_runner_2
 
+# Building external theme for keycloak
 build-external-theme:
   stage: prebuild
   image:
@@ -67,6 +80,7 @@ build-external-theme:
   tags:
   - global_runner_2
 
+# Building internal theme for keycloak
 build-internal-theme:
   stage: prebuild
   image:
@@ -87,6 +101,7 @@ build-internal-theme:
   tags:
   - global_runner_2
 
+# Persisting all extensions artifacts inside local cache directory
 cache-artifacts:
   stage: cache
   image: alpine:latest
@@ -109,6 +124,7 @@ cache-artifacts:
   tags:
   - global_runner_2
 
+# Building keycloak image
 build-docker-keycloak:
   stage: build-docker
   image:
@@ -146,6 +162,7 @@ build-docker-keycloak:
   tags:
   - global_runner_2
 
+# Building realm controller image
 build-docker-realm-controller:
   stage: build-docker
   image:
@@ -180,6 +197,7 @@ build-docker-realm-controller:
   tags:
   - global_runner_2
 
+# Deploying helm chart to dev invironment
 k8s-dev-deploy:
   stage: dev-deploy
   image: nexus.kacd.kz:5000/core2471/docker-helm:master-632
