@@ -37,4 +37,5 @@ spec:
   - IIN
   - EMAIL_VERIFIED
   - RESIDENCY
+  - DIVISION
   roles: []
