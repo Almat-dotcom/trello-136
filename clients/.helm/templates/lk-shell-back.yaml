@@ -14,7 +14,7 @@ metadata:
   {{- end }}
 spec:
   displayedName: LK Shell Back-End
-  displayedDescription: Back-end личного кабинета
+  displayedDescription: Back-end личного кабинета для доступа к внутренним сервисам
   access:
     validRedirectUris:
     - http://localhost:8080/*

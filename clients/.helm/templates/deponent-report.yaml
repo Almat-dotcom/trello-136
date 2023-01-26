@@ -14,7 +14,7 @@ metadata:
   {{- end }}
 spec:
   displayedName: Deponent accounts report service
-  displayedDescription: Формирование выписки для депонентов по лицевому счету
+  displayedDescription: Формирование выписки для депонентов  по лицевому счету
   access:
     validRedirectUris:
     - http://localhost:8080/*
