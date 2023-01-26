@@ -1,7 +1,7 @@
 apiVersion: sso.kacd.kz/v1
 kind: Client
 metadata:
-  name: lk-shell-back
+  name: deponent-report
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: internal-realm
@@ -13,8 +13,8 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  displayedName: LK Shell Back-End
-  displayedDescription: Back-end личного кабинета
+  displayedName: Deponent accounts report service
+  displayedDescription: Формирование выписки для депонентов по лицевому счету
   access:
     validRedirectUris:
     - http://localhost:8080/*
@@ -22,9 +22,9 @@ spec:
     - "+"
   capability:
     type: CONFIDENTIAL
-    clientExistingSecret: lk-shell-back-secret
+    clientExistingSecret: deponent-report-secret
     clientSecretKey: client_secret
   scope:
-    name: lk-access
-    scopeDescription: Получить доступ к API личного кабинета
+    name: deponent_report
+    scopeDescription: Получить доступ к API формировании выписки для депонентов по лицевому счету
   roles: []
