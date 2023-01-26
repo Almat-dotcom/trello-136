@@ -9,6 +9,8 @@ import kz.kacd.sso.realm.flow.AuthFlowConstants;
 import kz.kacd.sso.v1.ClientSpec;
 import kz.kacd.sso.v1.clientspec.*;
 import org.jboss.logging.Logger;
+import org.keycloak.authentication.ClientAuthenticator;
+import org.keycloak.authentication.authenticators.client.ClientIdAndSecretAuthenticator;
 import org.keycloak.component.ComponentModel;
 import org.keycloak.models.*;
 import org.keycloak.services.managers.ClientManager;
@@ -105,6 +107,7 @@ public class DefaultClientConfigurer implements ClientConfigurer {
         client.setPublicClient(false);
         client.setBearerOnly(false);
         client.setServiceAccountsEnabled(true);
+        client.setClientAuthenticatorType(ClientIdAndSecretAuthenticator.PROVIDER_ID);
         setSecret(client, spec);
         enableServiceAccount(client);
     }
@@ -112,6 +115,7 @@ public class DefaultClientConfigurer implements ClientConfigurer {
     private void configureBearerOnlyClient(ClientModel client, Capability spec) {
         client.setPublicClient(false);
         client.setBearerOnly(true);
+        client.setClientAuthenticatorType(ClientIdAndSecretAuthenticator.PROVIDER_ID);
         setSecret(client, spec);
     }
 
@@ -144,7 +148,7 @@ public class DefaultClientConfigurer implements ClientConfigurer {
                 .filter(it -> it.getName().equals(scope.getName()))
                 .findAny()
                 .orElseGet(() -> realm.addClientScope(scope.getName()));
-        
+
         model.setDescription(scope.getScopeDescription());
     }
 
