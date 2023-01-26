@@ -140,7 +140,11 @@ public class DefaultClientConfigurer implements ClientConfigurer {
             return;
         }
 
-        ClientScopeModel model = realm.addClientScope(scope.getName());
+        ClientScopeModel model = realm.getClientScopesStream()
+                .filter(it -> it.getName().equals(scope.getName()))
+                .findAny()
+                .orElseGet(() -> realm.addClientScope(scope.getName()));
+        
         model.setDescription(scope.getScopeDescription());
     }
 
