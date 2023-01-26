@@ -2,7 +2,8 @@ import { useState } from "react";
 
 type Element = {
     id: string,
-    label: string
+    label: string,
+    icon: any
 }
 
 type TabsProps = {
@@ -21,11 +22,11 @@ const Tabs = ({ elements, activeId, onChange }: TabsProps) => {
         }
     }
 
-    const children = elements.map((el) => <TabsElement key={el.id} id={el.id} label={el.label} choised={choised === el.id} onClick={onButtonClicked}/>)
+    const children = elements.map((el) => <TabsElement key={el.id} id={el.id} label={el.label} icon={el.icon} choised={choised === el.id} onClick={onButtonClicked}/>)
 
     return (
-        <div className="mx-8 mb-6 shadow rounded-md flex relative items-center text-sm bg-gray-200">
-            <div className="w-full flex p-1 relative items-center">
+        <div className="relative flex items-center mb-6 text-sm">
+            <div className="relative flex items-center w-full p-1">
                 {children}
             </div>
         </div>
@@ -35,13 +36,16 @@ const Tabs = ({ elements, activeId, onChange }: TabsProps) => {
 type TabsElementProps = {
     id: string,
     label: string,
+    icon: any,
     choised: boolean,
     onClick: (id: string) => void
 }
 
-const TabsElement = ({ id, label, choised, onClick }: TabsElementProps) => (
-    <div className={ `w-full flex justify-center py-1.5 rounded-md ${ choised ? "bg-white shadow-md" : "" } hover:text-primary` }>
-        <button type="button" onClick={() => onClick(id)}>{label}</button>
+const TabsElement = ({ id, label, icon, choised, onClick }: TabsElementProps) => (
+    <div className={ `flex justify-center mr-6 py-1.5 px-1 border-b-2 border-slate-300 text-slate-400 ${ choised ? "border-slate-900 text-primary-focus" : "" } hover:text-primary` }>
+        <button type="button" onClick={() => onClick(id)}>
+            {icon ? <img className="inline-block mr-2" alt="ico" src={icon}/> : null}{label}
+        </button>
     </div>
 )
 

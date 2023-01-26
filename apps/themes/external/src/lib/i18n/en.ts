@@ -154,5 +154,6 @@ export const en = {
     "copyright": "All rights reserved, 2022",
     "contacts": "Contacts",
     "address": "Location",
-    "allNews": "All news"
+    "allNews": "All news",
+    "faq": "Ответы на часто задаваемые вопросы"
 }

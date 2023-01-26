@@ -154,5 +154,6 @@ export const kz = {
     "copyright": "Барлық құқықтар қорғалған, 2022",
     "contacts": "Контактілер",
     "address": "Мекенжайы",
-    "allNews": "All news"
+    "allNews": "All news",
+    "faq": "Ответы на часто задаваемые вопросы"
 }

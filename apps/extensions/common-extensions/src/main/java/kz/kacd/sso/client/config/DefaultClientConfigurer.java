@@ -9,7 +9,6 @@ import kz.kacd.sso.realm.flow.AuthFlowConstants;
 import kz.kacd.sso.v1.ClientSpec;
 import kz.kacd.sso.v1.clientspec.*;
 import org.jboss.logging.Logger;
-import org.keycloak.authentication.ClientAuthenticator;
 import org.keycloak.authentication.authenticators.client.ClientIdAndSecretAuthenticator;
 import org.keycloak.component.ComponentModel;
 import org.keycloak.models.*;

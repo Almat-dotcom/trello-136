@@ -7,6 +7,8 @@ import Tabs from "components/parts/Tabs";
 import { KcContextLogin } from "./Type";
 import UsernamePassword from "./UsernamePassword";
 import Eds from "./Eds";
+import Passport from './passport.svg';
+import Key from './key.svg';
 
 const Login = memo(({ kcContext, i18n, ...props }: { kcContext: KcContextLogin; i18n: I18n; } & KcProps) => {
     const { url, message } = kcContext;
@@ -34,7 +36,7 @@ const Login = memo(({ kcContext, i18n, ...props }: { kcContext: KcContextLogin; 
                 <div className="mt-4">
                     <form id="kc-login-form" className="h-80" action={url.loginAction} ref={formRef} method="post">
                         <Tabs 
-                            elements={[{ id: "eds", label: msgStr("eds") }, { id: "logpass", label: msgStr("logpass") }]} 
+                            elements={[{ id: "logpass", label: msgStr("logpass"), icon: Passport }, { id: "eds", label: msgStr("eds"), icon: Key }]} 
                             activeId={currentTab} 
                             onChange={(id) => setCurrentTab(id)}
                         />
