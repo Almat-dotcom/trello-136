@@ -32,6 +32,7 @@ const Eds = ({ kcContext, i18n, hidden, onFormSubmit }: { kcContext: KcContext, 
                 label="Выберите тип хранилища ЭЦП"
                 options={[{ value: "PKC12", label: "Ваш компьютер" }]}
                 value={edsType}
+                required
                 error={extractError("eds")}
                 onValueChange={(option) => setEdsType(option.value)}
             />

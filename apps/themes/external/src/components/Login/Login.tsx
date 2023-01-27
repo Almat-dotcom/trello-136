@@ -9,6 +9,7 @@ import UsernamePassword from "./UsernamePassword";
 import Eds from "./Eds";
 import Passport from './passport.svg';
 import Key from './key.svg';
+import Button from "components/parts/Button";
 
 const Login = memo(({ kcContext, i18n, ...props }: { kcContext: KcContextLogin; i18n: I18n; } & KcProps) => {
     const { url, message } = kcContext;
@@ -34,7 +35,7 @@ const Login = memo(({ kcContext, i18n, ...props }: { kcContext: KcContextLogin; 
                 </div>
 
                 <div className="mt-4">
-                    <form id="kc-login-form" className="h-80" action={url.loginAction} ref={formRef} method="post">
+                    <form id="kc-login-form" className="h-120" action={url.loginAction} ref={formRef} method="post">
                         <Tabs 
                             elements={[{ id: "logpass", label: msgStr("logpass"), icon: Passport }, { id: "eds", label: msgStr("eds"), icon: Key }]} 
                             activeId={currentTab} 
@@ -45,15 +46,10 @@ const Login = memo(({ kcContext, i18n, ...props }: { kcContext: KcContextLogin; 
                     </form>
 
                     <p 
-                        className="mt-6 text-sm text-center text-gray-500"
+                        className="mt-6 text-sm text-center"
                     >
-                        {msgStr("noAccount")}
-                        <a 
-                            href={url.registrationUrl} 
-                            className="ml-4 text-sm text-secondary-dark font-semibold underline"
-                        >
-                            {msgStr("doRegister")}
-                        </a>
+                        <span className="text-gray-500">{msgStr("noAccount")}</span>
+                        <Button severity="secondary" type="link" href={url.registrationUrl}>{msgStr("doRegister")}</Button>
                     </p>
                 </div>
             </div>

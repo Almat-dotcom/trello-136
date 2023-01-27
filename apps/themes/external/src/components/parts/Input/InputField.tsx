@@ -8,6 +8,7 @@ type InputFieldProps = {
     label: string,
     type: string,
     value: string,
+    required?: boolean,
     error?: string,
     readOnly?: boolean,
     maxLength?: number,
@@ -15,7 +16,7 @@ type InputFieldProps = {
     onEnter?: () => void
 }
 
-const InputField = ({ fieldName, label, type, value, error, readOnly, maxLength, onChange, onEnter }: InputFieldProps) => {
+const InputField = ({ fieldName, label, type, value, required, error, readOnly, maxLength, onChange, onEnter }: InputFieldProps) => {
     const [ memError, setMemError ] = useState<string | undefined>(undefined);
     const [ switched, setSwitched ] = useState(false);
     
@@ -37,13 +38,13 @@ const InputField = ({ fieldName, label, type, value, error, readOnly, maxLength,
     }
 
     return (
-        <InputContainer onFocus={() => inputRef?.current?.focus()} name={fieldName} label={label} error={error && memError === error ? undefined : error}>
+        <InputContainer onFocus={() => inputRef?.current?.focus()} name={fieldName} required={required} label={label} error={error && memError === error ? undefined : error}>
             <input 
                 ref={inputRef}
                 type={ type === "password" && switched ? "text" : type }
                 id={fieldName} 
                 name={fieldName}
-                className="block px-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary focus:outline-none focus:ring-0 focus:border-primary peer"
+                className={`block px-2.5 py-2 w-full border rounded-sm text-sm ${error ? 'border-red-500' : 'border-gray-400 focus:border-primary-focus'} appearance-none focus:outline-none text-black`}
                 placeholder=" "
                 readOnly={readOnly}
                 maxLength={maxLength}
@@ -54,7 +55,7 @@ const InputField = ({ fieldName, label, type, value, error, readOnly, maxLength,
             {type === "password" ? (
                 <div className="absolute right-0 z-30 inset-y-1 flex items-center px-4 ">
                     <button type="button" onClick={onShowClicked} className="z-30 material-icons">
-                        <img className="h-6" alt="visibility" src={switched ? VisibilityOff : Visibility}/>
+                        <img className="h-6 " alt="visibility" src={switched ? Visibility : VisibilityOff}/>
                     </button>
                 </div>
             ) : null }

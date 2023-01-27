@@ -49,6 +49,7 @@ const ResetPassword = memo(({ kcContext, i18n, ...props }: { kcContext: KcContex
                             label={msgStr("usernameOrEmail")}
                             type="text"
                             value={username}
+                            required
                             error={advancedMsgStr(error ?? "") ?? error}
                             onChange={onUsernameChange}
                             onEnter={onSubmit}

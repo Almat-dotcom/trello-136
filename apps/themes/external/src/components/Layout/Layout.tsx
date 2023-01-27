@@ -14,7 +14,7 @@ const Layout = ({ children, kcContext, i18n, ...props }: { children: any, kcCont
                     <div className="hidden lg:block">
                     </div>
 
-                    <div className="flex flex-col items-center lg:block bg-white w-full lg:w-1/2 xl:w-2/5 mt-0 sm:m-4 lg:mt-16 px-6 md:px-24 pt-4 lg:pt-10 pb-6">
+                    <div className="flex flex-col items-center lg:block bg-white w-full lg:w-1/2 xl:w-1/3 mt-0 sm:m-4 px-6 md:px-24 pb-6">
                         <div className="flex justify-between w-full lg:hidden mb-4">
                         </div>
                         <div className="w-full sm:w-2/3 lg:w-full">{children}</div>

@@ -18,6 +18,7 @@ const UsernamePassword = ({ kcContext, i18n, hidden, onFormSubmit }: { kcContext
                 type="text"
                 error={advancedMsgStr(getError("username") ?? "") ?? getError("username")}
                 value={username}
+                required
                 onChange={(e) => { setUsername(e.target.value) }} 
                 onEnter={onSubmit}/>
             <InputField
@@ -26,6 +27,7 @@ const UsernamePassword = ({ kcContext, i18n, hidden, onFormSubmit }: { kcContext
                 type="password"
                 error={advancedMsgStr(getError("password") ?? "") ?? getError("password")}
                 value={password}
+                required
                 onChange={(e) => { setPassword(e.target.value) }} 
                 onEnter={onSubmit} />
 

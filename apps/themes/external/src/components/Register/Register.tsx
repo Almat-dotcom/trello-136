@@ -66,6 +66,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                         label: msgStr("nonResident")
                     }]}
                     value={fields.residency.value}
+                    required
                     error={error(fields.residency.error)}
                     onValueChange={(option) => { fields.residency.onChange(option.value) }}
                 />
@@ -80,6 +81,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                         label: msgStr("legal")
                     }]}
                     value={fields.clientType.value}
+                    required
                     error={error(fields.clientType.error)}
                     onValueChange={(option) => { fields.clientType.onChange(option.value) }}
                 />
@@ -95,6 +97,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                             label: msgStr("employee")
                         }]}
                         value={fields.legalRole.value}
+                        required
                         error={error(fields.legalRole.error)}
                         onValueChange={(option) => fields.legalRole.onChange(option.value)}
                     />
@@ -104,6 +107,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                     label={msgStr("lastName")}
                     type="text"
                     value={fields.lastName.value}
+                    required
                     error={error(fields.lastName.error)}
                     onChange={(event) => fields.lastName.onChange(event.target.value)}
                 />
@@ -112,6 +116,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                     label={msgStr("firstName")}
                     type="text"
                     value={fields.firstName.value}
+                    required
                     error={error(fields.firstName.error)}
                     onChange={(event => { fields.firstName.onChange(event.target.value) })}
                 />
@@ -128,6 +133,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                     label={msgStr("email")}
                     type="text"
                     value={fields.email.value}
+                    required
                     error={error(fields.email.error)}
                     onChange={(event) => { fields.email.onChange(event.target.value) }}
                 />
@@ -137,6 +143,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                         label={resident ? msgStr("bin") : msgStr("orgCode")}
                         type="text"
                         value={fields.bin.value}
+                        required
                         error={error(fields.bin.error)}
                         maxLength={12}
                         onChange={(event) => fields.bin.onChange(event.target.value)}
@@ -148,6 +155,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                         label={msgStr("iin")}
                         type="text"
                         value={fields.iin.value}
+                        required
                         error={error(fields.iin.error)}
                         maxLength={12}
                         onChange={(event) => fields.iin.onChange(event.target.value)}
@@ -158,6 +166,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                     label={msgStr("password")}
                     type="password"
                     value={fields.password.value}
+                    required
                     error={error(fields.password.error)}
                     onChange={(event) => fields.password.onChange(event.target.value)}
                 />
@@ -166,6 +175,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                     label={msgStr("passwordConfirm")}
                     type="password"
                     value={fields.passwordConfirm.value}
+                    required
                     error={error(fields.passwordConfirm.error)}
                     onChange={(event) => fields.passwordConfirm.onChange(event.target.value)}
                 />
@@ -213,18 +223,14 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                     </div>
                 </div>
 
-                <div className="mx-12">
+                <div>
                     <Button severity="primary" type="button" disabled={buttonDisabled} onClick={() => onSubmit()}>{msgStr("doRegister")}</Button>
                 </div>
                 <p
-                    className="mt-6 mb-6 text-sm text-center text-gray-400"
+                    className="my-6 text-sm text-center text-gray-500"
                 >
-                    <a
-                        href={url.loginUrl}
-                        className="ml-4 text-sm text-secondary-dark font-semibold underline"
-                    >
-                        {msg("backToLogin")}
-                    </a>
+                    <span>{msg("backToLogin")}</span>
+                    <Button type="link" severity="secondary" href={url.loginUrl}>{msgStr("doLogIn")}</Button>
                 </p>
             </form>
         </Layout>

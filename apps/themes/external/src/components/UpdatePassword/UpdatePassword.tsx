@@ -43,6 +43,7 @@ const UpdatePassword = memo(({ kcContext, i18n, ...props }: { kcContext: KcConte
                             label={msgStr("passwordNew")}
                             type="password"
                             value={password}
+                            required
                             error={advancedMsgStr(passwordError ?? "") ?? passwordError}
                             onChange={(event) => onPasswordChange(event.target.value)}
                             onEnter={onSubmit}
@@ -52,6 +53,7 @@ const UpdatePassword = memo(({ kcContext, i18n, ...props }: { kcContext: KcConte
                             label={msgStr("passwordNewConfirm")}
                             type="password"
                             value={passwordConfirm}
+                            required
                             error={advancedMsgStr(passwordConfirmError ?? "") ?? passwordConfirmError}
                             onChange={(event) => onConfirmChange(event.target.value)}
                             onEnter={onSubmit}
