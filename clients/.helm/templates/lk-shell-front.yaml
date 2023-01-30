@@ -14,7 +14,7 @@ metadata:
   {{- end }}
 spec:
   displayedName: LK Shell Front-End
-  displayedDescription: Фронт  приложение Личного кабинета KSCD
+  displayedDescription: Фронт приложение Личного кабинета KSCD
   access:
     validRedirectUris:
     - https://kacd-lk-shell.k8s-dev.kacd.kz/*
