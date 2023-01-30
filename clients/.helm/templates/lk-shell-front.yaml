@@ -38,4 +38,5 @@ spec:
   - EMAIL_VERIFIED
   - RESIDENCY
   - DIVISION
+  - PHONE_NUMBER
   roles: []
