@@ -19,3 +19,31 @@ body {
 .p-carousel-indicators {
 	padding-left: 2.5rem !important;
 }
+
+.p-inputmask {
+	font-family: "Roboto" !important;
+	font-size: 0.875rem !important;
+	color: black !important;
+	padding-top: 0.5rem !important;
+	padding-bottom: 0.5rem !important;
+	padding-left: 0.625rem !important;
+	padding-right: 0.625rem !important;
+	border-radius: 0.125rem !important;
+}
+
+.p-inputmask.border-red-500 {
+	border: 1px solid rgb(239 68 68 / var(--tw-border-opacity)) !important;
+}
+
+.p-inputmask.border-gray-400 {
+	border: 1px solid rgb(156 163 175 / var(--tw-border-opacity)) !important;
+}
+
+.p-inputtext:enabled:focus {
+	outline: none !important;
+	box-shadow: none !important;
+}
+
+.p-inputtext.border-gray-400:enabled:focus {
+	border: 1px solid #00333F !important;
+}

@@ -133,9 +133,9 @@ public class SimpleExternalAttributesValidator {
     }
 
     private void validatePhoneNumber(String value, Consumer<ValidationError> listener) {
-//        if (value == null || value.length() != 12) {
-//            listener.accept(error(ExternalRegistrationPage.FIELD_PHONE_NUMBER, ExternalMessages.INVALID_PHONE_NUMBER));
-//        }
+        if (value == null || value.length() != 12) {
+            listener.accept(error(ExternalRegistrationPage.FIELD_PHONE_NUMBER, ExternalMessages.INVALID_PHONE_NUMBER));
+        }
     }
 
     private ValidationError error(String field, String message, Object... args) {

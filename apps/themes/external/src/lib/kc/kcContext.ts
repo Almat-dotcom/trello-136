@@ -12,6 +12,7 @@ type ExtendedRegister = KcContextBase.RegisterCommon & {
                 displayName?: string;
                 lastName?: string;
                 email?: string;
+				phoneNumber?: string;
 				bin?: string;
                 iin?: string;
             };
@@ -22,8 +23,8 @@ type ExtendedContextExtended = KcContextBase.Login | KcContextBase.RegisterUserP
 
 export const { kcContext } = getKcContext<ExtendedContextExtended>({
 
-    "mockPageId": "login.ftl",
-	// "mockPageId": "register.ftl",
+    // "mockPageId": "login.ftl",
+	"mockPageId": "register.ftl",
 	// "mockPageId": "login-verify-email.ftl",
 	// "mockPageId": "login-update-password.ftl",
 	// "mockPageId": "logout-confirm.ftl",

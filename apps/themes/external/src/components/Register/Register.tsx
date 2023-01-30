@@ -2,7 +2,7 @@ import { memo, useRef } from "react";
 import type { KcProps } from "keycloakify";
 import type { I18n } from "../../lib/i18n";
 import { Layout, LayoutWithCarousel } from "components/Layout";
-import { InputField, InputSelect } from "components/parts/Input";
+import { InputField, InputMask, InputSelect } from "components/parts/Input";
 import Alert from "components/parts/Alert";
 import Button from "components/parts/Button";
 import { KcContext_Registration, useRegisterPage } from "./hooks";
@@ -145,6 +145,16 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                             value={fields.middleName.value}
                             error={error(fields.middleName.error)}
                             onChange={(event) => { fields.middleName.onChange(event.target.value) }}
+                        />
+                        <InputMask 
+                            fieldName="phoneNumber"
+                            label={msgStr("phoneNumber")}
+                            mask="+9 (999) 999 99 99"
+                            placeholder="+x (xxx) xxx xx xx"
+                            required
+                            value={fields.phoneNumber.value}
+                            error={error(fields.phoneNumber.error)}
+                            onChange={(value) => { fields.phoneNumber.onChange(value) }}
                         />
                         <InputField
                             fieldName="email"

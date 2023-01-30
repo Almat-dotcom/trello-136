@@ -20,6 +20,7 @@ type RegisterFields = {
     email: Field,
     bin: Field,
     iin: Field,
+    phoneNumber: Field,
     password: Field,
     passwordConfirm: Field
 }
@@ -82,8 +83,9 @@ export const useRegisterPage = (kcContext: KcContext_Registration, onFormSubmit:
             const iinValid = fields.iin.validate();
             const passwordValid = fields.password.validate();
             const confirmValid = fields.passwordConfirm.validate();
+            const phoneNumberValid = fields.phoneNumber.validate();
 
-            if (residencyValid && typeValid && legalValid && lastValid && firstValid && middleValid && emailValid && binValid && iinValid && passwordValid && confirmValid) {
+            if (residencyValid && typeValid && legalValid && lastValid && firstValid && middleValid && emailValid && binValid && iinValid && passwordValid && confirmValid && phoneNumberValid) {
                 onFormSubmit();
             }
         }
@@ -101,7 +103,7 @@ const useRegisterFields = (
 ): RegisterFields => {
     const { register } = kcContext;
     const { formData } = register;
-    const { residency, clientType, legalRole, lastName, firstName, middleName, email, bin, iin } = formData;
+    const { residency, clientType, legalRole, lastName, firstName, middleName, email, phoneNumber, bin, iin } = formData;
     return {
         residency: useField(isNotEmpty, (value) => { onResidentChanged(value === 'resident') }, residency, extractError(kcContext, "residency")),
         clientType: useField(isNotEmpty, (value) => { onLegalChanged(value === 'legal') }, clientType, extractError(kcContext, "clientType")),
@@ -112,6 +114,7 @@ const useRegisterFields = (
         email: useField(isNotEmpty, () => { }, email, extractError(kcContext, "email")),
         bin: useField(isBinIinOnLegalAndResident(() => legal, () => resident, () => head), () => { }, bin, extractError(kcContext, "bin")),
         iin: useField(isBinIinOnResident(() => resident), () => { }, iin, extractError(kcContext, "iin")),
+        phoneNumber: useField(isNotEmpty, () => {}, phoneNumber, extractError(kcContext, "phoneNumber")),
         password: useField(isNotEmpty, () => { }, undefined, extractError(kcContext, "password")),
         passwordConfirm: useField(isNotEmpty, () => { }, undefined, extractError(kcContext, "password-confirm"))
     };

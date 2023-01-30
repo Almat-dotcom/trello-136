@@ -22,15 +22,15 @@ const InputField = ({ fieldName, label, type, value, placeholder, required, disa
     const [memError, setMemError] = useState<string | undefined>(undefined);
     const [switched, setSwitched] = useState(false);
 
-    const inputRef = useRef<HTMLInputElement>(null)
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const onInputChanged = (event: ChangeEvent<HTMLInputElement>) => {
-        setMemError(error)
-        onChange(event)
+        setMemError(error);
+        onChange(event);
     }
 
     const onShowClicked = (event: MouseEvent<HTMLButtonElement>) => {
-        setSwitched(!switched)
+        setSwitched(!switched);
     }
 
     const onKeyPressed = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -46,7 +46,7 @@ const InputField = ({ fieldName, label, type, value, placeholder, required, disa
                 type={type === "password" && switched ? "text" : type}
                 id={fieldName}
                 name={fieldName}
-                className={`block px-2.5 py-2 w-full border rounded-sm text-sm ${error ? 'border-red-500' : 'border-gray-400 focus:border-primary-focus'} appearance-none focus:outline-none text-black ${disabled ? "cursor-not-allowed" : "cursor-text"}`}
+                className={`block px-2.5 py-2 w-full border rounded-sm text-sm ${error && memError !== error ? 'border-red-500' : 'border-gray-400 focus:border-primary-focus'} appearance-none focus:outline-none text-black ${disabled ? "cursor-not-allowed" : "cursor-text"}`}
                 placeholder={placeholder ? placeholder : " "}
                 readOnly={readOnly}
                 maxLength={maxLength}
