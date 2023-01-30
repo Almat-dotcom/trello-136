@@ -60,6 +60,10 @@ public class ExternalUserProfile {
         user.setAttribute(ExternalRegistrationPage.FIELD_MIDDLE_NAME, Collections.singletonList(middleName()));
         user.setAttribute(ExternalRegistrationPage.FIELD_IIN, Collections.singletonList(iin()));
         user.setAttribute(ExternalRegistrationPage.FIELD_RESIDENCY, Collections.singletonList(residency()));
+        user.setAttribute(ExternalRegistrationPage.FIELD_PHONE_NUMBER, Collections.singletonList(phoneNumber()));
+        if (locale() != null) {
+            user.setAttribute(ExternalRegistrationPage.FIELD_LOCALE, Collections.singletonList(locale()));
+        }
 
         if (ExternalRegistrationPage.CLIENT_LEGAL.equals(clientType())) {
             processLegalClient();
@@ -155,5 +159,13 @@ public class ExternalUserProfile {
 
     public String residency() {
         return attributes.residency();
+    }
+
+    public String locale() {
+        return attributes.locale();
+    }
+
+    public String phoneNumber() {
+        return attributes.phoneNumber();
     }
 }

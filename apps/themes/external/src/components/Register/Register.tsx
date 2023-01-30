@@ -76,7 +76,6 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                     </p>
                 </LayoutWithCarousel>
             ) : (
-
                 <Layout kcContext={kcContext} i18n={i18n}>
                     <form ref={formRef} id="kc-register-form" action={url.registrationAction} method="post">
                         <div className="text-center">
@@ -86,6 +85,8 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
 
                             <p className="mt-3 mb-4 text-slate-900 text-3xl font-bold">{msgStr("registerTitle")}</p>
                         </div>
+
+                        <input id="residency" name="residency" type="hidden" value={fields.residency.value}/>
                         
                         <InputSelect
                             fieldName="clientType"

@@ -28,6 +28,7 @@ public class SimpleExternalAttributesValidator {
         validateBin(attributes.bin(), listener);
         validateLegalRole(attributes.legalRole(), listener);
         validateResidency(attributes.residency(), listener);
+        validatePhoneNumber(attributes.phoneNumber(), listener);
     }
 
     private void validateEmail(String email, Consumer<ValidationError> listener) {
@@ -129,6 +130,12 @@ public class SimpleExternalAttributesValidator {
         ) {
             listener.accept(error(ExternalRegistrationPage.FIELD_RESIDENCY, ExternalMessages.INVALID_RESIDENCY));
         }
+    }
+
+    private void validatePhoneNumber(String value, Consumer<ValidationError> listener) {
+//        if (value == null || value.length() != 12) {
+//            listener.accept(error(ExternalRegistrationPage.FIELD_PHONE_NUMBER, ExternalMessages.INVALID_PHONE_NUMBER));
+//        }
     }
 
     private ValidationError error(String field, String message, Object... args) {

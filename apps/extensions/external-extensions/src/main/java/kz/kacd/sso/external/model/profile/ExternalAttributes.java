@@ -55,4 +55,12 @@ public class ExternalAttributes {
     public String residency() {
         return attributes.get(ExternalRegistrationPage.FIELD_RESIDENCY);
     }
+
+    public String locale() {
+        return attributes.get(ExternalRegistrationPage.FIELD_LOCALE);
+    }
+
+    public String phoneNumber() {
+        return attributes.get(ExternalRegistrationPage.FIELD_PHONE_NUMBER);
+    }
 }

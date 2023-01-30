@@ -20,7 +20,7 @@ const ButtonChoise = ({ choises }: ButtonChoiseProps) => {
 }
 
 const Element = ({ name, onSelect }: Choise) => (
-    <div className="w-1/2 pr-4">
+    <div className="w-1/2 px-2">
         <Button severity="secondary-inline" type="button" onClick={onSelect}>{name}</Button>
     </div>
 );
