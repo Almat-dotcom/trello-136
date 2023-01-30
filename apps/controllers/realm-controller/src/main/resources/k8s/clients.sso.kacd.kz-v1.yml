@@ -110,6 +110,7 @@ spec:
                   - IIN
                   - EMAIL_VERIFIED
                   - RESIDENCY
+                  - PHONE_NUMBER
                   type: string
                 type: array
               roles:
