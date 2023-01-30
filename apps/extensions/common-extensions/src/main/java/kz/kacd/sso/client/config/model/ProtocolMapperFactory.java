@@ -48,6 +48,8 @@ public class ProtocolMapperFactory {
                 return emailVerified();
             case RESIDENCY:
                 return residency();
+            case PHONE_NUMBER:
+                return phoneNumber();
         }
         return null;
     }
@@ -82,6 +84,10 @@ public class ProtocolMapperFactory {
         result.put(USER_ATTR, field);
         result.put(ADD_TO_USER_INFO, Boolean.TRUE.toString());
         return result;
+    }
+
+    private static ProtocolMapperModel phoneNumber() {
+        return attributeMapper("phoneNumber", true);
     }
 
     private static ProtocolMapperModel residency() {

@@ -64,8 +64,8 @@ public class ExternalAttributes {
         String result = attributes.get(ExternalRegistrationPage.FIELD_PHONE_NUMBER);
         if (result != null) {
             result = result.replace(" ", "")
-                    .replace("\\(", "")
-                    .replace("\\)", "");
+                    .replace("(", "")
+                    .replace(")", "");
         }
         return result;
     }
