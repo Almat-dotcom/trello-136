@@ -39,7 +39,7 @@ const InputSelect = ({ fieldName, label, options, value, required, error, onValu
         <InputContainer label={label} name={fieldName} required={required} error={changed ? undefined : error} onFocus={() => { }}>
             <div
                 id="floating_outlined"
-                className={`flex items-center justify-center px-2.5 py-2 w-full border rounded-sm ${error && !changed ? 'border-red-500' : 'border-gray-400 focus:border-primary-focus'} appearance-none focus:outline-none text-black`}
+                className={`flex items-center justify-center px-2.5 py-1.5 w-full border rounded-sm ${error && !changed ? 'border-red-500' : 'border-gray-400 focus:border-primary-focus'} appearance-none focus:outline-none text-black`}
             >
                 <input
                     className="h-full w-full appearance-none peer block cursor-pointer bg-transparent focus:outline-none text-sm"

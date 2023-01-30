@@ -151,9 +151,10 @@ export const en = {
     "invalidResidency": "Select residence type",
     "goToSite": "Go to website",
     "checkDoc": "Verify document",
-    "copyright": "All rights reserved, 2022",
+    "copyright": "All rights reserved, 2023",
     "contacts": "Contacts",
     "address": "Location",
     "allNews": "All news",
-    "faq": "Ответы на часто задаваемые вопросы"
+    "faq": "Ответы на часто задаваемые вопросы",
+    "doSetCertificate": "Выбрать сертификат"
 }

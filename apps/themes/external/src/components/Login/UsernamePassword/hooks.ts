@@ -10,7 +10,7 @@ type UseramePasswordForm = {
     onSubmit: () => void
 }
 
-const useUsernamePasswordForm = (kcContext: KcContextLogin, onFormSubmit: () => void): UseramePasswordForm => {
+const useUsernamePasswordForm = (kcContext: KcContextLogin, variant: "iin" | "email", onFormSubmit: () => void): UseramePasswordForm => {
     const { login, messagesPerField } = kcContext;
 
     const extractError = (name: string) => {
@@ -29,6 +29,9 @@ const useUsernamePasswordForm = (kcContext: KcContextLogin, onFormSubmit: () => 
         let error = false;
         if (username.length === 0) {
             setUsernameError("error-empty");
+            error = true;
+        } else if (variant === "iin" && username.length !== 12 && !isNaN(+username)) {
+            setUsernameError("only12Digits");
             error = true;
         }
         if (password.length === 0) {

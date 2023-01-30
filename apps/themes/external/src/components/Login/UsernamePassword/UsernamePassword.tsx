@@ -4,23 +4,26 @@ import { I18n } from "lib/i18n";
 import { KcContextLogin } from "../Type";
 import { useUsernamePasswordForm } from "./hooks";
 
-const UsernamePassword = ({ kcContext, i18n, hidden, onFormSubmit }: { kcContext: KcContextLogin, i18n: I18n, hidden: boolean, onFormSubmit: () => void }) => {
+type UsernameVariations = "iin" | "email";
+
+const UsernamePassword = ({ kcContext, i18n, hidden, variant, onFormSubmit }: { kcContext: KcContextLogin, i18n: I18n, hidden: boolean, variant: UsernameVariations, onFormSubmit: () => void }) => {
     const { url, realm } = kcContext;
     const { msgStr, advancedMsgStr } = i18n;
 
-    const { username, setUsername, password, setPassword, getError, onSubmit } = useUsernamePasswordForm(kcContext, onFormSubmit);
+    const { username, setUsername, password, setPassword, getError, onSubmit } = useUsernamePasswordForm(kcContext, variant, onFormSubmit);
 
     return (
-        <div className={ hidden ? "hidden" : "" }>
+        <div className={hidden ? "hidden" : ""}>
             <InputField
                 fieldName="username"
-                label={msgStr("usernameOrEmail")}
+                label={msgStr(variant === "email" ? "email" : "iin")}
                 type="text"
                 error={advancedMsgStr(getError("username") ?? "") ?? getError("username")}
                 value={username}
+                placeholder={variant === "iin" ? "- - - - - - - - - - - -" : " "}
                 required
-                onChange={(e) => { setUsername(e.target.value) }} 
-                onEnter={onSubmit}/>
+                onChange={(e) => { setUsername(e.target.value) }}
+                onEnter={onSubmit} />
             <InputField
                 fieldName="password"
                 label={msgStr("password")}
@@ -28,7 +31,7 @@ const UsernamePassword = ({ kcContext, i18n, hidden, onFormSubmit }: { kcContext
                 error={advancedMsgStr(getError("password") ?? "") ?? getError("password")}
                 value={password}
                 required
-                onChange={(e) => { setPassword(e.target.value) }} 
+                onChange={(e) => { setPassword(e.target.value) }}
                 onEnter={onSubmit} />
 
             <div className="flex items-center justify-between">

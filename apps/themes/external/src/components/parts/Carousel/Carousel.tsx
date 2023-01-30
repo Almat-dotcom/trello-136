@@ -35,7 +35,7 @@ const Carousel = ({ i18n } : { i18n: I18n }) => {
                         <img
                             src={article.img}
                             alt={article.name}
-                            className="rounded-3xl" />
+                            className="w-full rounded-3xl" />
                     </div>
                     <div className="pl-6">
                         <div className="w-full pb-2 text-slate-500 text-sm text-left">{article.date}</div>
@@ -47,7 +47,7 @@ const Carousel = ({ i18n } : { i18n: I18n }) => {
     }
 
     return (
-        <div className="w-5/6 xl:w-2/3 py-8">
+        <div className="w-5/6 py-8">
             <div>
                 <PrimeCarousel
                     autoplayInterval={10 * 1000}
@@ -60,7 +60,7 @@ const Carousel = ({ i18n } : { i18n: I18n }) => {
                     header={""}
                     indicatorsContentClassName="w-fit"
                 />
-                <div className="relative" style={{ top: '-46px', left: '82%' }}>
+                <div className="relative w-24" style={{ top: '-46px', left: '82%' }}>
                     <button className="ml-4 px-0.5 py-1 rounded-md border-2 border-transparent transition-colors" onClick={() => prev()}>
                         <img className="w-4" style={{ marginLeft: '0.3rem' }} src={ArrowBack} alt="arrow_back" />
                     </button>
