@@ -182,13 +182,11 @@ public class DefaultClientConfigurer implements ClientConfigurer {
 
         attrs.forEach(kind -> {
             ProtocolMapperModel model = ProtocolMapperFactory.create(kind);
-            if (model == null) {
-                log.error("Cannot create module with type " + kind + "!");
-            }
-            ProtocolMapperModel existing = client.getProtocolMapperByName(client.getProtocol(), model.getName());
+            ProtocolMapperModel existing = client.getProtocolMapperByName("openid-connect", model.getName());
             if (existing == null) {
                 client.addProtocolMapper(model);
             } else {
+                model.setId(existing.getId());
                 client.updateProtocolMapper(model);
             }
         });
