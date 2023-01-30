@@ -186,6 +186,8 @@ build-docker-realm-controller:
   - key: kaniko-cache-realm-controller
     paths:
     - .cache/
+  tags:
+  - global_runner_2
 
 # Deploying helm chart to dev invironment
 k8s-dev-deploy:
