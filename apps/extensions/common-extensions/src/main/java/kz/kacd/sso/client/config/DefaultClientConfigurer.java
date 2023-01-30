@@ -180,7 +180,15 @@ public class DefaultClientConfigurer implements ClientConfigurer {
             return;
         }
 
-        attrs.forEach(kind -> client.addProtocolMapper(ProtocolMapperFactory.create(kind)));
+        attrs.forEach(kind -> {
+            ProtocolMapperModel model = ProtocolMapperFactory.create(kind);
+            ProtocolMapperModel existing = client.getProtocolMapperByName(client.getProtocol(), model.getName());
+            if (existing == null) {
+                client.addProtocolMapper(model);
+            } else {
+                client.updateProtocolMapper(model);
+            }
+        });
     }
 
     private void setAllowedGroup(RealmModel realm, ClientModel client, String group) {
