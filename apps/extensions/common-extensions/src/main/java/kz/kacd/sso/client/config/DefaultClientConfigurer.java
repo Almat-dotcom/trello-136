@@ -16,6 +16,7 @@ import org.keycloak.services.managers.ClientManager;
 import org.keycloak.services.managers.RealmManager;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static kz.kacd.sso.util.ValueUtils.defaulted;
 
@@ -23,6 +24,7 @@ public class DefaultClientConfigurer implements ClientConfigurer {
     private static final Logger log = Logger.getLogger(DefaultClientConfigurer.class);
 
     private static final String POST_LOGOUT_URIS = "post.logout.redirect.uris";
+    private static final String RESTRICTED_ACCESS_ROLE = "restricted-access";
 
     private final KeycloakSession session;
 
@@ -155,8 +157,11 @@ public class DefaultClientConfigurer implements ClientConfigurer {
         if (roles == null) {
             return;
         }
+
+        List<RoleModel> existing = client.getRolesStream().collect(Collectors.toList());
         roles.forEach(it -> {
-            RoleModel role = client.addRole(it.getName());
+            RoleModel role = existing.stream().filter(r -> r.getName().equals(it.getName())).findAny()
+                    .orElseGet(() -> client.addRole(it.getName()));
             role.setDescription(it.getRoleDescription());
         });
     }
@@ -204,7 +209,10 @@ public class DefaultClientConfigurer implements ClientConfigurer {
             return;
         }
 
-        RoleModel restricted = client.addRole("restricted-access");
+        RoleModel restricted = client.getRole(RESTRICTED_ACCESS_ROLE);
+        if (restricted == null) {
+            restricted = client.addRole(RESTRICTED_ACCESS_ROLE);
+        }
         restricted.setDescription("Role to restrict access to client");
         allowedGroup.get().grantRole(restricted);
         AuthenticationFlowModel flow = realm.getFlowByAlias(AuthFlowConstants.RESTRICTED_BROWSER);

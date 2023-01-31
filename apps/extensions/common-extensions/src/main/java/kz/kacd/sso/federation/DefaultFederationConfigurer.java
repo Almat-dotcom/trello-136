@@ -10,6 +10,8 @@ import org.keycloak.models.RealmModel;
 import org.keycloak.models.utils.KeycloakModelUtils;
 import org.keycloak.provider.ProviderEvent;
 
+import java.util.Optional;
+
 public class DefaultFederationConfigurer implements FederationConfigurer {
     private static final Logger log = Logger.getLogger(DefaultFederationConfigurer.class);
 
@@ -39,7 +41,16 @@ public class DefaultFederationConfigurer implements FederationConfigurer {
                 new LdapRoleMapperBuilder(parent.getId())
                         .withClientAndDn(client, dn)
                         .build();
-        realm.addComponentModel(mapper);
+        Optional<ComponentModel> component = realm.getComponentsStream(mapper.getParentId(), mapper.getProviderType())
+                .filter(it -> it.getName() != null && it.getName().equals(mapper.getName()))
+                .findAny();
+        if (component.isPresent()) {
+            mapper.setId(component.get().getId());
+            realm.updateComponent(mapper);
+        } else {
+            realm.addComponentModel(mapper);
+        }
+
         session.getTransactionManager().commit();
         session.getTransactionManager().begin();
         session.getKeycloakSessionFactory().publish(groupsMapperCreated(realm, parent, mapper, true));

@@ -2,7 +2,6 @@ package kz.kacd.sso.client.config;
 
 import com.google.auto.service.AutoService;
 import kz.kacd.sso.federation.FederationConfigurer;
-import kz.kacd.sso.k8s.K8sClientProvider;
 import kz.kacd.sso.k8s.K8sConfig;
 import kz.kacd.sso.k8s.client.K8sClientSpecProvider;
 import org.keycloak.Config;
