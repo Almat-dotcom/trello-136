@@ -17,7 +17,7 @@ internal:
   ingress:
     serviceName: sso-keycloak
     tls: true
-    secretName: keycloak-tls
+    secretName: kacd-tls
 
 #
 # Конфигурация внешнего реалма
@@ -38,4 +38,4 @@ external:
   ingress:
     serviceName: sso-keycloak
     tls: true
-    secretName: keycloak-tls
+    secretName: kacd-tls
