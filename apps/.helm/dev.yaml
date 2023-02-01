@@ -1,18 +1,18 @@
 global:
   imageRegistry: nexus.kacd.kz:5000
   imagePullSecrets:
-    - kacd-docker-creds
+  - kacd-docker-creds
 
 image: nexus.kacd.kz:5000/valyayev/test/keycloak:0.3
 
 replicaCount: 3
 
-hostname: sso-dev.kacd.kz
+hostname: sso-dev.k8s-dev.kacd.kz
 
 enabledMasterRealm: "true"
 
 resources:
-  limits: 
+  limits:
     memory: "4Gi"
     cpu: "4"
   requests:
@@ -21,7 +21,7 @@ resources:
 
 tls:
   enabled: true
-  existingSecret: keycloak-fake-tls
+  existingSecret: keycloak-tls
   certificateFileKey: tls.crt
   keyFileKey: tls.key
 
