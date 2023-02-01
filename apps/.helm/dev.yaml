@@ -50,6 +50,10 @@ ingress:
   hostname: sso-dev.k8s-dev.kacd.kz
   tls: true
   secretName: kacd-tls
+  annotations:
+    nginx.ingress.kubernetes.io/server-snippet: |
+      client_header_buffer_size 100k;
+      large_client_header_buffers 4 100k;
 
 realmController:
   enabled: true
