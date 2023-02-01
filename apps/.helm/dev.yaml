@@ -21,7 +21,7 @@ resources:
 
 tls:
   enabled: true
-  existingSecret: keycloak-tls
+  existingSecret: kacd-tls
   certificateFileKey: tls.crt
   keyFileKey: tls.key
 
@@ -49,7 +49,7 @@ ingress:
   enabled: true
   hostname: sso-dev.kacd.kz
   tls: true
-  secretName: keycloak-tls
+  secretName: kacd-tls
 
 realmController:
   enabled: true
