@@ -5,7 +5,7 @@ global:
 
 image: nexus.kacd.kz:5000/valyayev/test/keycloak:0.3
 
-replicaCount: 3
+replicaCount: 1
 
 hostname: sso-dev.k8s-dev.kacd.kz
 
