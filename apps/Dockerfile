@@ -24,6 +24,8 @@ RUN /opt/keycloak/bin/kc.sh build && mkdir -p /opt/keycloak/.kacd/import
 
 # Running keycloak
 FROM quay.io/keycloak/keycloak:20.0.2
+ENV TZ="Asia/Almaty"
+
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
 
 ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start", "--optimized"]
