@@ -47,7 +47,7 @@ service:
 
 ingress:
   enabled: true
-  hostname: sso-dev.kacd.kz
+  hostname: sso-dev.k8s-dev.kacd.kz
   tls: true
   secretName: kacd-tls
 
