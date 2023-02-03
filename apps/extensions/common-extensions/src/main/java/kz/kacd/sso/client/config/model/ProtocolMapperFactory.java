@@ -91,7 +91,7 @@ public class ProtocolMapperFactory {
     }
 
     private static ProtocolMapperModel residency() {
-        return attributeMapper("residency");
+        return attributeMapper("residency", true);
     }
 
     private static ProtocolMapperModel middleName() {
@@ -103,7 +103,7 @@ public class ProtocolMapperFactory {
     }
 
     private static ProtocolMapperModel division() {
-        return attributeMapper("division");
+        return attributeMapper("division", true);
     }
 
     private static ProtocolMapperModel clientType() {
