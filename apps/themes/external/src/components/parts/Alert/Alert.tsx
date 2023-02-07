@@ -48,7 +48,9 @@ const Alert = ({ type, message, i18n }: { type: "success" | "warning" | "error" 
     return (
         <div className={`flex items-center px-2 py-3 ${bg} ${border} border-l-4 ${color} text-sm text-left`}>
             <img className="mr-2" alt="severity" src={icon} />
-            {messages}
+            <div>
+                {messages}
+            </div>
         </div>
     );
 };
