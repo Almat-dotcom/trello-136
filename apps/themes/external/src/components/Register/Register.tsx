@@ -26,7 +26,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
         fields.residency.onChange("resident");
     }
     const setNonResident = () => {
-        fields.residency.onChange("nonResident");
+        fields.residency.onChange("non-resident");
     }
     const resetResidency = () => {
         fields.residency.onChange("");
