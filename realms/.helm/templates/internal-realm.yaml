@@ -34,10 +34,10 @@ spec:
     encryption: []
   # Настройки тем для модулей входа, админки, профиля и почтовой рассылки
   themes: 
-    login: internal
+    login: keycloak
     account: keycloak
     admin: keycloak
-    email: internal
+    email: keycloak
     # Локализация на 2 языка
     localization:
       i18n: true
