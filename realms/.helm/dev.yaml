@@ -34,7 +34,7 @@ external:
     dnKey: "dn"
     passwordKey: "password"
     usersDn: "OU=OU_Users,DC=tstcsdepo,DC=net"
-    groupsDn: "OU=keycloak,OU=OU_Groups,DC=tstcsdepo,DC=net"
+    groupsDn: "OU=Distribution_Group,OU=OU_Groups,DC=tstcsdepo,DC=net"
     managementRolesDn: "OU=external-realm-management,OU=OU_Roles,DC=tstcsdepo,DC=net"
   # Настройки службы ingress
   ingress:
