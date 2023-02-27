@@ -32,6 +32,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
+      serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
       serviceAccountName: {{ printf "%s-sa" (include "common.names.fullname" .) }}
       {{- include "keycloak.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.nodeSelector }}
@@ -91,8 +92,8 @@ spec:
               value: "true"
             - name: K8S_NAMESPACE
               value: {{ include "common.names.namespace" . | quote }}
-            # - name: JAVA_OPTS_APPEND
-            #   value: {{ printf "-Djgroups.dns.query=%s-headless.%s.svc.%s" (include "common.names.fullname" .) (include "common.names.namespace" .) .Values.clusterDomain | quote }}
+            - name: JAVA_OPTS_APPEND
+              value: {{ printf "-Djgroups.dns.query=%s-headless.%s.svc.%s" (include "common.names.fullname" .) (include "common.names.namespace" .) .Values.clusterDomain | quote }}
             - name: KEYCLOAK_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
