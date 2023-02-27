@@ -5,7 +5,7 @@ global:
 
 image: nexus.kacd.kz:5000/valyayev/test/keycloak:0.3
 
-replicaCount: 1
+replicaCount: 3
 
 hostname: sso-dev.k8s-dev.kacd.kz
 
@@ -43,7 +43,7 @@ service:
   annotations:
     prometheus.io/scrape: "true"
     prometheus.io/path: "/metrics"
-    prometheus.io/port: "80"
+    prometheus.io/port: "8080"
 
 ingress:
   enabled: true
