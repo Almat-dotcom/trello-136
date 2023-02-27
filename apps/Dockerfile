@@ -1,4 +1,4 @@
-FROM quay.io/keycloak/keycloak:20.0.2 as builder
+FROM quay.io/keycloak/keycloak:21.0.0 as builder
 
 # Enable health and metrics support
 ENV KC_HEALTH_ENABLED=true
@@ -6,6 +6,8 @@ ENV KC_METRICS_ENABLED=true
 
 # Configure a database vendor
 ENV KC_DB=postgres
+ENV KC_CACHE=ispn
+ENV KC_CACHE_STACK=kubernetes
 
 WORKDIR /opt/keycloak
 

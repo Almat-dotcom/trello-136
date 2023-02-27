@@ -26,7 +26,7 @@ public class ExternalUserProfileProvider {
 
     private Map<String, String> toSimpleMap(MultivaluedMap<String, String> source) {
         return source.entrySet().stream().map(it ->
-                new AbstractMap.SimpleEntry<String, String>(it.getKey(), it.getValue().get(0))
+                new AbstractMap.SimpleEntry<>(it.getKey(), it.getValue().get(0))
         ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

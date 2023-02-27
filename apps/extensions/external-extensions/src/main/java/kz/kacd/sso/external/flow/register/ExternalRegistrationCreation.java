@@ -71,11 +71,11 @@ public class ExternalRegistrationCreation implements FormAction {
     }
 
     private ExternalUserProfile registerProfile(FormContext context) {
-        return registerProfile(context.getHttpRequest().getFormParameters(), context.getSession(), context.getEvent());
+        return registerProfile(context.getHttpRequest().getDecodedFormParameters(), context.getSession(), context.getEvent());
     }
 
     private void registerProfile(ValidationContext context) {
-        registerProfile(context.getHttpRequest().getFormParameters(), context.getSession(), context.getEvent());
+        registerProfile(context.getHttpRequest().getDecodedFormParameters(), context.getSession(), context.getEvent());
     }
 
     private ExternalUserProfile registerProfile(
