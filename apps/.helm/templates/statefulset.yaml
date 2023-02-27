@@ -82,7 +82,7 @@ spec:
             - name: KC_CACHE
               value: "ispn"
             - name: KC_CACHE_STACK
-              value: "udp"
+              value: "kubernetes"
             - name: KC_HTTP_ENABLED
               value: "true"
             - name: KC_LOG_CONSOLE_OUTPUT
