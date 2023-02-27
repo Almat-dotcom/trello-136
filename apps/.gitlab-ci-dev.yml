@@ -11,7 +11,7 @@ stages:
 # Building basic extension for keycloak
 build-common-extension:
   stage: prebuild
-  image: maven:3-eclipse-temurin-17-alpine
+  image: nexus.kacd.kz:5000/devops-tools/maven:3.8-amazoncorretto-17
   variables:
     GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
   only:
@@ -37,7 +37,7 @@ build-common-extension:
 # Building external extension for keycloak
 build-external-extension:
   stage: prebuild
-  image: maven:3-eclipse-temurin-17-alpine
+  image: nexus.kacd.kz:5000/devops-tools/maven:3.8-amazoncorretto-17
   only:
   - dev
   before_script:
@@ -129,7 +129,7 @@ build-docker-keycloak:
   - |-
     /kaniko/warmer \
       --cache-dir=${CI_PROJECT_DIR}/.cache \
-      --image=quay.io/keycloak/keycloak:20.0.2
+      --image=nexus.kacd.kz:5000/devops-tools/keycloak/keycloak:21.0.0
   script:
   - |-
     /kaniko/executor \
