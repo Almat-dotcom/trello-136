@@ -50,8 +50,8 @@ ingress:
   hostname: sso-dev.k8s-dev.kacd.kz
   tls: true
   secretName: kacd-tls
-  annotations:
-    nginx.ingress.kubernetes.io/affinity: cookie
+  # annotations:
+#   nginx.ingress.kubernetes.io/affinity: cookie
 
 realmController:
   enabled: true

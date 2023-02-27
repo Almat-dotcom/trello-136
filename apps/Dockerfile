@@ -1,3 +1,13 @@
+FROM alpine:latest as cacher
+
+WORKDIR /opt/keycloak/providers
+
+RUN apk add --no-cache curl
+
+# Prometheus metrics exporter for every realm and restricted access filter
+RUN curl -sL https://github.com/aerogear/keycloak-metrics-spi/releases/download/2.5.3/keycloak-metrics-spi-2.5.3.jar -o /opt/keycloak/providers/keycloak-metrics-spi.jar \
+    && curl -sL https://github.com/sventorben/keycloak-restrict-client-auth/releases/download/v21.0.0/keycloak-restrict-client-auth.jar -o /opt/keycloak/providers/keycloak-restrict-client-auth.jar
+
 FROM nexus.kacd.kz:5000/devops-tools/keycloak/keycloak:21.0.0 as builder
 
 # Enable health and metrics support
@@ -11,11 +21,9 @@ ENV KC_CACHE_STACK=kubernetes
 
 WORKDIR /opt/keycloak
 
-# Prometheus metrics exporter for every realm and restricted access filter
-RUN curl -sL https://github.com/aerogear/keycloak-metrics-spi/releases/download/2.5.3/keycloak-metrics-spi-2.5.3.jar -o /opt/keycloak/providers/keycloak-metrics-spi.jar \
-    && curl -sL https://github.com/sventorben/keycloak-restrict-client-auth/releases/download/v20.0.0/keycloak-restrict-client-auth.jar -o /opt/keycloak/providers/keycloak-restrict-client-auth.jar
-
 # Installing extensions
+COPY --from=cacher /opt/keycloak/providers/keycloak-metrics-spi.jar /opt/keycloak/providers/keycloak-metrics-spi.jar
+COPY --from=cacher /opt/keycloak/providers/keycloak-restrict-client-auth.jar /opt/keycloak/providers/keycloak-restrict-client-auth.jar
 COPY build-extensions/common-extensions.jar /opt/keycloak/providers/common-extensions.jar
 COPY build-extensions/external-extensions.jar /opt/keycloak/providers/external-extensions.jar
 COPY build-extensions/internal-keycloak-theme.jar /opt/keycloak/providers/internal-keycloak-theme.jar
