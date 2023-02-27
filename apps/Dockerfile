@@ -1,4 +1,4 @@
-FROM quay.io/keycloak/keycloak:21.0.0 as builder
+FROM nexus.kacd.kz:5000/devops-tools/keycloak/keycloak:21.0.0 as builder
 
 # Enable health and metrics support
 ENV KC_HEALTH_ENABLED=true
@@ -25,7 +25,7 @@ COPY build-extensions/external-keycloak-theme.jar /opt/keycloak/providers/extern
 RUN /opt/keycloak/bin/kc.sh build && mkdir -p /opt/keycloak/.kacd/import
 
 # Running keycloak
-FROM quay.io/keycloak/keycloak:20.0.2
+FROM nexus.kacd.kz:5000/devops-tools/keycloak/keycloak:21.0.0
 ENV TZ="Asia/Almaty"
 
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
