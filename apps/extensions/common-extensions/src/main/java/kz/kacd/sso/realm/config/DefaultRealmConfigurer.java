@@ -7,13 +7,16 @@ import kz.kacd.sso.realm.flow.AuthFlowConfigurer;
 import kz.kacd.sso.realm.flow.AuthFlowConstants;
 import kz.kacd.sso.v1.Realm;
 import kz.kacd.sso.v1.RealmSpec;
+import kz.kacd.sso.v1.realmspec.RealmRoles;
 import kz.kacd.sso.v1.realmspec.authentication.Flows;
 import org.jboss.logging.Logger;
 import org.keycloak.models.KeycloakSession;
-import org.keycloak.models.PasswordPolicy;
 import org.keycloak.models.RealmModel;
+import org.keycloak.models.RoleModel;
 import org.keycloak.provider.ProviderEvent;
 import org.keycloak.services.managers.RealmManager;
+
+import java.util.List;
 
 public class DefaultRealmConfigurer implements KeycloakRealmConfigurer {
     private static final Logger log = Logger.getLogger(DefaultRealmConfigurer.class);
@@ -69,6 +72,10 @@ public class DefaultRealmConfigurer implements KeycloakRealmConfigurer {
         applyFlowsToRealm(existing, spec);
         createAdminClient(existing);
 
+        if (spec.getRealmRoles() != null && !spec.getRealmRoles().isEmpty()) {
+            createRealmRoles(existing, spec.getRealmRoles());
+        }
+
         return existing;
     }
 
@@ -96,6 +103,14 @@ public class DefaultRealmConfigurer implements KeycloakRealmConfigurer {
     private void createAdminClient(RealmModel realm) {
         AdminClientProvider clients = session.getProvider(AdminClientProvider.class);
         clients.configureAdminClient(realm);
+    }
+
+    private void createRealmRoles(RealmModel realm, List<RealmRoles> roles) {
+        roles.stream().filter(it -> it.getName() != null && !it.getName().isEmpty())
+                .forEach(it -> {
+                    RoleModel role = realm.addRole(it.getName());
+                    role.setDescription(it.getRoleDescription());
+                });
     }
 
     private RealmModel find(String realm) {

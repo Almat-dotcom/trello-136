@@ -50,6 +50,8 @@ public class ProtocolMapperFactory {
                 return residency();
             case PHONE_NUMBER:
                 return phoneNumber();
+            case POSITION:
+                return position();
         }
         return null;
     }
@@ -84,6 +86,10 @@ public class ProtocolMapperFactory {
         result.put(USER_ATTR, field);
         result.put(ADD_TO_USER_INFO, Boolean.TRUE.toString());
         return result;
+    }
+
+    private static ProtocolMapperModel position() {
+        return attributeMapper("position");
     }
 
     private static ProtocolMapperModel phoneNumber() {

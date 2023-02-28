@@ -372,6 +372,18 @@ spec:
                         type: integer
                     type: object
                 type: object
+              realmRoles:
+                description: Roles on realm level
+                items:
+                  properties:
+                    name:
+                      description: Name of the role
+                      type: string
+                    roleDescription:
+                      description: Human readable description of the role
+                      type: string
+                  type: object
+                type: array
             type: object
           status:
             properties:
