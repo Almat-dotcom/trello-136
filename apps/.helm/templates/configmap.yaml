@@ -76,4 +76,11 @@ data:
       name: external
     spec:
       displayedName: KCSD
+  afr.yaml: |-
+    apiVersion: sso.kacd.kz/v1
+    kind: Realm
+    metadata:
+      name: afr
+    spec:
+      displayedName: AFR
 {{- end }}

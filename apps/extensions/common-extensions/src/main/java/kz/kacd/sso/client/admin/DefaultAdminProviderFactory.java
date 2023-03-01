@@ -4,6 +4,7 @@ import com.google.auto.service.AutoService;
 import org.keycloak.Config;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
+import org.keycloak.models.RealmModel;
 
 @AutoService(AdminClientProviderFactory.class)
 public class DefaultAdminProviderFactory implements AdminClientProviderFactory {
@@ -21,7 +22,13 @@ public class DefaultAdminProviderFactory implements AdminClientProviderFactory {
 
     @Override
     public void postInit(KeycloakSessionFactory factory) {
-        // Nothing to do after init
+        factory.register(event -> {
+            if (event instanceof RealmModel.RealmCreationEvent) {
+                RealmModel.RealmCreationEvent creationEvent = (RealmModel.RealmCreationEvent) event;
+                AdminClientProvider admins = creationEvent.getKeycloakSession().getProvider(AdminClientProvider.class);
+                admins.configureAdminClient(creationEvent.getCreatedRealm());
+            }
+        });
     }
 
     @Override
