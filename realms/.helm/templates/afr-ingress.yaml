@@ -40,7 +40,7 @@ spec:
                 name: http
         - path: /admin/realms/afr
           pathType: Prefix
-          bachend:
+          backend:
             service:
               name: {{ .Values.afr.ingress.serviceName }}
               port:
