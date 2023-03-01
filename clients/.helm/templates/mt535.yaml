@@ -17,10 +17,9 @@ spec:
   displayedDescription: Автоматизация процесса сверки по выпискам c YO (MT535)
   access:
     validRedirectUris:
-    - http://localhost:8082/*
-    - http://10.10.125.4:8085/*
+    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.mt535.redirectUris "context" $ ) | nindent 4 }}
     webOrigins:
-    - "+"
+    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.mt535.webOrigins "context" $ ) | nindent 4 }}
   capability:
     type: PUBLIC
   roles: []

@@ -17,9 +17,9 @@ spec:
   displayedDescription: Back-end личного кабинета для доступа к внутренним сервисам
   access:
     validRedirectUris:
-    - http://localhost:8080/*
+    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.lkShellBack.redirectUris "context" $ ) | nindent 4 }}
     webOrigins:
-    - "+"
+    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.lkShellBack.webOrigins "context" $ ) | nindent 4 }}
   capability:
     type: CONFIDENTIAL
     clientExistingSecret: lk-shell-back-secret

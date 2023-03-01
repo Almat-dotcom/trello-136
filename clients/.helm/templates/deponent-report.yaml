@@ -17,9 +17,9 @@ spec:
   displayedDescription: Формирование выписки для депонентов  по лицевому счету
   access:
     validRedirectUris:
-    - http://localhost:8080/*
+    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.deponentReport.redirectUris "context" $ ) | nindent 4 }}
     webOrigins:
-    - "+"
+    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.deponentReport.webOrigins "context" $ ) | nindent 4 }}
   capability:
     type: CONFIDENTIAL
     clientExistingSecret: deponent-report-secret

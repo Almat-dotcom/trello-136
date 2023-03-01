@@ -17,9 +17,9 @@ spec:
   displayedDescription: Фронт приложения гос услуг личного кабинета АРРФР
   access:
     validRedirectUris:
-    - http://localhost:4200/*
+    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.afrAuthorityServicesFront.redirectUris "context" $ ) | nindent 4 }}
     webOrigins:
-    - http://localhost:4200
+    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.afrAuthorityServicesFront.webOrigins "context" $ ) | nindent 4 }}
   capability:
     type: PUBLIC
   attributes:
