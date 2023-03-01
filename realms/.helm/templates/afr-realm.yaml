@@ -1,4 +1,4 @@
-{{- if .Values.arrfr.enabled }}
+{{- if .Values.afr.enabled }}
 apiVersion: sso.kacd.kz/v1
 kind: Realm
 metadata:
