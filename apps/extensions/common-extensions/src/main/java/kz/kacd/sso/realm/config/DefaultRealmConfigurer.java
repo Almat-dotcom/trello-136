@@ -108,7 +108,13 @@ public class DefaultRealmConfigurer implements KeycloakRealmConfigurer {
     private void createRealmRoles(RealmModel realm, List<RealmRoles> roles) {
         roles.stream().filter(it -> it.getName() != null && !it.getName().isEmpty())
                 .forEach(it -> {
-                    RoleModel role = realm.addRole(it.getName());
+                    RoleModel role;
+                    RoleModel found = realm.getRole(it.getName());
+                    if (found != null) {
+                        role = found;
+                    } else {
+                        role = realm.addRole(it.getName());
+                    }
                     role.setDescription(it.getRoleDescription());
                 });
     }
