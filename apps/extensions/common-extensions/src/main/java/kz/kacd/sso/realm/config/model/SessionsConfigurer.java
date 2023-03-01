@@ -33,18 +33,33 @@ public class SessionsConfigurer {
     }
 
     private void configureSso(RealmModel realm, Sso source) {
-        realm.setSsoSessionIdleTimeout(duration(defaulted(source.getSessionIdle(), "15m")).intValue());
-        realm.setSsoSessionMaxLifespan(duration(defaulted(source.getSessionMax(), "1d")).intValue());
-        realm.setSsoSessionIdleTimeoutRememberMe(duration(defaulted(source.getRememberMeSessionIdle(), "2h")).intValue());
+        Sso spec = source;
+        if (spec == null) {
+            spec = new Sso();
+        }
+
+        realm.setSsoSessionIdleTimeout(duration(defaulted(spec.getSessionIdle(), "15m")).intValue());
+        realm.setSsoSessionMaxLifespan(duration(defaulted(spec.getSessionMax(), "1d")).intValue());
+        realm.setSsoSessionIdleTimeoutRememberMe(duration(defaulted(spec.getRememberMeSessionIdle(), "2h")).intValue());
     }
 
     private void configureClient(RealmModel realm, Client source) {
-        realm.setClientSessionIdleTimeout(duration(defaulted(source.getSessionIdle(), "15m")).intValue());
-        realm.setClientSessionMaxLifespan(duration(defaulted(source.getSessionMax(), "15m")).intValue());
+        Client spec = source;
+        if (spec == null) {
+            spec = new Client();
+        }
+
+        realm.setClientSessionIdleTimeout(duration(defaulted(spec.getSessionIdle(), "15m")).intValue());
+        realm.setClientSessionMaxLifespan(duration(defaulted(spec.getSessionMax(), "15m")).intValue());
     }
 
     private void configureOffline(RealmModel realm, Offline source) {
-        realm.setOfflineSessionIdleTimeout(duration(defaulted(source.getSessionIdle(), "1d")).intValue());
-        realm.setOfflineSessionMaxLifespan(duration(defaulted(source.getSessionMax(), "360d")).intValue());
+        Offline spec = source;
+        if (spec == null) {
+            spec = new Offline();
+        }
+
+        realm.setOfflineSessionIdleTimeout(duration(defaulted(spec.getSessionIdle(), "1d")).intValue());
+        realm.setOfflineSessionMaxLifespan(duration(defaulted(spec.getSessionMax(), "360d")).intValue());
     }
 }
