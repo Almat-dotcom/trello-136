@@ -1,0 +1,54 @@
+{{- if .Values.afr.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ printf "%s-afr" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: keycloak
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.afr.ingress.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.afr.ingress.annotations "context" $) | nindent 4 }}
+    {{- end }}
+spec:
+  {{- if .Values.afr.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.afr.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    - host: {{ .Values.afr.hostname }}
+      http:
+        paths:
+        - path: /realms/afr
+          pathType: Prefix
+          backend:
+            service:
+              name: {{ .Values.afr.ingress.serviceName }}
+              port:
+                name: http
+        - path: /resources
+          pathType: Prefix
+          backend:
+            service:
+              name: {{ .Values.afr.ingress.serviceName }}
+              port:
+                name: http
+        - path: /admin/realms/afr
+          pathType: Prefix
+          bachend:
+            service:
+              name: {{ .Values.afr.ingress.serviceName }}
+              port:
+                name: http
+  {{- if and .Values.afr.ingress.tls }}
+  tls:
+    - hosts:
+        - {{ (tpl .Values.afr.hostname .) | quote }}
+      secretName: {{ .Values.afr.ingress.secretName }}
+  {{- end }}
+{{- end }}

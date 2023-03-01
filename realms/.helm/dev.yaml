@@ -43,3 +43,15 @@ external:
     secretName: kacd-tls
     annotations:
       nginx.ingress.kubernetes.io/affinity: cookie
+
+# Конфигурация реалма АРРФР
+afr:
+  enabled: true
+  hostname: afr-dev.k8s-dev.kacd.kz
+  # Настройки службы ingress
+  ingress:
+    serviceName: sso-keycloak
+    tls: true
+    secretName: kacd-tls
+    annotations:
+      nginx.ingress.kubernetes.io/affinity: cookie
