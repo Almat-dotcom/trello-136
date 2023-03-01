@@ -24,7 +24,7 @@ public class DefaultAdminProviderFactory implements AdminClientProviderFactory {
     public void postInit(KeycloakSessionFactory factory) {
         factory.register(event -> {
             if (event instanceof RealmModel.RealmPostCreateEvent) {
-                RealmModel.RealmCreationEvent creationEvent = (RealmModel.RealmPostCreateEvent) event;
+                RealmModel.RealmPostCreateEvent creationEvent = (RealmModel.RealmPostCreateEvent) event;
                 AdminClientProvider admins = creationEvent.getKeycloakSession().getProvider(AdminClientProvider.class);
                 admins.configureAdminClient(creationEvent.getCreatedRealm());
             }
