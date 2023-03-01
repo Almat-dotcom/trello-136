@@ -16,7 +16,7 @@ spec:
   # Отображаемое имя на странице авторизации
   displayedName: AFR
   # Базовый URL для доступа к реалму (Важно! Для админки динамически не изменяются хосты)
-  frontendUrl: {{ printf "https://%s" .Values.arf.hostname }}
+  frontendUrl: {{ printf "https://%s" .Values.afr.hostname }}
   # Любые запросы могут быть по HTTP
   requireSsl: none
   login:
