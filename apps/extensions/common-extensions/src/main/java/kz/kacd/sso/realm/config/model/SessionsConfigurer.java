@@ -30,6 +30,8 @@ public class SessionsConfigurer {
         realm.setAccessCodeLifespanUserAction(duration("5m").intValue());
         realm.setActionTokenGeneratedByUserLifespan(duration("5m").intValue());
         realm.setActionTokenGeneratedByAdminLifespan(duration("12h").intValue());
+        realm.setAccessCodeLifespanLogin(duration("30m").intValue());
+        realm.setAccessCodeLifespan(duration("30m").intValue());
     }
 
     private void configureSso(RealmModel realm, Sso source) {
