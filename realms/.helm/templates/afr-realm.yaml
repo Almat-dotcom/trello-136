@@ -36,10 +36,10 @@ spec:
     encryption: []
   # Настройки тем для модулей входа, админки, профиля и почтовой рассылки
   themes: 
-    login: keycloak
+    login: afr
     account: keycloak
     admin: keycloak
-    email: keycloak
+    email: afr
     # Локализация на 3 языка
     localization:
       i18n: true

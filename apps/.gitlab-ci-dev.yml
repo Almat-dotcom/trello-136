@@ -106,7 +106,7 @@ build-afr-theme:
   script:
   - yarn install --frozen-lockfile
   - yarn keycloak
-  - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./build_keycloak/target/keycloakify-starter-keycloak-theme-2.0.1.jar ${NEXUS_REPO}
+  - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./build_keycloak/target/afr-theme-2.0.1.jar ${NEXUS_REPO}
   cache:
   - key: node_modules_afr
     paths:
