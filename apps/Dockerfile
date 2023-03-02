@@ -26,6 +26,7 @@ COPY build-extensions/common-extensions.jar /opt/keycloak/providers/common-exten
 COPY build-extensions/external-extensions.jar /opt/keycloak/providers/external-extensions.jar
 COPY build-extensions/internal-keycloak-theme.jar /opt/keycloak/providers/internal-keycloak-theme.jar
 COPY build-extensions/external-keycloak-theme.jar /opt/keycloak/providers/external-keycloak-theme.jar
+COPY build-extensions/afr-keycloak-theme.jar /opt/keycloak/providers/afr-keycloak-theme.jar
 
 # building keycloak distribution and creating dir for realm import
 RUN /opt/keycloak/bin/kc.sh build && mkdir -p /opt/keycloak/.kacd/import

@@ -79,3 +79,22 @@ build-internal-theme:
   rules:
   - changes:
     - apps/themes/internal/**/*
+
+build-afr-theme:
+  stage: build
+  image:
+    name: nexus.kacd.kz:5000/devops-utils/keycloakify-build-image:latest
+    entrypoint: [""]
+  before_script:
+  - export PROJECT_DIR="apps/themes/afr"
+  - cd ${PROJECT_DIR}
+  script:
+  - yarn install --frozen-lockfile
+  - yarn keycloak
+  cache:
+  - key: node_modules_afr
+    paths:
+    - apps/themes/afr/node_modules
+  rules:
+  - changes:
+    - apps/themes/afr/**/*

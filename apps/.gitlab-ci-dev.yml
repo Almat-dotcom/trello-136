@@ -93,6 +93,25 @@ build-internal-theme:
     paths:
     - apps/themes/internal/node_modules
 
+# Building afr theme for keycloak
+build-afr-theme:
+  stage: prebuild
+  image:
+    name: nexus.kacd.kz:5000/devops-utils/keycloakify-build-image:latest
+    entrypoint: [""]
+  before_script:
+  - export PROJECT_DIR="apps/themes/afr"
+  - cd ${PROJECT_DIR}
+  - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/afr-keycloak-theme.jar"
+  script:
+  - yarn install --frozen-lockfile
+  - yarn keycloak
+  - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./build_keycloak/target/afr-keycloak-theme-1.0.6.jar ${NEXUS_REPO}
+  cache:
+  - key: node_modules_afr
+    paths:
+    - apps/themes/afr/node_modules
+
 # Persisting all extensions artifacts inside local cache directory
 cache-artifacts:
   stage: cache
@@ -108,6 +127,7 @@ cache-artifacts:
   - curl -sL --user "${NEXUS_RAW_REPO}" "${NEXUS_REPO}/external-extensions.jar" -o apps/build-extensions/external-extensions.jar
   - curl -sL --user "${NEXUS_RAW_REPO}" "${NEXUS_REPO}/internal-keycloak-theme.jar" -o apps/build-extensions/internal-keycloak-theme.jar
   - curl -sL --user "${NEXUS_RAW_REPO}" "${NEXUS_REPO}/external-keycloak-theme.jar" -o apps/build-extensions/external-keycloak-theme.jar
+  - curl -sL --user "${NEXUS_RAW_REPO}" "${NEXUS_REPO}/afr-keycloak-theme.jar" -o apps/build-extensions/afr-keycloak-theme.jar
   cache:
   - key: extensions
     policy: push
