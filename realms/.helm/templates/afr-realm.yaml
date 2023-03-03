@@ -22,7 +22,7 @@ spec:
   login:
     loginScreen:
       registration: false
-      forgotPassword: false
+      forgotPassword: true
       rememberMe: true
     email:
       loginWithEmail: true
