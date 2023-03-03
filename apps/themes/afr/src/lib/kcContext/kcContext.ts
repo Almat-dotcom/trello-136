@@ -7,8 +7,16 @@ export const { kcContext } = getKcContext({
 		{
 			pageId: "login.ftl",
 			locale: {
-
 				currentLanguageTag: "ru",
+			},
+			realm: {
+				displayNameHtml: 'AFR',
+				registrationAllowed: false
+			},
+			messagesPerField: {
+				existsError: (name: string) => true,
+				get: (name: string) => "Error!",
+				printIfExists: (name: string, t: string) => "Error!"
 			}
 		}
 	]

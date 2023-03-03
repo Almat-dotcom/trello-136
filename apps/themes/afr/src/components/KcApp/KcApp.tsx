@@ -6,7 +6,16 @@ import Fallback, { defaultKcProps, type KcProps, type PageProps } from "keycloak
 import DefaultTemplate from "keycloakify/lib/Template";
 
 const kcProps: KcProps = {
-    ...defaultKcProps
+    ...defaultKcProps,
+    kcLoginClass: "afr-login",
+    kcHeaderClass: "afr-header",
+    kcHeaderWrapperClass: "afr-header-wrapper",
+    kcFormCardClass: "afr-card",
+    kcLabelClass: "afr-label",
+    kcInputClass: "afr-input",
+    kcFormSettingClass: "afr-form-settings",
+    kcFormOptionsWrapperClass: "afr-link-wrapper",
+    kcButtonClass: "afr-button"
 };
 
 export default function App(props: { kcContext: KcContext; }) {
@@ -26,7 +35,7 @@ export default function App(props: { kcContext: KcContext; }) {
         Template: DefaultTemplate,
         // Wether or not we should download the CSS and JS resources that comes with the default Keycloak theme.  
         doFetchDefaultThemeResources: true,
-        ...kcProps,
+        ...kcProps
     };
 
     return (

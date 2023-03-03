@@ -1,3 +1,119 @@
-.myclass {
-    color: blue;
+body {
+    background: white !important;
+
+    font-family: 'Roboto' !important;
+}
+
+#root {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+}
+
+.afr-login {
+    flex-direction: column;
+    width: 100%;
+}
+
+.afr-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.afr-card {
+    margin-top: 24px;
+    margin-right: auto;
+    margin-left: auto;
+
+    max-width: 400px;
+}
+
+#kc-page-title {
+    font-weight: bold;
+    font-size: 3.5rem;
+    text-align: center;
+}
+
+.afr-label {
+    color: rgba(169, 169, 169, 1);
+
+    font-weight: normal;
+    font-size: 1.8rem;
+}
+
+.afr-input {
+    -webkit-appearance: none; 
+    box-shadow: none !important;
+    outline: none;
+
+    width: 100%;
+
+    padding: 4px 8px 4px 8px;
+
+    border: 1px solid rgba(169, 169, 169, 1);
+    border-radius: 2px;
+
+    font-size: 1.8rem;
+    transition: border 0.5s ease;
+}
+
+.afr-input:hover {
+    border: 1px solid rgba(31, 60, 136, 1);
+}
+
+.afr-input:active {
+    border: 1px solid rgba(31, 60, 136, 1);
+}
+
+.afr-input:focus {
+    border: 1px solid rgba(31, 60, 136, 1);
+}
+
+.afr-error {
+    font-size: 1.2rem;
+
+    color: #B00020;
+}
+
+.afr-form-settings {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    font-size: 1.6rem;
+    color: rgba(169, 169, 169, 1);
+}
+
+.afr-link-wrapper a {
+    color: rgba(31, 60, 136, 1);
+    text-decoration: underline;
+
+    transition: color 0.2s ease;
+
+}
+
+.afr-link-wrapper a:hover {
+    color: rgb(18, 35, 77);
+}
+
+.afr-button {
+    width: fit-content !important;
+    margin: auto;
+    padding: 8px 84px 8px 84px;
+
+    background: none;
+    background-color: rgba(31, 60, 136, 1);
+
+    border: none;
+
+    font-size: 1.8rem;
+
+    transition: background-color 0.2s ease;
+}
+
+.afr-button:hover {
+    background-color: rgb(18, 35, 77);
 }
