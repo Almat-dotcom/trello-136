@@ -43,7 +43,7 @@ spec:
     # Локализация на 3 языка
     localization:
       i18n: true
-      supportedLocales: ["ru", "kz"]
+      supportedLocales: ["ru"]
       defaultLocale: ru
   events:
     # Список слушателей событий. Стандартный слушатель для логирования событий.
