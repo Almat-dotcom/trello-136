@@ -38,6 +38,10 @@ database:
   existingSecret: sso-keycloak-database-password
   existingSecretPasswordKey: password
 
+redis:
+  host: keycloak-redis.sso.svc.cluster.local
+  port: 6379
+
 service:
   type: ClusterIP
   annotations:

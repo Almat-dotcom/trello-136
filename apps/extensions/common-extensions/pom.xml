@@ -16,6 +16,7 @@
     <properties>
         <keycloak.version>21.0.0</keycloak.version>
         <fabric8.k8s.version>6.2.0</fabric8.k8s.version>
+        <lettuce.version>6.2.3.RELEASE</lettuce.version>
 
         <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
 
@@ -30,6 +31,12 @@
             <artifactId>auto-service</artifactId>
             <version>1.0.1</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.lettuce</groupId>
+            <artifactId>lettuce-core</artifactId>
+            <version>${lettuce.version}</version>
         </dependency>
 
         <dependency>
