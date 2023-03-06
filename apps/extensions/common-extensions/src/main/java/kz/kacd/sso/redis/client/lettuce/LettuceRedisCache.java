@@ -58,7 +58,7 @@ public class LettuceRedisCache<T> implements RedisCache<T> {
         Tuple2<String, String> marhsalled = marshaller.marshall(record);
         String key = marhsalled.getT1();
         String valueStr = marhsalled.getT2();
-        commands.set(key, valueStr, new SetArgs().ex(Integer.valueOf(config.getTtl()).longValue()));
+        commands.set(key, valueStr, new SetArgs().ex(config.getTtl()));
         return record;
     }
 }
