@@ -1,6 +1,11 @@
 stages:
+- mirror
 - mr
 - dev
+
+include:
+  - project: 'core2471/ci-tools'
+    file: 'mirror/mirror-repo.yml'
 
 check_apps:
   stage: mr

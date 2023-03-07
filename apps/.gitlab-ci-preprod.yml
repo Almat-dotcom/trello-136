@@ -6,7 +6,7 @@ stages:
 # Build all docker images
 - build-docker
 # deploy to dev env
-- dev-deploy
+- preprod-deploy
 
 # Building basic extension for keycloak
 build-common-extension:
@@ -15,7 +15,7 @@ build-common-extension:
   variables:
     GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
   only:
-  - dev
+  - master
   before_script:
   - apk add curl
   - export PROJECT_DIR="apps/extensions/common-extensions"
@@ -39,7 +39,7 @@ build-external-extension:
   stage: prebuild
   image: nexus.kacd.kz:5000/devops-tools/maven:3.8-eclipse-temurin-17-alpine
   only:
-  - dev
+  - master
   before_script:
   - apk add curl
   - export PROJECT_DIR="apps/extensions/external-extensions"
@@ -117,7 +117,7 @@ cache-artifacts:
   stage: cache
   image: alpine:latest
   only:
-  - dev
+  - master
   before_script:
   - apk add curl
   - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}"
@@ -143,7 +143,7 @@ build-docker-keycloak:
     name: gcr.io/kaniko-project/executor:v1.9.1-debug
     entrypoint: [""]
   only:
-  - dev
+  - master
   before_script:
   - echo $KANIKO_DOCKER_CONFIG | base64 -d > /kaniko/.docker/config.json
   - |-
@@ -163,6 +163,7 @@ build-docker-keycloak:
       --use-new-run=true \
       --context=${CI_PROJECT_DIR}/apps \
       --destination=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/keycloak:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA} \
+      --destination=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/keycloak:latest
   cache:
   - key: kaniko-cache-keycloak
     paths:
@@ -181,7 +182,7 @@ build-docker-realm-controller:
     name: gcr.io/kaniko-project/executor:v1.9.1-debug
     entrypoint: [""]
   only:
-  - dev
+  - master
   before_script:
   - echo $KANIKO_DOCKER_CONFIG | base64 -d > /kaniko/.docker/config.json
   - |-
@@ -210,22 +211,22 @@ build-docker-realm-controller:
   - global_runner_2
 
 # Deploying helm chart to dev invironment
-k8s-dev-deploy:
-  stage: dev-deploy
+k8s-preprod-deploy:
+  stage: preprod-deploy
   image: 'nexus.kacd.kz:5000/devops-utils/alpine-helm-docker:3.15al-3.11he-20.10d'
   only:
-  - dev
+  - master
   environment:
-    name: dev
+    name: preprod
   before_script:
   - cd apps
   - export RELEASE_NAME="${CI_PROJECT_NAME}"
   - mkdir -p /etc/deploy && export KUBECONFIG=/etc/deploy/config
-  - echo ${KUBE_K8S_DEV_CONFIG} | base64 -d > /etc/deploy/config
+  - echo ${KUBE_K8S_PREPROD_CONFIG} | base64 -d > /etc/deploy/config
   script:
   - |-
     helm upgrade --install ${RELEASE_NAME} ./.helm \
-      --create-namespace --namespace="${CI_PROJECT_NAME}" \
-      -f ./.helm/dev.yaml \
+      --create-namespace --namespace="${CI_PROJECT_NAME}"-preprod \
+      -f ./.helm/preprod.yaml \
       --set image=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/keycloak:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA} \
       --set realmController.image=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/realm-controller:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA}
