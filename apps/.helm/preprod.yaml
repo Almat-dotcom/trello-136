@@ -33,7 +33,7 @@ auth:
 database:
   host: psql-preprod.kacd.kz
   name: sso
-  schema: auth
+  schema: public
   username: sso
   existingSecret: sso-keycloak-database-password
   existingSecretPasswordKey: password
