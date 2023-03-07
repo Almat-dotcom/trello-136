@@ -13,13 +13,14 @@ services:
     - KC_DB_USERNAME=postgres
     - KC_LOG_LEVEL=info
     - MASTER_REALM_ENABLED=true
-    - KC_CACHE=local
+    - KC_CACHE=ispn
     - REDIS_HOST=redis
     - REDIS_PORT=6379
     - ENABLED_K8S=false
     volumes:
     - ./target/common-extensions-jar-with-dependencies.jar:/opt/keycloak/providers/common-extensions.jar:rw
     - ./test-realm.yaml:/opt/keycloak/.kacd/import/test-realm.yaml
+    - ./cache-ispn.xml:/opt/keycloak/config/cache-ispn.xml
     ports:
     - "8080:8080"
   postgres:

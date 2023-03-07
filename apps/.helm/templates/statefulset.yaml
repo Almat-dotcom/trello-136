@@ -83,6 +83,8 @@ spec:
               value: "ispn"
             - name: KC_CACHE_STACK
               value: "kubernetes"
+            - name: KC_STORAGE
+              value: jpa
             - name: KC_HTTP_ENABLED
               value: "true"
             - name: KC_LOG_CONSOLE_OUTPUT

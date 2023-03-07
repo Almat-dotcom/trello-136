@@ -16,7 +16,8 @@ ENV KC_METRICS_ENABLED=true
 # Configure a database vendor
 ENV KC_DB=postgres
 ENV KC_CACHE=local
-# ENV KC_CACHE_STACK=kubernetes
+ENV KC_CACHE_STACK=kubernetes
+ENV KC_STORAGE=jpa
 
 WORKDIR /opt/keycloak
 
@@ -29,7 +30,7 @@ COPY build-extensions/external-keycloak-theme.jar /opt/keycloak/providers/extern
 COPY build-extensions/afr-keycloak-theme.jar /opt/keycloak/providers/afr-keycloak-theme.jar
 
 # building keycloak distribution and creating dir for realm import
-RUN /opt/keycloak/bin/kc.sh build --spi-authenticationSessions-provider=redis && mkdir -p /opt/keycloak/.kacd/import
+RUN /opt/keycloak/bin/kc.sh build && mkdir -p /opt/keycloak/.kacd/import
 
 # Running keycloak
 FROM nexus.kacd.kz:5000/devops-tools/keycloak/keycloak:21.0.0
