@@ -1,5 +1,8 @@
 package kz.kacd.sso.redis.client;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class RedisRecord<T> {
 
     private final RedisKey key;
@@ -23,14 +26,17 @@ public class RedisRecord<T> {
         private final String className;
         private final String identifier;
 
+        public RedisKey(String fullKey) {
+            String[] parts = fullKey.split("-");
+            this.cacheName = parts[0];
+            this.className = parts[1];
+            this.identifier = Arrays.stream(parts).skip(2).collect(Collectors.joining("-"));
+        }
+
         public RedisKey(String cacheName, String className, String identifier) {
             this.cacheName = cacheName;
             this.className = className;
             this.identifier = identifier;
-        }
-
-        static <T> RedisKey of(String cacheName, Class<T> clazz, String identifier) {
-            return new RedisKey(cacheName, clazz.getName(), identifier);
         }
 
         public String getCacheName() {

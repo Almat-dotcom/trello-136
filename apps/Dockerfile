@@ -37,4 +37,4 @@ ENV TZ="Asia/Almaty"
 
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
 
-ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start", "--optimized"]
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start", "--optimized", "--spi-authenticationSessions=redis"]

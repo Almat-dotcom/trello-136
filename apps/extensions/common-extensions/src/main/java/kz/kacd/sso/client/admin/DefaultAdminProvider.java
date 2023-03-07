@@ -47,6 +47,9 @@ public class DefaultAdminProvider implements AdminClientProvider {
         UserModel sa = session.users().getServiceAccount(result);
 
         ClientModel realmManagement = session.clients().getClientByClientId(realm, "realm-management");
+        if (realmManagement == null) {
+            return null;
+        }
         RoleModel role = realmManagement.getRolesStream()
                 .filter(it -> it.getName().equals(ADMIN_CLIENT))
                 .findFirst()
