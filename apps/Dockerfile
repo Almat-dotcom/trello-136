@@ -17,7 +17,7 @@ ENV KC_METRICS_ENABLED=true
 ENV KC_DB=postgres
 ENV KC_CACHE=ispn
 ENV KC_CACHE_STACK=kubernetes
-ENV KC_STORAGE=jpa
+# ENV KC_STORAGE=jpa
  
 WORKDIR /opt/keycloak
 
