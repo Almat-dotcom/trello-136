@@ -29,7 +29,7 @@ COPY build-extensions/external-keycloak-theme.jar /opt/keycloak/providers/extern
 COPY build-extensions/afr-keycloak-theme.jar /opt/keycloak/providers/afr-keycloak-theme.jar
 
 # building keycloak distribution and creating dir for realm import
-RUN /opt/keycloak/bin/kc.sh build && mkdir -p /opt/keycloak/.kacd/import
+RUN /opt/keycloak/bin/kc.sh build --spi-authenticationSessions-provider=redis && mkdir -p /opt/keycloak/.kacd/import
 
 # Running keycloak
 FROM nexus.kacd.kz:5000/devops-tools/keycloak/keycloak:21.0.0
@@ -37,4 +37,4 @@ ENV TZ="Asia/Almaty"
 
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
 
-ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start", "--optimized", "--spi-authenticationSessions-provider=redis"]
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start", "--optimized"]
