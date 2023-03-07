@@ -15,7 +15,7 @@ ENV KC_METRICS_ENABLED=true
 
 # Configure a database vendor
 ENV KC_DB=postgres
-# ENV KC_CACHE=ispn
+ENV KC_CACHE=local
 # ENV KC_CACHE_STACK=kubernetes
 
 WORKDIR /opt/keycloak
