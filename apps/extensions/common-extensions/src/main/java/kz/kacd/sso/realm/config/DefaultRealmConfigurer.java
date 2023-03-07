@@ -14,9 +14,11 @@ import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.RoleModel;
 import org.keycloak.provider.ProviderEvent;
+import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.services.managers.RealmManager;
 
 import java.util.List;
+import java.util.Objects;
 
 public class DefaultRealmConfigurer implements KeycloakRealmConfigurer {
     private static final Logger log = Logger.getLogger(DefaultRealmConfigurer.class);
@@ -74,6 +76,13 @@ public class DefaultRealmConfigurer implements KeycloakRealmConfigurer {
 
         if (spec.getRealmRoles() != null && !spec.getRealmRoles().isEmpty()) {
             createRealmRoles(existing, spec.getRealmRoles());
+        }
+
+        if (
+                existing.getRequiredCredentialsStream()
+                        .noneMatch(r -> Objects.equals(r.getType(), CredentialRepresentation.PASSWORD))
+        ) {
+            existing.addRequiredCredential(CredentialRepresentation.PASSWORD);
         }
 
         return existing;
