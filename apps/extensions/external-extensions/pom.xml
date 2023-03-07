@@ -16,6 +16,8 @@
     <properties>
         <keycloak.version>21.0.0</keycloak.version>
 
+        <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
+
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
