@@ -33,7 +33,7 @@ auth:
 database:
   host: psql-dev.kacd.kz
   name: keycloak
-  schema: auth
+  schema: public
   username: keycloak
   existingSecret: sso-keycloak-database-password
   existingSecretPasswordKey: password
