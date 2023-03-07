@@ -8,6 +8,11 @@ import kz.kacd.sso.redis.client.RedisRecord;
 import org.jboss.logging.Logger;
 import reactor.util.function.Tuple2;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class LettuceRedisCache<T> implements RedisCache<T> {
     private static final Logger log = Logger.getLogger(LettuceRedisCache.class);
 
@@ -38,6 +43,18 @@ public class LettuceRedisCache<T> implements RedisCache<T> {
     }
 
     @Override
+    public List<RedisRecord<T>> search(String idPart) {
+        RedisRecord.RedisKey search =
+                new RedisRecord.RedisKey(config.getName(), entityClass.getName(), idPart + "*");
+        log.debugf("Searching for records by key pattern {} ...", search);
+
+        Stream<RedisRecord.RedisKey> keys = commands.keys(search.toString())
+                .stream().map(RedisRecord.RedisKey::new);
+
+        return keys.map(it -> get(it.getIdentifier())).filter(Objects::nonNull).collect(Collectors.toList());
+    }
+
+    @Override
     public RedisRecord<T> get(String id) {
         RedisRecord.RedisKey resultKey = new RedisRecord.RedisKey(config.getName(), entityClass.getName(), id);
         log.debugf("Getting value for key {} ...", resultKey);
@@ -60,5 +77,13 @@ public class LettuceRedisCache<T> implements RedisCache<T> {
         String valueStr = marhsalled.getT2();
         commands.set(key, valueStr, new SetArgs().ex(config.getTtl()));
         return record;
+    }
+
+    @Override
+    public void remove(String id) {
+        RedisRecord.RedisKey resultKey = new RedisRecord.RedisKey(config.getName(), entityClass.getName(), id);
+        log.debugf("Removing value for key {} ...", resultKey);
+
+        commands.del(resultKey.toString());
     }
 }

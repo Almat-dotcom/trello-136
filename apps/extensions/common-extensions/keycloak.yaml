@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   keycloak:
-    image: quay.io/keycloak/keycloak:20.0.2
+    image: quay.io/keycloak/keycloak:21.0.0
     command: ["start-dev", "--import-realm"]
     environment:
     - KEYCLOAK_ADMIN=admin
@@ -13,6 +13,10 @@ services:
     - KC_DB_USERNAME=postgres
     - KC_LOG_LEVEL=info
     - MASTER_REALM_ENABLED=true
+    - KC_CACHE=local
+    - REDIS_HOST=redis
+    - REDIS_PORT=6379
+    - ENABLED_K8S=false
     volumes:
     - ./target/common-extensions-jar-with-dependencies.jar:/opt/keycloak/providers/common-extensions.jar:rw
     - ./test-realm.yaml:/opt/keycloak/.kacd/import/test-realm.yaml
@@ -25,3 +29,11 @@ services:
     - POSTGRES_DB=keycloak
     ports:
     - "5432:5432"
+  redis:
+    image: redis:7.0.9-alpine
+    ports:
+    - "6379:6379"
+  redisinsight:
+    image: redislabs/redisinsight:1.13.1
+    ports:
+    - "8001:8001"
