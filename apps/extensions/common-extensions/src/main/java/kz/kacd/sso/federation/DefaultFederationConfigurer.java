@@ -92,21 +92,20 @@ public class DefaultFederationConfigurer implements FederationConfigurer {
     }
 
     private void addMiddleName(RealmModel realm, ComponentModel parent, boolean readOnly) {
-        realm.addComponentModel(
-                new LdapAttributeMapperBuilder(parent)
-                        .withName("Middle Name")
-                        .withAttributeMapping(
-                                "middleName",
-                                "middleName",
-                                readOnly,
-                                false
-                        )
-                        .build()
-        );
+        ComponentModel mapper = new LdapAttributeMapperBuilder(parent)
+                .withName("Middle Name")
+                .withAttributeMapping(
+                        "middleName",
+                        "middleName",
+                        readOnly,
+                        false
+                )
+                .build();
+        mergeMapper(realm, parent, mapper);
     }
 
     private void addFirstName(RealmModel realm, ComponentModel parent, boolean readOnly) {
-        realm.addComponentModel(
+        ComponentModel mapper =
                 new LdapAttributeMapperBuilder(parent)
                         .withName("First Name")
                         .withAttributeMapping(
@@ -115,12 +114,12 @@ public class DefaultFederationConfigurer implements FederationConfigurer {
                                 readOnly,
                                 false
                         )
-                        .build()
-        );
+                        .build();
+        mergeMapper(realm, parent, mapper);
     }
 
     private void addLastName(RealmModel realm, ComponentModel parent, boolean readOnly) {
-        realm.addComponentModel(
+        ComponentModel mapper =
                 new LdapAttributeMapperBuilder(parent)
                         .withName("Last Name")
                         .withAttributeMapping(
@@ -129,17 +128,16 @@ public class DefaultFederationConfigurer implements FederationConfigurer {
                                 readOnly,
                                 false
                         )
-                        .build()
-        );
+                        .build();
+        mergeMapper(realm, parent, mapper);
     }
 
     private void addDivision(RealmModel realm, ComponentModel parent) {
-        realm.addComponentModel(
-                new LdapDivisionMapperBuilder(parent)
+        ComponentModel mapper = new LdapDivisionMapperBuilder(parent)
                         .withName("Division")
                         .withAttributeMapping("distinguishedName", "division")
-                        .build()
-        );
+                        .build();
+        mergeMapper(realm, parent, mapper);
     }
 
     private void addGroups(RealmModel realm, ComponentModel parent, FederationSpec spec) {
@@ -151,11 +149,19 @@ public class DefaultFederationConfigurer implements FederationConfigurer {
                 .withSpec(spec.getLdap().getGroups())
                 .build()
                 .forEach(it -> {
-                    realm.addComponentModel(it);
+                    mergeMapper(realm, parent, it);
                     session.getTransactionManager().commit();
                     session.getTransactionManager().begin();
                     session.getKeycloakSessionFactory().publish(groupsMapperCreated(realm, parent, it, false));
                 });
+    }
+
+    private void mergeMapper(RealmModel realm, ComponentModel parent, ComponentModel mapper) {
+        if (realm.getComponentsStream(parent.getId()).anyMatch(it -> it.getName().equals(mapper.getName()))) {
+            realm.updateComponent(mapper);
+        } else {
+            realm.addComponentModel(mapper);
+        }
     }
 
     private void addRealmManagementRolesMapper(RealmModel realm, ComponentModel parent, String dn) {
