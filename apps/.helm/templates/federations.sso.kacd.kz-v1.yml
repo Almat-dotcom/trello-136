@@ -1,0 +1,273 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: federations.sso.kacd.kz
+spec:
+  group: sso.kacd.kz
+  names:
+    kind: Federation
+    plural: federations
+    shortNames:
+      - fdr
+    singular: federation
+  scope: Namespaced
+  versions:
+  - name: v1
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            description: Specification of user federation
+            properties:
+              ldap:
+                description: Settings of ldap federation
+                properties:
+                  displayedName:
+                    description: User friendly name of ldap federation
+                    type: string
+                  vendor:
+                    description: Name of the vendor of ldap users
+                    type: string
+                    enum:
+                      - ACTIVE_DIRECTORY
+                  connection:
+                    description: Ldap connection settings
+                    properties:
+                      url:
+                        description: Full specified url to connect to ldap. E.g.
+                          ldaps://mydomain:689
+                        type: string
+                      startTls:
+                        description: If true start TLS will be used
+                        type: boolean
+                      useTrustStore:
+                        description: Mode of using Java trust store. LDAPS_ONLY
+                          is default and means that only with ldaps protocol trust
+                          store will be used. ALWAYS means that every protocols
+                          will be used with trust store. NONE means that trust
+                          store will not be used at all.
+                        type: string
+                        enum:
+                          - LDAPS_ONLY
+                          - ALWAYS
+                          - NEVER
+                      connectionPooling:
+                        description: If true connection pooling will be used to
+                          access LDAP server
+                        type: boolean
+                      timeout:
+                        description: "Duration of connection timeout (duration\
+                              \ can be s(Seconds) m(Minutest), h(Hours), d(Days))"
+                        type: string
+                    type: object
+                  auth:
+                    description: Authentication properties of LDAP Admin
+                    properties:
+                      type:
+                        description: Type of credentials binding. By default
+                          this is simple binding.
+                        type: string
+                        enum:
+                          - SIMPLE
+                          - NONE
+                      existingSecret:
+                        description: Name of existing secret with dn and password of the admin
+                        type: string
+                      dnKey:
+                        description: Name of the key with dn of admin in existingSecret
+                        type: string
+                      dnPlainValue:
+                        description: Plain value of admin's dn
+                        type: string
+                      passwordKey:
+                        description: Name of the key with password of admin in existingSecret
+                        type: string
+                      passwordPlainValue:
+                        description: Plain value of the admin password
+                        type: string
+                    type: object
+                  searching:
+                    description: Properties of searching users in LDAP
+                    properties:
+                      mode:
+                        description: Mode of access users in LDAP. By default
+                          is R - read only access. RW - read and write access;
+                          allows admins edit users using keycloak admin console.
+                        enum:
+                          - R
+                          - RW
+                          - code
+                        type: string
+                      usersDn:
+                        description: Describes full DN of UO where all users is
+                          stored.
+                        type: string
+                      username:
+                        description: Describes name of the username attribute
+                        type: string
+                      uuid:
+                        description: Describes name of the UUID attribute
+                        type: string
+                      classes:
+                        description: "List comma and space separated of user classes.\
+                                                \ By default person, organizationalPerson, user"
+                        type: string
+                      filter:
+                        description: Additional LDAP filter on users
+                        type: string
+                      scope:
+                        description: Scope of the searching. By default it is
+                          SUBTREE - search all sub UO for users. FLAT - search
+                          only in the first level of UO.
+                        enum:
+                          - SUBTREE
+                          - FLAT
+                          - code
+                        type: string
+                      readTimeout:
+                        description: "Timeout of the read of users (duration can\
+                                                \ be s(Seconds) m(Minutest), h(Hours), d(Days))"
+                        type: string
+                      pagination:
+                        description: If true keycloak will be used pagination.
+                          Make sure that your LDAP support this function
+                        type: boolean
+                    type: object
+                  sync:
+                    description: Synchronizing settings
+                    properties:
+                      importUsers:
+                        description: If true users will be imported into keycloak
+                          DB
+                        type: boolean
+                      syncRegistrations:
+                        description: If true all registrations will be persisted
+                          in LDAP
+                        type: boolean
+                      batch:
+                        description: Size of one transaction batch of users
+                        type: integer
+                      fullSync:
+                        description: If true full sync will be periodically ran
+                        type: boolean
+                      fullSyncPeriod:
+                        description: "Period of full sync (duration can be s(Seconds)\
+                                              \ m(Minutest), h(Hours), d(Days))"
+                        type: string
+                      changedSync:
+                        description: If true changed users will be synced periodically
+                        type: boolean
+                      changedSyncPeriod:
+                        description: "Period of changed sync (duration can be\
+                                              \ s(Seconds) m(Minutest), h(Hours), d(Days))"
+                        type: string
+                    type: object
+                  cache:
+                    description: Cache settings
+                    properties:
+                      policy:
+                        description: Mode of the cache. By default it is DEFAULT
+                          - global cache settings. EVICT_DAILY - every day cache
+                          will be evicted. EVICT_WEEKLY - every week cache will
+                          be evicted.
+                        enum:
+                          - DEFAULT
+                          - EVICT_DAILY
+                          - EVICT_WEEKLY
+                        type: string
+                    type: object
+                  advanced:
+                    description: Advanced settings
+                    properties:
+                      validatePassword:
+                        description: If true keycloak password verification policy
+                          will be applied on ldap users.
+                        type: boolean
+                      trustEmail:
+                        description: If true all emails in ldap will be trusted
+                          by keycloak
+                        type: boolean
+                      realmManagementRolesDn:
+                        description: DN for roles of realm management
+                        type: string
+                    type: object
+                  groups:
+                    description: Settings of group mapping
+                    properties:
+                      name:
+                        description: Name of the groups name attribute (default
+                          cn)
+                        type: string
+                      hierarchy:
+                        description: If true hierarchy of the groups in ldap will
+                          be saved in keycloak.
+                        type: boolean
+                      ignoreMissing:
+                        description: If true all missing groups in hierarchy will
+                          be ignored
+                        type: boolean
+                      attributeName:
+                        description: Name of the membership attribute in user
+                          representation
+                        type: string
+                      mode:
+                        description: Mode of the groups management. By default
+                          R - it means read only mode. RW - all groups mapping
+                          will be retrieved from LDAP and stored in LDAP. RWC
+                          - import groups mapping into keycloak DB and manages
+                          it in DB.
+                        enum:
+                          - R
+                          - RW
+                          - RWC
+                          - code
+                        type: string
+                      dropNonExisting:
+                        description: If true all non-existing in LDAP groups will
+                          be dropped.
+                        type: boolean
+                      mappings:
+                        description: Definition of groups mapping
+                        items:
+                          properties:
+                            dn:
+                              description: DN of UO where all groups are stored.
+                              type: string
+                            path:
+                              description: Base path of groups hierarchy in keycloak.
+                                By default /
+                              type: string
+                          type: object
+                        type: array
+                    type: object
+                type: object
+            type: object
+          status:
+            properties:
+              state:
+                description: State of the realm application
+                enum:
+                  - APPLYING
+                  - APPLIED
+                  - BACK_OFF
+                  - FAILED
+                  - WAITING_REALM
+                type: string
+              message:
+                description: Additional message for state
+                type: string
+              generation:
+                description: Applied generation
+                type: string
+              lastApplication:
+                description: Time of the last try to apply client
+                type: string
+              backoffSeconds:
+                description: Time to backoff in seconds
+                type: integer
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: { }

@@ -1,0 +1,118 @@
+{{- if .Values.afr.enabled }}
+apiVersion: sso.kacd.kz/v1
+kind: Realm
+metadata:
+  name: afr
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: afr-realm
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  # Отображаемое имя на странице авторизации
+  displayedName: AFR
+  # Базовый URL для доступа к реалму (Важно! Для админки динамически не изменяются хосты)
+  frontendUrl: {{ printf "https://%s" .Values.afr.hostname }}
+  # Любые запросы могут быть по HTTP
+  requireSsl: none
+  login:
+    loginScreen:
+      registration: false
+      forgotPassword: true
+      rememberMe: true
+    email:
+      loginWithEmail: true
+      verifyEmail: false
+  # Настройки SMTP сервера для рассылки
+  email:
+    from: sso@kacd.kz
+    displayedName: KCSD
+    smtpHost: mail.kacd.kz
+    smtpPort: 5252
+    encryption: []
+  # Настройки тем для модулей входа, админки, профиля и почтовой рассылки
+  themes: 
+    login: afr
+    account: keycloak
+    admin: keycloak
+    email: afr
+    # Локализация на 3 языка
+    localization:
+      i18n: true
+      supportedLocales: ["ru"]
+      defaultLocale: ru
+  events:
+    # Список слушателей событий. Стандартный слушатель для логирования событий.
+    eventListeners: ["jboss-logging"]
+    # Включить события пользователей и хранить их 7 дней
+    userEvents:
+      saveEvents: true
+      expiration: 7d
+    # Включить события администрирования и хранить их 7 дней
+    adminEvents:
+      saveEvents: true
+      includeRepresentation: true
+      expiration: 7d
+  security:
+    # Включить защиту от взлома пароля по методу brute force
+    bruteForce:
+      enabled: true
+      maxLoginFailures: 5
+  # Настройки сессий
+  sessions:
+    sso:
+      sessionIdle: 15m
+      sessionMax: 24h
+  tokens:
+    accessLifespan: 5m
+    oidcAccessLifespan: 5m
+  # Настройки токенов
+  tokens: {}
+  # Настройки аутентификации
+  authentication:
+    # Политики паролей
+    passwordPolicy:
+      # Срок пароля истекает через 30 дней
+      expiration: 30
+      # Новый пароль не должен совпадать как минимум с 7 предыдущими паролями
+      notRecentlyUsed: 7
+      # Минимальная длина пароля должна быть 12 символов
+      minimumLength: 12
+      # Пароль должен содержать как минимум 1 спец символ
+      countOfSpecialChars: 1
+      # Пароль должен содержать как минимум 1 символ в верхнем регистре
+      uppercaseChars: 1
+      # Пароль должен содержать как минимум 1 символ в нижнем регистре
+      lowercaseChars: 1
+      # Пароль должен содержать как минимум 1 цифру
+      numberOfDigits: 1
+  realmRoles:
+  - name: monitoring-view
+    roleDescription: Просмотр мониторинга
+  - name: monitoring-edit
+    roleDescription: Редактирование мониторинга
+  - name: application-queue-view
+    roleDescription: Просмотр очереди заявок
+  - name: application-review-view
+    roleDescription: Доступ на чтение к рассмотрению заявок
+  - name: application-review-data-enter
+    roleDescription: Доступ на ввод данных в рассмотрение заявок
+  - name: application-review-edit
+    roleDescription: Доступ на редактирование рассморения заявок
+  - name: application-approval-view
+    roleDescription: Доступ на чтение к утверждению заявок
+  - name: application-approval-data-enter
+    roleDescription: Доступ на ввод данных в утверждение заявок
+  - name: application-approval-edit
+    roleDescription: Доступ на редактирование в утверждении заявок
+  - name: admin-view
+    roleDescription: Доступ на просмотр пользователей
+  - name: admin-data-enter
+    roleDescription: Ввод данных пользователей
+  - name: admin-edit
+    roleDescription: Редактиование данных пользователей
+{{- end }}

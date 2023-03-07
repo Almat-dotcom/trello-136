@@ -1,0 +1,57 @@
+#
+# Конфигурация внутреннего реалма
+#
+internal:
+  # Доменое имя внутреннего реалма
+  hostname: internal-dev.k8s-dev.kacd.kz
+  # Настройки взаимодействия с Active Directory
+  ldap:
+    url: ldap://10.10.128.3:389
+    existingSecret: ldap-creds
+    dnKey: "dn"
+    passwordKey: "password"
+    usersDn: "OU=OU_Users,DC=tstcsdepo,DC=net"
+    groupsDn: "OU=keycloak,OU=OU_Groups,DC=tstcsdepo,DC=net"
+    managementRolesDn: "OU=internal-realm-management,OU=OU_Roles,DC=tstcsdepo,DC=net"
+  # Настройки службы ingress
+  ingress:
+    serviceName: sso-keycloak
+    tls: true
+    secretName: kacd-tls
+    annotations:
+      nginx.ingress.kubernetes.io/affinity: cookie
+
+#
+# Конфигурация внешнего реалма
+#
+external:
+  # Доменое имя внешнего реалма
+  hostname: external-dev.k8s-dev.kacd.kz
+  # Настройки взаимодействия с Active Directory
+  ldap:
+    url: ldap://10.10.128.3:389
+    existingSecret: ldap-creds
+    dnKey: "dn"
+    passwordKey: "password"
+    usersDn: "OU=OU_Users,DC=tstcsdepo,DC=net"
+    groupsDn: "OU=Distribution_Group,OU=OU_Groups,DC=tstcsdepo,DC=net"
+    managementRolesDn: "OU=external-realm-management,OU=OU_Roles,DC=tstcsdepo,DC=net"
+  # Настройки службы ingress
+  ingress:
+    serviceName: sso-keycloak
+    tls: true
+    secretName: kacd-tls
+    annotations:
+      nginx.ingress.kubernetes.io/affinity: cookie
+
+# Конфигурация реалма АРРФР
+afr:
+  enabled: true
+  hostname: afr-dev.k8s-dev.kacd.kz
+  # Настройки службы ingress
+  ingress:
+    serviceName: sso-keycloak
+    tls: true
+    secretName: kacd-tls
+    annotations:
+      nginx.ingress.kubernetes.io/affinity: cookie

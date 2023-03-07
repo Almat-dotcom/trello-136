@@ -1,0 +1,70 @@
+{{- if and .Values.realmController.enabled (not .Values.initialSetup) -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ printf "%s-realm-controller" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: realm-controller
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: realm-controller
+  template:
+    metadata:
+      annotations:
+        {{- if .Values.realmController.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: realm-controller
+        {{- if .Values.realmController.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ printf "%s-sa" (include "common.names.fullname" .) }}
+      {{- include "keycloak.imagePullSecrets" . | nindent 6 }}
+      containers:
+        - name: controller
+          image: {{ .Values.realmController.image }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: REALM_CONTROLLER_NAMESPACE
+              value: {{ include "common.names.namespace" . | quote }}
+            - name: QUARKUS_OPERATOR_SDK_NAMESPACES
+              value: {{ include "common.names.namespace" . | quote }}
+            - name: REALM_CONTROLLER_KEYCLOAK_DEFAULT_UR
+              value: {{ printf "https://%s" .Values.hostname }}
+          resources:
+            requests:
+              memory: "5Mi"
+              cpu: "500m"
+            limits:
+              memory: "500Mi"
+              cpu: "1"
+          startupProbe:
+            httpGet:
+              path: /q/health
+              port: http
+            periodSeconds: 1
+          livenessProbe:
+            httpGet:
+              path: /q/health
+              port: http
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /q/health
+              port: http
+{{- end }}

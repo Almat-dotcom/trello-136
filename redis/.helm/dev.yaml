@@ -1,0 +1,2 @@
+imagePullSecrets:
+- kacd-docker-creds

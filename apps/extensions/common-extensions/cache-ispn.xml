@@ -1,0 +1,75 @@
+<infinispan
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="urn:infinispan:config:11.0 http://www.infinispan.org/schemas/infinispan-config-11.0.xsd urn:infinispan:config:store:redis:8.0 http://www.infinispan.org/schemas/infinispan-cachestore-redis-config-8.0.xsd"
+        xmlns="urn:infinispan:config:11.0">
+
+    <cache-container name="keycloak">
+        <transport lock-timeout="60000"/>
+        <local-cache name="realms">
+            <encoding>
+                <key media-type="application/x-java-object"/>
+                <value media-type="application/x-java-object"/>
+            </encoding>
+            <memory max-count="10000"/>
+        </local-cache>
+        <local-cache name="users">
+            <encoding>
+                <key media-type="application/x-java-object"/>
+                <value media-type="application/x-java-object"/>
+            </encoding>
+            <memory max-count="10000"/>
+        </local-cache>
+        <distributed-cache name="sessions" owners="2">
+            <expiration lifespan="-1"/>
+            <persistence passivation="false">
+                <redis-store xmlns="urn:infinispan:config:store:redis:8.0"
+                             topology="server" socket-timeout="10000" connection-timeout="10000">
+                    <redis-server host="redis" port="6379"/>
+                    <connection-pool min-idle="6" max-idle="10" max-total="20"
+                                     min-evictable-idle-time="30000" time-between-eviction-runs="30000"/>
+                </redis-store>
+            </persistence>
+        </distributed-cache>
+        <distributed-cache name="authenticationSessions" owners="2">
+            <expiration lifespan="-1"/>
+        </distributed-cache>
+        <distributed-cache name="offlineSessions" owners="2">
+            <expiration lifespan="-1"/>
+        </distributed-cache>
+        <distributed-cache name="clientSessions" owners="2">
+            <expiration lifespan="-1"/>
+        </distributed-cache>
+        <distributed-cache name="offlineClientSessions" owners="2">
+            <expiration lifespan="-1"/>
+        </distributed-cache>
+        <distributed-cache name="loginFailures" owners="2">
+            <expiration lifespan="-1"/>
+        </distributed-cache>
+        <local-cache name="authorization">
+            <encoding>
+                <key media-type="application/x-java-object"/>
+                <value media-type="application/x-java-object"/>
+            </encoding>
+            <memory max-count="10000"/>
+        </local-cache>
+        <replicated-cache name="work">
+            <expiration lifespan="-1"/>
+        </replicated-cache>
+        <local-cache name="keys">
+            <encoding>
+                <key media-type="application/x-java-object"/>
+                <value media-type="application/x-java-object"/>
+            </encoding>
+            <expiration max-idle="3600000"/>
+            <memory max-count="1000"/>
+        </local-cache>
+        <distributed-cache name="actionTokens" owners="2">
+            <encoding>
+                <key media-type="application/x-java-object"/>
+                <value media-type="application/x-java-object"/>
+            </encoding>
+            <expiration max-idle="-1" lifespan="-1" interval="300000"/>
+            <memory max-count="-1"/>
+        </distributed-cache>
+    </cache-container>
+</infinispan>

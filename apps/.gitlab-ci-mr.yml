@@ -1,0 +1,100 @@
+stages:
+- build
+
+mock-step:
+  stage: build
+  image: alpine:latest
+  script:
+  - echo "This is mock step which allows to not fail MR pipeline"
+
+build-common-extension:
+  stage: build
+  image: maven:3-eclipse-temurin-17-alpine
+  before_script:
+  - export PROJECT_DIR="apps/extensions/common-extensions"
+  - cd ${PROJECT_DIR}
+  - export MAVEN_OPTS="-Dmaven.repo.local=${CI_PROJECT_DIR}/${PROJECT_DIR}/.m2"
+  script:
+  - mvn clean package
+  cache:
+  - key: m2-mr
+    paths:
+    - apps/extensions/common-extensions/.m2
+  rules:
+  - changes:
+    - apps/extensions/common-extensions/**/*
+
+build-external-extension:
+  stage: build
+  image: maven:3-eclipse-temurin-17-alpine
+  before_script:
+  - export PROJECT_DIR="apps/extensions/external-extensions"
+  - cd ${PROJECT_DIR}
+  - export MAVEN_OPTS="-Dmaven.repo.local=${CI_PROJECT_DIR}/${PROJECT_DIR}/.m2"
+  - chmod +x ./lib/install.sh && ./lib/install.sh
+  script:
+  - mvn clean package
+  cache:
+  - key: m2-mr
+    paths:
+    - apps/extensions/external-extensions/.m2
+  rules:
+  - changes:
+    - apps/extensions/external-extensions/**/*
+
+build-external-theme:
+  stage: build
+  image:
+    name: nexus.kacd.kz:5000/devops-utils/keycloakify-build-image:latest
+    entrypoint: [""]
+  before_script:
+  - export PROJECT_DIR="apps/themes/external"
+  - cd ${PROJECT_DIR}
+  script:
+  - yarn install --frozen-lockfile
+  - yarn keycloak
+  cache:
+  - key: node_modules_external
+    paths:
+    - apps/themes/external/node_modules
+  rules:
+  - changes:
+    - apps/themes/external/**/*
+
+build-internal-theme:
+  stage: build
+  image:
+    name: nexus.kacd.kz:5000/devops-utils/keycloakify-build-image:latest
+    entrypoint: [""]
+  before_script:
+  - export PROJECT_DIR="apps/themes/internal"
+  - cd ${PROJECT_DIR}
+  script:
+  - yarn install --frozen-lockfile
+  - yarn keycloak
+  cache:
+  - key: node_modules_internal
+    paths:
+    - apps/themes/internal/node_modules
+  rules:
+  - changes:
+    - apps/themes/internal/**/*
+
+build-afr-theme:
+  stage: build
+  image:
+    name: nexus.kacd.kz:5000/devops-utils/keycloakify-build-image:latest
+    entrypoint: [""]
+  before_script:
+  - export PROJECT_DIR="apps/themes/afr"
+  - cd ${PROJECT_DIR}
+  script:
+  - yarn install --frozen-lockfile
+  - yarn keycloak
+  cache:
+  - key: node_modules_afr
+    paths:
+    - apps/themes/afr/node_modules
+  rules:
+  - changes:
+    - apps/themes/afr/**/*

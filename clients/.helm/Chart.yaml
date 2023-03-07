@@ -1,0 +1,10 @@
+annotations:
+  category: DeveloperTools
+apiVersion: v2
+appVersion: 19.0.3
+description: Chart to configure all clients on keycloak.
+home: https://www.keycloak.org
+name: clients
+sources:
+  - https://github.com/keycloak/keycloak
+version: 0.0.1

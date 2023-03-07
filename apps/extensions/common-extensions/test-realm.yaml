@@ -1,0 +1,27 @@
+apiVersion: sso.kacd.kz/v1
+kind: Realm
+metadata:
+  name: test
+spec:
+  displayedName: "Test Realm"
+  login:
+    loginScreen:
+      registration: true
+      forgotPassword: true
+      rememberMe: true
+    email:
+      loginWithEmail: true
+  themes:
+    login: keycloak
+    account: keycloak
+    admin: keycloak
+    email: keycloak
+    localization:
+      i18n: true
+      supportedLocales:
+        - en
+        - ru
+      defaultLocale: ru
+  authentication:
+    passwordPolicy:
+      minimumLength: 8

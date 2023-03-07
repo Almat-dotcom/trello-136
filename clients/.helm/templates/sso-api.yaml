@@ -1,0 +1,40 @@
+apiVersion: sso.kacd.kz/v1
+kind: Client
+metadata:
+  name: sso-api
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: internal-realm
+    kz-kacd-realm-name: internal
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  displayedName: SSO API
+  displayedDescription: Интеграция между keycloak и другими внутренними службами
+  access:
+    validRedirectUris:
+    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.ssoApi.redirectUris "context" $ ) | nindent 4 }}
+    webOrigins:
+    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.ssoApi.webOrigins "context" $ ) | nindent 4 }}
+  capability:
+    type: CONFIDENTIAL
+    clientExistingSecret: sso-api-secret
+    clientSecretKey: client_secret
+  scope:
+    name: integrate-with-keycloak
+    scopeDescription: Разрешение на взаимодействие с sso-lk-integration для редактирования профилей внешних пользователей
+  roles:
+  - name: update-org-meta
+    roleDescription: Обновлять метаданные организации
+  - name: list-org-positions
+    roleDescription: Запрашивать список пользователей в организации
+  - name: manage-org-position
+    roleDescription: Утверждать или отзывать позиции в организации
+  - name: update-user-profile
+    roleDescription: Изменять профиль пользователя
+  - name: manage-user-roles
+    roleDescription: Добавлять и изменять роли пользователя

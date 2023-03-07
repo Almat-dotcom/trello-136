@@ -1,0 +1,41 @@
+#
+# Override namespace of the release
+#
+namespaceOverride: ""
+
+#
+# Sets common labels on all objects created
+#
+commonLabels: {}
+
+#
+# Sets common annotations on all objects created
+#
+commonAnnotations: {}
+
+#
+# Settings of the clients
+#
+clients:
+  afrAuthorityServicesFront:
+    redirectUris: []
+    webOrigins: []
+  deponentReport:
+    redirectUris: []
+    webOrigins: []
+  lkShellBack:
+    redirectUris: []
+    webOrigins: []
+  lkShellFront:
+    redirectUris: []
+    webOrigins: []
+  lkShellFrontInternal:
+    redirectUris: []
+    webOrigins: []
+  mt535:
+    redirectUris: []
+    webOrigins: []
+  ssoApi:
+    redirectUris: []
+    webOrigins: []
+

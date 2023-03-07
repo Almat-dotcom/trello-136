@@ -1,0 +1,20 @@
+stages:
+- preprod-deploy
+
+preprod-deploy-realms:
+  stage: preprod-deploy
+  image: 'nexus.kacd.kz:5000/devops-utils/alpine-helm-docker:3.15al-3.11he-20.10d'
+  only:
+  - master
+  environment:
+    name: preprod
+  before_script:
+  - cd clients
+  - export RELEASE_NAME="clients-${CI_PROJECT_NAME}"
+  - mkdir -p /etc/deploy && export KUBECONFIG=/etc/deploy/config
+  - echo ${KUBE_K8S_PREPROD_CONFIG} | base64 -d > /etc/deploy/config
+  script:
+  - |-
+    helm upgrade --install ${RELEASE_NAME} ./.helm \
+      --create-namespace --namespace="${CI_PROJECT_NAME}-preprod" \
+      -f ./.helm/preprod.yaml

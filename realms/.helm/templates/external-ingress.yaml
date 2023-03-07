@@ -1,0 +1,45 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ printf "%s-external" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: keycloak
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.external.ingress.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.external.ingress.annotations "context" $) | nindent 4 }}
+    {{- end }}
+spec:
+  {{- if .Values.external.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.external.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    - host: {{ .Values.external.hostname }}
+      http:
+        paths:
+        - path: /realms/external
+          pathType: Prefix
+          backend:
+            service:
+              name: {{ .Values.external.ingress.serviceName }}
+              port:
+                name: http
+        - path: /resources
+          pathType: Prefix
+          backend:
+            service:
+              name: {{ .Values.external.ingress.serviceName }}
+              port:
+                name: http
+  {{- if and .Values.external.ingress.tls }}
+  tls:
+    - hosts:
+        - {{ (tpl .Values.external.hostname .) | quote }}
+      secretName: {{ .Values.external.ingress.secretName }}
+  {{- end }}

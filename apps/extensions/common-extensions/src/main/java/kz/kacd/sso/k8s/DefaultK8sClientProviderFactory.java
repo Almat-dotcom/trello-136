@@ -1,0 +1,38 @@
+package kz.kacd.sso.k8s;
+
+import com.google.auto.service.AutoService;
+import org.keycloak.Config;
+import org.keycloak.models.KeycloakSession;
+import org.keycloak.models.KeycloakSessionFactory;
+
+@AutoService(K8sClientProviderFactory.class)
+public class DefaultK8sClientProviderFactory implements K8sClientProviderFactory {
+    private static final String PROVIDER_ID = "default-k8s-client-provider";
+
+    private static final DefaultK8sClientProvider INSTANCE = new DefaultK8sClientProvider();
+
+    @Override
+    public K8sClientProvider create(KeycloakSession session) {
+        return INSTANCE;
+    }
+
+    @Override
+    public void init(Config.Scope config) {
+        // Nothing to config
+    }
+
+    @Override
+    public void postInit(KeycloakSessionFactory factory) {
+        // Nothing to manage
+    }
+
+    @Override
+    public void close() {
+//        INSTANCE.getClient().close();
+    }
+
+    @Override
+    public String getId() {
+        return PROVIDER_ID;
+    }
+}

@@ -1,0 +1,2 @@
+call mvn install:install-file -Dfile=./lib/kalkancrypt-0.7.jar -DgroupId=kz.gov.pki.kalkan -DartifactId=kalkancrypt -Dversion=0.7 -Dpackaging=jar
+call mvn install:install-file -Dfile=./lib/kalkancrypt_xmldsig-0.4.jar -DgroupId=kz.gov.pki.kalkan -DartifactId=kalkancrypt_xmldsig -Dversion=0.4 -Dpackaging=jar
