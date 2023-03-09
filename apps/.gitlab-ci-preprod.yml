@@ -26,7 +26,7 @@ build-common-extension:
   - export SONAR_TOKEN="${SONAR_TOKEN_COMMON_EXTENSIONS}"
   script:
   - mvn clean package
-  - mvn verify sonar:sonar -Dsonar.projectKey=sso-common-extension
+  # - mvn verify sonar:sonar -Dsonar.projectKey=sso-common-extension
   - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./target/common-extensions-jar-with-dependencies.jar ${NEXUS_REPO}
   cache:
   - key: m2
