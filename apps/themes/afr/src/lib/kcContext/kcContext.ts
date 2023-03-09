@@ -13,6 +13,9 @@ export const { kcContext } = getKcContext({
 				displayNameHtml: 'AFR',
 				registrationAllowed: false
 			},
+			message: {
+				type: 'error'
+			},
 			messagesPerField: {
 				existsError: (name: string) => true,
 				get: (name: string) => "Error!",

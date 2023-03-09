@@ -8,10 +8,25 @@ export function useI18n(props: Props) {
         kcContext,
         "extraMessages": {
             "en": {
+                "ncaSignInProgress": "Работа с NCALayer.",
+                "ncaSignFinished": "Запрос успешно подписан.",
+                "ncaCancelled": "Вы отменили подписание запроса.",
+                "ncaConnectionLost": "Не удается подключится к NCALayer. Проверьте запущен ли он на вашем устройстве.",
+                "ncaError": "Ошибка при подписании запроса."
             },
             "ru": {
+                "ncaSignInProgress": "Работа с NCALayer.",
+                "ncaSignFinished": "Запрос успешно подписан.",
+                "ncaCancelled": "Вы отменили подписание запроса.",
+                "ncaConnectionLost": "Не удается подключится к NCALayer. Проверьте запущен ли он на вашем устройстве.",
+                "ncaError": "Ошибка при подписании запроса."
             },
             "kz": {
+                "ncaSignInProgress": "Работа с NCALayer.",
+                "ncaSignFinished": "Запрос успешно подписан.",
+                "ncaCancelled": "Вы отменили подписание запроса.",
+                "ncaConnectionLost": "Не удается подключится к NCALayer. Проверьте запущен ли он на вашем устройстве.",
+                "ncaError": "Ошибка при подписании запроса."
             }
         },
     });

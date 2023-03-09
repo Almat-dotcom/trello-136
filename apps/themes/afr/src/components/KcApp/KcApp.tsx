@@ -4,6 +4,7 @@ import type { KcContext } from "../../lib/kcContext";
 import { useI18n } from "../../lib/i18n";
 import Fallback, { defaultKcProps, type KcProps, type PageProps } from "keycloakify";
 import DefaultTemplate from "keycloakify/lib/Template";
+import Login from "../Login";
 
 const kcProps: KcProps = {
     ...defaultKcProps,
@@ -41,7 +42,11 @@ export default function App(props: { kcContext: KcContext; }) {
     return (
         <Suspense>
             {(() => {
-                return <Fallback {...{ kcContext, ...pageProps }} />;
+
+                switch (kcContext.pageId) {
+                    case 'login.ftl': return <Login {...{ kcContext, ...pageProps }} />;
+                    default: return <Fallback {...{ kcContext, ...pageProps }} />;
+                }
             })()}
         </Suspense>
     );
