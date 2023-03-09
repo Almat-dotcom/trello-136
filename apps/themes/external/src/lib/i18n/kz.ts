@@ -159,5 +159,7 @@ export const kz = {
     "doSetCertificate": "Выбрать сертификат",
     "ncaConnectionLost": "Невозможно подключится к NCALayer. Проверьте, запущен ли он на вашем устройстве.",
     "ncaCancelled": "Вы отменили действие в NCALayer.",
-    "ncaFailed": "Не удалось подписать запрос на вход."
+    "ncaFailed": "Не удалось подписать запрос на вход.",
+    "ncaSignProgress": "Работа с NCALayer.",
+    "ncaSignFinished": "Подписание прошло успешно."
 }

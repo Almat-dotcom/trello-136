@@ -18,8 +18,10 @@ const Eds = ({ kcContext, i18n, hidden, onFormSubmit }: { kcContext: KcContext, 
     const xml = `<Authentication><token>${token}</token></Authentication>`;
     const onClick = async () => {
         try {
+            setError('ncaSignProgress');
             const result = await signAuthXml(xml);
             edsRef.current!.value = result;
+            setError('ncaSignFinished');
             onFormSubmit();
         } catch (error) {
             console.error(error);
@@ -33,10 +35,20 @@ const Eds = ({ kcContext, i18n, hidden, onFormSubmit }: { kcContext: KcContext, 
         }
     }
 
+    let type: "success" | "warning" | "error" | "info" = 'error';
+    if (error === 'ncaInProgress') {
+        type = 'info';
+    }
+    if (error === 'ncaSignFinished') {
+        type = 'success';
+    }
+    if (error === 'ncaCancelled') {
+        type = 'warning'
+    }
     return (
         <div className={hidden ? "hidden" : ""}>
             {error && (
-                <Alert i18n={i18n} type={error === 'ncaCancelled' ? 'warning' : 'error'} message={error}/>
+                <Alert i18n={i18n} type={type} message={error} />
             )}
             <input id="authType" name="authType" type="hidden" value={hidden ? "" : "eds"} />
             <input ref={edsRef} id="eds" name="eds" type="hidden" />

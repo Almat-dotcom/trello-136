@@ -66,6 +66,7 @@ build-external-theme:
     entrypoint: [""]
   before_script:
   - export PROJECT_DIR="apps/themes/external"
+  - export SONAR_TOKEN="${SONAR_TOKEN_EXTERNAL_THEME}"
   - cd ${PROJECT_DIR}
   - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/external-keycloak-theme.jar"
   script:
@@ -76,6 +77,24 @@ build-external-theme:
   - key: node_modules_external
     paths:
     - apps/themes/external/node_modules
+
+# Scanning external theme for keycloak
+scan-external-theme:
+  stage: prebuild
+  image:
+    name: sonarsource/sonar-scanner-cli:latest
+    entrypoint: [""]
+  before_script:
+  - export PROJECT_DIR="apps/themes/external"
+  - export SONAR_TOKEN="${SONAR_TOKEN_EXTERNAL_THEME}"
+  - cd ${PROJECT_DIR}
+  - export SONAR_USER_HOME="${CI_PROJECT_DIR}/${PROJECT_DIR}$/.sonar"
+  script:
+  - sonar-scanner
+  cache:
+  - key: sonar_external
+    paths:
+    - apps/themes/external/.sonar/cache
 
 # Building internal theme for keycloak
 build-internal-theme:
