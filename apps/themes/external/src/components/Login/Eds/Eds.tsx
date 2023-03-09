@@ -36,7 +36,7 @@ const Eds = ({ kcContext, i18n, hidden, onFormSubmit }: { kcContext: KcContext, 
     }
 
     let type: "success" | "warning" | "error" | "info" = 'error';
-    if (error === 'ncaInProgress') {
+    if (error === 'ncaSignProgress') {
         type = 'info';
     }
     if (error === 'ncaSignFinished') {
@@ -52,7 +52,7 @@ const Eds = ({ kcContext, i18n, hidden, onFormSubmit }: { kcContext: KcContext, 
             )}
             <input id="authType" name="authType" type="hidden" value={hidden ? "" : "eds"} />
             <input ref={edsRef} id="eds" name="eds" type="hidden" />
-            <Button severity="primary" type="button" onClick={onClick}>{msgStr("doSetCertificate")}</Button>
+            <Button severity="primary" type="button" disabled={error === 'ncaSignProgress' || error === 'ncaSignFinished'} onClick={onClick}>{msgStr("doSetCertificate")}</Button>
         </div>
     );
 };

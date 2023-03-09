@@ -115,6 +115,24 @@ build-internal-theme:
     paths:
     - apps/themes/internal/node_modules
 
+# Scanning internal theme for keycloak
+scan-internal-theme:
+  stage: prebuild
+  image:
+    name: sonarsource/sonar-scanner-cli:latest
+    entrypoint: [""]
+  before_script:
+  - export PROJECT_DIR="apps/themes/internal"
+  - export SONAR_TOKEN="${SONAR_TOKEN_INTERNAL_THEME}"
+  - cd ${PROJECT_DIR}
+  - export SONAR_USER_HOME="${CI_PROJECT_DIR}/${PROJECT_DIR}$/.sonar"
+  script:
+  - sonar-scanner
+  cache:
+  - key: sonar_internal
+    paths:
+    - apps/themes/internal/.sonar/cache
+
 # Building afr theme for keycloak
 build-afr-theme:
   stage: prebuild
@@ -133,6 +151,24 @@ build-afr-theme:
   - key: node_modules_afr
     paths:
     - apps/themes/afr/node_modules
+
+# Scanning afr theme for keycloak
+scan-afr-theme:
+  stage: prebuild
+  image:
+    name: sonarsource/sonar-scanner-cli:latest
+    entrypoint: [""]
+  before_script:
+  - export PROJECT_DIR="apps/themes/afr"
+  - export SONAR_TOKEN="${SONAR_TOKEN_AFR_THEME}"
+  - cd ${PROJECT_DIR}
+  - export SONAR_USER_HOME="${CI_PROJECT_DIR}/${PROJECT_DIR}$/.sonar"
+  script:
+  - sonar-scanner
+  cache:
+  - key: sonar_afr
+    paths:
+    - apps/themes/afr/.sonar/cache
 
 # Persisting all extensions artifacts inside local cache directory
 cache-artifacts:
