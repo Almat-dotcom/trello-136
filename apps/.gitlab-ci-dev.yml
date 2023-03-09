@@ -51,7 +51,7 @@ build-external-extension:
   - chmod +x ./lib/install.sh && ./lib/install.sh
   script:
   - mvn clean package
-  - mvn verify sonar:sonar -Dsonar.projectKey=external-extensions
+  - mvn verify sonar:sonar -Dsonar.projectKey=sso-external-extensions
   - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./target/external-extensions-jar-with-dependencies.jar ${NEXUS_REPO}
   cache:
   - key: m2
