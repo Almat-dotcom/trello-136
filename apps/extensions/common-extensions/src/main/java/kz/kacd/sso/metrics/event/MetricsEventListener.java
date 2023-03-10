@@ -39,13 +39,7 @@ public class MetricsEventListener implements EventListenerProvider, EventListene
         tags.add(Tag.of("event_type", event.getType().name()));
         RealmModel realm = getRealm(event.getRealmId());
         tags.add(Tag.of("realm", realm != null ? realm.getName() : UNDEFINED));
-        String clientId;
-        if (realm != null) {
-            clientId = getClientId(realm, event.getClientId());
-        } else {
-            clientId = UNDEFINED;
-        }
-        tags.add(Tag.of("client", clientId));
+        tags.add(Tag.of("client", event.getClientId()));
         String username;
         if (realm != null) {
             username = getUsername(realm, event.getUserId());
@@ -72,7 +66,7 @@ public class MetricsEventListener implements EventListenerProvider, EventListene
                     .counter(USER_EVENT, allRealms)
                     .increment();
             List<Tag> allClients = new ArrayList<>(tags);
-            allRealms.replaceAll(t -> {
+            allClients.replaceAll(t -> {
                 if (t.getKey().equals("client")) {
                     return Tag.of("client", ALL);
                 }
@@ -90,13 +84,7 @@ public class MetricsEventListener implements EventListenerProvider, EventListene
 
         RealmModel realm = getRealm(event.getAuthDetails().getRealmId());
         tags.add(Tag.of("realm", realm != null ? realm.getName() : UNDEFINED));
-        String clientId;
-        if (realm != null) {
-            clientId = getClientId(realm, event.getAuthDetails().getClientId());
-        } else {
-            clientId = UNDEFINED;
-        }
-        tags.add(Tag.of("client", clientId));
+        tags.add(Tag.of("client", event.getAuthDetails().getClientId()));
         String username;
         if (realm != null) {
             username = getUsername(realm, event.getAuthDetails().getUserId());
@@ -130,7 +118,7 @@ public class MetricsEventListener implements EventListenerProvider, EventListene
                     .counter(ADMIN_EVENT, allRealms)
                     .increment();
             List<Tag> allClients = new ArrayList<>(tags);
-            allRealms.replaceAll(t -> {
+            allClients.replaceAll(t -> {
                 if (t.getKey().equals("client")) {
                     return Tag.of("client", ALL);
                 }
@@ -148,15 +136,6 @@ public class MetricsEventListener implements EventListenerProvider, EventListene
         }
 
         return session.realms().getRealm(id);
-    }
-
-    private String getClientId(RealmModel realm, String id) {
-        if (id == null || session == null) {
-            return UNDEFINED;
-        }
-
-        ClientModel client = session.clients().getClientById(realm, id);
-        return client == null ? UNDEFINED : client.getClientId();
     }
 
     private String getUsername(RealmModel realm, String userId) {
