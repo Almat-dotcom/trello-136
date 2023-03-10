@@ -18,6 +18,7 @@ public class MetricsEventListener implements EventListenerProvider, EventListene
     public static final String PROVIDER_ID = "metrics-listener";
 
     private static final String UNDEFINED = "undefined";
+    private static final String ALL = "All";
 
     private final KeycloakSession session;
 
@@ -58,6 +59,19 @@ public class MetricsEventListener implements EventListenerProvider, EventListene
             session.getProvider(MetricsRegistryProvider.class).provide()
                     .counter("keycloak_user_events_count", tags)
                     .increment();
+
+            tags.replaceAll(t -> {
+                if (t.getKey().equals("realm")) {
+                    return Tag.of("realm", ALL);
+                }
+                if (t.getKey().equals("client")) {
+                    return Tag.of("client", ALL);
+                }
+                return t;
+            });
+            session.getProvider(MetricsRegistryProvider.class).provide()
+                    .counter("keycloak_user_events_count", tags)
+                    .increment();
         }
     }
 
@@ -93,6 +107,19 @@ public class MetricsEventListener implements EventListenerProvider, EventListene
         tags.add(Tag.of("outcome", event.getError() != null ? "ERROR" : "SUCCESS"));
 
         if (session != null) {
+            session.getProvider(MetricsRegistryProvider.class).provide()
+                    .counter("keycloak_admin_events_count", tags)
+                    .increment();
+
+            tags.replaceAll(t -> {
+                if (t.getKey().equals("realm")) {
+                    return Tag.of("realm", ALL);
+                }
+                if (t.getKey().equals("client")) {
+                    return Tag.of("client", ALL);
+                }
+                return t;
+            });
             session.getProvider(MetricsRegistryProvider.class).provide()
                     .counter("keycloak_admin_events_count", tags)
                     .increment();

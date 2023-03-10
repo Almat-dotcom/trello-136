@@ -31,10 +31,11 @@ public class MetricsEndpoint implements RealmResourceProvider {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public Response get(@Context HttpHeaders headers) {
-        if (!headers.getRequestHeader("x-forwarded-host").isEmpty()) {
-            if (!System.getenv("KC_HOSTNAME").equals(headers.getRequestHeader("x-forwarded-host").get(0))) {
-                return Response.status(403).build();
-            }
+        if (
+                !headers.getRequestHeader("x-forwarded-host").isEmpty()
+                        && !System.getenv("KC_HOSTNAME").equals(headers.getRequestHeader("x-forwarded-host").get(0))
+        ) {
+            return Response.status(403).build();
         }
 
         MeterRegistry registry = session.getProvider(MetricsRegistryProvider.class).provide();
