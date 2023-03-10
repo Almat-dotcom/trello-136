@@ -9,10 +9,7 @@ import org.keycloak.events.Event;
 import org.keycloak.events.EventListenerProvider;
 import org.keycloak.events.EventListenerProviderFactory;
 import org.keycloak.events.admin.AdminEvent;
-import org.keycloak.models.KeycloakSession;
-import org.keycloak.models.KeycloakSessionFactory;
-import org.keycloak.models.RealmModel;
-import org.keycloak.models.UserModel;
+import org.keycloak.models.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,10 +62,19 @@ public class MetricsEventListener implements EventListenerProvider, EventListene
         tags.add(Tag.of("resource_uri", event.getResourcePath() != null ? event.getResourcePath() : UNDEFINED));
         tags.add(Tag.of("outcome", event.getError() != null ? "ERROR" : "SUCCESS"));
 
+        RealmModel authRealm = getRealm(event.getAuthDetails().getRealmId());
+        String clientId;
+        if (authRealm == null || event.getAuthDetails().getClientId() == null) {
+            clientId = null;
+        } else {
+            ClientModel client = authRealm.getClientById(event.getAuthDetails().getClientId());
+            clientId = client != null ? client.getClientId() : null;
+        }
+
         count(
                 ADMIN_EVENT,
                 event.getAuthDetails().getRealmId(),
-                event.getAuthDetails().getClientId(),
+                clientId,
                 event.getAuthDetails().getUserId(),
                 null,
                 event.getAuthDetails().getIpAddress(),
@@ -90,8 +96,9 @@ public class MetricsEventListener implements EventListenerProvider, EventListene
 
         RealmModel realm = getRealm(realmId);
 
-        if (realm != null) {
-            tags.add(Tag.of("user", getUsername(realm, userId)));
+        if (realm != null && userId != null) {
+            String username = getUsername(realm, userId);
+            tags.add(Tag.of("user", username != null ? username : UNDEFINED));
         } else {
             tags.add(Tag.of("user", UNDEFINED));
         }
@@ -102,11 +109,11 @@ public class MetricsEventListener implements EventListenerProvider, EventListene
         allRealm.add(Tag.of("realm", ALL));
 
         List<Tag> specifiedRealmSpecifiedClient = new ArrayList<>(specifiedRealm);
-        specifiedRealmSpecifiedClient.add(Tag.of("client", clientId));
+        specifiedRealmSpecifiedClient.add(Tag.of("client", clientId == null ? UNDEFINED : clientId));
         List<Tag> specifiedRealmAllClient = new ArrayList<>(specifiedRealm);
         specifiedRealmAllClient.add(Tag.of("client", ALL));
         List<Tag> allRealmSpecifiedClient = new ArrayList<>(allRealm);
-        allRealmSpecifiedClient.add(Tag.of("client", clientId));
+        allRealmSpecifiedClient.add(Tag.of("client", clientId == null ? UNDEFINED : clientId));
         List<Tag> allRealmAllClient = new ArrayList<>(allRealm);
         allRealmAllClient.add(Tag.of("client", ALL));
 
