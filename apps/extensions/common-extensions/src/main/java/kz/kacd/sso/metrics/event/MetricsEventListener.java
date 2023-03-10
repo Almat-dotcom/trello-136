@@ -1,6 +1,7 @@
 package kz.kacd.sso.metrics.event;
 
 import com.google.auto.service.AutoService;
+import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
 import kz.kacd.sso.metrics.MetricsRegistryProvider;
 import org.keycloak.Config;
@@ -8,7 +9,10 @@ import org.keycloak.events.Event;
 import org.keycloak.events.EventListenerProvider;
 import org.keycloak.events.EventListenerProviderFactory;
 import org.keycloak.events.admin.AdminEvent;
-import org.keycloak.models.*;
+import org.keycloak.models.KeycloakSession;
+import org.keycloak.models.KeycloakSessionFactory;
+import org.keycloak.models.RealmModel;
+import org.keycloak.models.UserModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,65 +41,23 @@ public class MetricsEventListener implements EventListenerProvider, EventListene
         List<Tag> tags = new ArrayList<>();
 
         tags.add(Tag.of("event_type", event.getType().name()));
-        RealmModel realm = getRealm(event.getRealmId());
-        tags.add(Tag.of("realm", realm != null ? realm.getName() : UNDEFINED));
-        tags.add(Tag.of("client", event.getClientId()));
-        String username;
-        if (realm != null) {
-            username = getUsername(realm, event.getUserId());
-        } else {
-            username = UNDEFINED;
-        }
-        tags.add(Tag.of("user", username));
-        tags.add(Tag.of("session_id", event.getSessionId() != null ? event.getSessionId() : UNDEFINED));
-        tags.add(Tag.of("ip_address", event.getIpAddress() != null ? event.getIpAddress() : UNDEFINED));
         tags.add(Tag.of("outcome", event.getError() != null ? "ERROR" : "SUCCESS"));
 
-        if (session != null) {
-            session.getProvider(MetricsRegistryProvider.class).provide()
-                    .counter(USER_EVENT, tags)
-                    .increment();
-            List<Tag> allRealms = new ArrayList<>(tags);
-            allRealms.replaceAll(t -> {
-                if (t.getKey().equals("realm")) {
-                    return Tag.of("realm", ALL);
-                }
-                return t;
-            });
-            session.getProvider(MetricsRegistryProvider.class).provide()
-                    .counter(USER_EVENT, allRealms)
-                    .increment();
-            List<Tag> allClients = new ArrayList<>(tags);
-            allClients.replaceAll(t -> {
-                if (t.getKey().equals("client")) {
-                    return Tag.of("client", ALL);
-                }
-                return t;
-            });
-            session.getProvider(MetricsRegistryProvider.class).provide()
-                    .counter(USER_EVENT, allClients)
-                    .increment();
-        }
+        count(
+                USER_EVENT,
+                event.getRealmId(),
+                event.getClientId(),
+                event.getUserId(),
+                event.getSessionId(),
+                event.getIpAddress(),
+                tags
+        );
     }
 
     @Override
     public void onEvent(AdminEvent event, boolean includeRepresentation) {
         List<Tag> tags = new ArrayList<>();
 
-        RealmModel realm = getRealm(event.getAuthDetails().getRealmId());
-        tags.add(Tag.of("realm", realm != null ? realm.getName() : UNDEFINED));
-        tags.add(Tag.of("client", event.getAuthDetails().getClientId()));
-        String username;
-        if (realm != null) {
-            username = getUsername(realm, event.getAuthDetails().getUserId());
-        } else {
-            username = UNDEFINED;
-        }
-        tags.add(Tag.of("user", username));
-        tags.add(Tag.of(
-                "ip_address",
-                event.getAuthDetails().getIpAddress() != null ? event.getAuthDetails().getIpAddress() : UNDEFINED)
-        );
         RealmModel targetRealm = getRealm(event.getRealmId());
         tags.add(Tag.of("target_realm", targetRealm != null ? targetRealm.getName() : UNDEFINED));
         tags.add(Tag.of("resource", event.getResourcePath() != null ? event.getResourcePath() : UNDEFINED));
@@ -103,30 +65,57 @@ public class MetricsEventListener implements EventListenerProvider, EventListene
         tags.add(Tag.of("resource_uri", event.getResourcePath() != null ? event.getResourcePath() : UNDEFINED));
         tags.add(Tag.of("outcome", event.getError() != null ? "ERROR" : "SUCCESS"));
 
+        count(
+                ADMIN_EVENT,
+                event.getAuthDetails().getRealmId(),
+                event.getAuthDetails().getClientId(),
+                event.getAuthDetails().getUserId(),
+                null,
+                event.getAuthDetails().getIpAddress(),
+                tags
+        );
+    }
+
+    private void count(
+            String metric,
+            String realmId,
+            String clientId,
+            String userId,
+            String sessionId,
+            String ipAddress,
+            List<Tag> tags
+    ) {
+        tags.add(Tag.of("ip_address", ipAddress == null ? UNDEFINED : ipAddress));
+        tags.add(Tag.of("session", sessionId == null ? UNDEFINED : sessionId));
+
+        RealmModel realm = getRealm(realmId);
+
+        if (realm != null) {
+            tags.add(Tag.of("user", getUsername(realm, userId)));
+        } else {
+            tags.add(Tag.of("user", UNDEFINED));
+        }
+
+        List<Tag> specifiedRealm = new ArrayList<>(tags);
+        specifiedRealm.add(Tag.of("realm", realm != null ? realm.getName() : UNDEFINED));
+        List<Tag> allRealm = new ArrayList<>(tags);
+        allRealm.add(Tag.of("realm", ALL));
+
+        List<Tag> specifiedRealmSpecifiedClient = new ArrayList<>(specifiedRealm);
+        specifiedRealmSpecifiedClient.add(Tag.of("client", clientId));
+        List<Tag> specifiedRealmAllClient = new ArrayList<>(specifiedRealm);
+        specifiedRealmAllClient.add(Tag.of("client", ALL));
+        List<Tag> allRealmSpecifiedClient = new ArrayList<>(allRealm);
+        allRealmSpecifiedClient.add(Tag.of("client", clientId));
+        List<Tag> allRealmAllClient = new ArrayList<>(allRealm);
+        allRealmAllClient.add(Tag.of("client", ALL));
+
         if (session != null) {
-            session.getProvider(MetricsRegistryProvider.class).provide()
-                    .counter(ADMIN_EVENT, tags)
-                    .increment();
-            List<Tag> allRealms = new ArrayList<>(tags);
-            allRealms.replaceAll(t -> {
-                if (t.getKey().equals("realm")) {
-                    return Tag.of("realm", ALL);
-                }
-                return t;
-            });
-            session.getProvider(MetricsRegistryProvider.class).provide()
-                    .counter(ADMIN_EVENT, allRealms)
-                    .increment();
-            List<Tag> allClients = new ArrayList<>(tags);
-            allClients.replaceAll(t -> {
-                if (t.getKey().equals("client")) {
-                    return Tag.of("client", ALL);
-                }
-                return t;
-            });
-            session.getProvider(MetricsRegistryProvider.class).provide()
-                    .counter(ADMIN_EVENT, allClients)
-                    .increment();
+            MeterRegistry registry = session.getProvider(MetricsRegistryProvider.class).provide();
+            registry.counter(metric, specifiedRealmSpecifiedClient).increment();
+            registry.counter(metric, specifiedRealmAllClient).increment();
+            registry.counter(metric, allRealmSpecifiedClient).increment();
+            registry.counter(metric, allRealmAllClient).increment();
         }
     }
 
