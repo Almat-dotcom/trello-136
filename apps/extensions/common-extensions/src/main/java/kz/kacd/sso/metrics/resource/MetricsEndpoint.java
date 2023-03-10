@@ -7,6 +7,7 @@ import org.keycloak.models.KeycloakSession;
 import org.keycloak.services.resource.RealmResourceProvider;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
@@ -15,7 +16,7 @@ import javax.ws.rs.core.Response;
 
 public class MetricsEndpoint implements RealmResourceProvider {
 
-    public static final String ID = "metrics";
+    public static final String ID = "business-metrics";
 
     private final KeycloakSession session;
 
@@ -29,6 +30,7 @@ public class MetricsEndpoint implements RealmResourceProvider {
     }
 
     @GET
+    @Path("")
     @Produces(MediaType.TEXT_PLAIN)
     public Response get(@Context HttpHeaders headers) {
         if (

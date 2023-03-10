@@ -5,7 +5,7 @@ RUN chown 1001 /work \
     && chmod "g+rwX" /work \
     && chown 1001:root /work
 
-FROM quay.io/quarkus/ubi-quarkus-mandrel-builder-image:22.3-java17 AS build
+FROM nexus.kacd.kz:5000/devops-tools/quarkus/ubi-quarkus-mandrel-builder-image:22.3-java17 AS build
 WORKDIR /build
 USER root
 RUN microdnf install maven -y
