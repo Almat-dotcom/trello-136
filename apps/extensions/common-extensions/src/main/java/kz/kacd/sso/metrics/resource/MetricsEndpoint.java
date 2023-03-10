@@ -16,7 +16,7 @@ import javax.ws.rs.core.Response;
 
 public class MetricsEndpoint implements RealmResourceProvider {
 
-    public static final String ID = "business-metrics";
+    public static final String ID = "metrics";
 
     private final KeycloakSession session;
 

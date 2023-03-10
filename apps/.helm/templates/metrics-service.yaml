@@ -21,17 +21,10 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    {{- if .Values.service.http.enabled }}
-    - name: http
-      port: {{ coalesce .Values.service.ports.http .Values.service.port }}
+    - name: metrics-http
+      port: {{ .Values.containerPorts.http }}
       protocol: TCP
       targetPort: http
-      {{- if (and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.http))) }}
-      nodePort: {{ .Values.service.nodePorts.http }}
-      {{- else if eq .Values.service.type "ClusterIP" }}
-      nodePort: null
-      {{- end }}
-    {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: keycloak
 {{- end }}
