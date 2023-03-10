@@ -52,7 +52,7 @@ spec:
       defaultLocale: ru
   events:
     # Список слушателей событий. Стандартный слушатель для логирования событий.
-    eventListeners: ["jboss-logging"]
+    eventListeners: ["jboss-logging", "metrics-listener"]
     # Включить события пользователей и хранить их 7 дней
     userEvents:
       saveEvents: true
