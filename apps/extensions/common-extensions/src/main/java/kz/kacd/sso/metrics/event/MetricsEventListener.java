@@ -19,6 +19,8 @@ public class MetricsEventListener implements EventListenerProvider, EventListene
 
     private static final String UNDEFINED = "undefined";
     private static final String ALL = "All";
+    private static final String USER_EVENT = "keycloak_user_events_count";
+    private static final String ADMIN_EVENT = "keycloak_admin_events_count";
 
     private final KeycloakSession session;
 
@@ -57,20 +59,27 @@ public class MetricsEventListener implements EventListenerProvider, EventListene
 
         if (session != null) {
             session.getProvider(MetricsRegistryProvider.class).provide()
-                    .counter("keycloak_user_events_count", tags)
+                    .counter(USER_EVENT, tags)
                     .increment();
-
-            tags.replaceAll(t -> {
+            List<Tag> allRealms = new ArrayList<>(tags);
+            allRealms.replaceAll(t -> {
                 if (t.getKey().equals("realm")) {
                     return Tag.of("realm", ALL);
                 }
+                return t;
+            });
+            session.getProvider(MetricsRegistryProvider.class).provide()
+                    .counter(USER_EVENT, allRealms)
+                    .increment();
+            List<Tag> allClients = new ArrayList<>(tags);
+            allRealms.replaceAll(t -> {
                 if (t.getKey().equals("client")) {
                     return Tag.of("client", ALL);
                 }
                 return t;
             });
             session.getProvider(MetricsRegistryProvider.class).provide()
-                    .counter("keycloak_user_events_count", tags)
+                    .counter(USER_EVENT, allClients)
                     .increment();
         }
     }
@@ -108,20 +117,27 @@ public class MetricsEventListener implements EventListenerProvider, EventListene
 
         if (session != null) {
             session.getProvider(MetricsRegistryProvider.class).provide()
-                    .counter("keycloak_admin_events_count", tags)
+                    .counter(ADMIN_EVENT, tags)
                     .increment();
-
-            tags.replaceAll(t -> {
+            List<Tag> allRealms = new ArrayList<>(tags);
+            allRealms.replaceAll(t -> {
                 if (t.getKey().equals("realm")) {
                     return Tag.of("realm", ALL);
                 }
+                return t;
+            });
+            session.getProvider(MetricsRegistryProvider.class).provide()
+                    .counter(ADMIN_EVENT, allRealms)
+                    .increment();
+            List<Tag> allClients = new ArrayList<>(tags);
+            allRealms.replaceAll(t -> {
                 if (t.getKey().equals("client")) {
                     return Tag.of("client", ALL);
                 }
                 return t;
             });
             session.getProvider(MetricsRegistryProvider.class).provide()
-                    .counter("keycloak_admin_events_count", tags)
+                    .counter(ADMIN_EVENT, allClients)
                     .increment();
         }
     }
