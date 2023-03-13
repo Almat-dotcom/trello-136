@@ -49,7 +49,7 @@ spec:
     advanced:
       # Доверять адресам почты, что записаны в LDAP
       trustEmail: true
-      realmManagementRolesDn: {{ .Values.external.ldap.realmManagementRolesDn }}
+      realmManagementRolesDn: {{ .Values.external.ldap.managementRolesDn }}
     # Добавить маппинг групп с LDAP в режиме Read-Write
     groups:
       mappings:
