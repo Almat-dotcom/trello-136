@@ -18,8 +18,6 @@ internal:
     serviceName: sso-keycloak
     tls: true
     secretName: kacd-tls
-    annotations:
-      nginx.ingress.kubernetes.io/affinity: cookie
 
 #
 # Конфигурация внешнего реалма
@@ -41,8 +39,6 @@ external:
     serviceName: sso-keycloak
     tls: true
     secretName: kacd-tls
-    annotations:
-      nginx.ingress.kubernetes.io/affinity: cookie
 
 # Конфигурация реалма АРРФР
 afr:
@@ -53,5 +49,3 @@ afr:
     serviceName: sso-keycloak
     tls: true
     secretName: kacd-tls
-    annotations:
-      nginx.ingress.kubernetes.io/affinity: cookie

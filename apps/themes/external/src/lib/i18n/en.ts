@@ -156,5 +156,10 @@ export const en = {
     "address": "Location",
     "allNews": "All news",
     "faq": "Ответы на часто задаваемые вопросы",
-    "doSetCertificate": "Выбрать сертификат"
+    "doSetCertificate": "Выбрать сертификат",
+    "ncaConnectionLost": "Невозможно подключится к NCALayer. Проверьте, запущен ли он на вашем устройстве.",
+    "ncaCancelled": "Вы отменили действие в NCALayer.",
+    "ncaFailed": "Не удалось подписать запрос на вход.",
+    "ncaSignProgress": "Работа с NCALayer.",
+    "ncaSignFinished": "Подписание прошло успешно."
 }

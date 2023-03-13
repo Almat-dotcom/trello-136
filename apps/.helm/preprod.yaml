@@ -19,6 +19,8 @@ resources:
     memory: "1Gi"
     cpu: "1"
 
+ncaUrl: https://kcsd-secure-nca.k8s-preprod.kacd.kz/platform/services/secure/nca/auth/v1/authenticate
+
 tls:
   enabled: true
   existingSecret: kacd-tls
@@ -50,8 +52,6 @@ ingress:
   hostname: sso-preprod.k8s-preprod.kacd.kz
   tls: true
   secretName: kacd-tls
-  annotations:
-    nginx.ingress.kubernetes.io/affinity: cookie
 
 realmController:
   enabled: true

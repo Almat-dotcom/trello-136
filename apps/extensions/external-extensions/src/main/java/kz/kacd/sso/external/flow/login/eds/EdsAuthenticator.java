@@ -40,7 +40,7 @@ public class EdsAuthenticator extends UsernamePasswordForm implements Alternativ
             return;
         }
 
-        SignatureValidator.Result result = signatureValidator.validate("eds");
+        SignatureValidator.Result result = signatureValidator.validate(eds);
         switch (result.getType()) {
             case ERROR:
                 failAuth(context, result.getMessage());

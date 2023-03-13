@@ -29,6 +29,7 @@ data:
   MASTER_REALM_ENABLED: {{ .Values.enabledMasterRealm | quote }}
   REDIS_HOST: {{ .Values.redis.host | quote }}
   REDIS_PORT: {{ .Values.redis.port | quote }}
+  KC_SIGN_NCA_URL: {{ .Values.ncaUrl | quote }}
 {{- if (include "keycloak.createConfigmap" .) }}
 ---
 apiVersion: v1

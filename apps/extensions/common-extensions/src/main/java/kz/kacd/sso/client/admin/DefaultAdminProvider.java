@@ -50,6 +50,15 @@ public class DefaultAdminProvider implements AdminClientProvider {
         if (realmManagement == null) {
             return null;
         }
+        realmManagement.setAuthenticationFlowBindingOverride(
+                "browser",
+                realm.getAuthenticationFlowsStream()
+                        .filter(it -> "browser".equals(it.getAlias()))
+                        .findFirst()
+                        .orElseThrow(() -> new IllegalStateException("Cannot find default browser flow!"))
+                        .getId()
+        );
+
         RoleModel role = realmManagement.getRolesStream()
                 .filter(it -> it.getName().equals(ADMIN_CLIENT))
                 .findFirst()

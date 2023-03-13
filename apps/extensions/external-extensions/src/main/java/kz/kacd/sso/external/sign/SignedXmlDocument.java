@@ -1,42 +1,50 @@
 package kz.kacd.sso.external.sign;
 
-import org.jboss.logging.Logger;
-import org.w3c.dom.Document;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import kz.kacd.sso.external.sign.exception.InvalidSignatureException;
+import kz.kacd.sso.external.sign.exception.UnexpectedSignerErrorException;
+import okhttp3.*;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.ByteArrayInputStream;
-import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 
 public class SignedXmlDocument {
-    private static final Logger log = Logger.getLogger(SignedXmlDocument.class);
 
-    private Document doc;
+    private final OkHttpClient client;
+    private final String document;
+    private final String url;
+    private SignatureSubject subject;
     private Throwable error;
-    private DocumentSignature signature;
 
     public SignedXmlDocument(String source) {
-        initDoc(source);
-    }
-
-    private void initDoc(String source) {
-        try {
-            log.debug("Initializing doc ...");
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-            dbf.setNamespaceAware(true);
-            DocumentBuilder builder = dbf.newDocumentBuilder();
-            doc = builder.parse(new ByteArrayInputStream(source.getBytes(StandardCharsets.UTF_8)));
-        } catch (Exception e) {
-            log.debug("Error on initializing document!", e);
-            this.error = e;
-        }
+        this.document = source;
+        this.client = new OkHttpClient.Builder()
+                .connectTimeout(Duration.ofSeconds(5))
+                .readTimeout(Duration.ofSeconds(15))
+                .build();
+        this.url = System.getenv("KC_SIGN_NCA_URL");
     }
 
     public void validate() {
         try {
-            signature = new DocumentSignature(doc);
-            signature.validate();
+            Request req = new Request.Builder()
+                    .url(url)
+                    .post(RequestBody.create(document, MediaType.parse("application/xml")))
+                    .build();
+
+            Call call = client.newCall(req);
+            try (Response response = call.execute()) {
+                if (response.code() == 200 && response.body() != null) {
+                    this.subject = new ObjectMapper().readValue(response.body().byteStream(), SignatureSubject.class);
+                    return;
+                }
+
+                if (response.code() == 400) {
+                    this.error = new InvalidSignatureException();
+                    return;
+                }
+
+                this.error = new UnexpectedSignerErrorException();
+            }
         } catch (Exception e) {
             error = e;
         }
@@ -47,10 +55,10 @@ public class SignedXmlDocument {
     }
 
     public String getIin() {
-        return signature != null ? signature.getIin() : null;
+        return subject != null ? subject.getIin() : null;
     }
 
     public String getBin() {
-        return signature != null ? signature.getBin() : null;
+        return subject != null ? subject.getBin() : null;
     }
 }
