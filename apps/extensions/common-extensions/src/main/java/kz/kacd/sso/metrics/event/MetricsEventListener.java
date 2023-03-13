@@ -95,20 +95,14 @@ public class MetricsEventListener implements EventListenerProvider, EventListene
             return;
         }
 
-        boolean openTransactionAfterAll = false;
         if (session.getTransactionManager().isActive()) {
-            session.getTransactionManager().commit();
-            openTransactionAfterAll = true;
+            consumer.accept(session);
         }
 
         KeycloakModelUtils.runJobInTransaction(
                 session.getKeycloakSessionFactory(),
                 consumer::accept
         );
-
-        if (openTransactionAfterAll) {
-            session.getTransactionManager().begin();
-        }
     }
 
     private void count(
