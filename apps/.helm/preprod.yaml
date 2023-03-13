@@ -19,7 +19,7 @@ resources:
     memory: "1Gi"
     cpu: "1"
 
-ncaUrl: https://kcsd-secure-nca.k8s-dev.kacd.kz/platform/services/secure/nca/auth/v1/authenticate
+ncaUrl: https://kcsd-secure-nca.k8s-preprod.kacd.kz/platform/services/secure/nca/auth/v1/authenticate
 
 tls:
   enabled: true
