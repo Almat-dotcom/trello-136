@@ -38,7 +38,7 @@ spec:
               name: {{ .Values.afr.ingress.serviceName }}
               port:
                 name: http
-        - path: /admin/afr/console
+        - path: /admin
           pathType: Prefix
           backend:
             service:
