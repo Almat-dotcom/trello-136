@@ -2,6 +2,7 @@ package kz.kacd.sso.external.flow.login;
 
 import com.google.auto.service.AutoService;
 import kz.kacd.sso.external.flow.login.eds.EdsAuthenticator;
+import kz.kacd.sso.external.flow.login.ldap.NoLdapUserValidator;
 import kz.kacd.sso.external.flow.login.legal.LegalUserValidator;
 import kz.kacd.sso.external.sign.SignatureValidator;
 import org.keycloak.Config;
@@ -13,6 +14,7 @@ import org.keycloak.models.KeycloakSessionFactory;
 import org.keycloak.models.credential.PasswordCredentialModel;
 import org.keycloak.provider.ProviderConfigProperty;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -63,7 +65,7 @@ public class EdsOrUsernamePasswordFormFactory implements AuthenticatorFactory {
     public Authenticator create(KeycloakSession session) {
         return new ExtendedUsernamePasswordForm(
                 Collections.singletonList(new EdsAuthenticator(new SignatureValidator())),
-                Collections.singletonList(new LegalUserValidator())
+                Arrays.asList(new LegalUserValidator(), new NoLdapUserValidator())
         );
     }
 
