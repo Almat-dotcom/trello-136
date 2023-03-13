@@ -30,6 +30,13 @@ spec:
               name: {{ .Values.internal.ingress.serviceName }}
               port:
                 name: http
+        - path: /admin/internal/console
+          pathType: Prefix
+          backend:
+            service:
+              name: {{ .Values.internal.ingress.serviceName }}
+              port:
+                name: http
         - path: /resources
           pathType: Prefix
           backend:
