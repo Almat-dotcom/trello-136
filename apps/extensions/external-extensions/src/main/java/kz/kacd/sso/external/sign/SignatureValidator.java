@@ -3,8 +3,6 @@ package kz.kacd.sso.external.sign;
 public class SignatureValidator {
 
     public Result validate(String xmlToVerify) {
-        SecurityProviderInitializer.init();
-
         SignedXmlDocument document = new SignedXmlDocument(xmlToVerify);
         document.validate();
 
@@ -18,6 +16,12 @@ public class SignatureValidator {
                 document.getBin(),
                 null
         );
+    }
+
+    public enum Type {
+        ERROR,
+        PHYSICAL,
+        LEGAL
     }
 
     public static final class Result {
@@ -49,11 +53,5 @@ public class SignatureValidator {
         public String getMessage() {
             return message;
         }
-    }
-
-    public enum Type {
-        ERROR,
-        PHYSICAL,
-        LEGAL;
     }
 }

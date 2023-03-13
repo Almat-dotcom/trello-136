@@ -95,6 +95,11 @@ metrics:
   enabled: true
 
 #
+# URL to authenticate users by eds
+#
+ncaUrl: ""
+
+#
 # TLS config. It's required to run keycloak in production mode.
 #
 tls:
