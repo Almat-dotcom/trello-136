@@ -42,8 +42,8 @@ spec:
   # Настройки тем для модулей входа, админки, профиля и почтовой рассылки
   themes: 
     login: external
-    account: keycloak
-    admin: keycloak
+    account: keycloak.v2
+    admin: keycloak.v2
     email: external
     # Локализация на 3 языка
     localization:
