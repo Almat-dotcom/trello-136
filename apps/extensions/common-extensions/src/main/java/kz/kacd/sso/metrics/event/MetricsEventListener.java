@@ -10,9 +10,11 @@ import org.keycloak.events.EventListenerProvider;
 import org.keycloak.events.EventListenerProviderFactory;
 import org.keycloak.events.admin.AdminEvent;
 import org.keycloak.models.*;
+import org.keycloak.models.utils.KeycloakModelUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 @AutoService(EventListenerProviderFactory.class)
 public class MetricsEventListener implements EventListenerProvider, EventListenerProviderFactory {
@@ -35,54 +37,82 @@ public class MetricsEventListener implements EventListenerProvider, EventListene
 
     @Override
     public void onEvent(Event event) {
-        List<Tag> tags = new ArrayList<>();
+        inTransaction(s -> {
+            List<Tag> tags = new ArrayList<>();
 
-        tags.add(Tag.of("event_type", event.getType().name()));
-        tags.add(Tag.of("outcome", event.getError() != null ? "ERROR" : "SUCCESS"));
+            tags.add(Tag.of("event_type", event.getType().name()));
+            tags.add(Tag.of("outcome", event.getError() != null ? "ERROR" : "SUCCESS"));
 
-        count(
-                USER_EVENT,
-                event.getRealmId(),
-                event.getClientId(),
-                event.getUserId(),
-                event.getSessionId(),
-                event.getIpAddress(),
-                tags
-        );
+            count(
+                    s,
+                    USER_EVENT,
+                    event.getRealmId(),
+                    event.getClientId(),
+                    event.getUserId(),
+                    event.getSessionId(),
+                    event.getIpAddress(),
+                    tags
+            );
+        });
     }
 
     @Override
     public void onEvent(AdminEvent event, boolean includeRepresentation) {
-        List<Tag> tags = new ArrayList<>();
+        inTransaction(s -> {
+            List<Tag> tags = new ArrayList<>();
 
-        RealmModel targetRealm = getRealm(event.getRealmId());
-        tags.add(Tag.of("target_realm", targetRealm != null ? targetRealm.getName() : UNDEFINED));
-        tags.add(Tag.of("resource", event.getResourcePath() != null ? event.getResourcePath() : UNDEFINED));
-        tags.add(Tag.of("operation", event.getOperationType() != null ? event.getOperationType().name() : UNDEFINED));
-        tags.add(Tag.of("resource_uri", event.getResourcePath() != null ? event.getResourcePath() : UNDEFINED));
-        tags.add(Tag.of("outcome", event.getError() != null ? "ERROR" : "SUCCESS"));
+            RealmModel targetRealm = getRealm(s, event.getRealmId());
+            tags.add(Tag.of("target_realm", targetRealm != null ? targetRealm.getName() : UNDEFINED));
+            tags.add(Tag.of("resource", event.getResourcePath() != null ? event.getResourcePath() : UNDEFINED));
+            tags.add(Tag.of("operation", event.getOperationType() != null ? event.getOperationType().name() : UNDEFINED));
+            tags.add(Tag.of("resource_uri", event.getResourcePath() != null ? event.getResourcePath() : UNDEFINED));
+            tags.add(Tag.of("outcome", event.getError() != null ? "ERROR" : "SUCCESS"));
 
-        RealmModel authRealm = getRealm(event.getAuthDetails().getRealmId());
-        String clientId;
-        if (authRealm == null || event.getAuthDetails().getClientId() == null) {
-            clientId = null;
-        } else {
-            ClientModel client = authRealm.getClientById(event.getAuthDetails().getClientId());
-            clientId = client != null ? client.getClientId() : null;
+            RealmModel authRealm = getRealm(s, event.getAuthDetails().getRealmId());
+            String clientId;
+            if (authRealm == null || event.getAuthDetails().getClientId() == null) {
+                clientId = null;
+            } else {
+                ClientModel client = authRealm.getClientById(event.getAuthDetails().getClientId());
+                clientId = client != null ? client.getClientId() : null;
+            }
+
+            count(
+                    s,
+                    ADMIN_EVENT,
+                    event.getAuthDetails().getRealmId(),
+                    clientId,
+                    event.getAuthDetails().getUserId(),
+                    null,
+                    event.getAuthDetails().getIpAddress(),
+                    tags
+            );
+        });
+    }
+
+    private void inTransaction(Consumer<KeycloakSession> consumer) {
+        if (session == null) {
+            return;
         }
 
-        count(
-                ADMIN_EVENT,
-                event.getAuthDetails().getRealmId(),
-                clientId,
-                event.getAuthDetails().getUserId(),
-                null,
-                event.getAuthDetails().getIpAddress(),
-                tags
+        boolean openTransactionAfterAll = false;
+        if (session.getTransactionManager().isActive()) {
+            session.getTransactionManager().commit();
+            openTransactionAfterAll = true;
+        }
+
+        KeycloakModelUtils.runJobInTransaction(
+                session.getKeycloakSessionFactory(),
+                consumer::accept
         );
+
+        if (openTransactionAfterAll) {
+            session.getTransactionManager().begin();
+        }
     }
 
     private void count(
+            KeycloakSession s,
             String metric,
             String realmId,
             String clientId,
@@ -94,10 +124,10 @@ public class MetricsEventListener implements EventListenerProvider, EventListene
         tags.add(Tag.of("ip_address", ipAddress == null ? UNDEFINED : ipAddress));
         tags.add(Tag.of("session", sessionId == null ? UNDEFINED : sessionId));
 
-        RealmModel realm = getRealm(realmId);
+        RealmModel realm = getRealm(s, realmId);
 
         if (realm != null && userId != null) {
-            String username = getUsername(realm, userId);
+            String username = getUsername(s, realm, userId);
             tags.add(Tag.of("user", username != null ? username : UNDEFINED));
         } else {
             tags.add(Tag.of("user", UNDEFINED));
@@ -117,29 +147,19 @@ public class MetricsEventListener implements EventListenerProvider, EventListene
         List<Tag> allRealmAllClient = new ArrayList<>(allRealm);
         allRealmAllClient.add(Tag.of("client", ALL));
 
-        if (session != null) {
-            MeterRegistry registry = session.getProvider(MetricsRegistryProvider.class).provide();
-            registry.counter(metric, specifiedRealmSpecifiedClient).increment();
-            registry.counter(metric, specifiedRealmAllClient).increment();
-            registry.counter(metric, allRealmSpecifiedClient).increment();
-            registry.counter(metric, allRealmAllClient).increment();
-        }
+        MeterRegistry registry = s.getProvider(MetricsRegistryProvider.class).provide();
+        registry.counter(metric, specifiedRealmSpecifiedClient).increment();
+        registry.counter(metric, specifiedRealmAllClient).increment();
+        registry.counter(metric, allRealmSpecifiedClient).increment();
+        registry.counter(metric, allRealmAllClient).increment();
     }
 
-    private RealmModel getRealm(String id) {
-        if (id == null || session == null) {
-            return null;
-        }
-
-        return session.realms().getRealm(id);
+    private RealmModel getRealm(KeycloakSession s, String id) {
+        return s.realms().getRealm(id);
     }
 
-    private String getUsername(RealmModel realm, String userId) {
-        if (userId == null || session == null) {
-            return UNDEFINED;
-        }
-
-        UserModel user = session.users().getUserById(realm, userId);
+    private String getUsername(KeycloakSession s, RealmModel realm, String userId) {
+        UserModel user = s.users().getUserById(realm, userId);
         return user == null ? UNDEFINED : user.getUsername();
     }
 
