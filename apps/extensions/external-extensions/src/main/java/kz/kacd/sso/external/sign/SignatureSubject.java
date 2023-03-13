@@ -1,5 +1,8 @@
 package kz.kacd.sso.external.sign;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SignatureSubject {
 
     private String iin;
