@@ -19,6 +19,7 @@ public class OrganizationRepresentation {
 
     private OrganizationRepresentation(
             String id,
+            String bin,
             String name,
             String displayName,
             Boolean enabled,
@@ -26,6 +27,7 @@ public class OrganizationRepresentation {
             String updatedAt
     ) {
         this.id = id;
+        this.bin = bin;
         this.name = name;
         this.displayName = displayName;
         this.enabled = enabled;
@@ -36,6 +38,7 @@ public class OrganizationRepresentation {
     public static OrganizationRepresentation from(OrganizationModel source) {
         return new OrganizationRepresentation(
                 source.getId(),
+                source.getBin(),
                 source.getName(),
                 source.getDisplayName(),
                 source.enabled(),
