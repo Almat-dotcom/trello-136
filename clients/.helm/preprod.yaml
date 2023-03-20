@@ -29,11 +29,13 @@ clients:
     redirectUris:
     - https://kacd-lk-shell.k8s-dev.kacd.kz/admin/*
     - http://localhost:4200/admin/*
+    - http://localhost:4600/*
     - http://kacd-lk-shell.k8s-dev.kacd.kz/admin/*
     - https://kacd-lk-shell.k8s-preprod.kacd.kz/admin/*
     webOrigins:
     - https://kacd-lk-shell.k8s-dev.kacd.kz
     - http://localhost:4200
+    - http://localhost:4600
     - http://kacd-lk-shell.k8s-dev.kacd.kz
     - https://kacd-lk-shell.k8s-preprod.kacd.kz
   mt535:
