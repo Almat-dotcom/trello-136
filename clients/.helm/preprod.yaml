@@ -32,12 +32,14 @@ clients:
     - http://localhost:4600/*
     - http://kacd-lk-shell.k8s-dev.kacd.kz/admin/*
     - https://kacd-lk-shell.k8s-preprod.kacd.kz/admin/*
+    - https://kacd-lk-admin.k8s-dev.kacd.kz/*
     webOrigins:
     - https://kacd-lk-shell.k8s-dev.kacd.kz
     - http://localhost:4200
     - http://localhost:4600
     - http://kacd-lk-shell.k8s-dev.kacd.kz
     - https://kacd-lk-shell.k8s-preprod.kacd.kz
+    - https://kacd-lk-admin.k8s-dev.kacd.kz
   mt535:
     redirectUris:
     - http://localhost:8082/*
