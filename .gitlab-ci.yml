@@ -3,6 +3,7 @@ stages:
 - mr
 - dev
 - preprod
+- prod
 
 include:
   - project: 'core2471/ci-tools'
@@ -48,13 +49,14 @@ clients:
     changes:
     - clients/**/*
 
+# PREPROD deploy
 build-apps-preprod:
   stage: preprod
   trigger:
     include: apps/.gitlab-ci-preprod.yml
     strategy: depend
   rules:
-  - if: $CI_COMMIT_BRANCH == "master"
+  - if: $PROD != "true" && $CI_COMMIT_BRANCH == "master"
     changes:
     - apps/**/*
 
@@ -64,7 +66,7 @@ realms-preprod:
     include: realms/.gitlab-ci-preprod.yml
     strategy: depend
   rules:
-  - if: $CI_COMMIT_BRANCH == "master"
+  - if: $PROD != "true" && $CI_COMMIT_BRANCH == "master"
     changes:
     - realms/**/*
 
@@ -74,6 +76,41 @@ clients-preprod:
     include: clients/.gitlab-ci-preprod.yml
     strategy: depend
   rules:
-  - if: $CI_COMMIT_BRANCH == "master"
+  - if: $PROD != "true" && $CI_COMMIT_BRANCH == "master"
     changes:
     - clients/**/*
+
+### PROD deploy with Rules
+build-apps-prod:
+  stage: prod
+  when: manual
+  trigger:
+    include: apps/.gitlab-ci-prod.yml
+    strategy: depend
+  rules:
+  - if: $PROD == "true" && $CI_SERVER_URL == "https://gitlab.kacd.kz" && $CI_PIPELINE_SOURCE =~ "web|push" && $CI_COMMIT_BRANCH == "master"
+    changes:
+    - apps/**/*
+
+realms-prod:
+  stage: prod
+  when: manual
+  trigger:
+    include: realms/.gitlab-ci-prod.yml
+    strategy: depend
+  rules:
+  - if: $PROD == "true" && $CI_SERVER_URL == "https://gitlab.kacd.kz" && $CI_PIPELINE_SOURCE =~ "web|push" && $CI_COMMIT_BRANCH == "master"
+    changes:
+    - realms/**/*
+
+clients-prod:
+  stage: prod
+  when: manual
+  trigger:
+    include: clients/.gitlab-ci-prod.yml
+    strategy: depend
+  rules:
+  - if: $PROD == "true" && $CI_SERVER_URL == "https://gitlab.kacd.kz" && $CI_PIPELINE_SOURCE =~ "web|push" && $CI_COMMIT_BRANCH == "master"
+    changes:
+    - clients/**/*
+

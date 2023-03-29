@@ -1,0 +1,36 @@
+clients:
+  afrAuthorityServicesFront:
+    redirectUris:
+    - http://localhost:4200/*
+    webOrigins:
+    - http://localhost:4200
+  deponentReport:
+    redirectUris:
+    - http://localhost:8080/*
+    webOrigins:
+    - "+"
+  lkShellBack:
+    redirectUris:
+    - http://localhost:8080/*
+    webOrigins:
+    - "+"
+  lkShellFront:
+    redirectUris:
+    - https://my-kcsd.kacd.kz/*
+    webOrigins:
+    - https://my-kcsd.kacd.kz
+  lkShellFrontInternal:
+    redirectUris:
+    - https://my-kcsd.kacd.kz/*
+    webOrigins:
+    - https://my-kcsd.kacd.kz
+  mt535:
+    redirectUris:
+    - http://10.10.125.4:8085/*
+    webOrigins:
+    - "+"
+  ssoApi:
+    redirectUris:
+    - http://localhost:8080/*
+    webOrigins:
+    - "+"

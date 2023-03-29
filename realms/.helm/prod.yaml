@@ -1,0 +1,51 @@
+#
+# Конфигурация внутреннего реалма
+#
+internal:
+  # Доменое имя внутреннего реалма
+  hostname: internal-sso.kacd.kz
+  # Настройки взаимодействия с Active Directory
+  ldap:
+    url: ldap://csdepo.net:389
+    existingSecret: ldap-creds
+    dnKey: "dn"
+    passwordKey: "password"
+    usersDn: "OU=OU_Users,DC=csdepo,DC=net"
+    groupsDn: "OU=Distribution_Group,OU=OU_Groups,DC=csdepo,DC=net"
+    managementRolesDn: "OU=OU_InternalRealmManagement,OU=OU_Roles,DC=csdepo,DC=net"
+  # Настройки службы ingress
+  ingress:
+    serviceName: sso-keycloak
+    tls: true
+    secretName: kacd-tls
+
+#
+# Конфигурация внешнего реалма
+#
+external:
+  # Доменое имя внешнего реалма
+  hostname: external-sso.kacd.kz
+  # Настройки взаимодействия с Active Directory
+  ldap:
+    url: ldap://csdepo.net:389
+    existingSecret: ldap-creds
+    dnKey: "dn"
+    passwordKey: "password"
+    usersDn: "OU=OU_Users,DC=csdepo,DC=net"
+    groupsDn: "OU=Distribution_Group,OU=OU_Groups,DC=csdepo,DC=net"
+    managementRolesDn: "OU=OU_ExternalRealmManagement,OU=OU_Roles,DC=csdepo,DC=net"
+  # Настройки службы ingress
+  ingress:
+    serviceName: sso-keycloak
+    tls: true
+    secretName: kacd-tls
+
+# Конфигурация реалма АРРФР
+afr:
+  enabled: false
+  hostname: afr-sso.kacd.kz
+  # Настройки службы ingress
+  ingress:
+    serviceName: sso-keycloak
+    tls: true
+    secretName: kacd-tls
