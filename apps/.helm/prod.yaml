@@ -1,0 +1,58 @@
+global:
+  imageRegistry: nexus.kacd.kz:5000
+  imagePullSecrets:
+  - kacd-docker-creds
+
+image: nexus.kacd.kz:5000/valyayev/test/keycloak:0.3
+
+replicaCount: 1
+
+hostname: sso-2.kacd.kz
+
+enabledMasterRealm: "true"
+
+resources:
+  limits:
+    memory: "4Gi"
+    cpu: "4"
+  requests:
+    memory: "1Gi"
+    cpu: "1"
+
+ncaUrl: https://kcsd-secure-nca.platform-services/platform/services/secure/nca/auth/v1/authenticate
+
+tls:
+  enabled: true
+  existingSecret: kacd-tls
+  certificateFileKey: tls.crt
+  keyFileKey: tls.key
+
+auth:
+  adminUser: admin
+  existingSecret: "sso-keycloak-admin-password"
+  existingSecretPasswordKey: password
+
+database:
+  host: psql.kacd.kz
+  name: sso
+  schema: public
+  username: sso
+  existingSecret: sso-keycloak-database-password
+  existingSecretPasswordKey: password
+
+service:
+  type: ClusterIP
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/metrics"
+    prometheus.io/port: "8080"
+
+ingress:
+  enabled: true
+  hostname: sso-2.kacd.kz
+  tls: true
+  secretName: kacd-tls
+
+realmController:
+  enabled: true
+  image: nexus.kacd.kz:5000/platform/sso/realm-controller:dev-1377
