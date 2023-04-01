@@ -16,9 +16,9 @@ clients:
     - "+"
   lkShellFront:
     redirectUris:
-    - https://cabinets.kacd.kz/*
+    - https://cabinet.kacd.kz/*
     webOrigins:
-    - https://cabinets.kacd.kz
+    - https://cabinet.kacd.kz
   lkShellFrontInternal:
     redirectUris:
     - https://my-kcsd.kacd.kz/*
