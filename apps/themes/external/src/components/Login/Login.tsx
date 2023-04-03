@@ -108,7 +108,7 @@ const Login = memo(({ kcContext, i18n, ...props }: { kcContext: KcContextLogin; 
                                     onChange={(id) => setCurrentTab(id)} />
 
                                 <Eds kcContext={kcContext} i18n={i18n} hidden={currentTab !== "eds"} onFormSubmit={onFormSubmit} />
-                                {currentTab !== "email" ? (
+                                {currentTab === "email" ? (
                                     <UsernamePassword
                                         kcContext={kcContext}
                                         i18n={i18n}
@@ -116,15 +116,18 @@ const Login = memo(({ kcContext, i18n, ...props }: { kcContext: KcContextLogin; 
                                         variant="email"
                                         onFormSubmit={onFormSubmit}
                                     />
-                                ) : (
-                                    <UsernamePassword
-                                        kcContext={kcContext}
-                                        i18n={i18n}
-                                        hidden={false}
-                                        variant="iin"
-                                        onFormSubmit={onFormSubmit}
-                                    />
-                                )}
+                                ) : null}
+                                {currentTab === 'logpass' ? (
+                                    (
+                                        <UsernamePassword
+                                            kcContext={kcContext}
+                                            i18n={i18n}
+                                            hidden={false}
+                                            variant="iin"
+                                            onFormSubmit={onFormSubmit}
+                                        />
+                                    )
+                                ) : null}
                                 <div className="w-min">
                                     <Button type="button" severity="link-primary" onClick={resetType}>&laquo;{msgStr("doBack")}</Button>
                                 </div>
