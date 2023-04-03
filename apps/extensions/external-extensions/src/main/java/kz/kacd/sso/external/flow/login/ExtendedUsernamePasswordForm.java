@@ -49,11 +49,9 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
             public void action(AuthenticationFlowContext context) {
                 String username = extractUsername(context);
                 boolean isIin = isIin(username);
-                log.infof("username: " + username + "; IsIin: " + isIin);
                 if (isIin) {
                     rewriteContextUsername(context, username);
                 }
-                log.infof("Extracted changed username" + extractUsername(context));
 
                 ExtendedUsernamePasswordForm.super.action(context);
 
