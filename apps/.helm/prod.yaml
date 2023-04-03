@@ -19,7 +19,7 @@ resources:
     memory: "1Gi"
     cpu: "1"
 
-ncaUrl: https://kcsd-secure-nca.platform-services:8080/platform/services/secure/nca/auth/v1/authenticate
+ncaUrl: http://kcsd-secure-nca.platform-services:8080/platform/services/secure/nca/auth/v1/authenticate
 
 tls:
   enabled: true

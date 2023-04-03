@@ -108,33 +108,28 @@ const Login = memo(({ kcContext, i18n, ...props }: { kcContext: KcContextLogin; 
                                     onChange={(id) => setCurrentTab(id)} />
 
                                 <Eds kcContext={kcContext} i18n={i18n} hidden={currentTab !== "eds"} onFormSubmit={onFormSubmit} />
-                                <UsernamePassword
-                                    kcContext={kcContext}
-                                    i18n={i18n}
-                                    hidden={currentTab !== "email"}
-                                    variant="email"
-                                    onFormSubmit={onFormSubmit}
-                                />
-                                <UsernamePassword
-                                    kcContext={kcContext}
-                                    i18n={i18n}
-                                    hidden={currentTab !== "logpass"}
-                                    variant="iin"
-                                    onFormSubmit={onFormSubmit}
-                                />
-
+                                {currentTab !== "email" ? (
+                                    <UsernamePassword
+                                        kcContext={kcContext}
+                                        i18n={i18n}
+                                        hidden={false}
+                                        variant="email"
+                                        onFormSubmit={onFormSubmit}
+                                    />
+                                ) : (
+                                    <UsernamePassword
+                                        kcContext={kcContext}
+                                        i18n={i18n}
+                                        hidden={false}
+                                        variant="iin"
+                                        onFormSubmit={onFormSubmit}
+                                    />
+                                )}
                                 <div className="w-min">
                                     <Button type="button" severity="link-primary" onClick={resetType}>&laquo;{msgStr("doBack")}</Button>
                                 </div>
                             </div>
                         ) : null}
-                        {/* <Tabs 
-                            elements={[{ id: "logpass", label: msgStr("logpass"), icon: Passport }, { id: "eds", label: msgStr("eds"), icon: Key }]} 
-                            activeId={currentTab} 
-                            onChange={(id) => setCurrentTab(id)}
-                        />
-                        <Eds kcContext={kcContext} i18n={i18n} hidden={currentTab !== "eds"} onFormSubmit={onFormSubmit}/>
-                        <UsernamePassword kcContext={kcContext} i18n={i18n} hidden={currentTab !== "logpass"} onFormSubmit={onFormSubmit}/> */}
                     </form>
 
                     <p
