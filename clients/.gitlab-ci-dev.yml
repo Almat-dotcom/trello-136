@@ -16,5 +16,5 @@ dev-deploy-realms:
   script:
   - |-
     helm upgrade --install ${RELEASE_NAME} ./.helm \
-      --create-namespace --namespace="${CI_PROJECT_NAME}" \
+      --create-namespace --namespace="${CI_PROJECT_NAME}-dev" \
       -f ./.helm/dev.yaml
