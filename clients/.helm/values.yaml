@@ -35,7 +35,13 @@ clients:
   mt535:
     redirectUris: []
     webOrigins: []
-  ssoApi:
+  externalSsoApi:
+    redirectUris: []
+    webOrigins: []
+  afrSsoApi:
+    redirectUris: []
+    webOrigins: []
+  internalSsoApi:
     redirectUris: []
     webOrigins: []
 
