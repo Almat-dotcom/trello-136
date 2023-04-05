@@ -1,0 +1,27 @@
+apiVersion: sso.kacd.kz/v1
+kind: Client
+metadata:
+  name: internal-sso-api
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    kz-kacd-realm-name: internal
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  displayedName: SSO Profile API Internal
+  displayedDescription: Сервис доступа к API SSO на внутреннем реалме
+  access:
+    validRedirectUris:
+    - https://localhost:8080/*
+    webOrigins:
+    - "+"
+  capability:
+    type: CONFIDENTIAL
+    clientExistingSecret: internal-sso-api-secret
+    clientSecretKey: client_secret
+  attributes: []
+  roles: []

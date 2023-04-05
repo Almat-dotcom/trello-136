@@ -281,7 +281,7 @@ k8s-dev-deploy:
   script:
   - |-
     helm upgrade --install ${RELEASE_NAME} ./.helm \
-      --create-namespace --namespace="${CI_PROJECT_NAME}" \
+      --create-namespace --namespace="${CI_PROJECT_NAME}-dev" \
       -f ./.helm/dev.yaml \
       --set image=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/keycloak:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA} \
       --set realmController.image=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/realm-controller:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA}
