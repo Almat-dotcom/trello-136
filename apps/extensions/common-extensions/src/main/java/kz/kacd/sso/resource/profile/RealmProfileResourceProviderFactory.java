@@ -10,7 +10,7 @@ import org.keycloak.services.managers.RealmManager;
 import org.keycloak.services.resource.RealmResourceProvider;
 import org.keycloak.services.resource.RealmResourceProviderFactory;
 
-@AutoService(RealmProfileResourceProviderFactory.class)
+@AutoService(RealmResourceProviderFactory.class)
 public class RealmProfileResourceProviderFactory implements RealmResourceProviderFactory {
     public static final String PROVIDER_ID = "profile";
     private static final Logger log = Logger.getLogger(RealmProfileResourceProviderFactory.class);
