@@ -1,6 +1,6 @@
 package kz.kacd.sso.resource;
 
-import kz.kacd.sso.resource.common.ConfigAdminAuth;
+import kz.kacd.sso.resource.config.ConfigAdminAuth;
 import kz.kacd.sso.resource.cors.Cors;
 import kz.kacd.sso.resource.cors.CorsResource;
 import org.jboss.logging.Logger;
@@ -18,6 +18,7 @@ import org.keycloak.representations.AccessToken;
 import org.keycloak.services.managers.AppAuthManager;
 import org.keycloak.services.managers.AuthenticationManager;
 import org.keycloak.services.managers.RealmManager;
+import org.keycloak.services.resources.admin.AdminAuth;
 import org.keycloak.services.resources.admin.AdminEventBuilder;
 import org.keycloak.services.resources.admin.permissions.AdminPermissionEvaluator;
 import org.keycloak.services.resources.admin.permissions.AdminPermissions;
@@ -43,7 +44,7 @@ public abstract class AbstractAdminResource {
     protected HttpHeaders headers;
     @Context
     protected KeycloakSession session;
-    protected ConfigAdminAuth auth;
+    protected AdminAuth auth;
     protected AdminPermissionEvaluator permissions;
     protected AdminEventBuilder adminEvent;
     protected UserModel user;
@@ -139,7 +140,7 @@ public abstract class AbstractAdminResource {
         }
 
         user = authResult.getUser();
-        auth = new ConfigAdminAuth(realm, token, user, client);
+        auth = new AdminAuth(realm, token, user, client);
     }
 
     private void setupEvents() {

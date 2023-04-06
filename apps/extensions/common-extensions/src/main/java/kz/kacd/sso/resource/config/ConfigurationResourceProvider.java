@@ -1,5 +1,6 @@
-package kz.kacd.sso.resource;
+package kz.kacd.sso.resource.config;
 
+import kz.kacd.sso.resource.BaseRealmResourceProvider;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;

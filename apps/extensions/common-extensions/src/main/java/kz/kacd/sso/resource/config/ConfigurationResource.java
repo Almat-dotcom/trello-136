@@ -1,4 +1,4 @@
-package kz.kacd.sso.resource;
+package kz.kacd.sso.resource.config;
 
 import kz.kacd.sso.client.config.ClientConfigurer;
 import kz.kacd.sso.federation.FederationConfigurer;

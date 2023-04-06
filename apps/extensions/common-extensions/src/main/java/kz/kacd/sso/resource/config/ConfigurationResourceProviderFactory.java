@@ -1,7 +1,6 @@
-package kz.kacd.sso.resource;
+package kz.kacd.sso.resource.config;
 
 import com.google.auto.service.AutoService;
-import kz.kacd.sso.resource.common.ConfigAdminAuth;
 import org.jboss.logging.Logger;
 import org.keycloak.Config;
 import org.keycloak.models.*;
