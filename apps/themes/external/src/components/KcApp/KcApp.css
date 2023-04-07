@@ -47,3 +47,8 @@ body {
 .p-inputtext.border-gray-400:enabled:focus {
 	border: 1px solid #00333F !important;
 }
+
+.p-tooltip {
+	background: #ffffff !important;
+	color: #00333F;
+}

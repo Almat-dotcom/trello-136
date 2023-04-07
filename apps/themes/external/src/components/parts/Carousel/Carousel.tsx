@@ -27,7 +27,7 @@ const Carousel = ({ i18n } : { i18n: I18n }) => {
         }
     }
 
-    const productTemplate = (article: any) => {
+    const articleTemplate = (article: any) => {
         return (
             <div>
                 <div className="flex flex-col items-center m-4">
@@ -56,7 +56,7 @@ const Carousel = ({ i18n } : { i18n: I18n }) => {
                     numScroll={1}
                     page={page}
                     showNavigators={false}
-                    itemTemplate={productTemplate}
+                    itemTemplate={articleTemplate}
                     header={""}
                     indicatorsContentClassName="w-fit"
                 />
@@ -70,7 +70,7 @@ const Carousel = ({ i18n } : { i18n: I18n }) => {
                 </div>
             </div>
             <div>
-                <a className="ml-9 text-secondary-dark font-semibold underline" href="/oops">{msgStr("allNews")} &#187;</a>
+                <a className="ml-9 text-secondary-dark font-semibold underline" href="https://cabinet.kacd.kz/news">{msgStr("allNews")} &#187;</a>
             </div>
         </div>
     );

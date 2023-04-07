@@ -86,8 +86,8 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                             <p className="mt-3 mb-4 text-slate-900 text-3xl font-bold">{msgStr("registerTitle")}</p>
                         </div>
 
-                        <input id="residency" name="residency" type="hidden" value={fields.residency.value}/>
-                        
+                        <input id="residency" name="residency" type="hidden" value={fields.residency.value} />
+
                         <InputSelect
                             fieldName="clientType"
                             label={msgStr("clientType")}
@@ -146,7 +146,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                             error={error(fields.middleName.error)}
                             onChange={(event) => { fields.middleName.onChange(event.target.value) }}
                         />
-                        <InputMask 
+                        <InputMask
                             fieldName="phoneNumber"
                             label={msgStr("phoneNumber")}
                             mask="+9 (999) 999 99 99"
@@ -197,6 +197,18 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                             required
                             error={error(fields.password.error)}
                             onChange={(event) => fields.password.onChange(event.target.value)}
+                            tooltipElement={
+                                <>
+                                    <div className="font-semibold text-black">{msgStr("passwordPolicyTitle")}</div>
+                                    <ul className="mt-4 text-sm text-red-600">
+                                        <li>* {msgStr("passwordPolicyLength")}</li>
+                                        <li>* {msgStr("passwordPolicyUpperCase")}</li>
+                                        <li>* {msgStr("passwordPolicyLowerCase")}</li>
+                                        <li>* {msgStr("passwordPolicyDigits")}</li>
+                                        <li>* {msgStr("passwordPolicySpecialSymbols")}</li>
+                                    </ul>
+                                </>
+                            }
                         />
                         <InputField
                             fieldName="password-confirm"
