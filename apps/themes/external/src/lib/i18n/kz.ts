@@ -165,8 +165,8 @@ export const kz = {
     "manuals": "Manual",
     "passwordPolicyTitle": "Деректерді қорғау үшін күшті пароль ойлап табу керек. Онда:",
     "passwordPolicyLength": "8 немесе одан да көп таңбалар",
-    "passwordPolicyLowerCase": "бас және кіші латын әріптері",
-    "passwordPolicyUpperCase": "строчные латинские буквы",
+    "passwordPolicyLowerCase": "бас латын әріптері",
+    "passwordPolicyUpperCase": "кіші латын әріптері",
     "passwordPolicyDigits": "сандар",
     "passwordPolicySpecialSymbols": "тыныс белгілері (!\"$%&'()+,-./:;<=>?@[]^_{|}~) болуы керек"
 }
