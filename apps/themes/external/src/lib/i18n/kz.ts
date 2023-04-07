@@ -16,6 +16,7 @@ export const kz = {
     "registerTitle": "Тіркелу",
     "loginAccountTitle": "Кабинетке кіру",
     "unknownUser": "Белгісіз пайдаланушы",
+    "Your login attempt timed out. Login will start from the beginning.": "Сессияның мерзімі аяқталды. Қайта кіріңіз",
     "loginTimeout": "Сессияның мерзімі аяқталды. Қайта кіріңіз",
     "reauthenticate": "Жалғастыру үшін сәйкестендіруден өтіңіз",
     "errorTitle": "Кешіріңіз...",

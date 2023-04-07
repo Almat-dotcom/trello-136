@@ -18,7 +18,7 @@ const Header = ({ kcContext, current, langs, i18n }: { kcContext: KcContext, cur
                     <a className="flex items-center mr-4 text-dark-text hover:text-primary-focus" href="https://cabinet.kacd.kz/faq">
                         <img className="inline-block mr-2" alt="faq" src={FAQ}/><span className="hidden md:inline-block">{msgStr("faq")}</span>
                     </a>
-                    <a className="flex items-center mr-4 text-dark-text hover:text-primary-focus" href={kcContext.url.resourcesPath + "/build/static/media/Руководство пользователя_ЛКv1.doc"} download>
+                    <a className="flex items-center mr-4 text-dark-text hover:text-primary-focus" href={kcContext.url.resourcesPath + "/build/Руководство пользователя_ЛКv1.doc"} download>
                         <img className="inline-block mr-2" alt="faq" src={Manuals}/>
                         <span className="hidden md:inline-block mr-2">{msgStr("manuals")}</span>
                         <img className="hidden md:inline-block" alt="faq" src={Download}/>
