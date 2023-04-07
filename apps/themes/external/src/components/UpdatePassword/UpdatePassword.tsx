@@ -47,6 +47,18 @@ const UpdatePassword = memo(({ kcContext, i18n, ...props }: { kcContext: KcConte
                             error={advancedMsgStr(passwordError ?? "") ?? passwordError}
                             onChange={(event) => onPasswordChange(event.target.value)}
                             onEnter={onSubmit}
+                            tooltipElement={
+                                <>
+                                    <div className="font-semibold text-black">{msgStr("passwordPolicyTitle")}</div>
+                                    <ul className="mt-4 text-sm text-red-600">
+                                        <li>* {msgStr("passwordPolicyLength")}</li>
+                                        <li>* {msgStr("passwordPolicyUpperCase")}</li>
+                                        <li>* {msgStr("passwordPolicyLowerCase")}</li>
+                                        <li>* {msgStr("passwordPolicyDigits")}</li>
+                                        <li>* {msgStr("passwordPolicySpecialSymbols")}</li>
+                                    </ul>
+                                </>
+                            }
                         />
                         <InputField
                             fieldName="password-confirm"

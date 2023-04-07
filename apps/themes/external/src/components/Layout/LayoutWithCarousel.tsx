@@ -15,10 +15,10 @@ const LayoutWithCarousel = ({ children, kcContext, i18n, ...props }: { children:
 
     return (
         <div className="bg-white">
-            <Header current={currentLanguageTag} langs={supported} i18n={i18n} />
+            <Header kcContext={kcContext} current={currentLanguageTag} langs={supported} i18n={i18n} />
             <div className="flex min-h-screen">
                 <div className="flex flex-col w-full max-w-lg px-6 mx-auto lg:w-1/2">
-                    <div className="pt-56">
+                    <div className="pt-28">
                     </div>
                     {children}
                     <div className="w-20">
@@ -27,7 +27,7 @@ const LayoutWithCarousel = ({ children, kcContext, i18n, ...props }: { children:
                 </div>
                 <div className="hidden bg-gradient-to-tr lg:block lg:w-1/2">
                     <div className="flex flex-col items-center justify-between p-4">
-                        <div className="w-full h-32">
+                        <div className="w-full h-16">
                         </div>
 
                         <div className="flex items-center justify-center w-full">

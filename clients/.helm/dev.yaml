@@ -36,7 +36,7 @@ clients:
     - http://kacd-lk-shell.k8s-dev.kacd.kz
   mt535:
     redirectUris:
-    - http://localhost:8082/*
+    - http://localhost:8184/*
     - http://10.10.125.4:8085/*
     webOrigins:
     - "+"

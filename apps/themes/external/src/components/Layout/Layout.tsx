@@ -9,7 +9,7 @@ const Layout = ({ children, kcContext, i18n, ...props }: { children: any, kcCont
     return (
         <div>
             <div className="bg-gradient-to-tr">
-                <Header current={currentLanguageTag} langs={supported} i18n={i18n}/> 
+                <Header kcContext={kcContext} current={currentLanguageTag} langs={supported} i18n={i18n}/> 
                 <div className="flex justify-between items-stretch pt-20 min-h-screen p-2">
                     <div className="hidden lg:block">
                     </div>

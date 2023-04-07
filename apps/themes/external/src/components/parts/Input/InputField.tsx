@@ -1,4 +1,5 @@
 import { ChangeEvent, MouseEvent, useRef, useState, KeyboardEvent } from "react";
+import { Tooltip } from 'primereact/tooltip';
 import InputContainer from "./InputContainer";
 import Visibility from "./visibility.svg";
 import VisibilityOff from "./visibility_off.svg";
@@ -14,11 +15,26 @@ type InputFieldProps = {
     error?: string,
     readOnly?: boolean,
     maxLength?: number,
+    tooltipElement?: any,
     onChange: (event: ChangeEvent<HTMLInputElement>) => void,
     onEnter?: () => void
 }
 
-const InputField = ({ fieldName, label, type, value, placeholder, required, disabled, error, readOnly, maxLength, onChange, onEnter }: InputFieldProps) => {
+const InputField = ({
+    fieldName,
+    label,
+    type,
+    value,
+    placeholder,
+    required,
+    disabled,
+    error,
+    readOnly,
+    maxLength,
+    tooltipElement,
+    onChange,
+    onEnter
+}: InputFieldProps) => {
     const [memError, setMemError] = useState<string | undefined>(undefined);
     const [switched, setSwitched] = useState(false);
 
@@ -41,6 +57,13 @@ const InputField = ({ fieldName, label, type, value, placeholder, required, disa
 
     return (
         <InputContainer onFocus={() => inputRef?.current?.focus()} name={fieldName} required={required} label={label} error={error && memError === error ? undefined : error}>
+            {tooltipElement && (
+                <Tooltip target={'#' + fieldName}>
+                    <div className="max-w-sm bg-white rounded-sm p-4" style={{ margin: '-7px' }}>
+                        {tooltipElement}
+                    </div>
+                </Tooltip>
+            )}
             <input
                 ref={inputRef}
                 type={type === "password" && switched ? "text" : type}
