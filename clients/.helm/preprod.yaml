@@ -2,8 +2,10 @@ clients:
   afrAuthorityServicesFront:
     redirectUris:
     - http://localhost:4200/*
+    - https://kacd-arrfr-lk.k8s-dev.kacd.kz/*
     webOrigins:
     - http://localhost:4200
+    - https://kacd-arrfr-lk.k8s-dev.kacd.kz
   deponentReport:
     redirectUris:
     - http://localhost:8080/*

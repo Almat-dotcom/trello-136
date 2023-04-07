@@ -1,6 +1,7 @@
-package kz.kacd.sso.resource;
+package kz.kacd.sso.resource.config;
 
 import kz.kacd.sso.k8s.K8sConfig;
+import kz.kacd.sso.resource.AbstractAdminResource;
 import org.jboss.resteasy.spi.InternalServerErrorException;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.keycloak.models.RealmModel;
@@ -20,7 +21,7 @@ public abstract class BaseConfigAdminResource extends AbstractAdminResource {
     }
 
     protected void checkPermissions() {
-        if (!auth.hasRealmConfig()) {
+        if (!auth().hasRealmConfig()) {
             throw new NotAuthorizedException("User has no permissions to run configuration!");
         }
     }
@@ -29,6 +30,10 @@ public abstract class BaseConfigAdminResource extends AbstractAdminResource {
         if (!K8sConfig.ENABLED) {
             throw new InternalServerErrorException("Server does not configured to use kubernetes api!");
         }
+    }
+
+    private ConfigAdminAuth auth() {
+        return new ConfigAdminAuth(auth);
     }
 
     @Override
