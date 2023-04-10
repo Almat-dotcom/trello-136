@@ -33,7 +33,7 @@ public class MembersResource extends BaseOrganizationAdminResource {
         checkViewPermissions();
 
         log.debugf("Finding members for organization %s ...", model.getId());
-        return model.getPositions().map(PositionRepresentation::from);
+        return model.getPositions().map(it -> PositionRepresentation.from(session, realm, it));
     }
 
     @Path("{id}")
@@ -66,7 +66,7 @@ public class MembersResource extends BaseOrganizationAdminResource {
             throw positionNotFound(member.getPosition());
         }
 
-        PositionRepresentation rep = PositionRepresentation.from(position);
+        PositionRepresentation rep = PositionRepresentation.from(session, realm, position);
 
         adminEvent.resource(OrganizationResourceType.ORGANIZATION_MEMBERSHIP.name())
                 .resourcePath(session.getContext().getUri(), rep.getId())
