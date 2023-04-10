@@ -46,7 +46,7 @@ spec:
     roleDescription: Держатель
   }, {
     name: reporting_person,
-    roleDescription: Информирующее лицо
+    roleDescription: "Информирующее лицо"
   }, {
     name: custodian,
     roleDescription: Кастодиан
