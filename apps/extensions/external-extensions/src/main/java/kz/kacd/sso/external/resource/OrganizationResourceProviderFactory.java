@@ -14,8 +14,6 @@ import org.keycloak.services.managers.RealmManager;
 import org.keycloak.services.resource.RealmResourceProvider;
 import org.keycloak.services.resource.RealmResourceProviderFactory;
 
-import java.util.stream.Collectors;
-
 /**
  * Resource provider factory for organization admin resource.
  * </>
@@ -23,9 +21,8 @@ import java.util.stream.Collectors;
  */
 @AutoService(RealmResourceProviderFactory.class)
 public class OrganizationResourceProviderFactory implements RealmResourceProviderFactory {
-    private static final Logger log = Logger.getLogger(OrganizationResourceProviderFactory.class);
-
     public static final String PROVIDER_ID = "orgs";
+    private static final Logger log = Logger.getLogger(OrganizationResourceProviderFactory.class);
 
     @Override
     public String getId() {

@@ -1,32 +1,34 @@
 package kz.kacd.sso.external.representation;
 
 import kz.kacd.sso.external.model.PositionModel;
+import org.keycloak.models.KeycloakSession;
+import org.keycloak.models.RealmModel;
 
 public class PositionRepresentation {
 
     private String id;
     private String name;
     private String description;
-    private String userId;
+    private ProfileResourceRepresentation user;
     private Boolean confirmed;
 
     public PositionRepresentation() {
     }
 
-    private PositionRepresentation(String id, String name, String description, String userId, Boolean confirmed) {
+    private PositionRepresentation(String id, String name, String description, ProfileResourceRepresentation user, Boolean confirmed) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.userId = userId;
+        this.user = user;
         this.confirmed = confirmed;
     }
 
-    public static PositionRepresentation from(PositionModel source) {
+    public static PositionRepresentation from(KeycloakSession session, RealmModel realm, PositionModel source) {
         return new PositionRepresentation(
                 source.getId(),
                 source.getName(),
                 source.getDescription(),
-                source.getUser().getId(),
+                ProfileResourceRepresentation.of(session, realm, source.getUser()),
                 source.confirmed()
         );
     }
@@ -55,12 +57,12 @@ public class PositionRepresentation {
         this.description = description;
     }
 
-    public String getUserId() {
-        return userId;
+    public ProfileResourceRepresentation getUser() {
+        return user;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUser(ProfileResourceRepresentation user) {
+        this.user = user;
     }
 
     public Boolean getConfirmed() {

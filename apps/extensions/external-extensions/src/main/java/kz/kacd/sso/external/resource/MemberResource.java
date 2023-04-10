@@ -8,7 +8,10 @@ import org.jboss.logging.Logger;
 import org.keycloak.events.admin.OperationType;
 import org.keycloak.models.RealmModel;
 
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.PATCH;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -29,7 +32,7 @@ public class MemberResource extends BaseOrganizationAdminResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getMember() {
         log.debugf("Getting member %s ...", model.getId());
-        return Response.ok(PositionRepresentation.from(model)).build();
+        return Response.ok(PositionRepresentation.from(session, realm, model)).build();
     }
 
     @PATCH
@@ -40,7 +43,7 @@ public class MemberResource extends BaseOrganizationAdminResource {
 
         org.confirmPosition(model);
 
-        PositionRepresentation rep = PositionRepresentation.from(model);
+        PositionRepresentation rep = PositionRepresentation.from(session, realm, model);
 
         adminEvent.resource(OrganizationResourceType.ORGANIZATION_MEMBERSHIP.name())
                 .resourcePath(session.getContext().getUri(), rep.getId())
@@ -59,7 +62,7 @@ public class MemberResource extends BaseOrganizationAdminResource {
 
         org.revokePosition(model);
 
-        PositionRepresentation rep = PositionRepresentation.from(model);
+        PositionRepresentation rep = PositionRepresentation.from(session, realm, model);
 
         adminEvent.resource(OrganizationResourceType.ORGANIZATION_MEMBERSHIP.name())
                 .resourcePath(session.getContext().getUri(), rep.getId())
