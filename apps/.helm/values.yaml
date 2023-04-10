@@ -179,6 +179,14 @@ database:
   existingSecretPasswordKey: ""
 
 #
+# Kafka settings
+#
+kafka:
+  enabled: false
+  bootstrapServers: ""
+  groupId: ""
+
+#
 # Configuration to access redis
 #
 redis:
