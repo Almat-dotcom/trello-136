@@ -24,6 +24,7 @@ public class RealmClientRolesResource extends BaseClientRealmResource {
 
         log.debugf("Finding clients for realm {} ...", realm.getName());
         List<RealmClientRepresentation> representations = session.clients().getClientsStream(realm)
+                .filter(ClientModel::isEnabled)
                 .filter(it -> !protectedClients(it.getClientId()))
                 .map(it -> new RealmClientRepresentation(it.getClientId(), it.getName(), it.getDescription()))
                 .collect(Collectors.toList());

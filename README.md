@@ -214,3 +214,46 @@
 ### Response
 
 **responseCode** `202`
+
+---
+## Получить список клиентов
+
+### Request
+
+**GET** `/realm-client-roles`
+
+### Response
+
+**responseCode** `200`
+
+**Body**
+
+```json
+[{
+    "clientId": "test",
+    "name": "Test",
+    "description": "Test"
+}]
+```
+
+---
+## Получить список ролей по клиенту
+
+### Request
+
+**GET** `/realm-client-roles/{clientId}/role`
+
+**PATH**
+- clientId - Идентификатор клиента
+
+### Response
+
+**responseCode** `200`
+
+**Body**
+```json
+[{
+    "name": "depositor",
+    "description": "Депонент"
+}]
+```
