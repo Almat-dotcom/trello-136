@@ -37,7 +37,7 @@ export const { kcContext } = getKcContext<ExtendedContextExtended>({
         {
             "pageId": "login.ftl",
             "locale": {
-                "currentLanguageTag": "ru",
+                "currentLanguageTag": "kz",
 				"supported": [{
 					"url": "mockurl-kz",
 					"label": "locale_kz",
