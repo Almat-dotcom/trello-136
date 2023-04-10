@@ -59,6 +59,21 @@ public class RealmProfileResource extends BaseProfileRealmResource {
         ).build();
     }
 
+    @GET
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response get(@PathParam("id") String id) {
+        hasReadPermission();
+
+        log.debugf("Getting profile by user id {} ...", id);
+        UserModel user = session.users().getUserById(realm, id);
+        if (user == null) {
+            throw new NotFoundException("User not found!");
+        }
+
+        return Response.ok(ProfileResourceRepresentation.of(session, realm, user)).build();
+    }
+
     @PATCH
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)

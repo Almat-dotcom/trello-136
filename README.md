@@ -55,6 +55,35 @@
 ```
 
 ---
+## Получить профиль
+
+### Request
+
+**GET** `/profile/{id}`
+
+**Path** 
+- id - Идентификаор пользователя
+
+### Response
+
+**responseCode** `200`
+**Body**:
+```json
+{
+    "id": "0e475c35-ed18-4951-b583-72ed72372dc8",
+    "username": "test",
+    "firstName": "test",
+    "enabled": true,
+    "roles": {
+        "realm": [
+            "default-roles-external"
+        ]
+    },
+    "groups": ["test"]
+}
+```
+
+---
 ## Обновить авторизационные данные
 
 ### Request

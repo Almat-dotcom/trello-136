@@ -1,10 +1,9 @@
 apiVersion: sso.kacd.kz/v1
 kind: Client
 metadata:
-  name: lk-shell-front
+  name: authority-services-front
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: intenral-realm
     kz-kacd-realm-name: external
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -13,8 +12,8 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  displayedName: LK Shell Front-End
-  displayedDescription: Фронт приложение Личного кабинета KSCD
+  displayedName: Гос услуги Front-End
+  displayedDescription: Фронт приложение Личного кабинета KSCD по гос услугам
   access:
     validRedirectUris:
     {{- include "common.tplvalues.render" ( dict "value" .Values.clients.lkShellFront.redirectUris "context" $ ) | nindent 4 }}
@@ -36,21 +35,9 @@ spec:
   - DIVISION
   - PHONE_NUMBER
   roles: [{
-    name: issuer,
-    roleDescription: Эмитент
+    name: signer,
+    roleDescription: Просмотр, создание, редактирование и подписание ЭЦП для отправки в уполномоченный орган заявлений и документов.
   }, {
-    name: depositor,
-    roleDescription: Депонент
-  }, {
-    name: shareholder,
-    roleDescription: Держатель
-  }, {
-    name: reporting_person,
-    roleDescription: Информирующее лицо
-  }, {
-    name: custodian,
-    roleDescription: Кастодиан
-  }, {
-    name: client-bank,
-    roleDescription: Банк-клиент
+    name: editor,
+    roleDescription: Просмотр, создание и редактирование заявлений и документов.
   }]
