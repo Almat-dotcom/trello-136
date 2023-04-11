@@ -44,6 +44,11 @@ redis:
   host: keycloak-redis.sso.svc.cluster.local
   port: 6379
 
+kafka:
+  enabled: true
+  bootstrapServers: "kafka-dev.kacd.kz:9092"
+  groupId: keycloak-dev
+
 service:
   type: ClusterIP
   annotations:
