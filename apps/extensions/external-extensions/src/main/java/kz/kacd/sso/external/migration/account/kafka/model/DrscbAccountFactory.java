@@ -59,7 +59,9 @@ public class DrscbAccountFactory {
     }
 
     private static String emailOf(DrscbPersonRepresentation representation) {
-        return representation.getEmail() != null ? representation.getEmail() : DrscbAccount.MOCK_EMAIL;
+        return representation.getEmail() != null
+                ? representation.getEmail()
+                : representation.getId() + "@" + DrscbAccount.MOCK_EMAIL;
     }
 
     private static String phoneNumberOf(DrscbPersonRepresentation representation) {

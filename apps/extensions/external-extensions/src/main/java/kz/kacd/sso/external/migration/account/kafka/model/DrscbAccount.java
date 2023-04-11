@@ -7,7 +7,7 @@ public class DrscbAccount {
 
     public static final String LK_CLIENT = "lk-shell-front";
     public static final String LEGACY_CLIENT = "kcsd-legacy-portal";
-    public static final String MOCK_EMAIL = "mock@fake.com";
+    public static final String MOCK_EMAIL = "example.com";
 
     private final String id;
     private final Kind kind;
@@ -59,7 +59,7 @@ public class DrscbAccount {
     }
 
     public boolean emailPresent() {
-        return !email.equals(MOCK_EMAIL);
+        return !email.endsWith(MOCK_EMAIL);
     }
 
     public boolean phoneNumberPresent() {
@@ -159,7 +159,7 @@ public class DrscbAccount {
         }
 
         public String clientId() {
-            return name;
+            return client;
         }
     }
 }
