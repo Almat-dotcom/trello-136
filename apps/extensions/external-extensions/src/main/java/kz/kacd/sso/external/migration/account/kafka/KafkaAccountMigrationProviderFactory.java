@@ -99,7 +99,8 @@ public class KafkaAccountMigrationProviderFactory implements AccountMigrationPro
     }
 
     private void onError(Throwable e) {
-        log.errorf("Error on listening {} topic!", TOPIC, e);
+        log.errorf("Error on listening %s topic! %s", TOPIC, e);
+        e.printStackTrace();
     }
 
     @Override
