@@ -96,7 +96,6 @@ public class DefaultKafkaTopic<T> implements KafkaTopic<T> {
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         config.put(ConsumerConfig.GROUP_ID_CONFIG, KafkaConfig.groupId());
         config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-        config.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "10");
 
         consumer = new KafkaConsumer<>(config);
 

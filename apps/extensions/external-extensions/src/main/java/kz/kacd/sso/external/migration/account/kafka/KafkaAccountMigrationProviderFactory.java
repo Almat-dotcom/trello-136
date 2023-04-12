@@ -66,6 +66,7 @@ public class KafkaAccountMigrationProviderFactory implements AccountMigrationPro
         KeycloakModelUtils.runJobInTransaction(
                 factory,
                 session -> {
+                    session.getContext().setRealm(session.realms().getRealmByName("external"));
                     DrscbAccountHandler handler = createHandler(session);
                     handler.handle(account);
                 }
