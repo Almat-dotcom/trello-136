@@ -26,7 +26,7 @@ import org.keycloak.models.utils.KeycloakModelUtils;
 import org.keycloak.models.utils.PostMigrationEvent;
 import org.keycloak.provider.ProviderFactory;
 
-@AutoService(KafkaAccountMigrationProviderFactory.class)
+@AutoService(AccountMigrationProviderFactory.class)
 public class KafkaAccountMigrationProviderFactory implements AccountMigrationProviderFactory {
     public static final String PROVIDER_ID = "kafka-account-migration";
     private static final Logger log = Logger.getLogger(KafkaAccountMigrationProviderFactory.class);
@@ -46,7 +46,6 @@ public class KafkaAccountMigrationProviderFactory implements AccountMigrationPro
     public void postInit(KeycloakSessionFactory factory) {
         factory.register(event -> {
             if (event instanceof PostMigrationEvent) {
-                log.infof("AFTER MIGRATION");
                 subscribe(((PostMigrationEvent) event).getFactory());
             }
         });
