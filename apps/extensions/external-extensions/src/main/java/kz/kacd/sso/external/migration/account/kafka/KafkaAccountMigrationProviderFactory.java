@@ -2,6 +2,7 @@ package kz.kacd.sso.external.migration.account.kafka;
 
 import com.google.auto.service.AutoService;
 import kz.kacd.sso.external.kafka.KafkaProvider;
+import kz.kacd.sso.external.kafka.impl.DefaultKafkaProvider;
 import kz.kacd.sso.external.migration.account.AccountMigrationProvider;
 import kz.kacd.sso.external.migration.account.AccountMigrationProviderFactory;
 import kz.kacd.sso.external.migration.account.kafka.handler.AuthenticationDetailsHandler;
@@ -60,6 +61,7 @@ public class KafkaAccountMigrationProviderFactory implements AccountMigrationPro
     }
 
     private void onAccount(KeycloakSessionFactory factory, DrscbPersonRepresentation representation) {
+        log.error("ACCOUNT " + representation.getId());
         DrscbAccount account = DrscbAccountFactory.create(representation);
         KeycloakModelUtils.runJobInTransaction(
                 factory,
@@ -99,8 +101,7 @@ public class KafkaAccountMigrationProviderFactory implements AccountMigrationPro
     }
 
     private void onError(Throwable e) {
-        log.errorf("Error on listening %s topic! %s", TOPIC, e);
-        e.printStackTrace();
+        log.errorf("Error on listening %s topic! %s", TOPIC, e.getClass().getName() + ": " + e.getMessage());
     }
 
     @Override

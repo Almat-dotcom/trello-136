@@ -96,6 +96,7 @@ public class DefaultKafkaTopic<T> implements KafkaTopic<T> {
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         config.put(ConsumerConfig.GROUP_ID_CONFIG, KafkaConfig.groupId());
         config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        config.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "10");
 
         consumer = new KafkaConsumer<>(config);
 
@@ -122,11 +123,11 @@ public class DefaultKafkaTopic<T> implements KafkaTopic<T> {
     }
 
     private void poll() {
-        log.debugf("Polling records from topic {} ...", name);
+        log.debugf("Polling records from topic %s ...", name);
         ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
 
         for (ConsumerRecord<String, String> entry : records) {
-            log.debugf("Got record with key {} and offset {} ...", entry.key(), entry.offset());
+            log.debugf("Got record with key %s and offset %s ...", entry.key(), entry.offset());
             T value = parse(entry.value());
             subscribers.forEach((k, v) -> v.onNext(value));
         }
