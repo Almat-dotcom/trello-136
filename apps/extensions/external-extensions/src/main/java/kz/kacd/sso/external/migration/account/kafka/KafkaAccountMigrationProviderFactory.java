@@ -46,6 +46,7 @@ public class KafkaAccountMigrationProviderFactory implements AccountMigrationPro
     public void postInit(KeycloakSessionFactory factory) {
         factory.register(event -> {
             if (event instanceof PostMigrationEvent) {
+                log.infof("AFTER MIGRATION");
                 subscribe(((PostMigrationEvent) event).getFactory());
             }
         });
