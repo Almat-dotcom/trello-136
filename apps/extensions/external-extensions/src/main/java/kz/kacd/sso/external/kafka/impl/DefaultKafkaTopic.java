@@ -12,7 +12,6 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.jboss.logging.Logger;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Map;
@@ -34,7 +33,7 @@ public class DefaultKafkaTopic<T> implements KafkaTopic<T> {
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     private KafkaConsumer<String, String> consumer;
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
     public DefaultKafkaTopic(String name, Class<T> itemClass) {
         this.name = name;
@@ -141,8 +140,7 @@ public class DefaultKafkaTopic<T> implements KafkaTopic<T> {
         }
     }
 
-    @Override
-    public void close() throws IOException {
+    public void close() {
         executor.shutdown();
         consumer.unsubscribe();
         subscribers.forEach((k, v) -> v.onComplete());

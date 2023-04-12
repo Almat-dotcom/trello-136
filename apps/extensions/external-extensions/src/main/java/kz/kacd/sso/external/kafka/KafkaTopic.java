@@ -1,9 +1,8 @@
 package kz.kacd.sso.external.kafka;
 
-import java.io.Closeable;
 import java.util.function.Consumer;
 
-public interface KafkaTopic<T> extends Closeable {
+public interface KafkaTopic<T> {
 
     String name();
 
