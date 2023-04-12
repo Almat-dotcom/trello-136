@@ -61,7 +61,6 @@ public class KafkaAccountMigrationProviderFactory implements AccountMigrationPro
     }
 
     private void onAccount(KeycloakSessionFactory factory, DrscbPersonRepresentation representation) {
-        log.error("ACCOUNT " + representation.getId());
         DrscbAccount account = DrscbAccountFactory.create(representation);
         KeycloakModelUtils.runJobInTransaction(
                 factory,

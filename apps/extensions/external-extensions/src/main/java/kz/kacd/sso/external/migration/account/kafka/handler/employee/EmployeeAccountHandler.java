@@ -28,6 +28,9 @@ public class EmployeeAccountHandler {
         UserModel user = searcher.find(account);
         if (user == null) {
             user = creator.create(account);
+            if (user == null) {
+                return;
+            }
             auth.applyAuthenticationDetails(account, user);
         }
         applier.apply(account, user);
