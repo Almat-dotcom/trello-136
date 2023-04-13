@@ -23,6 +23,8 @@ public class AuthenticationDetailsHandler {
     public void applyAuthenticationDetails(DrscbAccount source, UserModel targetUser) {
         log.debugf("Applying authentication details on new account {} ...", source.getId());
 
+        targetUser.addRequiredAction(UserModel.RequiredAction.UPDATE_PASSWORD);
+
         if (source.isResident()) {
             targetUser.setEmail(mockEmail(source.getId()));
             targetUser.addRequiredAction(ChangeEmailRequiredAction.PROVIDER_ID);
