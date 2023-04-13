@@ -5,9 +5,10 @@ import kz.kacd.sso.external.migration.account.kafka.model.DrscbAccountFactory;
 import kz.kacd.sso.external.migration.account.kafka.representation.DrscbPersonRepresentation;
 import kz.kacd.sso.external.requiredaction.email.ChangeEmailRequiredAction;
 import kz.kacd.sso.external.requiredaction.phone.ChangePhoneRequiredAction;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.keycloak.models.UserModel;
+import org.keycloak.models.*;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -16,20 +17,38 @@ import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 
 @ExtendWith(MockitoExtension.class)
 class AuthenticationDetailsHandlerTest {
 
     @Mock
+    KeycloakSession session;
+    @Mock
+    KeycloakContext context;
+    @Mock
+    RealmModel realm;
+    @Mock
+    UserProvider userProvider;
+    @Mock
     UserModel user;
 
-    AuthenticationDetailsHandler handler = new AuthenticationDetailsHandler(session);
+    AuthenticationDetailsHandler handler;
+
+    @BeforeEach
+    void setUp() {
+        given(session.getContext()).willReturn(context);
+        given(context.getRealm()).willReturn(realm);
+        handler = new AuthenticationDetailsHandler(session);
+    }
 
     @Test
     void should_apply_new_email_and_add_verify_email_action() {
         String email = "my@email.com";
         DrscbAccount account = account(email, null);
+        given(session.users()).willReturn(userProvider);
+        given(userProvider.getUserByEmail(realm, email)).willReturn(null);
         ArgumentCaptor<String> emailCaptor = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<UserModel.RequiredAction> actionCaptor = ArgumentCaptor.forClass(UserModel.RequiredAction.class);
         doNothing().when(user).setEmail(emailCaptor.capture());
@@ -55,10 +74,9 @@ class AuthenticationDetailsHandlerTest {
 
     @Test
     void should_force_user_to_change_phone_number() {
-        String email = "test@t.me";
+        String email = "test@example.com";
         DrscbAccount account = account(email, null);
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
-        doNothing().when(user).addRequiredAction(any(UserModel.RequiredAction.class));
         doNothing().when(user).addRequiredAction(captor.capture());
 
         handler.applyAuthenticationDetails(account, user);
