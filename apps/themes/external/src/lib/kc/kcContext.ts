@@ -1,5 +1,4 @@
 import { getKcContext, KcContextBase } from "keycloakify/lib/getKcContext";
-import { type } from "os";
 
 type ExtendedRegister = KcContextBase.RegisterCommon & {
 	pageId: "register.ftl";
