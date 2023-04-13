@@ -16,6 +16,8 @@ import ResetPassword from "components/ResetPassword";
 import LoginExpired from "components/LoginExpired";
 import Info from "components/Info";
 import Error from "components/Error";
+import ChangeEmail from "components/ChangeEmail";
+import ChangePhoneNumber from "components/ChangePhoneNumber/ChangePhoneNumber";
 
 export type Props = {
     kcContext: KcContext;
@@ -50,6 +52,8 @@ export default function KcApp({ kcContext }: Props) {
                     case "login-page-expired.ftl": return <LoginExpired {...{ kcContext, ...props }} />;
                     case "info.ftl": return <Info {...{ kcContext, ...props }} />;
                     case "error.ftl": return <Error {...{ kcContext, ...props }} />;
+                    case "update-email.ftl": return <ChangeEmail {...{ kcContext, ...props }}/>;
+                    case "update-phone.ftl": return <ChangePhoneNumber {...{ kcContext, ...props }}/>;
                     default: return <KcAppBase doFetchDefaultThemeResources={true} {...{ kcContext: defaultContext, ...props }} />;
                 }
             })()}

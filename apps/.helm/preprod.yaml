@@ -40,6 +40,11 @@ database:
   existingSecret: sso-keycloak-database-password
   existingSecretPasswordKey: password
 
+kafka:
+  enabled: true
+  bootstrapServers: "kafka-preprod.kacd.kz:9092"
+  groupId: keycloak-preprod
+
 service:
   type: ClusterIP
   annotations:

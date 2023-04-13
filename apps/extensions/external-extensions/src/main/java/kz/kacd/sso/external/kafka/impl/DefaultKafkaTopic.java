@@ -12,7 +12,6 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.jboss.logging.Logger;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Map;
@@ -34,7 +33,7 @@ public class DefaultKafkaTopic<T> implements KafkaTopic<T> {
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     private KafkaConsumer<String, String> consumer;
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
     public DefaultKafkaTopic(String name, Class<T> itemClass) {
         this.name = name;
@@ -123,11 +122,11 @@ public class DefaultKafkaTopic<T> implements KafkaTopic<T> {
     }
 
     private void poll() {
-        log.debugf("Polling records from topic {} ...", name);
+        log.debugf("Polling records from topic %s ...", name);
         ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
 
         for (ConsumerRecord<String, String> entry : records) {
-            log.debugf("Got record with key {} and offset {} ...", entry.key(), entry.offset());
+            log.debugf("Got record with key %s and offset %s ...", entry.key(), entry.offset());
             T value = parse(entry.value());
             subscribers.forEach((k, v) -> v.onNext(value));
         }
@@ -141,8 +140,7 @@ public class DefaultKafkaTopic<T> implements KafkaTopic<T> {
         }
     }
 
-    @Override
-    public void close() throws IOException {
+    public void close() {
         executor.shutdown();
         consumer.unsubscribe();
         subscribers.forEach((k, v) -> v.onComplete());
