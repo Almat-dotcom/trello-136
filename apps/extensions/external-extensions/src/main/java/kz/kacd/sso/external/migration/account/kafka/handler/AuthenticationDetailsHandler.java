@@ -24,7 +24,7 @@ public class AuthenticationDetailsHandler {
         log.debugf("Applying authentication details on new account {} ...", source.getId());
 
         if (source.isResident()) {
-            targetUser.setEmail(source.getId() + "@" + DrscbAccount.MOCK_EMAIL);
+            targetUser.setEmail(mockEmail(source.getId()));
             targetUser.addRequiredAction(ChangeEmailRequiredAction.PROVIDER_ID);
             targetUser.addRequiredAction(ChangePhoneRequiredAction.PROVIDER_ID);
             return;
@@ -34,7 +34,7 @@ public class AuthenticationDetailsHandler {
         if (source.emailPresent() && session.users().getUserByEmail(realm, email) == null) {
             targetUser.addRequiredAction(UserModel.RequiredAction.VERIFY_EMAIL);
         } else if (source.emailPresent()) {
-            email = source.getId() + "@" + DrscbAccount.MOCK_EMAIL;
+            email = mockEmail(source.getId());
             targetUser.addRequiredAction(ChangeEmailRequiredAction.PROVIDER_ID);
         } else {
             targetUser.addRequiredAction(ChangeEmailRequiredAction.PROVIDER_ID);
@@ -46,5 +46,9 @@ public class AuthenticationDetailsHandler {
         } else {
             targetUser.addRequiredAction(ChangePhoneRequiredAction.PROVIDER_ID);
         }
+    }
+
+    private String mockEmail(String id) {
+        return id + "@" + DrscbAccount.MOCK_EMAIL;
     }
 }
