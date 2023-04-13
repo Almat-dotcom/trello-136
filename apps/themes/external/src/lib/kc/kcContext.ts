@@ -1,29 +1,40 @@
 import { getKcContext, KcContextBase } from "keycloakify/lib/getKcContext";
+import { type } from "os";
 
 type ExtendedRegister = KcContextBase.RegisterCommon & {
 	pageId: "register.ftl";
-        register: {
-            formData: {
-				residency?: string;
-				clientType?: string;
-				legalRole?: string;
-                firstName?: string;
-				middleName?: string;
-                displayName?: string;
-                lastName?: string;
-                email?: string;
-				phoneNumber?: string;
-				bin?: string;
-                iin?: string;
-            };
-        };
+	register: {
+		formData: {
+			residency?: string;
+			clientType?: string;
+			legalRole?: string;
+			firstName?: string;
+			middleName?: string;
+			displayName?: string;
+			lastName?: string;
+			email?: string;
+			phoneNumber?: string;
+			bin?: string;
+			iin?: string;
+		};
+	};
 }
 
-type ExtendedContextExtended = KcContextBase.Login | KcContextBase.RegisterUserProfile | KcContextBase.Info | KcContextBase.Error | KcContextBase.LoginResetPassword | KcContextBase.LoginVerifyEmail | KcContextBase.Terms | KcContextBase.LoginOtp | KcContextBase.LoginUsername | KcContextBase.WebauthnAuthenticate | KcContextBase.LoginPassword | KcContextBase.LoginUpdatePassword | KcContextBase.LoginUpdateProfile | KcContextBase.LoginIdpLinkConfirm | KcContextBase.LoginIdpLinkEmail | KcContextBase.LoginPageExpired | KcContextBase.LoginConfigTotp | KcContextBase.LogoutConfirm | KcContextBase.UpdateUserProfile | KcContextBase.IdpReviewUserProfile | ExtendedRegister;
+type ChangeEmail = KcContextBase.Common & {
+	pageId: "update-email.ftl";
+	email?: string;
+}
+
+type ChangePhone = KcContextBase.Common & {
+	pageId: "update-phone.ftl";
+	phoneNumber?: string
+}
+
+type ExtendedContextExtended = KcContextBase.Login | KcContextBase.RegisterUserProfile | KcContextBase.Info | KcContextBase.Error | KcContextBase.LoginResetPassword | KcContextBase.LoginVerifyEmail | KcContextBase.Terms | KcContextBase.LoginOtp | KcContextBase.LoginUsername | KcContextBase.WebauthnAuthenticate | KcContextBase.LoginPassword | KcContextBase.LoginUpdatePassword | KcContextBase.LoginUpdateProfile | KcContextBase.LoginIdpLinkConfirm | KcContextBase.LoginIdpLinkEmail | KcContextBase.LoginPageExpired | KcContextBase.LoginConfigTotp | KcContextBase.LogoutConfirm | KcContextBase.UpdateUserProfile | KcContextBase.IdpReviewUserProfile | ExtendedRegister | ChangeEmail | ChangePhone;
 
 export const { kcContext } = getKcContext<ExtendedContextExtended>({
 
-    "mockPageId": "login.ftl",
+	"mockPageId": "login.ftl",
 	// "mockPageId": "register.ftl",
 	// "mockPageId": "login-verify-email.ftl",
 	// "mockPageId": "login-update-password.ftl",
@@ -32,18 +43,20 @@ export const { kcContext } = getKcContext<ExtendedContextExtended>({
 	// "mockPageId": "login-page-expired.ftl",
 	// "mockPageId": "info.ftl",
 	// "mockPageId": "error.ftl",
+	// "mockPageId": "update-email.ftl",
+	// "mockPageId": "update-phone.ftl",
 
-    "mockData": [
-        {
-            "pageId": "login.ftl",
-            "locale": {
-                "currentLanguageTag": "kz",
+	"mockData": [
+		{
+			"pageId": "login.ftl",
+			"locale": {
+				"currentLanguageTag": "kz",
 				"supported": [{
 					"url": "mockurl-kz",
 					"label": "locale_kz",
 					"languageTag": "kz"
 				}]
-            },
+			},
 			"auth": {
 				"showResetCredentials": true,
 			},
@@ -57,20 +70,20 @@ export const { kcContext } = getKcContext<ExtendedContextExtended>({
 				// eslint-disable-next-line no-template-curly-in-string
 				"summary": "invalidUserMessage"
 			}
-        },
+		},
 		{
 			"pageId": "register.ftl",
 			"realm": {
 				"internationalizationEnabled": true
 			},
 			"locale": {
-                "currentLanguageTag": "ru",
+				"currentLanguageTag": "ru",
 				"supported": [{
 					"url": "mockurl-kz",
 					"label": "locale_kz",
 					"languageTag": "kz"
 				}]
-            }
+			}
 		},
 		{
 			"pageId": "login-verify-email.ftl",
@@ -170,7 +183,7 @@ export const { kcContext } = getKcContext<ExtendedContextExtended>({
 				}]
 			}
 		}
-    ]
+	]
 });
 
 export type KcContext = NonNullable<typeof kcContext>;

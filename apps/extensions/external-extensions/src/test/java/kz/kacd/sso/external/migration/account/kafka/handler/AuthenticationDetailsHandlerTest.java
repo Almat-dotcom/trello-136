@@ -66,6 +66,7 @@ class AuthenticationDetailsHandlerTest {
         DrscbAccount account = account(fake, "+77777777777");
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         doNothing().when(user).addRequiredAction(captor.capture());
+        doNothing().when(user).addRequiredAction(any(UserModel.RequiredAction.class));
 
         handler.applyAuthenticationDetails(account, user);
 
@@ -78,6 +79,7 @@ class AuthenticationDetailsHandlerTest {
         DrscbAccount account = account(email, null);
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         doNothing().when(user).addRequiredAction(captor.capture());
+        doNothing().when(user).addRequiredAction(any(UserModel.RequiredAction.class));
 
         handler.applyAuthenticationDetails(account, user);
 

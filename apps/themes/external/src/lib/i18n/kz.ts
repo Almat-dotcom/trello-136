@@ -169,5 +169,7 @@ export const kz = {
     "passwordPolicyLowerCase": "бас латын әріптері",
     "passwordPolicyUpperCase": "кіші латын әріптері",
     "passwordPolicyDigits": "сандар",
-    "passwordPolicySpecialSymbols": "тыныс белгілері (!\"$%&'()+,-./:;<=>?@[]^_{|}~) болуы керек"
+    "passwordPolicySpecialSymbols": "тыныс белгілері (!\"$%&'()+,-./:;<=>?@[]^_{|}~) болуы керек",
+    "forcedToChangeEmail": "Вам необходимо указать и подтвердить адрес электронной почты",
+    "forcedToChangePhoneNumber": "Вам необходимо указать номер телефона"
 }

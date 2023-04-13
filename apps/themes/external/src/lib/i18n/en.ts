@@ -169,5 +169,7 @@ export const en = {
     "passwordPolicyLowerCase": "uppercase Latin letters",
     "passwordPolicyUpperCase": "lowercase Latin letters",
     "passwordPolicyDigits": "digits",
-    "passwordPolicySpecialSymbols": "punctuation marks (!\"$%&'()+,-./:;<=>?@[]^_{|}~)"
+    "passwordPolicySpecialSymbols": "punctuation marks (!\"$%&'()+,-./:;<=>?@[]^_{|}~)",
+    "forcedToChangeEmail": "You need to change and verify your email",
+    "forcedToChangePhoneNumber": "You need to change your phone number"
 }

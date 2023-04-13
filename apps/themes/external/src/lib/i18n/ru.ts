@@ -169,5 +169,7 @@ export const ru = {
     "passwordPolicyLowerCase": "прописные латинские буквы",
     "passwordPolicyUpperCase": "строчные латинские буквы",
     "passwordPolicyDigits": "цифры",
-    "passwordPolicySpecialSymbols": "знаки пунктуации (!\"$%&'()+,-./:;<=>?@[]^_{|}~)"
+    "passwordPolicySpecialSymbols": "знаки пунктуации (!\"$%&'()+,-./:;<=>?@[]^_{|}~)",
+    "forcedToChangeEmail": "Вам необходимо указать и подтвердить адрес электронной почты",
+    "forcedToChangePhoneNumber": "Вам необходимо указать номер телефона"
 }

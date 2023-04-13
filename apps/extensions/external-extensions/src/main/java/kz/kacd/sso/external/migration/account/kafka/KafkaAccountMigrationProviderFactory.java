@@ -1,6 +1,7 @@
 package kz.kacd.sso.external.migration.account.kafka;
 
 import com.google.auto.service.AutoService;
+import kz.kacd.sso.external.kafka.KafkaConfig;
 import kz.kacd.sso.external.kafka.KafkaProvider;
 import kz.kacd.sso.external.migration.account.AccountMigrationProvider;
 import kz.kacd.sso.external.migration.account.AccountMigrationProviderFactory;
@@ -45,6 +46,9 @@ public class KafkaAccountMigrationProviderFactory implements AccountMigrationPro
 
     @Override
     public void postInit(KeycloakSessionFactory factory) {
+        if (!KafkaConfig.enabled()) {
+            return;
+        }
         factory.register(event -> {
             if (event instanceof PostMigrationEvent) {
                 subscribe(((PostMigrationEvent) event).getFactory());
