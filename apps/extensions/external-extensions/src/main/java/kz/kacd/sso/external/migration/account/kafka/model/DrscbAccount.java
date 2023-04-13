@@ -6,7 +6,7 @@ import java.util.List;
 public class DrscbAccount {
 
     public static final String LK_CLIENT = "lk-shell-front";
-    public static final String LEGACY_CLIENT = "kcsd-legacy-portal";
+    public static final String LEGACY_CLIENT = "kacd-legacy-portal";
     public static final String MOCK_EMAIL = "example.com";
 
     private final String id;
