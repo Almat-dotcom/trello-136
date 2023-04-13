@@ -2,11 +2,11 @@ package kz.kacd.sso.external.migration.account.kafka;
 
 import com.google.auto.service.AutoService;
 import kz.kacd.sso.external.kafka.KafkaProvider;
-import kz.kacd.sso.external.kafka.impl.DefaultKafkaProvider;
 import kz.kacd.sso.external.migration.account.AccountMigrationProvider;
 import kz.kacd.sso.external.migration.account.AccountMigrationProviderFactory;
 import kz.kacd.sso.external.migration.account.kafka.handler.AuthenticationDetailsHandler;
 import kz.kacd.sso.external.migration.account.kafka.handler.DrscbAccountHandler;
+import kz.kacd.sso.external.migration.account.kafka.handler.DrscbAccountRoleMapper;
 import kz.kacd.sso.external.migration.account.kafka.handler.DrscbAttributesApplier;
 import kz.kacd.sso.external.migration.account.kafka.handler.employee.EmployeeAccountHandler;
 import kz.kacd.sso.external.migration.account.kafka.handler.employee.EmployeeUserCreator;
@@ -73,8 +73,9 @@ public class KafkaAccountMigrationProviderFactory implements AccountMigrationPro
     }
 
     private DrscbAccountHandler createHandler(KeycloakSession session) {
-        AuthenticationDetailsHandler authenticationDetailsHandler = new AuthenticationDetailsHandler();
+        AuthenticationDetailsHandler authenticationDetailsHandler = new AuthenticationDetailsHandler(session);
         DrscbAttributesApplier drscbAttributesApplier = new DrscbAttributesApplier();
+        DrscbAccountRoleMapper drscbAccountRoleMapper = new DrscbAccountRoleMapper(session);
 
         PhysicalUserSearcher physicalUserSearcher = new PhysicalUserSearcher(session);
         PhysicalUserCreator physicalUserCreator = new PhysicalUserCreator(session);
@@ -82,7 +83,8 @@ public class KafkaAccountMigrationProviderFactory implements AccountMigrationPro
                 physicalUserSearcher,
                 physicalUserCreator,
                 authenticationDetailsHandler,
-                drscbAttributesApplier
+                drscbAttributesApplier,
+                drscbAccountRoleMapper
         );
 
         LegalOrganizationSearcher legalOrganizationSearcher = new LegalOrganizationSearcher(session);
@@ -94,7 +96,8 @@ public class KafkaAccountMigrationProviderFactory implements AccountMigrationPro
                 employeeUserSearcher,
                 employeeUserCreator,
                 authenticationDetailsHandler,
-                drscbAttributesApplier
+                drscbAttributesApplier,
+                drscbAccountRoleMapper
         );
 
         return new DrscbAccountHandler(physics, legalAccountHandler, employeeAccountHandler);

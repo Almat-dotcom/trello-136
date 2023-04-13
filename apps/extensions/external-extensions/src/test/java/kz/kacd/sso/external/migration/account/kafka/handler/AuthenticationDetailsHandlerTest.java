@@ -24,7 +24,7 @@ class AuthenticationDetailsHandlerTest {
     @Mock
     UserModel user;
 
-    AuthenticationDetailsHandler handler = new AuthenticationDetailsHandler();
+    AuthenticationDetailsHandler handler = new AuthenticationDetailsHandler(session);
 
     @Test
     void should_apply_new_email_and_add_verify_email_action() {
@@ -71,7 +71,7 @@ class AuthenticationDetailsHandlerTest {
         representation.setEmail(email);
         representation.setmPhone(phone);
         representation.setId(BigDecimal.ONE);
-        representation.setIrs("1");
+        representation.setIrs("2");
         return DrscbAccountFactory.create(representation);
     }
 }

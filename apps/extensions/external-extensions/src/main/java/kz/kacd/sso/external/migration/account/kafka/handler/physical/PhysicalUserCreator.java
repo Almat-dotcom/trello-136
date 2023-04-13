@@ -31,13 +31,11 @@ public class PhysicalUserCreator {
             result = session.users().addUser(realm, username);
         } else {
             String email = account.getEmail();
-            if (!account.emailPresent()) {
-                log.warnf(
-                        "Account {} will be created only for admin console. This account can't be identified!",
-                        account.getId()
-                );
+            if (account.emailPresent()) {
+                result = session.users().addUser(realm, externalNonResidentUsername(email));
+            } else {
+                result = session.users().addUser(realm, account.getIin());
             }
-            result = session.users().addUser(realm, externalNonResidentUsername(email));
         }
         result.setSingleAttribute(ExternalRegistrationPage.FIELD_CLIENT_TYPE, ExternalRegistrationPage.CLIENT_PHYSICAL);
 

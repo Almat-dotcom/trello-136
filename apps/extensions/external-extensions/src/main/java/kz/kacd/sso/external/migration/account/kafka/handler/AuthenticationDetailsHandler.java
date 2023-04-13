@@ -5,20 +5,41 @@ import kz.kacd.sso.external.model.page.ExternalRegistrationPage;
 import kz.kacd.sso.external.requiredaction.email.ChangeEmailRequiredAction;
 import kz.kacd.sso.external.requiredaction.phone.ChangePhoneRequiredAction;
 import org.jboss.logging.Logger;
+import org.keycloak.models.KeycloakSession;
+import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 
 public class AuthenticationDetailsHandler {
     private static final Logger log = Logger.getLogger(AuthenticationDetailsHandler.class);
 
+    private final KeycloakSession session;
+    private final RealmModel realm;
+
+    public AuthenticationDetailsHandler(KeycloakSession session) {
+        this.session = session;
+        this.realm = session.getContext().getRealm();
+    }
+
     public void applyAuthenticationDetails(DrscbAccount source, UserModel targetUser) {
         log.debugf("Applying authentication details on new account {} ...", source.getId());
 
-        if (source.emailPresent()) {
-            targetUser.setEmail(source.getEmail());
+        if (source.isResident()) {
+            targetUser.setEmail(source.getId() + "@" + DrscbAccount.MOCK_EMAIL);
+            targetUser.addRequiredAction(ChangeEmailRequiredAction.PROVIDER_ID);
+            targetUser.addRequiredAction(ChangePhoneRequiredAction.PROVIDER_ID);
+            return;
+        }
+
+        String email = source.getEmail();
+        if (source.emailPresent() && session.users().getUserByEmail(realm, email) == null) {
             targetUser.addRequiredAction(UserModel.RequiredAction.VERIFY_EMAIL);
+        } else if (source.emailPresent()) {
+            email = source.getId() + "@" + DrscbAccount.MOCK_EMAIL;
+            targetUser.addRequiredAction(ChangeEmailRequiredAction.PROVIDER_ID);
         } else {
             targetUser.addRequiredAction(ChangeEmailRequiredAction.PROVIDER_ID);
         }
+        targetUser.setEmail(email);
 
         if (source.phoneNumberPresent()) {
             targetUser.setSingleAttribute(ExternalRegistrationPage.FIELD_PHONE_NUMBER, source.getPhoneNumber());
