@@ -1,6 +1,6 @@
 package kz.kacd.sso.sign.exception;
 
-import kz.kcsd.state.sso.model.ExtensionMessages;
+import kz.kacd.sso.login.ExtensionMessages;
 
 public class InvalidSignatureException extends RuntimeException {
 
