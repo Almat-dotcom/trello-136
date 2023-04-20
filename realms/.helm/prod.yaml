@@ -42,7 +42,7 @@ external:
 
 # Конфигурация реалма АРРФР
 afr:
-  enabled: false
+  enabled: true
   hostname: afr-sso.kacd.kz
   # Настройки службы ingress
   ingress:
