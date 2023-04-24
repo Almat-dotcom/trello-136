@@ -1,11 +1,10 @@
 import { PageProps } from "keycloakify";
 import { clsx } from "keycloakify/lib/tools/clsx";
-import { useConstCallback } from "keycloakify/lib/tools/useConstCallback";
 import { I18n } from "lib/i18n";
 import { KcContext } from "lib/kcContext";
 import { signAuthXml } from "lib/ncalayer";
 import { CancelledByUser, ConnectionLost } from "lib/ncalayer/NCALayer";
-import { FormEventHandler, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 const NCAMessage = ({ message, i18n }: { message: string, i18n: I18n }) => {
     const dark = (message: string) => {
