@@ -124,7 +124,7 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
                                                     //NOTE: This is used by Google Chrome auto fill so we use it to tell
                                                     //the browser how to pre fill the form but before submit we put it back
                                                     //to username because it is what keycloak expects.
-                                                    name={autoCompleteHelper}
+                                                    name="username"
                                                     defaultValue={login.username ?? ""}
                                                     type="text"
                                                     {...(usernameEditDisabled || inputDisabled
