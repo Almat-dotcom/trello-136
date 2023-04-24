@@ -51,6 +51,8 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
 
     const [inputDisabled, setInputDisabled] = useState(false);
     const [ncaMessage, setNcaMessage] = useState('');
+    const [username, setUsername] = useState(login.username ?? '');
+    const [password, setPassword] = useState('');
     const edsRef = useRef<HTMLInputElement>(null);
 
     const onSubmit = useConstCallback<FormEventHandler<HTMLFormElement>>(async e => {
@@ -121,7 +123,8 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
                                                     //the browser how to pre fill the form but before submit we put it back
                                                     //to username because it is what keycloak expects.
                                                     name="username"
-                                                    defaultValue={login.username ?? ""}
+                                                    value={username}
+                                                    onChange={e => setUsername(e.target.value)}
                                                     type="text"
                                                     {...(usernameEditDisabled || inputDisabled
                                                         ? { "disabled": true }
@@ -144,6 +147,8 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
                                         className={clsx(kcProps.kcInputClass)}
                                         name="password"
                                         type="password"
+                                        value={password}
+                                        onChange={e => setPassword(e.target.value)}
                                         autoComplete="off"
                                         disabled={inputDisabled}
                                     />
