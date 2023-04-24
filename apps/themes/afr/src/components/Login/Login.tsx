@@ -56,7 +56,7 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
     const edsRef = useRef<HTMLInputElement>(null);
     const formRef = useRef<HTMLFormElement>(null);
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         setInputDisabled(true);
         setNcaMessage('ncaSignInProgress');
         const xml = `<Authentication><signature>${client.clientId}${realm.name}</signature></Authentication>`;
@@ -76,7 +76,7 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
                 setNcaMessage('ncaError');
             }
         }
-    });
+    }
 
     return (
         <Template
