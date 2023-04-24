@@ -66,10 +66,6 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
 
             const formElement = e.target as HTMLFormElement;
 
-            //NOTE: Even if we login with email Keycloak expect username and password in
-            //the POST request.
-            formElement.querySelector("input[name='email']")?.setAttribute("name", "username");
-
             formElement.submit();
         } catch (error) {
             setInputDisabled(false);
