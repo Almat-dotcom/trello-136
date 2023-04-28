@@ -86,39 +86,39 @@ scan-external-theme:
   - sonar-scanner
 
 # Building internal theme for keycloak
-build-internal-theme:
-  stage: prebuild
-  image:
-    name: nexus.kacd.kz:5000/devops-utils/keycloakify-build-image:latest
-    entrypoint: [""]
-  before_script:
-  - export PROJECT_DIR="apps/themes/internal"
-  - cd ${PROJECT_DIR}
-  - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/internal-keycloak-theme.jar"
-  - mkdir -p ${HOME}/.m2
-  - echo -n "${PUBLIC_NEXUS_MIRROR}" > ${HOME}/.m2/settings.xml
-  script:
-  - yarn install --frozen-lockfile
-  - yarn keycloak
-  - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./build_keycloak/target/internal-keycloak-theme-1.0.6.jar ${NEXUS_REPO}
-  cache:
-  - key: node_modules_internal
-    paths:
-    - apps/themes/internal/node_modules
+# build-internal-theme:
+#   stage: prebuild
+#   image:
+#     name: nexus.kacd.kz:5000/devops-utils/keycloakify-build-image:latest
+#     entrypoint: [""]
+#   before_script:
+#   - export PROJECT_DIR="apps/themes/internal"
+#   - cd ${PROJECT_DIR}
+#   - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/internal-keycloak-theme.jar"
+#   - mkdir -p ${HOME}/.m2
+#   - echo -n "${PUBLIC_NEXUS_MIRROR}" > ${HOME}/.m2/settings.xml
+#   script:
+#   - yarn install --frozen-lockfile
+#   - yarn keycloak
+#   - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./build_keycloak/target/internal-keycloak-theme-1.0.6.jar ${NEXUS_REPO}
+#   cache:
+#   - key: node_modules_internal
+#     paths:
+#     - apps/themes/internal/node_modules
 
-# Scanning internal theme for keycloak
-scan-internal-theme:
-  stage: prebuild
-  image:
-    name: sonarsource/sonar-scanner-cli:latest
-    entrypoint: [""]
-  before_script:
-  - export PROJECT_DIR="apps/themes/internal"
-  - export SONAR_TOKEN="${SONAR_TOKEN_INTERNAL_THEME}"
-  - cd ${PROJECT_DIR}
-  - export SONAR_USER_HOME="${CI_PROJECT_DIR}/${PROJECT_DIR}$/.sonar"
-  script:
-  - sonar-scanner
+# # Scanning internal theme for keycloak
+# scan-internal-theme:
+#   stage: prebuild
+#   image:
+#     name: sonarsource/sonar-scanner-cli:latest
+#     entrypoint: [""]
+#   before_script:
+#   - export PROJECT_DIR="apps/themes/internal"
+#   - export SONAR_TOKEN="${SONAR_TOKEN_INTERNAL_THEME}"
+#   - cd ${PROJECT_DIR}
+#   - export SONAR_USER_HOME="${CI_PROJECT_DIR}/${PROJECT_DIR}$/.sonar"
+#   script:
+#   - sonar-scanner
 
 # Building afr theme for keycloak
 build-afr-theme:
