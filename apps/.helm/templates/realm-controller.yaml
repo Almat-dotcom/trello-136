@@ -48,11 +48,11 @@ spec:
               value: {{ printf "https://%s" .Values.hostname }}
           resources:
             requests:
-              memory: "5Mi"
-              cpu: "500m"
+              memory: "50Mi"
+              cpu: "200m"
             limits:
-              memory: "500Mi"
-              cpu: "1"
+              memory: "128Mi"
+              cpu: "500m"
           startupProbe:
             httpGet:
               path: /q/health

@@ -5,7 +5,7 @@ global:
 
 image: nexus.kacd.kz:5000/valyayev/test/keycloak:0.3
 
-replicaCount: 3
+replicaCount: 1
 
 clusterDomain: k8s-cluster-prod.local
 
@@ -15,7 +15,7 @@ enabledMasterRealm: "true"
 
 resources:
   limits:
-    memory: "1Gi"
+    memory: "640Mi"
     cpu: "1"
   requests:
     memory: "512Mi"

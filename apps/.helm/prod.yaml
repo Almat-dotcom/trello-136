@@ -5,7 +5,9 @@ global:
 
 image: nexus.kacd.kz:5000/valyayev/test/keycloak:0.3
 
-replicaCount: 1
+clusterDomain: cluster.local
+
+replicaCount: 3
 
 hostname: sso-2.kacd.kz
 
@@ -13,11 +15,11 @@ enabledMasterRealm: "true"
 
 resources:
   limits:
-    memory: "2Gi"
-    cpu: "2"
-  requests:
     memory: "1Gi"
     cpu: "1"
+  requests:
+    memory: "640Mi"
+    cpu: "600m"
 
 ncaUrl: http://kcsd-secure-nca.platform-services:8080/platform/services/secure/nca/auth/v1/authenticate
 
