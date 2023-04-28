@@ -19,7 +19,7 @@ resources:
     cpu: "1"
   requests:
     memory: "512Mi"
-    cpu: "400Mi"
+    cpu: "400m"
 
 ncaUrl: https://kcsd-secure-nca.k8s-dev.kacd.kz/platform/services/secure/nca/auth/v1/authenticate
 
