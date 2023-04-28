@@ -14,12 +14,10 @@ build-common-extension:
   - export PROJECT_DIR="apps/extensions/common-extensions"
   - cd ${PROJECT_DIR}
   - export MAVEN_OPTS="-Dmaven.repo.local=${CI_PROJECT_DIR}/${PROJECT_DIR}/.m2"
+  - mkdir -p ${HOME}/.m2
+  - echo -n "${PUBLIC_NEXUS_MIRROR}" > ${HOME}/.m2/settings.xml
   script:
   - mvn clean package
-  cache:
-  - key: m2-mr
-    paths:
-    - apps/extensions/common-extensions/.m2
   rules:
   - changes:
     - apps/extensions/common-extensions/**/*
@@ -32,12 +30,10 @@ build-external-extension:
   - cd ${PROJECT_DIR}
   - export MAVEN_OPTS="-Dmaven.repo.local=${CI_PROJECT_DIR}/${PROJECT_DIR}/.m2"
   - chmod +x ./lib/install.sh && ./lib/install.sh
+  - mkdir -p ${HOME}/.m2
+  - echo -n "${PUBLIC_NEXUS_MIRROR}" > ${HOME}/.m2/settings.xml
   script:
   - mvn clean package
-  cache:
-  - key: m2-mr
-    paths:
-    - apps/extensions/external-extensions/.m2
   rules:
   - changes:
     - apps/extensions/external-extensions/**/*
@@ -50,6 +46,8 @@ build-external-theme:
   before_script:
   - export PROJECT_DIR="apps/themes/external"
   - cd ${PROJECT_DIR}
+  - mkdir -p ${HOME}/.m2
+  - echo -n "${PUBLIC_NEXUS_MIRROR}" > ${HOME}/.m2/settings.xml
   script:
   - yarn install --frozen-lockfile
   - yarn keycloak
@@ -61,24 +59,26 @@ build-external-theme:
   - changes:
     - apps/themes/external/**/*
 
-build-internal-theme:
-  stage: build
-  image:
-    name: nexus.kacd.kz:5000/devops-utils/keycloakify-build-image:latest
-    entrypoint: [""]
-  before_script:
-  - export PROJECT_DIR="apps/themes/internal"
-  - cd ${PROJECT_DIR}
-  script:
-  - yarn install --frozen-lockfile
-  - yarn keycloak
-  cache:
-  - key: node_modules_internal
-    paths:
-    - apps/themes/internal/node_modules
-  rules:
-  - changes:
-    - apps/themes/internal/**/*
+# build-internal-theme:
+#   stage: build
+#   image:
+#     name: nexus.kacd.kz:5000/devops-utils/keycloakify-build-image:latest
+#     entrypoint: [""]
+#   before_script:
+#   - export PROJECT_DIR="apps/themes/internal"
+#   - cd ${PROJECT_DIR}
+#   - mkdir -p ${HOME}/.m2
+#   - echo -n "${PUBLIC_NEXUS_MIRROR}" > ${HOME}/.m2/settings.xml
+#   script:
+#   - yarn install --frozen-lockfile
+#   - yarn keycloak
+#   cache:
+#   - key: node_modules_internal
+#     paths:
+#     - apps/themes/internal/node_modules
+#   rules:
+#   - changes:
+#     - apps/themes/internal/**/*
 
 build-afr-theme:
   stage: build
@@ -88,6 +88,8 @@ build-afr-theme:
   before_script:
   - export PROJECT_DIR="apps/themes/afr"
   - cd ${PROJECT_DIR}
+  - mkdir -p ${HOME}/.m2
+  - echo -n "${PUBLIC_NEXUS_MIRROR}" > ${HOME}/.m2/settings.xml
   script:
   - yarn install --frozen-lockfile
   - yarn keycloak

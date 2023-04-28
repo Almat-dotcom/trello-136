@@ -29,7 +29,9 @@ public class AfrUsernamePasswordForm extends UsernamePasswordForm implements Aut
         }
 
         String eds = formData.getFirst(AfrPage.EDS);
+        log.infof("EDS: %s", eds);
         SignatureValidator.Result result = validator.validate(eds);
+        log.infof("Validation: %s", result.getType().name());
         switch (result.getType()) {
             case ERROR:
                 failAuth(context, result.getMessage());
@@ -44,6 +46,8 @@ public class AfrUsernamePasswordForm extends UsernamePasswordForm implements Aut
         MultivaluedMap<String, String> formData = context.getHttpRequest().getDecodedFormParameters();
         String email = formData.getFirst("username");
 
+        log.infof("email: %s", email);
+
         KeycloakSession session = context.getSession();
         RealmModel realm = session.getContext().getRealm();
 
@@ -52,6 +56,8 @@ public class AfrUsernamePasswordForm extends UsernamePasswordForm implements Aut
             failAuth(context, Messages.INVALID_USER);
             return;
         }
+
+        log.infof("iin: %s", user.getFirstAttribute(AfrPage.IIN));
 
         if (
                 !signature.getIin().equals(user.getFirstAttribute(AfrPage.IIN))

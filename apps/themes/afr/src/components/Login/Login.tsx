@@ -1,11 +1,10 @@
 import { PageProps } from "keycloakify";
 import { clsx } from "keycloakify/lib/tools/clsx";
-import { useConstCallback } from "keycloakify/lib/tools/useConstCallback";
 import { I18n } from "lib/i18n";
 import { KcContext } from "lib/kcContext";
 import { signAuthXml } from "lib/ncalayer";
 import { CancelledByUser, ConnectionLost } from "lib/ncalayer/NCALayer";
-import { FormEventHandler, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 const NCAMessage = ({ message, i18n }: { message: string, i18n: I18n }) => {
     const dark = (message: string) => {
@@ -45,17 +44,18 @@ const NCAMessage = ({ message, i18n }: { message: string, i18n: I18n }) => {
 const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I18n>) => {
     const { kcContext, i18n, doFetchDefaultThemeResources = true, Template, ...kcProps } = props;
 
-    const { social, realm, url, usernameEditDisabled, login, auth, registrationDisabled, client } = kcContext;
+    const { social, realm, url, usernameEditDisabled, login, registrationDisabled, client } = kcContext;
 
     const { msg, msgStr } = i18n;
 
     const [inputDisabled, setInputDisabled] = useState(false);
     const [ncaMessage, setNcaMessage] = useState('');
+    const [username, setUsername] = useState(login.username ?? '');
+    const [password, setPassword] = useState('');
     const edsRef = useRef<HTMLInputElement>(null);
+    const formRef = useRef<HTMLFormElement>(null);
 
-    const onSubmit = useConstCallback<FormEventHandler<HTMLFormElement>>(async e => {
-        e.preventDefault();
-
+    const onSubmit = async () => {
         setInputDisabled(true);
         setNcaMessage('ncaSignInProgress');
         const xml = `<Authentication><signature>${client.clientId}${realm.name}</signature></Authentication>`;
@@ -64,13 +64,7 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
             edsRef.current!.value = signature;
             setNcaMessage('ncaSignFinished');
 
-            const formElement = e.target as HTMLFormElement;
-
-            //NOTE: Even if we login with email Keycloak expect username and password in
-            //the POST request.
-            formElement.querySelector("input[name='email']")?.setAttribute("name", "username");
-
-            formElement.submit();
+            formRef.current!.submit();
         } catch (error) {
             setInputDisabled(false);
             if (error === ConnectionLost) {
@@ -81,7 +75,7 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
                 setNcaMessage('ncaError');
             }
         }
-    });
+    }
 
     return (
         <Template
@@ -101,56 +95,43 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
                             <NCAMessage message={ncaMessage} i18n={i18n} />
                         )}
                         {realm.password && (
-                            <form id="kc-form-login" onSubmit={onSubmit} action={url.loginAction} method="post">
+                            <form id="kc-form-login" ref={formRef} action={url.loginAction} method="post">
                                 <div className={clsx(kcProps.kcFormGroupClass)}>
-                                    {(() => {
-                                        const label = !realm.loginWithEmailAllowed
-                                            ? "username"
-                                            : realm.registrationEmailAsUsername
-                                                ? "email"
-                                                : "usernameOrEmail";
-
-                                        const autoCompleteHelper: typeof label = label === "usernameOrEmail" ? "username" : label;
-
-                                        return (
-                                            <>
-                                                <label htmlFor={autoCompleteHelper} className={clsx(kcProps.kcLabelClass)}>
-                                                    {msg(label)}
-                                                </label>
-                                                <input
-                                                    tabIndex={1}
-                                                    id={autoCompleteHelper}
-                                                    className={clsx(kcProps.kcInputClass)}
-                                                    //NOTE: This is used by Google Chrome auto fill so we use it to tell
-                                                    //the browser how to pre fill the form but before submit we put it back
-                                                    //to username because it is what keycloak expects.
-                                                    name={autoCompleteHelper}
-                                                    defaultValue={login.username ?? ""}
-                                                    type="text"
-                                                    {...(usernameEditDisabled || inputDisabled
-                                                        ? { "disabled": true }
-                                                        : {
-                                                            "autoFocus": true,
-                                                            "autoComplete": "off"
-                                                        })}
-                                                />
-                                            </>
-                                        );
-                                    })()}
-                                </div>
-                                <div className={clsx(kcProps.kcFormGroupClass)}>
-                                    <label htmlFor="password" className={clsx(kcProps.kcLabelClass)}>
-                                        {msg("password")}
+                                    <label htmlFor="username" className={clsx(kcProps.kcLabelClass)}>
+                                        {msg("email")}
                                     </label>
                                     <input
-                                        tabIndex={2}
-                                        id="password"
+                                        id="username"
                                         className={clsx(kcProps.kcInputClass)}
-                                        name="password"
-                                        type="password"
-                                        autoComplete="off"
-                                        disabled={inputDisabled}
+                                        //NOTE: This is used by Google Chrome auto fill so we use it to tell
+                                        //the browser how to pre fill the form but before submit we put it back
+                                        //to username because it is what keycloak expects.
+                                        name="username"
+                                        value={username}
+                                        onChange={e => setUsername(e.target.value)}
+                                        type="text"
+                                        {...(usernameEditDisabled || inputDisabled
+                                            ? { "disabled": true }
+                                            : {
+                                                "autoFocus": true,
+                                                "autoComplete": "off"
+                                            })}
                                     />
+                                    <div className={clsx(kcProps.kcFormGroupClass)}>
+                                        <label htmlFor="password" className={clsx(kcProps.kcLabelClass)}>
+                                            {msg("password")}
+                                        </label>
+                                        <input
+                                            id="password"
+                                            className={clsx(kcProps.kcInputClass)}
+                                            name="password"
+                                            type="password"
+                                            value={password}
+                                            onChange={e => setPassword(e.target.value)}
+                                            autoComplete="off"
+                                            disabled={inputDisabled}
+                                        />
+                                    </div>
                                 </div>
                                 <div className={clsx(kcProps.kcFormGroupClass, kcProps.kcFormSettingClass)}>
                                     <div id="kc-form-options">
@@ -174,26 +155,13 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
                                             </div>
                                         )}
                                     </div>
-                                    <div className={clsx(kcProps.kcFormOptionsWrapperClass)}>
-                                        {(realm.resetPasswordAllowed && !inputDisabled) && (
-                                            <span>
-                                                <a tabIndex={5} href={url.loginResetCredentialsUrl}>
-                                                    {msg("doForgotPassword")}
-                                                </a>
-                                            </span>
-                                        )}
-                                    </div>
                                 </div>
                                 <div id="kc-form-buttons" className={clsx(kcProps.kcFormGroupClass)}>
                                     <input
                                         type="hidden"
                                         id="id-hidden-input"
                                         name="credentialId"
-                                        {...(auth?.selectedCredential !== undefined
-                                            ? {
-                                                "value": auth.selectedCredential
-                                            }
-                                            : {})}
+                                        value="password"
                                     />
                                     <input
                                         type="hidden"
@@ -214,6 +182,7 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
                                         type="submit"
                                         value={msgStr("doLogIn")}
                                         disabled={inputDisabled}
+                                        onClick={e => onSubmit()}
                                     />
                                 </div>
                             </form>

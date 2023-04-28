@@ -7,17 +7,19 @@ image: nexus.kacd.kz:5000/valyayev/test/keycloak:0.3
 
 replicaCount: 1
 
+clusterDomain: k8s-cluster-prod.local
+
 hostname: sso-dev.k8s-dev.kacd.kz
 
 enabledMasterRealm: "true"
 
 resources:
   limits:
-    memory: "4Gi"
-    cpu: "4"
-  requests:
-    memory: "1Gi"
+    memory: "640Mi"
     cpu: "1"
+  requests:
+    memory: "512Mi"
+    cpu: "400m"
 
 ncaUrl: https://kcsd-secure-nca.k8s-dev.kacd.kz/platform/services/secure/nca/auth/v1/authenticate
 
@@ -39,10 +41,6 @@ database:
   username: keycloak
   existingSecret: sso-keycloak-database-password
   existingSecretPasswordKey: password
-
-redis:
-  host: keycloak-redis.sso.svc.cluster.local
-  port: 6379
 
 kafka:
   enabled: true

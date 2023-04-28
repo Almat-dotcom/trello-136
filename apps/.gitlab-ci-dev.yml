@@ -24,15 +24,12 @@ build-common-extension:
   - export MAVEN_OPTS="-Dmaven.repo.local=${CI_PROJECT_DIR}/${PROJECT_DIR}/.m2"
   - export SONAR_USER_HOME="${CI_PROJECT_DIR}/${PROJECT_DIR}/.sonar"
   - export SONAR_TOKEN="${SONAR_TOKEN_COMMON_EXTENSIONS}"
+  - mkdir -p ${HOME}/.m2
+  - echo -n "${PUBLIC_NEXUS_MIRROR}" > ${HOME}/.m2/settings.xml
   script:
   - mvn clean package
   - mvn verify sonar:sonar -Dsonar.projectKey=sso-common-extension
   - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./target/common-extensions-jar-with-dependencies.jar ${NEXUS_REPO}
-  cache:
-  - key: m2
-    paths:
-    - apps/extensions/common-extensions/.m2
-    - apps/extensions/common-extensions/.sonar
 
 # Building external extension for keycloak
 build-external-extension:
@@ -49,14 +46,12 @@ build-external-extension:
   - export SONAR_USER_HOME="${CI_PROJECT_DIR}/${PROJECT_DIR}/.sonar"
   - export SONAR_TOKEN="${SONAR_TOKEN_EXTERNAL_EXTENSIONS}"
   - chmod +x ./lib/install.sh && ./lib/install.sh
+  - mkdir -p ${HOME}/.m2
+  - echo -n "${PUBLIC_NEXUS_MIRROR}" > ${HOME}/.m2/settings.xml
   script:
   - mvn clean package
   - mvn verify sonar:sonar -Dsonar.projectKey=sso-external-extensions
   - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./target/external-extensions-jar-with-dependencies.jar ${NEXUS_REPO}
-  cache:
-  - key: m2
-    paths:
-    - apps/extensions/external-extensions/.m2
 
 # Building external theme for keycloak
 build-external-theme:
@@ -69,14 +64,12 @@ build-external-theme:
   - export SONAR_TOKEN="${SONAR_TOKEN_EXTERNAL_THEME}"
   - cd ${PROJECT_DIR}
   - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/external-keycloak-theme.jar"
+  - mkdir -p ${HOME}/.m2
+  - echo -n "${PUBLIC_NEXUS_MIRROR}" > ${HOME}/.m2/settings.xml
   script:
   - yarn install --frozen-lockfile
   - yarn keycloak
   - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./build_keycloak/target/external-keycloak-theme-1.0.6.jar ${NEXUS_REPO}
-  cache:
-  - key: node_modules_external
-    paths:
-    - apps/themes/external/node_modules
 
 # Scanning external theme for keycloak
 scan-external-theme:
@@ -91,47 +84,41 @@ scan-external-theme:
   - export SONAR_USER_HOME="${CI_PROJECT_DIR}/${PROJECT_DIR}$/.sonar"
   script:
   - sonar-scanner
-  cache:
-  - key: sonar_external
-    paths:
-    - apps/themes/external/.sonar/cache
 
 # Building internal theme for keycloak
-build-internal-theme:
-  stage: prebuild
-  image:
-    name: nexus.kacd.kz:5000/devops-utils/keycloakify-build-image:latest
-    entrypoint: [""]
-  before_script:
-  - export PROJECT_DIR="apps/themes/internal"
-  - cd ${PROJECT_DIR}
-  - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/internal-keycloak-theme.jar"
-  script:
-  - yarn install --frozen-lockfile
-  - yarn keycloak
-  - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./build_keycloak/target/internal-keycloak-theme-1.0.6.jar ${NEXUS_REPO}
-  cache:
-  - key: node_modules_internal
-    paths:
-    - apps/themes/internal/node_modules
+# build-internal-theme:
+#   stage: prebuild
+#   image:
+#     name: nexus.kacd.kz:5000/devops-utils/keycloakify-build-image:latest
+#     entrypoint: [""]
+#   before_script:
+#   - export PROJECT_DIR="apps/themes/internal"
+#   - cd ${PROJECT_DIR}
+#   - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/internal-keycloak-theme.jar"
+#   - mkdir -p ${HOME}/.m2
+#   - echo -n "${PUBLIC_NEXUS_MIRROR}" > ${HOME}/.m2/settings.xml
+#   script:
+#   - yarn install --frozen-lockfile
+#   - yarn keycloak
+#   - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./build_keycloak/target/internal-keycloak-theme-1.0.6.jar ${NEXUS_REPO}
+#   cache:
+#   - key: node_modules_internal
+#     paths:
+#     - apps/themes/internal/node_modules
 
-# Scanning internal theme for keycloak
-scan-internal-theme:
-  stage: prebuild
-  image:
-    name: sonarsource/sonar-scanner-cli:latest
-    entrypoint: [""]
-  before_script:
-  - export PROJECT_DIR="apps/themes/internal"
-  - export SONAR_TOKEN="${SONAR_TOKEN_INTERNAL_THEME}"
-  - cd ${PROJECT_DIR}
-  - export SONAR_USER_HOME="${CI_PROJECT_DIR}/${PROJECT_DIR}$/.sonar"
-  script:
-  - sonar-scanner
-  cache:
-  - key: sonar_internal
-    paths:
-    - apps/themes/internal/.sonar/cache
+# # Scanning internal theme for keycloak
+# scan-internal-theme:
+#   stage: prebuild
+#   image:
+#     name: sonarsource/sonar-scanner-cli:latest
+#     entrypoint: [""]
+#   before_script:
+#   - export PROJECT_DIR="apps/themes/internal"
+#   - export SONAR_TOKEN="${SONAR_TOKEN_INTERNAL_THEME}"
+#   - cd ${PROJECT_DIR}
+#   - export SONAR_USER_HOME="${CI_PROJECT_DIR}/${PROJECT_DIR}$/.sonar"
+#   script:
+#   - sonar-scanner
 
 # Building afr theme for keycloak
 build-afr-theme:
@@ -143,6 +130,8 @@ build-afr-theme:
   - export PROJECT_DIR="apps/themes/afr"
   - cd ${PROJECT_DIR}
   - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/afr-keycloak-theme.jar"
+  - mkdir -p ${HOME}/.m2
+  - echo -n "${PUBLIC_NEXUS_MIRROR}" > ${HOME}/.m2/settings.xml
   script:
   - yarn install --frozen-lockfile
   - yarn keycloak
@@ -165,10 +154,6 @@ scan-afr-theme:
   - export SONAR_USER_HOME="${CI_PROJECT_DIR}/${PROJECT_DIR}$/.sonar"
   script:
   - sonar-scanner
-  cache:
-  - key: sonar_afr
-    paths:
-    - apps/themes/afr/.sonar/cache
 
 # Persisting all extensions artifacts inside local cache directory
 cache-artifacts:
