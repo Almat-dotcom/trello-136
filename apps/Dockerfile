@@ -25,7 +25,7 @@ WORKDIR /opt/keycloak
 COPY --from=cacher /opt/keycloak/providers/keycloak-restrict-client-auth.jar /opt/keycloak/providers/keycloak-restrict-client-auth.jar
 COPY build-extensions/common-extensions.jar /opt/keycloak/providers/common-extensions.jar
 COPY build-extensions/external-extensions.jar /opt/keycloak/providers/external-extensions.jar
-COPY build-extensions/internal-keycloak-theme.jar /opt/keycloak/providers/internal-keycloak-theme.jar
+# COPY build-extensions/internal-keycloak-theme.jar /opt/keycloak/providers/internal-keycloak-theme.jar
 COPY build-extensions/external-keycloak-theme.jar /opt/keycloak/providers/external-keycloak-theme.jar
 COPY build-extensions/afr-keycloak-theme.jar /opt/keycloak/providers/afr-keycloak-theme.jar
 
