@@ -15,11 +15,11 @@ enabledMasterRealm: "true"
 
 resources:
   limits:
-    memory: "4Gi"
-    cpu: "4"
-  requests:
     memory: "1Gi"
     cpu: "1"
+  requests:
+    memory: "512Mi"
+    cpu: "400Mi"
 
 ncaUrl: https://kcsd-secure-nca.k8s-dev.kacd.kz/platform/services/secure/nca/auth/v1/authenticate
 
