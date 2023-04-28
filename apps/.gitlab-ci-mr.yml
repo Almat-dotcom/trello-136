@@ -14,6 +14,8 @@ build-common-extension:
   - export PROJECT_DIR="apps/extensions/common-extensions"
   - cd ${PROJECT_DIR}
   - export MAVEN_OPTS="-Dmaven.repo.local=${CI_PROJECT_DIR}/${PROJECT_DIR}/.m2"
+  - mkdir -p ${HOME}/.m2
+  - echo -n "${PUBLIC_NEXUS_MIRROR}" > ${HOME}/.m2/settings.xml
   script:
   - mvn clean package
   cache:
@@ -32,6 +34,8 @@ build-external-extension:
   - cd ${PROJECT_DIR}
   - export MAVEN_OPTS="-Dmaven.repo.local=${CI_PROJECT_DIR}/${PROJECT_DIR}/.m2"
   - chmod +x ./lib/install.sh && ./lib/install.sh
+  - mkdir -p ${HOME}/.m2
+  - echo -n "${PUBLIC_NEXUS_MIRROR}" > ${HOME}/.m2/settings.xml
   script:
   - mvn clean package
   cache:
@@ -50,6 +54,8 @@ build-external-theme:
   before_script:
   - export PROJECT_DIR="apps/themes/external"
   - cd ${PROJECT_DIR}
+  - mkdir -p ${HOME}/.m2
+  - echo -n "${PUBLIC_NEXUS_MIRROR}" > ${HOME}/.m2/settings.xml
   script:
   - yarn install --frozen-lockfile
   - yarn keycloak
@@ -69,6 +75,8 @@ build-internal-theme:
   before_script:
   - export PROJECT_DIR="apps/themes/internal"
   - cd ${PROJECT_DIR}
+  - mkdir -p ${HOME}/.m2
+  - echo -n "${PUBLIC_NEXUS_MIRROR}" > ${HOME}/.m2/settings.xml
   script:
   - yarn install --frozen-lockfile
   - yarn keycloak
@@ -88,6 +96,8 @@ build-afr-theme:
   before_script:
   - export PROJECT_DIR="apps/themes/afr"
   - cd ${PROJECT_DIR}
+  - mkdir -p ${HOME}/.m2
+  - echo -n "${PUBLIC_NEXUS_MIRROR}" > ${HOME}/.m2/settings.xml
   script:
   - yarn install --frozen-lockfile
   - yarn keycloak
