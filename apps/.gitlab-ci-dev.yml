@@ -30,11 +30,6 @@ build-common-extension:
   - mvn clean package
   - mvn verify sonar:sonar -Dsonar.projectKey=sso-common-extension
   - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./target/common-extensions-jar-with-dependencies.jar ${NEXUS_REPO}
-  cache:
-  - key: m2
-    paths:
-    - apps/extensions/common-extensions/.m2
-    - apps/extensions/common-extensions/.sonar
 
 # Building external extension for keycloak
 build-external-extension:
@@ -57,10 +52,6 @@ build-external-extension:
   - mvn clean package
   - mvn verify sonar:sonar -Dsonar.projectKey=sso-external-extensions
   - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./target/external-extensions-jar-with-dependencies.jar ${NEXUS_REPO}
-  cache:
-  - key: m2
-    paths:
-    - apps/extensions/external-extensions/.m2
 
 # Building external theme for keycloak
 build-external-theme:
@@ -79,10 +70,6 @@ build-external-theme:
   - yarn install --frozen-lockfile
   - yarn keycloak
   - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./build_keycloak/target/external-keycloak-theme-1.0.6.jar ${NEXUS_REPO}
-  cache:
-  - key: node_modules_external
-    paths:
-    - apps/themes/external/node_modules
 
 # Scanning external theme for keycloak
 scan-external-theme:
@@ -97,10 +84,6 @@ scan-external-theme:
   - export SONAR_USER_HOME="${CI_PROJECT_DIR}/${PROJECT_DIR}$/.sonar"
   script:
   - sonar-scanner
-  cache:
-  - key: sonar_external
-    paths:
-    - apps/themes/external/.sonar/cache
 
 # Building internal theme for keycloak
 build-internal-theme:
@@ -136,10 +119,6 @@ scan-internal-theme:
   - export SONAR_USER_HOME="${CI_PROJECT_DIR}/${PROJECT_DIR}$/.sonar"
   script:
   - sonar-scanner
-  cache:
-  - key: sonar_internal
-    paths:
-    - apps/themes/internal/.sonar/cache
 
 # Building afr theme for keycloak
 build-afr-theme:
@@ -175,10 +154,6 @@ scan-afr-theme:
   - export SONAR_USER_HOME="${CI_PROJECT_DIR}/${PROJECT_DIR}$/.sonar"
   script:
   - sonar-scanner
-  cache:
-  - key: sonar_afr
-    paths:
-    - apps/themes/afr/.sonar/cache
 
 # Persisting all extensions artifacts inside local cache directory
 cache-artifacts:

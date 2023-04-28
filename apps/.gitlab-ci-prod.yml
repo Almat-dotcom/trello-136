@@ -30,11 +30,6 @@ build-common-extension:
   - mvn clean package
   # - mvn verify sonar:sonar -Dsonar.projectKey=sso-common-extension
   - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./target/common-extensions-jar-with-dependencies.jar ${NEXUS_REPO}
-  cache:
-  - key: m2
-    paths:
-    - apps/extensions/common-extensions/.m2
-    - apps/extensions/common-extensions/.sonar
 
 # Building external extension for keycloak
 build-external-extension:
@@ -54,10 +49,6 @@ build-external-extension:
   script:
   - mvn clean package
   - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./target/external-extensions-jar-with-dependencies.jar ${NEXUS_REPO}
-  cache:
-  - key: m2
-    paths:
-    - apps/extensions/external-extensions/.m2
 
 # Building external theme for keycloak
 build-external-theme:

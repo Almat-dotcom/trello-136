@@ -18,10 +18,6 @@ build-common-extension:
   - echo -n "${PUBLIC_NEXUS_MIRROR}" > ${HOME}/.m2/settings.xml
   script:
   - mvn clean package
-  cache:
-  - key: m2-mr
-    paths:
-    - apps/extensions/common-extensions/.m2
   rules:
   - changes:
     - apps/extensions/common-extensions/**/*
@@ -38,10 +34,6 @@ build-external-extension:
   - echo -n "${PUBLIC_NEXUS_MIRROR}" > ${HOME}/.m2/settings.xml
   script:
   - mvn clean package
-  cache:
-  - key: m2-mr
-    paths:
-    - apps/extensions/external-extensions/.m2
   rules:
   - changes:
     - apps/extensions/external-extensions/**/*
