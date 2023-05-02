@@ -24,7 +24,7 @@ public class KcsdUserRoleMapper extends AbstractOIDCProtocolMapper
 
     public static final String PROVIDER_ID = "kcsd-user-role-mapper";
 
-    private static final String CLAIM = "resource_access";
+    private static final String CLAIM = "kcsd_roles";
     private static final String IGNORE_CLIENT = "realm-management";
     private static final String REALM = "realm";
 
