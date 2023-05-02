@@ -1,6 +1,7 @@
 package kz.kacd.sso.ldap.mapper;
 
 import com.google.auto.service.AutoService;
+import com.google.common.collect.Streams;
 import org.keycloak.models.*;
 import org.keycloak.protocol.ProtocolMapper;
 import org.keycloak.protocol.ProtocolMapperUtils;
@@ -10,7 +11,10 @@ import org.keycloak.representations.IDToken;
 import reactor.util.function.Tuple2;
 import reactor.util.function.Tuples;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,7 +35,13 @@ public class KcsdUserRoleMapper extends AbstractOIDCProtocolMapper
     }
 
     @Override
-    protected void setClaim(IDToken token, ProtocolMapperModel mappingModel, UserSessionModel userSession, KeycloakSession keycloakSession, ClientSessionContext clientSessionCtx) {
+    protected void setClaim(
+            IDToken token,
+            ProtocolMapperModel mappingModel,
+            UserSessionModel userSession,
+            KeycloakSession keycloakSession,
+            ClientSessionContext clientSessionCtx
+    ) {
         UserModel user = userSession.getUser();
         RealmModel realm = userSession.getRealm();
 
@@ -39,19 +49,7 @@ public class KcsdUserRoleMapper extends AbstractOIDCProtocolMapper
         Map<String, String> clients = clientModelStream
                 .collect(Collectors.toMap(ClientModel::getId, ClientModel::getClientId));
 
-        Stream<GroupModel> groups = user.getGroupsStream();
-        Stream<RoleModel> directRoles = user.getRoleMappingsStream();
-
-        // Extracting all roles includes inherited roles from composites and groups
-        List<RoleModel> allRoles = directRoles.collect(Collectors.toList());
-        groups.collect(Collectors.toList()).forEach(g -> allRoles.addAll(g.getRoleMappingsStream().collect(Collectors.toList())));
-        allRoles.forEach(direct -> {
-            if (direct.isComposite()) {
-                allRoles.addAll(direct.getCompositesStream().collect(Collectors.toList()));
-            }
-        });
-
-        Map<String, List<RoleModel>> roleModelStream = allRoles.stream()
+        Map<String, List<RoleModel>> roleModelStream = getAllRoles(user)
                 .collect(Collectors.groupingBy(RoleModel::getContainerId));
         Map<String, List<String>> roles = roleModelStream.entrySet().stream()
                 .map(it ->
@@ -79,6 +77,20 @@ public class KcsdUserRoleMapper extends AbstractOIDCProtocolMapper
         });
 
         token.getOtherClaims().put(CLAIM, rolesClaimValue);
+    }
+
+    private Stream<RoleModel> getAllRoles(UserModel user) {
+        Stream<GroupModel> groups = user.getGroupsStream();
+        Stream<RoleModel> directRoles = user.getRoleMappingsStream();
+        Stream<RoleModel> groupRoles = groups.flatMap(GroupModel::getRoleMappingsStream);
+
+        return Streams.concat(directRoles, groupRoles)
+                .flatMap(role -> {
+                    if (role.isComposite()) {
+                        return role.getCompositesStream();
+                    }
+                    return Stream.of(role);
+                });
     }
 
     @Override
