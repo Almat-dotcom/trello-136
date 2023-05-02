@@ -1,5 +1,6 @@
 package kz.kacd.sso.realm.config.model;
 
+import kz.kacd.sso.ldap.mapper.KcsdUserRoleMapper;
 import kz.kacd.sso.v1.RealmSpec;
 import kz.kacd.sso.v1.realmspec.*;
 import kz.kacd.sso.v1.realmspec.events.AdminEvents;
@@ -13,11 +14,12 @@ import kz.kacd.sso.v1.realmspec.sessions.Offline;
 import kz.kacd.sso.v1.realmspec.sessions.Sso;
 import kz.kacd.sso.v1.realmspec.themes.Localization;
 import org.keycloak.common.enums.SslRequired;
+import org.keycloak.models.ClientScopeModel;
 import org.keycloak.models.KeycloakSession;
+import org.keycloak.models.ProtocolMapperModel;
 import org.keycloak.models.RealmModel;
 
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static kz.kacd.sso.util.ValueUtils.defaulted;
@@ -28,6 +30,10 @@ public class RealmConfigApplier {
     private static final String ADMIN_EVENTS_EXPIRATION = "adminEventsExpiration";
     private static final String FRONT_END_URL = "frontendUrl";
     private static final String DEFAULT_THEME = "keycloak";
+    private static final String ADD_TO_ACCESS_TOKEN = "access.token.claim";
+    private static final String CLAIM_NAME = "claim.name";
+    private static final String ADD_TO_ID_TOKEN = "id.token.claim";
+    private static final String ADD_TO_USER_INFO = "userinfo.token.claim";
 
     private final RealmModel model;
     private final KeycloakSession session;
@@ -48,6 +54,7 @@ public class RealmConfigApplier {
         applySession(source.getSessions());
         applyTokens(source.getTokens());
         applyPasswordPolicy(source.getAuthentication());
+        applyRolesMappers();
 
         return model;
     }
@@ -227,5 +234,35 @@ public class RealmConfigApplier {
         }
 
         model.setPasswordPolicy(new PasswordPolicyBuilder(session, model).build(spec.getPasswordPolicy()));
+    }
+
+    private void applyRolesMappers() {
+        Optional<ClientScopeModel> scope = model.getClientScopesStream().filter(it -> it.getName().equals("roles"))
+                .findAny();
+        if (!scope.isPresent()) {
+            return;
+        }
+
+        ClientScopeModel scopeModel = scope.get();
+        scopeModel.getProtocolMappersStream()
+                .filter(it -> it.getName().equals("realm roles") || it.getName().equals("client roles"))
+                .forEach(scopeModel::removeProtocolMapper);
+
+        ProtocolMapperModel mapper = new ProtocolMapperModel();
+        mapper.setName("kcsd roles mapper");
+        mapper.setProtocol(scopeModel.getProtocol());
+        mapper.setProtocolMapper(KcsdUserRoleMapper.PROVIDER_ID);
+
+        Map<String, String> config = new HashMap<>();
+        config.put(ADD_TO_ACCESS_TOKEN, Boolean.TRUE.toString());
+        config.put(ADD_TO_ID_TOKEN, Boolean.FALSE.toString());
+        config.put(ADD_TO_USER_INFO, Boolean.FALSE.toString());
+        config.put(CLAIM_NAME, "resource_access");
+
+        mapper.setConfig(config);
+
+        if (scopeModel.getProtocolMapperByName(scopeModel.getProtocol(), mapper.getName()) == null) {
+            scopeModel.addProtocolMapper(mapper);
+        }
     }
 }
