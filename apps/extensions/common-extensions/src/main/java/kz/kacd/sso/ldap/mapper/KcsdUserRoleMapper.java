@@ -44,7 +44,7 @@ public class KcsdUserRoleMapper extends AbstractOIDCProtocolMapper
 
         // Extracting all roles includes inherited roles from composites and groups
         List<RoleModel> allRoles = directRoles.collect(Collectors.toList());
-        groups.forEach(g -> allRoles.addAll(g.getRoleMappingsStream().collect(Collectors.toList())));
+        groups.collect(Collectors.toList()).forEach(g -> allRoles.addAll(g.getRoleMappingsStream().collect(Collectors.toList())));
         allRoles.forEach(direct -> {
             if (direct.isComposite()) {
                 allRoles.addAll(direct.getCompositesStream().collect(Collectors.toList()));
