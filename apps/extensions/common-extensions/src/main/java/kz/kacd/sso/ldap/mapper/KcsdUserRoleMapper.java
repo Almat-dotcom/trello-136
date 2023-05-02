@@ -39,13 +39,27 @@ public class KcsdUserRoleMapper extends AbstractOIDCProtocolMapper
         Map<String, String> clients = clientModelStream
                 .collect(Collectors.toMap(ClientModel::getId, ClientModel::getClientId));
 
-        Map<String, List<RoleModel>> roleModelStream = user.getRoleMappingsStream()
+        Stream<GroupModel> groups = user.getGroupsStream();
+        Stream<RoleModel> directRoles = user.getRoleMappingsStream();
+
+        // Extracting all roles includes inherited roles from composites and groups
+        List<RoleModel> allRoles = new ArrayList<>();
+        directRoles.forEach(allRoles::add);
+        groups.forEach(g -> g.getRoleMappingsStream().forEach(allRoles::add));
+        allRoles.forEach(direct -> {
+            if (direct.isComposite()) {
+                direct.getCompositesStream().forEach(allRoles::add);
+            }
+        });
+
+        Map<String, List<RoleModel>> roleModelStream = allRoles.stream()
                 .collect(Collectors.groupingBy(RoleModel::getContainerId));
         Map<String, List<String>> roles = roleModelStream.entrySet().stream()
                 .map(it ->
                         Tuples.of(
                                 it.getKey(),
                                 it.getValue().stream().map(RoleModel::getName)
+                                        .distinct()
                                         .collect(Collectors.toList())
                         )
                 ).collect(Collectors.toMap(Tuple2::getT1, Tuple2::getT2));
