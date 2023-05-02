@@ -249,9 +249,9 @@ public class RealmConfigApplier {
                 .forEach(scopeModel::removeProtocolMapper);
 
         ProtocolMapperModel mapper = new ProtocolMapperModel();
-        mapper.setName("kcsd roles");
+        mapper.setName("kcsd roles mapper");
         mapper.setProtocol(scopeModel.getProtocol());
-        mapper.setProtocolMapper(KcsdUserRoleMapper.class.getName());
+        mapper.setProtocolMapper(KcsdUserRoleMapper.PROVIDER_ID);
 
         Map<String, String> config = new HashMap<>();
         config.put(ADD_TO_ACCESS_TOKEN, Boolean.TRUE.toString());
