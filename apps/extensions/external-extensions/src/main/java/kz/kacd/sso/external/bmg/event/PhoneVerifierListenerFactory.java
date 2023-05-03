@@ -34,9 +34,7 @@ public class PhoneVerifierListenerFactory implements EventListenerProviderFactor
             if (event instanceof PostMigrationEvent) {
                 KeycloakModelUtils.runJobInTransaction(
                         ((PostMigrationEvent) event).getFactory(),
-                        session -> {
-                            session.realms().getRealmsStream().forEach(this::checkListenerSettings);
-                        }
+                        session -> session.realms().getRealmsStream().forEach(this::checkListenerSettings)
                 );
             } else if (event instanceof RealmModel.RealmPostCreateEvent) {
                 RealmModel.RealmPostCreateEvent createEvent = (RealmModel.RealmPostCreateEvent) event;

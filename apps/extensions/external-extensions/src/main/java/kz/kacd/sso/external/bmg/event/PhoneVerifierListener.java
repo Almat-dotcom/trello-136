@@ -65,8 +65,8 @@ public class PhoneVerifierListener implements EventListenerProvider {
     }
 
     private boolean residentPhysical(UserModel user) {
-        return user.getFirstAttribute(ExternalRegistrationPage.FIELD_RESIDENCY).equals(ExternalRegistrationPage.RESIDENT)
-                && user.getFirstAttribute(ExternalRegistrationPage.FIELD_CLIENT_TYPE).equals(ExternalRegistrationPage.CLIENT_PHYSICAL);
+        return ExternalRegistrationPage.RESIDENT.equals(user.getFirstAttribute(ExternalRegistrationPage.FIELD_RESIDENCY))
+                && ExternalRegistrationPage.CLIENT_PHYSICAL.equals(user.getFirstAttribute(ExternalRegistrationPage.FIELD_CLIENT_TYPE));
     }
 
     @Override
