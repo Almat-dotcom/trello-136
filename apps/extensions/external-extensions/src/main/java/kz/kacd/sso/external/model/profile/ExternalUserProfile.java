@@ -61,7 +61,9 @@ public class ExternalUserProfile {
         user.setAttribute(ExternalRegistrationPage.FIELD_IIN, Collections.singletonList(iin()));
         user.setAttribute(ExternalRegistrationPage.FIELD_RESIDENCY, Collections.singletonList(residency()));
         user.setAttribute(ExternalRegistrationPage.FIELD_PHONE_NUMBER, Collections.singletonList(phoneNumber()));
-        user.setAttribute(ExternalRegistrationPage.FIELD_PHONE_VERIFIED, Collections.singletonList(Boolean.FALSE.toString()));
+        if (!user.getAttributes().containsKey(ExternalRegistrationPage.FIELD_PHONE_VERIFIED)) {
+            user.setAttribute(ExternalRegistrationPage.FIELD_PHONE_VERIFIED, Collections.singletonList(Boolean.FALSE.toString()));
+        }
         if (locale() != null) {
             user.setAttribute(ExternalRegistrationPage.FIELD_LOCALE, Collections.singletonList(locale()));
         }
