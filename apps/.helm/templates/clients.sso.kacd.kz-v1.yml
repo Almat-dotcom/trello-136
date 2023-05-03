@@ -111,6 +111,7 @@ spec:
                   - EMAIL_VERIFIED
                   - RESIDENCY
                   - PHONE_NUMBER
+                  - PHONE_NUMBER_VERIFIED
                   - POSITION
                   type: string
                 type: array

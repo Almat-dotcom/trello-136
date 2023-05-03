@@ -1,6 +1,6 @@
-# External Extensions
+# Common Extensions
 
-Библиотека расширений keycloak для внешнего реалма.
+Библиотека расширений keycloak.
 
 ## Разработка
 
@@ -16,6 +16,3 @@
 2. Поднять keycloak: `docker compose -f keycloak.yaml up`
 
 На порту 8080 будет поднят Keycloak. На порту 5432 будет поднят PostgreSQL.
-
-Для тестирования в Postman можете импортировать коллекцию
-`External_Organization_Tests.postman_collection.json`

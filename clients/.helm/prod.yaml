@@ -21,9 +21,9 @@ clients:
     - https://cabinet.kacd.kz
   lkShellFrontInternal:
     redirectUris:
-    - https://my-kcsd.kacd.kz/*
+    - https://backoffice.kacd.kz/*
     webOrigins:
-    - https://my-kcsd.kacd.kz
+    - https://backoffice.kacd.kz
   mt535:
     redirectUris:
     - http://10.10.125.4:8085/*

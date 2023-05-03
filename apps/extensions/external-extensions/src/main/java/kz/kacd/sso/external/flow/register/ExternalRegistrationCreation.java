@@ -1,5 +1,6 @@
 package kz.kacd.sso.external.flow.register;
 
+import kz.kacd.sso.external.bmg.MobilePhoneValidator;
 import kz.kacd.sso.external.model.page.ExternalRegistrationPage;
 import kz.kacd.sso.external.model.profile.ExternalUserProfile;
 import kz.kacd.sso.external.model.profile.ExternalUserProfileProvider;
@@ -56,6 +57,13 @@ public class ExternalRegistrationCreation implements FormAction {
         UserModel user = profile.create();
         user.setEnabled(true);
 
+        if (
+                profile.residency().equals(ExternalRegistrationPage.RESIDENT)
+                        && profile.clientType().equals(ExternalRegistrationPage.CLIENT_PHYSICAL)
+        ) {
+            validatePhone(user, context.getSession());
+        }
+
         context.setUser(user);
 
         context.getEvent().user(user);
@@ -93,6 +101,14 @@ public class ExternalRegistrationCreation implements FormAction {
         event.detail(UserModel.LAST_NAME, profile.lastName());
 
         return profile;
+    }
+
+    private void validatePhone(UserModel user, KeycloakSession session) {
+        MobilePhoneValidator validator = session.getProvider(MobilePhoneValidator.class);
+        String iin = user.getFirstAttribute(ExternalRegistrationPage.FIELD_IIN);
+        String phoneNumber = user.getFirstAttribute(ExternalRegistrationPage.FIELD_PHONE_NUMBER);
+        boolean verified = validator.check(iin, phoneNumber);
+        user.setSingleAttribute(ExternalRegistrationPage.FIELD_PHONE_VERIFIED, verified + "");
     }
 
     @Override

@@ -35,6 +35,7 @@ spec:
   - RESIDENCY
   - DIVISION
   - PHONE_NUMBER
+  - PHONE_NUMBER_VERIFIED
   roles: [{
     name: issuer,
     roleDescription: Эмитент
