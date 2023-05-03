@@ -35,10 +35,10 @@ public class KeycloakSelfClient {
                 .url(url)
                 .post(
                         new FormBody.Builder()
-                                .add("grant_type", "client_credentials")
-                                .add("client_id", clientId)
-                                .add("client_secret", clientSecret)
-                                .add("scope", scope)
+                                .addEncoded("grant_type", "client_credentials")
+                                .addEncoded("client_id", clientId)
+                                .addEncoded("client_secret", clientSecret)
+                                .addEncoded("scope", scope + " openid")
                                 .build()
                 )
                 .build();
