@@ -23,6 +23,8 @@ resources:
 
 ncaUrl: http://kcsd-secure-nca.platform-services:8080/platform/services/secure/nca/auth/v1/authenticate
 
+mkbUrl: http://mkb-integration.platform-services:8080
+
 tls:
   enabled: true
   existingSecret: kacd-tls

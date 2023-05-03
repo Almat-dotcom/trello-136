@@ -50,6 +50,8 @@ public class ProtocolMapperFactory {
                 return residency();
             case PHONE_NUMBER:
                 return phoneNumber();
+            case PHONE_NUMBER_VERIFIED:
+                return phoneNumberVerified();
             case POSITION:
                 return position();
         }
@@ -94,6 +96,10 @@ public class ProtocolMapperFactory {
 
     private static ProtocolMapperModel phoneNumber() {
         return attributeMapper("phoneNumber", true);
+    }
+
+    private static ProtocolMapperModel phoneNumberVerified() {
+        return attributeMapper("phoneNumberVerified", true);
     }
 
     private static ProtocolMapperModel residency() {
