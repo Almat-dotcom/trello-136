@@ -10,7 +10,7 @@ public class MkbMobilePhoneValidator implements MobilePhoneValidator {
     private static final Logger log = Logger.getLogger(MkbMobilePhoneValidator.class);
 
     public static final String REALM_NAME = "internal";
-    public static final String SCOPE_NAME = "mkb-bmg";
+    public static final String SCOPE_NAME = "mkb_bmg";
     public static final String CLIENT_ID = "internal-sso-api";
     private static final String FRONT_END_URL_ATTR = "frontendUrl";
 
