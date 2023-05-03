@@ -8,7 +8,7 @@ import org.keycloak.Config;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
 
-@AutoService(MkbMobilePhoneValidatorFactory.class)
+@AutoService(MobilePhoneValidatorFactory.class)
 public class MkbMobilePhoneValidatorFactory implements MobilePhoneValidatorFactory {
 
     public static final String PROVIDER_ID = "mkb-mobile-phone-validator";
