@@ -42,7 +42,7 @@ public class PhoneVerifierListener implements EventListenerProvider {
             return;
         }
 
-        if (residentPhysical(user)) {
+        if (residentPhysical(user) && requiredAttributesExists(user)) {
             String iin = extractIin(user);
             String phoneNumber = extractPhone(user);
             MobilePhoneValidator validator = session.getProvider(MobilePhoneValidator.class);
@@ -57,6 +57,11 @@ public class PhoneVerifierListener implements EventListenerProvider {
 
     private String extractIin(UserModel user) {
         return user.getFirstAttribute(ExternalRegistrationPage.FIELD_IIN);
+    }
+
+    private boolean requiredAttributesExists(UserModel user) {
+        return user.getFirstAttribute(ExternalRegistrationPage.FIELD_IIN) != null
+                && user.getFirstAttribute(ExternalRegistrationPage.FIELD_PHONE_NUMBER) != null;
     }
 
     private boolean residentPhysical(UserModel user) {
