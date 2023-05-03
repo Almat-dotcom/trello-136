@@ -30,6 +30,7 @@ data:
   REDIS_HOST: {{ .Values.redis.host | quote }}
   REDIS_PORT: {{ .Values.redis.port | quote }}
   KC_SIGN_NCA_URL: {{ .Values.ncaUrl | quote }}
+  MKB_URL: {{ .Values.mkbUrl | quote }}
 {{- if (include "keycloak.createConfigmap" .) }}
 ---
 apiVersion: v1

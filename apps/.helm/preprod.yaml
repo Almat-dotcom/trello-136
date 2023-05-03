@@ -23,6 +23,8 @@ resources:
 
 ncaUrl: https://kcsd-secure-nca.k8s-preprod.kacd.kz/platform/services/secure/nca/auth/v1/authenticate
 
+mkbUrl: https://mkb-preprod.k8s-preprod.kacd.kz
+
 tls:
   enabled: true
   existingSecret: kacd-tls
