@@ -43,7 +43,7 @@ external:
 # Конфигурация реалма АРРФР
 afr:
   enabled: true
-  hostname: afr-sso.kacd.kz
+  hostname: ardfm-sso.kacd.kz
   # Настройки службы ingress
   ingress:
     serviceName: sso-keycloak
