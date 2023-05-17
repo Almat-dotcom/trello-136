@@ -14,7 +14,7 @@ metadata:
   {{- end }}
 spec:
   # Отображаемое имя на странице авторизации
-  displayedName: AFR
+  displayedName: АРРФР
   # Базовый URL для доступа к реалму (Важно! Для админки динамически не изменяются хосты)
   frontendUrl: {{ printf "https://%s" .Values.afr.hostname }}
   # Любые запросы могут быть по HTTP

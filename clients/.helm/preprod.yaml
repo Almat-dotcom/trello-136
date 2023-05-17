@@ -3,11 +3,11 @@ clients:
     redirectUris:
     - http://localhost:4200/*
     - https://ardfm.k8s-dev.kacd.kz/*
-    - https://ardfm-sso.k8s-preprod.kacd.kz/*
+    - https://ardfm.k8s-preprod.kacd.kz/*
     webOrigins:
     - http://localhost:4200
     - https://ardfm.k8s-dev.kacd.kz
-    - https://ardfm-sso.k8s-preprod.kacd.kz
+    - https://ardfm.k8s-preprod.kacd.kz
   deponentReport:
     redirectUris:
     - http://localhost:8080/*
