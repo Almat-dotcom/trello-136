@@ -36,7 +36,7 @@ spec:
     encryption: []
   # Настройки тем для модулей входа, админки, профиля и почтовой рассылки
   themes: 
-    login: afr
+    login: keycloak
     account: keycloak.v2
     admin: keycloak.v2
     email: afr
@@ -65,13 +65,11 @@ spec:
   # Настройки сессий
   sessions:
     sso:
-      sessionIdle: 15m
+      sessionIdle: 30m
       sessionMax: 24h
   tokens:
-    accessLifespan: 5m
-    oidcAccessLifespan: 5m
-  # Настройки токенов
-  tokens: {}
+    accessLifespan: 15m
+    oidcAccessLifespan: 15m
   # Настройки аутентификации
   authentication:
     # Политики паролей

@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 public class RealmProfileResource extends BaseProfileRealmResource {
     private static final Logger log = Logger.getLogger(RealmProfileResource.class);
 
-    private static final int LIMIT = 10;
+    private static final int MAX_LIMIT = 50;
     private static final String SUCCESS = "{\"status\": \"success\"}";
 
     protected RealmProfileResource(RealmModel realm) {
@@ -31,17 +31,19 @@ public class RealmProfileResource extends BaseProfileRealmResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response listProfiles(
-            @QueryParam("page") Integer pageParam
+            @QueryParam("page") Integer pageParam,
+            @QueryParam("limit") Integer limitParam
     ) {
         hasReadPermission();
 
         int page = pageParam != null ? pageParam : 1;
+        int limit = limitParam != null && limitParam < MAX_LIMIT ? limitParam : MAX_LIMIT;
         log.debugf("Reading profiles by page {} ...", page);
 
         long total = session.users().getUsersCount(realm);
 
         Stream<UserModel> content = session.users()
-                .searchForUserStream(realm, "*", (page - 1) * LIMIT, LIMIT);
+                .searchForUserStream(realm, "*", (page - 1) * limit, limit);
 
         List<ProfileResourceRepresentation> representations = content
                 .map(it -> ProfileResourceRepresentation.of(session, realm, it))
@@ -51,8 +53,8 @@ public class RealmProfileResource extends BaseProfileRealmResource {
                 new Page<>(
                         page,
                         representations.size(),
-                        LIMIT,
-                        (int) (total / LIMIT) + 1,
+                        limit,
+                        (int) (total / limit) + 1,
                         total,
                         representations
                 )

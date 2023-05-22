@@ -69,11 +69,12 @@ spec:
       maxLoginFailures: 3
   # Настройки сессий
   sessions:
-    client: {}
-    offline: {}
-    sso: {}
-  # Настройки токенов
-  tokens: {}
+    sso:
+      sessionIdle: 30m
+      sessionMax: 24h
+  tokens:
+    accessLifespan: 15m
+    oidcAccessLifespan: 15m
   # Настройки аутентификации
   authentication:
     # Потоки аутентификации

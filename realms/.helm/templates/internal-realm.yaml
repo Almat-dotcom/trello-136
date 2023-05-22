@@ -55,11 +55,14 @@ spec:
       saveEvents: true
       includeRepresentation: true
       expiration: 7d
+  # Настройки сессий
   sessions:
-    client: {}
-    offline: {}
-    sso: {}
-  tokens: {}
+    sso:
+      sessionIdle: 30m
+      sessionMax: 24h
+  tokens:
+    accessLifespan: 15m
+    oidcAccessLifespan: 15m
   security:
     # Включить защиту от взлома пароля по методу brute force
     bruteForce:
