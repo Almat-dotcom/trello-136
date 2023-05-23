@@ -40,3 +40,18 @@ clients:
     - http://10.10.125.4:8085/*
     webOrigins:
     - "+"
+  camundaOperate:
+    redirectUris:
+    - https://camunda.k8s-dev.kacd.kz/operate/*
+    webOrigins:
+    - "+"
+  camundaTasklist:
+    redirectUris:
+    - https://camunda.k8s-dev.kacd.kz/tasklist/*
+    webOrigins:
+    - "+"
+  camundaOptimize:
+    redirectUris:
+    - https://camunda.k8s-dev.kacd.kz/optimize/*
+    webOrigins:
+    - "+"
