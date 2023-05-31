@@ -59,6 +59,16 @@ public class ChangeEmailRequiredAction implements RequiredActionProvider {
             return;
         }
 
+        UserModel existedUsers = context.getSession().users().getUserByEmail(context.getRealm(), newEmail);
+        if (existedUsers != null) {
+            log.debugf("User with email %s already exists!", newEmail);
+            LoginFormsProvider form = context.form();
+            form.setAttribute("email", newEmail);
+            form.addError(new FormMessage(RegistrationPage.FIELD_EMAIL, Messages.EMAIL_EXISTS));
+            context.challenge(form.createForm(FORM));
+            return;
+        }
+
         UserModel user = context.getUser();
         user.setEmail(newEmail);
         user.addRequiredAction(UserModel.RequiredAction.VERIFY_EMAIL);
