@@ -11,13 +11,12 @@ import org.keycloak.models.utils.FormMessage;
 import org.keycloak.services.messages.Messages;
 
 import javax.ws.rs.core.MultivaluedMap;
+import java.util.stream.Collectors;
 
 public class ChangeEmailRequiredAction implements RequiredActionProvider {
-    private static final Logger log = Logger.getLogger(ChangeEmailRequiredAction.class);
-
-    private static final String FORM = "update-email.ftl";
-
     public static final String PROVIDER_ID = "change-email";
+    private static final Logger log = Logger.getLogger(ChangeEmailRequiredAction.class);
+    private static final String FORM = "update-email.ftl";
 
     @Override
     public InitiatedActionSupport initiatedActionSupport() {
@@ -26,8 +25,14 @@ public class ChangeEmailRequiredAction implements RequiredActionProvider {
 
     @Override
     public void evaluateTriggers(RequiredActionContext context) {
-        if (context.getUser().getEmail().endsWith("example.com")) {
+        if (context.getUser().getEmail() == null || context.getUser().getEmail().endsWith("example.com")) {
             context.getUser().addRequiredAction(PROVIDER_ID);
+            if (
+                    context.getUser().getRequiredActionsStream()
+                            .collect(Collectors.toList()).contains(UserModel.RequiredAction.VERIFY_EMAIL.name())
+            ) {
+                context.getUser().removeRequiredAction(UserModel.RequiredAction.VERIFY_EMAIL);
+            }
         }
     }
 
