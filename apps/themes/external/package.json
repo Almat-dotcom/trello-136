@@ -15,8 +15,8 @@
     },
     "keycloakify": {
         "extraPages": [
-            "my-extra-page-1.ftl",
-            "my-extra-page-2.ftl"
+            "update-email.ftl",
+            "update-phone.ftl"
         ]
     },
     "author": "u/garronej",

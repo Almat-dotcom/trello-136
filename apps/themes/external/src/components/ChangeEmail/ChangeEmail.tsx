@@ -23,7 +23,7 @@ const ChangeEmail = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext_
     const formRef = useRef<HTMLFormElement>(null);
 
     const onSubmit = () => {
-        if (newEmail.length === 0 || newEmail.indexOf("@")) {
+        if (newEmail.length === 0 || newEmail.indexOf("@") === -1) {
             setError("invalidEmailMessage");
             return;
         }

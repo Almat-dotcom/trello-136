@@ -39,7 +39,7 @@ const ChangePhoneNumber = memo(({ kcContext, i18n, ...props }: { kcContext: KcCo
                         <Alert i18n={i18n} type={message.type} message={message.summary} />
                     )}
 
-                    <p className="my-6 text-slate-900 text-2xl font-bold">{msgStr("forcedToChangeEmail")}</p>
+                    <p className="my-6 text-slate-900 text-2xl font-bold">{msgStr("forcedToChangePhoneNumber")}</p>
                 </div>
 
                 <div className="mt-4">
