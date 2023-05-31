@@ -33,6 +33,9 @@ public class ChangePhoneRequiredAction implements RequiredActionProvider {
     public void processAction(RequiredActionContext context) {
         MultivaluedMap<String, String> formData = context.getHttpRequest().getDecodedFormParameters();
         String newPhone = formData.getFirst(ExternalRegistrationPage.FIELD_PHONE_NUMBER);
+        newPhone = newPhone == null ? null : newPhone.replace(" ", "")
+                .replace("(", "")
+                .replace(")", "");
 
         if (newPhone == null || !newPhone.matches("\\+\\d{11}")) {
             log.debugf("Invalid phone received!");
