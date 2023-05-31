@@ -18,6 +18,10 @@ public class MkbMobilePhoneValidatorFactory implements MobilePhoneValidatorFacto
         OkHttpClient client = new OkHttpClient();
         KeycloakSelfClient selfClient = new KeycloakSelfClient(client);
         String mkbUrl = System.getenv("MKB_URL");
+        if (mkbUrl == null) {
+            // Always fails validation
+            mkbUrl = "https://mock.service";
+        }
         MkbHttpClient mkbHttpClient = new MkbHttpClient(client, mkbUrl);
         return new MkbMobilePhoneValidator(session, selfClient, mkbHttpClient);
     }
