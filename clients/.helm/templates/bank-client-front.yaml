@@ -1,7 +1,7 @@
 apiVersion: sso.kacd.kz/v1
 kind: Client
 metadata:
-  name: bank-client-fron
+  name: bank-client-front
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: external-realm
@@ -13,8 +13,8 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  displayedName: Front-End of authority services for AFR
-  displayedDescription: Фронт приложения гос услуг личного кабинета АРРФР
+  displayedName: Front-End for Banking
+  displayedDescription: Фронт банковских услуг
   access:
     validRedirectUris:
     - http://localhsot:4200
