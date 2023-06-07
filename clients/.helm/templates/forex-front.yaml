@@ -13,8 +13,8 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  displayedName: Front-End of authority services for AFR
-  displayedDescription: Фронт приложения гос услуг личного кабинета АРРФР
+  displayedName: Front-End of Forex
+  displayedDescription: Фронт приложения Forex
   access:
     validRedirectUris:
     - http://localhost:4200
