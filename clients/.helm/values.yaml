@@ -44,13 +44,4 @@ clients:
   internalSsoApi:
     redirectUris: []
     webOrigins: []
-  camundaOperate:
-    redirectUris: []
-    webOrigins: []
-  camundaTasklist:
-    redirectUris: []
-    webOrigins: []
-  camundaOptimize:
-    redirectUris: []
-    webOrigins: []
 

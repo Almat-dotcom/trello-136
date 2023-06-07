@@ -1,10 +1,11 @@
 apiVersion: sso.kacd.kz/v1
 kind: Client
 metadata:
-  name: camunda-tasklist
+  name: bank-client-fron
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    kz-kacd-realm-name: internal
+    app.kubernetes.io/component: external-realm
+    kz-kacd-realm-name: external
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -12,14 +13,25 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  displayedName: Client for camunda tasklist
-  displayedDescription: Client for camunda tasklist
+  displayedName: Front-End of authority services for AFR
+  displayedDescription: Фронт приложения гос услуг личного кабинета АРРФР
   access:
     validRedirectUris:
-    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.camundaTasklist.redirectUris "context" $ ) | nindent 4 }}
+    - http://localhsot:4200
     webOrigins:
-    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.camundaTasklist.webOrigins "context" $ ) | nindent 4 }}
+    - "+"
   capability:
     type: PUBLIC
-  attributes: []
-  roles: []
+  attributes:
+  - POSITION
+  - FIRST_NAME
+  - LAST_NAME
+  - MIDDLE_NAME
+  - GROUPS
+  - LOCALE
+  - IIN
+  - PHONE_NUMBER
+  roles: [{
+    name: forex,
+    roleDescription: Доступ к Forex
+  }]
