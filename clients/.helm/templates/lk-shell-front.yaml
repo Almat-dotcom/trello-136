@@ -54,4 +54,7 @@ spec:
   }, {
     name: client-bank,
     roleDescription: Банк-клиент
+  }, {
+    name: pfi,
+    roleDescription: Доступ к PFI
   }]
