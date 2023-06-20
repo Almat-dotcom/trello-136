@@ -46,9 +46,6 @@ spec:
     name: shareholder,
     roleDescription: Держатель
   }, {
-    name: reporting_person,
-    roleDescription: "Информирующее лицо"
-  }, {
     name: custodian,
     roleDescription: Кастодиан
   }, {
@@ -56,5 +53,11 @@ spec:
     roleDescription: Банк-клиент
   }, {
     name: pfi,
-    roleDescription: Доступ к PFI
+    roleDescription: Информирующее лицо
+  }, {
+    name: ceo,
+    roleDescription: Первое лицо
+  }, {
+    name: admin,
+    roleDescription: Администратор
   }]
