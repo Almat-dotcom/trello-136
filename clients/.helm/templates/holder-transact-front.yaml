@@ -1,7 +1,7 @@
 apiVersion: sso.kacd.kz/v1
 kind: Client
 metadata:
-  name: information-services-front
+  name: holder-transact-front
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: external-realm
@@ -13,8 +13,8 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  displayedName: Front-End for Information services
-  displayedDescription: Фронт информ услуг
+  displayedName: Front-End for transact
+  displayedDescription: Фронт сделок
   access:
     validRedirectUris:
     - http://localhsot:4200

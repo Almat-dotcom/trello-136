@@ -1,0 +1,40 @@
+apiVersion: sso.kacd.kz/v1
+kind: Client
+metadata:
+  name: holder-accounts-front
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: external-realm
+    kz-kacd-realm-name: external
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  displayedName: Front-End for Accounts operations
+  displayedDescription: Фронт операций со счетами
+  access:
+    validRedirectUris:
+    - http://localhsot:4200
+    webOrigins:
+    - "+"
+  capability:
+    type: PUBLIC
+  attributes:
+  - POSITION
+  - FIRST_NAME
+  - LAST_NAME
+  - MIDDLE_NAME
+  - GROUPS
+  - LOCALE
+  - IIN
+  - PHONE_NUMBER
+  roles: [{
+    name: reader,
+    roleDescription: Доступ на чтение
+  },{
+    name: editor,
+    roleDescription: Доступ к редактированию
+  }]
