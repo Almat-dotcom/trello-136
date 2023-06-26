@@ -137,7 +137,7 @@ public class OrganizationAdapter implements OrganizationModel, JpaModel<Organiza
                 "select o from OrganizationMemberEntity o where o.organization = :organization",
                 OrganizationMemberEntity.class
         );
-        query.setParameter(":organization", entity);
+        query.setParameter("organization", entity);
         query.setFirstResult(from);
         query.setMaxResults(limit);
         List<PositionModel> result = query.getResultStream()
