@@ -99,7 +99,7 @@ public class ProtocolMapperFactory {
     }
 
     private static ProtocolMapperModel phoneNumberVerified() {
-        return attributeMapper("phoneNumberVerified", true);
+        return attributeMapper("phoneVerified", true);
     }
 
     private static ProtocolMapperModel residency() {
