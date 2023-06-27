@@ -2,6 +2,7 @@ package kz.kacd.sso.external.resource;
 
 import kz.kacd.sso.external.model.OrganizationModel;
 import kz.kacd.sso.external.model.PositionModel;
+import kz.kacd.sso.external.representation.PageRepresentation;
 import kz.kacd.sso.external.representation.PositionRepresentation;
 import kz.kacd.sso.external.representation.RequestMember;
 import kz.kacd.sso.external.resource.common.OrganizationResourceType;
@@ -29,11 +30,23 @@ public class MembersResource extends BaseOrganizationAdminResource {
     @GET
     @Path("")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Stream<PositionRepresentation> findAll() {
+    public PageRepresentation<PositionRepresentation> findAll(
+            @QueryParam("from") Integer fromArg,
+            @QueryParam("limit") Integer limitArg
+    ) {
         checkViewPermissions();
 
+        int from = 0;
+        if (fromArg != null) {
+            from = fromArg;
+        }
+        int limit = 100;
+        if (limitArg != null) {
+            limit = limitArg;
+        }
+
         log.debugf("Finding members for organization %s ...", model.getId());
-        return model.getPositions().map(it -> PositionRepresentation.from(session, realm, it));
+        return model.getPositions(from, limit).map(it -> PositionRepresentation.from(session, realm, it));
     }
 
     @Path("{id}")

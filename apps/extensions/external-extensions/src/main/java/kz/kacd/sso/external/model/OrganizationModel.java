@@ -1,11 +1,13 @@
 package kz.kacd.sso.external.model;
 
+import kz.kacd.sso.external.representation.PageRepresentation;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 import org.keycloak.provider.ProviderEvent;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.stream.Stream;
 
 public interface OrganizationModel {
@@ -39,6 +41,8 @@ public interface OrganizationModel {
     LocalDateTime getUpdatedAt();
 
     Stream<PositionModel> getPositions();
+
+    PageRepresentation<PositionModel> getPositions(int from, int limit);
 
     PositionModel getPosition(UserModel user);
 

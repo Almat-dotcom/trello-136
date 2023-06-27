@@ -5,6 +5,7 @@ import kz.kacd.sso.external.model.PositionModel;
 import kz.kacd.sso.external.model.jpa.entity.OrganizationEntity;
 import kz.kacd.sso.external.model.jpa.entity.OrganizationMemberEntity;
 import kz.kacd.sso.external.model.jpa.entity.PositionEntity;
+import kz.kacd.sso.external.representation.PageRepresentation;
 import org.jboss.logging.Logger;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
@@ -13,8 +14,11 @@ import org.keycloak.models.jpa.JpaModel;
 import org.keycloak.models.utils.KeycloakModelUtils;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class OrganizationAdapter implements OrganizationModel, JpaModel<OrganizationEntity> {
@@ -125,6 +129,32 @@ public class OrganizationAdapter implements OrganizationModel, JpaModel<Organiza
     @Override
     public Stream<PositionModel> getPositions() {
         return entity.getMembers().stream().map(it -> adaptersFactory.create(keycloakSession, it, realm));
+    }
+
+    @Override
+    public PageRepresentation<PositionModel> getPositions(int from, int limit) {
+        TypedQuery<OrganizationMemberEntity> query = em.createQuery(
+                "select o from OrganizationMemberEntity o where o.organization = :organization",
+                OrganizationMemberEntity.class
+        );
+        query.setParameter("organization", entity);
+        query.setFirstResult(from);
+        query.setMaxResults(limit);
+        List<PositionModel> result = query.getResultStream()
+                .map(it -> adaptersFactory.create(keycloakSession, it, realm))
+                .collect(Collectors.toList());
+        return new PageRepresentation<>(
+                getPositionsCount(),
+                from,
+                limit,
+                result
+        );
+    }
+
+    private long getPositionsCount() {
+        Query query = em.createQuery("select count(o) from OrganizationMemberEntity o where o.organization = :organization");
+        query.setParameter("organization", entity);
+        return (Long) query.getSingleResult();
     }
 
     @Override
