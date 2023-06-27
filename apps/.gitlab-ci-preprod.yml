@@ -1,4 +1,5 @@
 stages:
+- scan
 # Build all extensions
 - prebuild
 # Cache extensions inside local directory
@@ -7,6 +8,10 @@ stages:
 - build-docker
 # deploy to dev env
 - preprod-deploy
+
+include:
+- project: 'core2471/ci-tools'
+  file: 'scan/solar/solar-scan-code.yml'
 
 # Building basic extension for keycloak
 build-common-extension:
@@ -30,6 +35,7 @@ build-common-extension:
   - mvn clean package
   # - mvn verify sonar:sonar -Dsonar.projectKey=sso-common-extension
   - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./target/common-extensions-jar-with-dependencies.jar ${NEXUS_REPO}
+  needs: []
 
 # Building external extension for keycloak
 build-external-extension:
@@ -49,6 +55,7 @@ build-external-extension:
   script:
   - mvn clean package
   - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./target/external-extensions-jar-with-dependencies.jar ${NEXUS_REPO}
+  needs: []
 
 # Building external theme for keycloak
 build-external-theme:
@@ -70,6 +77,7 @@ build-external-theme:
   - key: node_modules_external
     paths:
     - apps/themes/external/node_modules
+  needs: []
 
 # Building internal theme for keycloak
 # build-internal-theme:
@@ -112,6 +120,7 @@ build-afr-theme:
   - key: node_modules_afr
     paths:
     - apps/themes/afr/node_modules
+  needs: []
 
 # Persisting all extensions artifacts inside local cache directory
 cache-artifacts:
