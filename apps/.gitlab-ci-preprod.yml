@@ -1,5 +1,4 @@
 stages:
-- scan
 # Build all extensions
 - prebuild
 # Cache extensions inside local directory
@@ -8,10 +7,6 @@ stages:
 - build-docker
 # deploy to dev env
 - preprod-deploy
-
-include:
-- project: 'core2471/ci-tools'
-  file: 'scan/solar/solar-scan-code.yml'
 
 # Building basic extension for keycloak
 build-common-extension:

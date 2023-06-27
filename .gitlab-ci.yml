@@ -1,13 +1,16 @@
 stages:
 - mirror
+- scan
 - mr
 - dev
 - preprod
 - prod
 
 include:
-  - project: 'core2471/ci-tools'
-    file: 'mirror/mirror-repo.yml'
+- project: 'core2471/ci-tools'
+  file: 'mirror/mirror-repo.yml'
+- project: 'core2471/ci-tools'
+  file: 'scan/solar/solar-scan-code.yml'
 
 check_apps:
   stage: mr
