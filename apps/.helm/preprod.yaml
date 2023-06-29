@@ -13,6 +13,8 @@ hostname: sso-preprod.k8s-preprod.kacd.kz
 
 enabledMasterRealm: "true"
 
+debugAuth: true
+
 resources:
   limits:
     memory: "640Mi"
