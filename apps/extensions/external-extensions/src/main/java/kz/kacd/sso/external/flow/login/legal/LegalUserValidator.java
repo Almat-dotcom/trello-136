@@ -68,7 +68,7 @@ public class LegalUserValidator implements AuthenticatorValidator {
 
     private boolean notEdsAuth(AuthenticationFlowContext context) {
         if (debugMode()) {
-            return true;
+            return false;
         }
         MultivaluedMap<String, String> formData = context.getHttpRequest().getDecodedFormParameters();
         String type = formData.getFirst(ExternalLoginPage.AUTHENTICATION_TYPE);
