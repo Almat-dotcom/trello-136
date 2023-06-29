@@ -171,5 +171,6 @@ export const kz = {
     "passwordPolicyDigits": "сандар",
     "passwordPolicySpecialSymbols": "тыныс белгілері (!\"$%&'()+,-./:;<=>?@[]^_{|}~) болуы керек",
     "forcedToChangeEmail": "Вам необходимо указать и подтвердить адрес электронной почты",
-    "forcedToChangePhoneNumber": "Вам необходимо указать номер телефона"
+    "forcedToChangePhoneNumber": "Вам необходимо указать номер телефона",
+    "invalid_user_credentials": "Логин немесе құпиясөз дұрыс емес."
 }
