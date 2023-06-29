@@ -13,38 +13,31 @@ import org.keycloak.events.Errors;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
+import twitter4j.v1.User;
 
+import javax.ws.rs.core.MultivaluedMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class LegalUserValidator implements AuthenticatorValidator {
     private static final Logger log = Logger.getLogger(LegalUserValidator.class);
 
+    public static final String AUTH_DEBUG_MODE = "AUTH_DEBUG_MODE";
+
     @Override
     public Error validate(UserModel user, KeycloakSession session, AuthenticationFlowContext context) {
         log.debugf("Validating user %s ...", user.getUsername());
-        String clientType = user.getFirstAttribute(ExternalRegistrationPage.FIELD_CLIENT_TYPE);
-        if (clientType == null || !clientType.equals(ExternalRegistrationPage.CLIENT_LEGAL)) {
+
+        if (nonLegal(user)) {
             log.debugf("User %s is not legal.", user.getUsername());
             return null;
         }
 
-        RealmModel realm = session.getContext().getRealm();
-        OrganizationProvider orgs = session.getProvider(OrganizationProvider.class);
-
-        OrganizationModel organization;
-
-        String bin = context.getAuthenticationSession().getAuthNote(ExternalRegistrationPage.FIELD_BIN);
-        if (bin == null || bin.isEmpty()) {
-            List<OrganizationModel> list = orgs.getUserOrganizations(realm, user).collect(Collectors.toList());
-            if (list.size() != 1) {
-                organization = null;
-            } else {
-                organization = list.get(0);
-            }
-        } else {
-            organization = orgs.getOrganizationByBin(realm, bin);
+        if (resident(user) && notEdsAuth(context)) {
+            return new Error(Errors.INVALID_USER_CREDENTIALS, null);
         }
+
+        OrganizationModel organization = findOrg(user, session, context);
         if (organization == null) {
             return new Error(Errors.INVALID_USER_CREDENTIALS, null);
         }
@@ -62,5 +55,44 @@ public class LegalUserValidator implements AuthenticatorValidator {
         }
 
         return null;
+    }
+
+    private boolean nonLegal(UserModel user) {
+        String clientType = user.getFirstAttribute(ExternalRegistrationPage.FIELD_CLIENT_TYPE);
+        return clientType == null || !clientType.equals(ExternalRegistrationPage.CLIENT_LEGAL);
+    }
+
+    private boolean resident(UserModel user) {
+        return ExternalRegistrationPage.RESIDENT.equals(user.getFirstAttribute(ExternalRegistrationPage.FIELD_RESIDENCY));
+    }
+
+    private boolean notEdsAuth(AuthenticationFlowContext context) {
+        if (debugMode()) {
+            return true;
+        }
+        MultivaluedMap<String, String> formData = context.getHttpRequest().getDecodedFormParameters();
+        String type = formData.getFirst(ExternalLoginPage.AUTHENTICATION_TYPE);
+        return type == null || !type.equals(ExternalLoginPage.EDS_AUTHENTICATION);
+    }
+
+    private boolean debugMode() {
+        String env = System.getenv(AUTH_DEBUG_MODE);
+        return Boolean.TRUE.toString().equals(env);
+    }
+
+    private OrganizationModel findOrg(UserModel user, KeycloakSession session, AuthenticationFlowContext context) {
+        RealmModel realm = session.getContext().getRealm();
+        OrganizationProvider orgs = session.getProvider(OrganizationProvider.class);
+        String bin = context.getAuthenticationSession().getAuthNote(ExternalRegistrationPage.FIELD_BIN);
+        if (bin == null || bin.isEmpty()) {
+            List<OrganizationModel> list = orgs.getUserOrganizations(realm, user).collect(Collectors.toList());
+            if (list.size() != 1) {
+                return null;
+            } else {
+                return list.get(0);
+            }
+        } else {
+            return orgs.getOrganizationByBin(realm, bin);
+        }
     }
 }
