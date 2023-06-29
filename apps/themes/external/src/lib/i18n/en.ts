@@ -171,5 +171,6 @@ export const en = {
     "passwordPolicyDigits": "digits",
     "passwordPolicySpecialSymbols": "punctuation marks (!\"$%&'()+,-./:;<=>?@[]^_{|}~)",
     "forcedToChangeEmail": "You need to change and verify your email",
-    "forcedToChangePhoneNumber": "You need to change your phone number"
+    "forcedToChangePhoneNumber": "You need to change your phone number",
+    "invalid_user_credentials": "Invalid username or password."
 }

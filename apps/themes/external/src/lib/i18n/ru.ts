@@ -171,5 +171,6 @@ export const ru = {
     "passwordPolicyDigits": "цифры",
     "passwordPolicySpecialSymbols": "знаки пунктуации (!\"$%&'()+,-./:;<=>?@[]^_{|}~)",
     "forcedToChangeEmail": "Вам необходимо указать и подтвердить адрес электронной почты",
-    "forcedToChangePhoneNumber": "Вам необходимо указать номер телефона"
+    "forcedToChangePhoneNumber": "Вам необходимо указать номер телефона",
+    "invalid_user_credentials": "Неверный логин или пароль."
 }
