@@ -40,7 +40,7 @@ public class LegalClientValidation {
 
         OrganizationModel found = orgs.getOrganizationByBin(realm, attributes.bin());
         if (found == null) {
-            listener.accept(error(ExternalRegistrationPage.FIELD_BIN, ExternalMessages.INVALID_BIN));
+            listener.accept(error(ExternalRegistrationPage.FIELD_BIN, ExternalMessages.ATTEMPT_TO_REGISTER_LEGAL_BY_EMPLOYEE));
         }
     }
 

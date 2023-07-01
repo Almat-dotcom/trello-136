@@ -172,5 +172,6 @@ export const en = {
     "passwordPolicySpecialSymbols": "punctuation marks (!\"$%&'()+,-./:;<=>?@[]^_{|}~)",
     "forcedToChangeEmail": "You need to change and verify your email",
     "forcedToChangePhoneNumber": "You need to change your phone number",
-    "invalid_user_credentials": "Invalid username or password."
+    "invalid_user_credentials": "Invalid username or password.",
+    "attemptToRegisterLegalByEmployee": "Согласно процедуре регистрации юридического лица в первую очередь необходимо зарегистрировать первого руководителя. После успешной регистрации первого руководителя, необходимо приступить к регистрации сотрудника юридического лица. Мы рекомендуем вам придерживаться указанной последовательности для более эффективного и быстрого завершения процесса регистрации."
 }
