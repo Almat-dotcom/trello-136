@@ -13,16 +13,14 @@ import org.keycloak.events.Errors;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
-import twitter4j.v1.User;
 
 import javax.ws.rs.core.MultivaluedMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class LegalUserValidator implements AuthenticatorValidator {
-    private static final Logger log = Logger.getLogger(LegalUserValidator.class);
-
     public static final String AUTH_DEBUG_MODE = "AUTH_DEBUG_MODE";
+    private static final Logger log = Logger.getLogger(LegalUserValidator.class);
 
     @Override
     public Error validate(UserModel user, KeycloakSession session, AuthenticationFlowContext context) {
