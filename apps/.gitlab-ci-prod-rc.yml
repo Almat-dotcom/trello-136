@@ -91,6 +91,7 @@ k8s-prod-rc-deploy:
   # - master
   environment:
     name: prod
+  when: manual
   before_script:
   - cd apps
   - export RELEASE_NAME="${CI_PROJECT_NAME}"

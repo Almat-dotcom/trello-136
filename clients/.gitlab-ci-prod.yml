@@ -6,6 +6,7 @@ prod-deploy-realms:
   image: 'nexus.kacd.kz:5000/devops-utils/alpine-helm-docker:3.15al-3.11he-20.10d'
   # only:
   # - master
+  when: manual
   environment:
     name: prod
   before_script:
