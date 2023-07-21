@@ -15,7 +15,15 @@ global:
 # Image of the keycloak
 image: nexus.kacd.kz:5000/platform/sso/keycloak:0.3
 
+#
+# If true, then keycloak will be deployed with default realms configs and without any networking access to it.
+#
 initialSetup: false
+
+#
+# Enables DEBUG login for external users
+#
+debugAuth: false
 
 #
 # Service account settings

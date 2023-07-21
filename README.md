@@ -153,7 +153,7 @@
 
 ### Request
 
-**GET** `/org/{id}`
+**GET** `/orgs/{id}`
 
 **PATH**
 - id - Идентификатор ЮЛ
@@ -180,10 +180,14 @@
 
 ### Request
 
-**GET** `/org/{id}/members`
+**GET** `/orgs/{id}/members`
 
 **PATH**
 - id - Идентификатор организации
+
+**QUERY**
+- from - Номер елемента, с которого начинать страницу результата
+- limit - максимальное кол-во элементов на странице
 
 ### Response
 
@@ -191,24 +195,88 @@
 
 **Body**
 ```json
-[{
-    "id": "0e3dcc38-d366-4d63-bf95-7ead8a50ad50",
-    "name": "HEAD",
-    "description": "Первый руководитель",
-    "user": {
-        "id": "0e475c35-ed18-4951-b583-72ed72372dc8",
-        "username": "test",
-        "firstName": "test",
-        "enabled": true,
-        "roles": {
-            "realm": [
-                "default-roles-external"
-            ]
-        },
-        "groups": ["test"]
-    },
-    "configrmed": false
-}]
+{
+    "totalElements": 1,
+    "from": 0,
+    "limit": 100,
+    "content": [
+        {
+            "id": "0c987e03-d9d7-405b-af8e-efdd60cef48b",
+            "name": "HEAD",
+            "description": "Первый руководитель",
+            "user": {
+                "id": "df20f94e-2f92-4590-a910-72015afd8511",
+                "username": "admin",
+                "enabled": true,
+                "roles": {
+                    "internal-realm": [
+                        "query-groups",
+                        "manage-identity-providers",
+                        "view-events",
+                        "query-users",
+                        "view-authorization",
+                        "manage-events",
+                        "view-clients",
+                        "manage-clients",
+                        "query-realms",
+                        "view-users",
+                        "manage-authorization",
+                        "manage-realm",
+                        "query-clients",
+                        "manage-users",
+                        "view-identity-providers",
+                        "create-client",
+                        "view-realm"
+                    ],
+                    "afr-realm": [
+                        "query-clients",
+                        "query-groups",
+                        "view-authorization",
+                        "manage-events",
+                        "view-events",
+                        "manage-identity-providers",
+                        "query-realms",
+                        "view-clients",
+                        "create-client",
+                        "view-identity-providers",
+                        "view-realm",
+                        "query-users",
+                        "manage-realm",
+                        "manage-clients",
+                        "manage-users",
+                        "manage-authorization",
+                        "view-users"
+                    ],
+                    "external-realm": [
+                        "create-client",
+                        "view-users",
+                        "query-groups",
+                        "manage-realm",
+                        "view-events",
+                        "manage-users",
+                        "manage-identity-providers",
+                        "view-identity-providers",
+                        "manage-authorization",
+                        "manage-events",
+                        "view-authorization",
+                        "view-clients",
+                        "query-realms",
+                        "manage-clients",
+                        "query-clients",
+                        "query-users",
+                        "view-realm"
+                    ],
+                    "realm": [
+                        "default-roles-master",
+                        "admin"
+                    ]
+                },
+                "groups": []
+            },
+            "confirmed": true
+        }
+    ]
+}
 ```
 
 ---
@@ -216,7 +284,7 @@
 
 ### Request
 
-**PATCH** `/org/{id}/members/{memberId}/confirm`
+**PATCH** `/orgs/{id}/members/{memberId}/confirm`
 
 **PATH**
 - id - Идентификатор организации

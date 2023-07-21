@@ -31,6 +31,7 @@ data:
   REDIS_PORT: {{ .Values.redis.port | quote }}
   KC_SIGN_NCA_URL: {{ .Values.ncaUrl | quote }}
   MKB_URL: {{ .Values.mkbUrl | quote }}
+  AUTH_DEBUG_MODE: {{ .Values.debugAuth | quote }}
 {{- if (include "keycloak.createConfigmap" .) }}
 ---
 apiVersion: v1

@@ -13,6 +13,7 @@ public class ExternalMessages {
     public static final String INVALID_BIN = "invalidBin";
     public static final String MISSING_LEGAL_ROLE = "missingLegalRole";
     public static final String INVALID_LEGAL_ROLE = "invalidLegalRole";
+    public static final String ATTEMPT_TO_REGISTER_LEGAL_BY_EMPLOYEE = "attemptToRegisterLegalByEmployee";
     public static final String DUPLICATE_IIN = "duplicateIin";
     public static final String DUPLICATE_BIN = "duplicateBin";
     public static final String MISSING_EDS = "missingEds";
