@@ -100,6 +100,6 @@ k8s-prod-rc-deploy:
   - |-
     helm upgrade --install ${RELEASE_NAME} ./.helm \
       --create-namespace --namespace="${CI_PROJECT_NAME}" \
-      -f ./.helm/prod.yaml \
+      -f ./.helm/prod-rc.yaml \
       --set image=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/keycloak:latest \
       --set realmController.image=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/realm-controller:latest
