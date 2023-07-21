@@ -114,3 +114,34 @@ clients-prod:
     changes:
     - clients/**/*
 
+### PROD-RC deploy
+
+apps-prod-rc:
+  stage: prod
+  when: manual
+  trigger:
+    include: apps/.gitlab-ci-prod-rc.yml
+    strategy: depend
+  rules:
+  - if: $PROD == "true" && $CI_SERVER_URL == "https://gitlab-rc.kacd.kz" && $CI_PIPELINE_SOURCE =~ "web|push" && $CI_COMMIT_BRANCH == "master"
+  - when: never
+
+realms-prod-rc:
+  stage: prod
+  when: manual
+  trigger:
+    include: realms/.gitlab-ci-prod-rc.yml
+    strategy: depend
+  rules:
+  - if: $PROD == "true" && $CI_SERVER_URL == "https://gitlab-rc.kacd.kz" && $CI_PIPELINE_SOURCE =~ "web|push" && $CI_COMMIT_BRANCH == "master"
+  - when: never
+
+clients-prod-rc:
+  stage: prod
+  when: manual
+  trigger:
+    include: clients/.gitlab-ci-prod-rc.yml
+    strategy: depend
+  rules:
+  - if: $PROD == "true" && $CI_SERVER_URL == "https://gitlab-rc.kacd.kz" && $CI_PIPELINE_SOURCE =~ "web|push" && $CI_COMMIT_BRANCH == "master"
+  - when: never

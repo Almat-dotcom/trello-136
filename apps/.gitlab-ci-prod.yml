@@ -165,6 +165,7 @@ build-docker-keycloak:
       --context=${CI_PROJECT_DIR}/apps \
       --destination=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/keycloak:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA} \
       --destination=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/keycloak:latest
+      --destination=nexus-rc.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/keycloak:latest
   cache:
   - key: kaniko-cache-keycloak
     paths:
@@ -203,7 +204,9 @@ build-docker-realm-controller:
       --snapshot-mode=time \
       --use-new-run=true \
       --context=${CI_PROJECT_DIR}/apps/controllers/realm-controller \
-      --destination=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/realm-controller:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA}
+      --destination=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/realm-controller:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA} \
+      --destination=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/realm-controller:latest \
+      --destination=nexus-rc.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/realm-controller:latest
   cache:
   - key: kaniko-cache-realm-controller
     paths:
