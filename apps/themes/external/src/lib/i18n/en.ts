@@ -115,7 +115,7 @@ export const en = {
     "legal": "Entity",
     "legalRole": "Role",
     "head": "CEO",
-    "employee": "Emplyee",
+    "employee": "Employee",
     "middleName": "Patronymic",
     "bin": "BIN",
     "iin": "IIN",
