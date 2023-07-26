@@ -5,26 +5,21 @@ import kz.kacd.sso.external.model.OrganizationProvider;
 import kz.kacd.sso.external.model.PositionModel;
 import kz.kacd.sso.external.model.jpa.entity.OrganizationEntity;
 import kz.kacd.sso.external.model.jpa.entity.OrganizationMemberEntity;
-import org.hibernate.boot.archive.scan.spi.ClassDescriptor;
-import org.hibernate.metamodel.model.domain.internal.EntityTypeImpl;
 import org.jboss.logging.Logger;
-import org.keycloak.models.*;
+import org.keycloak.models.KeycloakSession;
+import org.keycloak.models.RealmModel;
+import org.keycloak.models.UserModel;
 import org.keycloak.models.utils.KeycloakModelUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.persistence.metamodel.EntityType;
 import java.math.BigInteger;
 import java.util.Optional;
-import java.util.Queue;
 import java.util.stream.Stream;
 
 public class JpaOrganizationProvider implements OrganizationProvider {
     private static final Logger log = Logger.getLogger(JpaOrganizationProvider.class);
-
-    private static final String LK_SHELL = "lk-shell-front";
-    private static final String CEO = "ceo";
 
     private static final String REALM_ID = "realmId";
     private static final String BIN = "bin";
@@ -60,16 +55,6 @@ public class JpaOrganizationProvider implements OrganizationProvider {
 
         PositionModel head = org.requestPosition(PositionModel.HEAD, createdBy);
         org.confirmPosition(head);
-
-        ClientModel client = keycloakSession.clients().getClientByClientId(realm, LK_SHELL);
-        if (client == null) {
-            return org;
-        }
-        RoleModel role = keycloakSession.roles().getClientRole(client, CEO);
-        if (role == null) {
-            return org;
-        }
-        createdBy.grantRole(role);
 
         return org;
     }

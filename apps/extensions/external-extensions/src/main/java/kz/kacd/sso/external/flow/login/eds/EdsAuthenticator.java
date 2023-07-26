@@ -58,10 +58,10 @@ public class EdsAuthenticator extends UsernamePasswordForm implements Alternativ
 
     private boolean validateUser(AuthenticationFlowContext context, SignatureValidator.Result sign) {
         MultivaluedMap<String, String> userData = context.getHttpRequest().getDecodedFormParameters();
-        String username = sign.getIin() + "-" + (sign.getType() == SignatureValidator.Type.PHYSICAL ? "physical" : "legal");
+        String username = sign.getSubject().getIin() + "-" + (sign.getType() == SignatureValidator.Type.PHYSICAL ? "physical" : "legal");
         if (sign.getType().equals(SignatureValidator.Type.LEGAL)) {
-            context.getEvent().detail(ExternalRegistrationPage.FIELD_BIN, Collections.singletonList(sign.getBin()));
-            context.getAuthenticationSession().setAuthNote(ExternalRegistrationPage.FIELD_BIN, sign.getBin());
+            context.getEvent().detail(ExternalRegistrationPage.FIELD_BIN, Collections.singletonList(sign.getSubject().getBin()));
+            context.getAuthenticationSession().setAuthNote(ExternalRegistrationPage.FIELD_BIN, sign.getSubject().getBin());
         }
         userData.put(AuthenticationManager.FORM_USERNAME, Collections.singletonList(username));
         return validateUser(context, userData);
