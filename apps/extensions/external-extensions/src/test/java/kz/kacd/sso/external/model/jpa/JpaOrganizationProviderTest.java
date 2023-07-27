@@ -47,7 +47,6 @@ class JpaOrganizationProviderTest {
         given(realm.getId()).willReturn("test");
         given(user.getId()).willReturn("test");
         given(session.getKeycloakSessionFactory()).willReturn(sessionFactory);
-        given(session.clients()).willReturn(mock(ClientProvider.class));
         given(adapterFactory.create(any(), any(), any(), any(), any())).willReturn(adapter);
 
         provider.createOrganization(realm, user);
@@ -60,7 +59,6 @@ class JpaOrganizationProviderTest {
         given(realm.getId()).willReturn("test");
         given(user.getId()).willReturn("test");
         given(session.getKeycloakSessionFactory()).willReturn(sessionFactory);
-        given(session.clients()).willReturn(mock(ClientProvider.class));
         given(adapterFactory.create(any(), any(), any(), any(), any())).willReturn(adapter);
 
         provider.createOrganization(realm, user);
@@ -75,7 +73,6 @@ class JpaOrganizationProviderTest {
         given(realm.getId()).willReturn("test");
         given(user.getId()).willReturn("test");
         given(session.getKeycloakSessionFactory()).willReturn(sessionFactory);
-        given(session.clients()).willReturn(mock(ClientProvider.class));
         given(adapterFactory.create(any(), any(), any(), any(), any())).willReturn(adapter);
 
         provider.createOrganization(realm, user);

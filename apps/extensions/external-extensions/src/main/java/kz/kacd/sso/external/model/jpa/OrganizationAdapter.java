@@ -7,9 +7,7 @@ import kz.kacd.sso.external.model.jpa.entity.OrganizationMemberEntity;
 import kz.kacd.sso.external.model.jpa.entity.PositionEntity;
 import kz.kacd.sso.external.representation.PageRepresentation;
 import org.jboss.logging.Logger;
-import org.keycloak.models.KeycloakSession;
-import org.keycloak.models.RealmModel;
-import org.keycloak.models.UserModel;
+import org.keycloak.models.*;
 import org.keycloak.models.jpa.JpaModel;
 import org.keycloak.models.utils.KeycloakModelUtils;
 
@@ -23,6 +21,9 @@ import java.util.stream.Stream;
 
 public class OrganizationAdapter implements OrganizationModel, JpaModel<OrganizationEntity> {
     private static final Logger log = Logger.getLogger(OrganizationAdapter.class);
+
+    private static final String LK_SHELL = "lk-shell-front";
+    private static final String CEO = "ceo";
 
     private final KeycloakSession keycloakSession;
     private final OrganizationEntity entity;
@@ -197,23 +198,59 @@ public class OrganizationAdapter implements OrganizationModel, JpaModel<Organiza
     public void confirmPosition(PositionModel position) {
         log.debug("Confirming position " + position.getId());
         setConfirmed(position, true);
+
+        if (PositionModel.HEAD.equals(position.getName())) {
+            grantCeo(position.getUser());
+        }
+    }
+
+    private void grantCeo(UserModel user) {
+        RoleModel role = getCeoRole();
+        if (role == null || user.hasRole(role)) {
+            return;
+        }
+        user.grantRole(role);
     }
 
     @Override
     public void revokePosition(PositionModel position) {
         log.debug("Revoking position " + position.getId());
         setConfirmed(position, false);
+
+        if (PositionModel.HEAD.equals(position.getName())) {
+            revokeCeo(position.getUser());
+        }
+    }
+
+    private void setConfirmed(PositionModel position, boolean confirmed) {
+        OrganizationMemberEntity member = em.find(OrganizationMemberEntity.class, position.getId());
+        member.setConfirmed(confirmed);
     }
 
     @Override
     public void removePosition(PositionModel position) {
         log.debug("Removing position " + position.getId());
         em.remove(em.find(OrganizationMemberEntity.class, position.getId()));
+
+        if (PositionModel.HEAD.equals(position.getName())) {
+            revokeCeo(position.getUser());
+        }
     }
 
-    private void setConfirmed(PositionModel position, boolean confirmed) {
-        OrganizationMemberEntity member = em.find(OrganizationMemberEntity.class, position.getId());
-        member.setConfirmed(confirmed);
+    private void revokeCeo(UserModel user) {
+        RoleModel role = getCeoRole();
+        if (role == null || !user.hasRole(role)) {
+            return;
+        }
+        user.deleteRoleMapping(role);
+    }
+
+    private RoleModel getCeoRole() {
+        ClientModel client = keycloakSession.clients().getClientByClientId(realm, LK_SHELL);
+        if (client == null) {
+            return null;
+        }
+        return keycloakSession.roles().getClientRole(client, CEO);
     }
 
     @Override

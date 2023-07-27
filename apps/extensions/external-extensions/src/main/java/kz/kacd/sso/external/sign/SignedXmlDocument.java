@@ -54,11 +54,7 @@ public class SignedXmlDocument {
         return error;
     }
 
-    public String getIin() {
-        return subject != null ? subject.getIin() : null;
-    }
-
-    public String getBin() {
-        return subject != null ? subject.getBin() : null;
+    public SignatureSubject getSubject() {
+        return subject;
     }
 }

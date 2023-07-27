@@ -7,13 +7,12 @@ public class SignatureValidator {
         document.validate();
 
         if (document.getError() != null) {
-            return new Result(Type.ERROR, null, null, document.getError().getMessage());
+            return new Result(Type.ERROR, null, document.getError().getMessage());
         }
 
         return new Result(
-                document.getBin() != null ? Type.LEGAL : Type.PHYSICAL,
-                document.getIin(),
-                document.getBin(),
+                document.getSubject().legal() ? Type.LEGAL : Type.PHYSICAL,
+                document.getSubject(),
                 null
         );
     }
@@ -27,14 +26,12 @@ public class SignatureValidator {
     public static final class Result {
 
         private final Type type;
-        private final String iin;
-        private final String bin;
+        private final SignatureSubject subject;
         private final String message;
 
-        public Result(Type type, String iin, String bin, String message) {
+        public Result(Type type, SignatureSubject subject, String message) {
             this.type = type;
-            this.iin = iin;
-            this.bin = bin;
+            this.subject = subject;
             this.message = message;
         }
 
@@ -42,12 +39,8 @@ public class SignatureValidator {
             return type;
         }
 
-        public String getIin() {
-            return iin;
-        }
-
-        public String getBin() {
-            return bin;
+        public SignatureSubject getSubject() {
+            return subject;
         }
 
         public String getMessage() {
