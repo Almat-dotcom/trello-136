@@ -57,6 +57,7 @@ export const useRegisterPage = (
     edsRef: RefObject<HTMLInputElement>,
     onFormSubmit: () => void
 ): RegisterForm => {
+    const [signing, setSigning] = useState(false);
     const [message, setMessage] = useState(kcContext.message);
     const [legal, setLegal] = useState(kcContext.register.formData.clientType === 'legal');
     const [resident, setResident] = useState(kcContext.register.formData.residency === 'resident');
@@ -72,7 +73,7 @@ export const useRegisterPage = (
         legal: legal,
         resident: resident,
         head: head,
-        buttonDisabled: !concent1 || !concent2,
+        buttonDisabled: signing || !concent1 || !concent2,
         concents: {
             concent1: concent1,
             concent1Shown: concent1Shown,
@@ -100,6 +101,7 @@ export const useRegisterPage = (
             if (residencyValid && typeValid && legalValid && lastValid && firstValid && middleValid && emailValid && binValid && iinValid && passwordValid && confirmValid && phoneNumberValid) {
 
                 if (resident && legal) {
+                    setSigning(true);
                     try {
                         const xml = '<registration></registration>'
                         setMessage({ type: 'info', summary: 'ncaSignProgress' });
@@ -117,6 +119,7 @@ export const useRegisterPage = (
                             setMessage({ type: 'error', summary: 'ncaFailed' });
                         }
                     }
+                    setSigning(false);
                 } else {
                     onFormSubmit();
                 }
