@@ -21,6 +21,7 @@ import org.keycloak.services.validation.Validation;
 import org.keycloak.userprofile.ValidationException;
 
 import javax.ws.rs.core.MultivaluedMap;
+import java.util.Collections;
 import java.util.List;
 
 public class ExternalRegistrationProfile implements FormAction {
@@ -73,19 +74,29 @@ public class ExternalRegistrationProfile implements FormAction {
                         && ExternalRegistrationPage.CLIENT_LEGAL.equals(profile.clientType())
         ) {
             if (profile.eds() == null) {
-                context.error(ExternalMessages.INVALID_EDS);
+                failEds(context);
                 return false;
             }
             SignatureValidator.Result sign = new SignatureValidator().validate(profile.eds());
 
             if (!SignatureValidator.Type.LEGAL.equals(sign.getType())) {
-                context.error(ExternalMessages.INVALID_EDS);
+                failEds(context);
                 return false;
             }
 
             profile.rewriteFromSubject(sign.getSubject(), context.getAuthenticationSession());
         }
         return true;
+    }
+
+    private void failEds(ValidationContext context) {
+        context.error(ExternalMessages.INVALID_EDS);
+        context.validationError(
+                context.getHttpRequest().getDecodedFormParameters(),
+                Collections.singletonList(
+                        new FormMessage(ExternalRegistrationPage.FIELD_EDS, ExternalMessages.INVALID_EDS)
+                )
+        );
     }
 
     @Override
