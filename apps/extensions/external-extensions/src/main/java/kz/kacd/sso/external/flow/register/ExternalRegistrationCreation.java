@@ -15,6 +15,7 @@ import org.keycloak.forms.login.LoginFormsProvider;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
+import org.keycloak.sessions.AuthenticationSessionModel;
 
 import javax.ws.rs.core.MultivaluedMap;
 
@@ -79,26 +80,43 @@ public class ExternalRegistrationCreation implements FormAction {
     }
 
     private ExternalUserProfile registerProfile(FormContext context) {
-        return registerProfile(context.getHttpRequest().getDecodedFormParameters(), context.getSession(), context.getEvent());
+        return registerProfile(
+                context.getHttpRequest().getDecodedFormParameters(),
+                context.getSession(),
+                context.getEvent(),
+                context.getAuthenticationSession()
+        );
     }
 
     private void registerProfile(ValidationContext context) {
-        registerProfile(context.getHttpRequest().getDecodedFormParameters(), context.getSession(), context.getEvent());
+        registerProfile(
+                context.getHttpRequest().getDecodedFormParameters(),
+                context.getSession(),
+                context.getEvent(),
+                context.getAuthenticationSession()
+        );
     }
 
     private ExternalUserProfile registerProfile(
             MultivaluedMap<String, String> formData,
             KeycloakSession session,
-            EventBuilder event
+            EventBuilder event,
+            AuthenticationSessionModel auth
     ) {
         event.detail(Details.REGISTER_METHOD, "form");
         ExternalUserProfileProvider provider = new ExternalUserProfileProvider(session);
         ExternalUserProfile profile = provider.create(formData);
+        profile.rewriteFromSession(auth);
 
         event.detail(UserModel.EMAIL, profile.email());
         event.detail(UserModel.USERNAME, profile.username());
         event.detail(UserModel.FIRST_NAME, profile.firstName());
         event.detail(UserModel.LAST_NAME, profile.lastName());
+        event.detail(ExternalRegistrationPage.FIELD_RESIDENCY, profile.residency());
+        event.detail(ExternalRegistrationPage.FIELD_CLIENT_TYPE, profile.clientType());
+        event.detail(ExternalRegistrationPage.FIELD_LEGAL_ROLE, profile.legalRole());
+        event.detail(ExternalRegistrationPage.FIELD_IIN, profile.iin());
+        event.detail(ExternalRegistrationPage.FIELD_BIN, profile.bin());
 
         return profile;
     }

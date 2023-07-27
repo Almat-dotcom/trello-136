@@ -17,6 +17,8 @@ public class ExternalRegistrationPage extends RegistrationPage {
     public static final String FIELD_LOCALE = "locale";
     public static final String FIELD_PHONE_NUMBER = "phoneNumber";
     public static final String FIELD_PHONE_VERIFIED = "phoneVerified";
+    public static final String FIELD_EDS = "eds";
+    public static final String FIELD_ORG_NAME = "orgName";
 
     public static final String CLIENT_PHYSICAL = "physical";
     public static final String CLIENT_LEGAL = "legal";

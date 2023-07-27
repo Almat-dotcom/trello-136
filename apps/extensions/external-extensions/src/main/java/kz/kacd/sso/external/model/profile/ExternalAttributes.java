@@ -13,6 +13,14 @@ public class ExternalAttributes {
         this.attributes = attributes;
     }
 
+    Map<String, String> getAttributes() {
+        return attributes;
+    }
+
+    public void add(Map<String, String> newFields) {
+        attributes.putAll(newFields);
+    }
+
     public String email() {
         return attributes.get(RegistrationPage.FIELD_EMAIL);
     }
@@ -68,5 +76,13 @@ public class ExternalAttributes {
                     .replace(")", "");
         }
         return result;
+    }
+
+    public String eds() {
+        return attributes.get(ExternalRegistrationPage.FIELD_EDS);
+    }
+
+    public String orgName() {
+        return attributes.get(ExternalRegistrationPage.FIELD_ORG_NAME);
     }
 }

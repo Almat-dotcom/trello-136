@@ -11,13 +11,13 @@ import org.keycloak.validate.ValidationError;
 
 import java.util.function.Consumer;
 
-public class LegalClientValidation {
+public class LegalClientValidator {
     private static final String VALIDATOR_ID = "external-legal-client-validator";
 
     private final Consumer<ValidationError> listener;
     private final KeycloakSession session;
 
-    public LegalClientValidation(Consumer<ValidationError> listener, KeycloakSession session) {
+    public LegalClientValidator(Consumer<ValidationError> listener, KeycloakSession session) {
         this.listener = listener;
         this.session = session;
     }
@@ -32,7 +32,7 @@ public class LegalClientValidation {
 
         if (attributes.legalRole().equals(ExternalRegistrationPage.ROLE_HEAD)) {
             OrganizationModel found = orgs.getOrganizationByBin(realm, attributes.bin());
-            if (found != null) {
+            if (found != null && ExternalRegistrationPage.NON_RESIDENT.equals(attributes.residency())) {
                 listener.accept(error(ExternalRegistrationPage.FIELD_BIN, ExternalMessages.DUPLICATE_BIN));
             }
             return;

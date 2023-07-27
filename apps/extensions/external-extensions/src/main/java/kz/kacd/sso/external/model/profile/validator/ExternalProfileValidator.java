@@ -29,7 +29,7 @@ public class ExternalProfileValidator {
             return result;
         }
 
-        new LegalClientValidation(result, session).validate(attributes);
+        new LegalClientValidator(result, session).validate(attributes);
         if (!result.getErrors().isEmpty()) {
             return result;
         }

@@ -16,12 +16,13 @@ import LkEn from "./lk_en.md";
 import ButtonChoise from "components/parts/ButtonChoise";
 
 const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext_Registration; i18n: I18n; } & KcProps) => {
-    const { url, message } = kcContext;
+    const { url, locale } = kcContext;
     const { msg, msgStr, advancedMsgStr } = i18n;
 
     const formRef = useRef<HTMLFormElement>(null);
+    const edsRef = useRef<HTMLInputElement>(null);
 
-    const { fields, legal, resident, head, buttonDisabled, concents, onSubmit } = useRegisterPage(kcContext, () => formRef.current?.submit())
+    const { message, fields, legal, resident, head, buttonDisabled, concents, onSubmit } = useRegisterPage(kcContext, edsRef, () => formRef.current?.submit())
     const setResident = () => {
         fields.residency.onChange("resident");
     }
@@ -87,6 +88,8 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                         </div>
 
                         <input id="residency" name="residency" type="hidden" value={fields.residency.value} />
+                        <input ref={edsRef} id="eds" name="eds" type="hidden" />
+                        <input id="locale" name="locale" type="hidden" value={locale?.currentLanguageTag} />
 
                         <InputSelect
                             fieldName="clientType"
@@ -103,7 +106,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                             error={error(fields.clientType.error)}
                             onValueChange={(option) => { fields.clientType.onChange(option.value) }}
                         />
-                        {legal ? (
+                        {legal && !resident ? (
                             <InputSelect
                                 fieldName="legalRole"
                                 label={msgStr("legalRole")}
@@ -120,32 +123,36 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                                 onValueChange={(option) => fields.legalRole.onChange(option.value)}
                             />
                         ) : null}
-                        <InputField
-                            fieldName="lastName"
-                            label={msgStr("lastName")}
-                            type="text"
-                            value={fields.lastName.value}
-                            required
-                            error={error(fields.lastName.error)}
-                            onChange={(event) => fields.lastName.onChange(event.target.value)}
-                        />
-                        <InputField
-                            fieldName="firstName"
-                            label={msgStr("firstName")}
-                            type="text"
-                            value={fields.firstName.value}
-                            required
-                            error={error(fields.firstName.error)}
-                            onChange={(event => { fields.firstName.onChange(event.target.value) })}
-                        />
-                        <InputField
-                            fieldName="middleName"
-                            label={msgStr("middleName")}
-                            type="text"
-                            value={fields.middleName.value}
-                            error={error(fields.middleName.error)}
-                            onChange={(event) => { fields.middleName.onChange(event.target.value) }}
-                        />
+                        {!legal || !resident ? (
+                            <>
+                                <InputField
+                                    fieldName="lastName"
+                                    label={msgStr("lastName")}
+                                    type="text"
+                                    value={fields.lastName.value}
+                                    required
+                                    error={error(fields.lastName.error)}
+                                    onChange={(event) => fields.lastName.onChange(event.target.value)}
+                                />
+                                <InputField
+                                    fieldName="firstName"
+                                    label={msgStr("firstName")}
+                                    type="text"
+                                    value={fields.firstName.value}
+                                    required
+                                    error={error(fields.firstName.error)}
+                                    onChange={(event => { fields.firstName.onChange(event.target.value) })}
+                                />
+                                <InputField
+                                    fieldName="middleName"
+                                    label={msgStr("middleName")}
+                                    type="text"
+                                    value={fields.middleName.value}
+                                    error={error(fields.middleName.error)}
+                                    onChange={(event) => { fields.middleName.onChange(event.target.value) }}
+                                />
+                            </>
+                        ) : null}
                         <InputMask
                             fieldName="phoneNumber"
                             label={msgStr("phoneNumber")}
@@ -165,7 +172,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                             error={error(fields.email.error)}
                             onChange={(event) => { fields.email.onChange(event.target.value) }}
                         />
-                        {legal && (resident || !head) ? (
+                        {legal && !resident && !head ? (
                             <InputField
                                 fieldName="bin"
                                 label={resident ? msgStr("bin") : msgStr("orgCode")}
@@ -177,7 +184,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                                 onChange={(event) => fields.bin.onChange(event.target.value)}
                             />
                         ) : null}
-                        {resident ? (
+                        {resident && !legal ? (
                             <InputField
                                 fieldName="iin"
                                 label={msgStr("iin")}
