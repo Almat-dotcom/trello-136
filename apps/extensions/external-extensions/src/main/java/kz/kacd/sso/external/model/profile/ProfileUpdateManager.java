@@ -59,10 +59,7 @@ public class ProfileUpdateManager {
             user.setSingleAttribute(ExternalRegistrationPage.FIELD_LOCALE, attributes.locale());
         }
 
-        if (
-                ExternalRegistrationPage.CLIENT_LEGAL.equals(attributes.clientType())
-                        || ExternalRegistrationPage.CLIENT_LEGAL.equals(user.getFirstAttribute(ExternalRegistrationPage.FIELD_CLIENT_TYPE))
-        ) {
+        if (ExternalRegistrationPage.CLIENT_LEGAL.equals(attributes.clientType())) {
             processLegalClient();
         }
     }
