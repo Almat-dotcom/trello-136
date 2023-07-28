@@ -1,7 +1,10 @@
 package kz.kacd.sso.external.flow.register;
 
+import kz.kacd.sso.external.model.page.ExternalMessages;
+import kz.kacd.sso.external.model.page.ExternalRegistrationPage;
 import kz.kacd.sso.external.model.profile.ExternalUserProfile;
 import kz.kacd.sso.external.model.profile.ExternalUserProfileProvider;
+import kz.kacd.sso.external.sign.SignatureValidator;
 import org.jboss.logging.Logger;
 import org.keycloak.authentication.FormAction;
 import org.keycloak.authentication.FormContext;
@@ -18,6 +21,7 @@ import org.keycloak.services.validation.Validation;
 import org.keycloak.userprofile.ValidationException;
 
 import javax.ws.rs.core.MultivaluedMap;
+import java.util.Collections;
 import java.util.List;
 
 public class ExternalRegistrationProfile implements FormAction {
@@ -38,6 +42,10 @@ public class ExternalRegistrationProfile implements FormAction {
         ExternalUserProfileProvider provider = new ExternalUserProfileProvider(context.getSession());
         ExternalUserProfile profile = provider.create(formData);
 
+        if (!validateEds(profile, context)) {
+            return;
+        }
+
         ValidationException pve = profile.validate();
 
         if (pve == null) {
@@ -53,17 +61,51 @@ public class ExternalRegistrationProfile implements FormAction {
 
         if (pve.hasError(Messages.EMAIL_EXISTS)) {
             context.error(Errors.EMAIL_IN_USE);
-        } else
+        } else {
             context.error(Errors.INVALID_REGISTRATION);
+        }
 
         context.validationError(formData, errors);
+    }
+
+    private boolean validateEds(ExternalUserProfile profile, ValidationContext context) {
+        if (
+                ExternalRegistrationPage.RESIDENT.equals(profile.residency())
+                        && ExternalRegistrationPage.CLIENT_LEGAL.equals(profile.clientType())
+        ) {
+            if (profile.eds() == null) {
+                failEds(context);
+                return false;
+            }
+            SignatureValidator.Result sign = new SignatureValidator().validate(profile.eds());
+
+            if (!SignatureValidator.Type.LEGAL.equals(sign.getType())) {
+                failEds(context);
+                return false;
+            }
+
+            profile.rewriteFromSubject(sign.getSubject(), context.getAuthenticationSession());
+        }
+        return true;
+    }
+
+    private void failEds(ValidationContext context) {
+        context.error(ExternalMessages.INVALID_EDS);
+        context.validationError(
+                context.getHttpRequest().getDecodedFormParameters(),
+                Collections.singletonList(
+                        new FormMessage(ExternalRegistrationPage.FIELD_EDS, ExternalMessages.INVALID_EDS)
+                )
+        );
     }
 
     @Override
     public void success(FormContext context) {
         UserModel model = context.getUser();
         ExternalUserProfileProvider provider = new ExternalUserProfileProvider(context.getSession());
-        provider.create(context.getHttpRequest().getDecodedFormParameters(), model).update();
+        ExternalUserProfile profile = provider.create(context.getHttpRequest().getDecodedFormParameters(), model);
+        profile.rewriteFromSession(context.getAuthenticationSession());
+        profile.update();
     }
 
     @Override

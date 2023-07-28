@@ -1,5 +1,7 @@
 import { KcContext } from "lib/kc";
-import { useState } from "react";
+import { signAuthXml } from "lib/ncalayer";
+import { CancelledByUser, ConnectionLost } from "lib/ncalayer/NCALayer";
+import { RefObject, useState } from "react";
 
 export type KcContext_Registration = Extract<KcContext, { pageId: "register.ftl" }>;
 
@@ -37,16 +39,26 @@ type Concents = {
 }
 
 type RegisterForm = {
+    message?: {
+        type: "success" | "warning" | "error" | "info",
+        summary: string
+    },
     fields: RegisterFields,
     legal: boolean,
     resident: boolean,
     head: boolean,
     buttonDisabled: boolean,
     concents: Concents,
-    onSubmit: () => void
+    onSubmit: () => Promise<void>
 }
 
-export const useRegisterPage = (kcContext: KcContext_Registration, onFormSubmit: () => void): RegisterForm => {
+export const useRegisterPage = (
+    kcContext: KcContext_Registration,
+    edsRef: RefObject<HTMLInputElement>,
+    onFormSubmit: () => void
+): RegisterForm => {
+    const [signing, setSigning] = useState(false);
+    const [message, setMessage] = useState(kcContext.message);
     const [legal, setLegal] = useState(kcContext.register.formData.clientType === 'legal');
     const [resident, setResident] = useState(kcContext.register.formData.residency === 'resident');
     const [head, setHead] = useState(kcContext.register.formData.legalRole === "head");
@@ -56,11 +68,12 @@ export const useRegisterPage = (kcContext: KcContext_Registration, onFormSubmit:
     const [concent2Shown, setConcent2Shown] = useState(false);
     const fields = useRegisterFields(kcContext, legal, (value) => setLegal(value), resident, (value) => setResident(value), head, (value) => setHead(value));
     return {
+        message: message,
         fields: fields,
         legal: legal,
         resident: resident,
         head: head,
-        buttonDisabled: !concent1 || !concent2,
+        buttonDisabled: signing || !concent1 || !concent2,
         concents: {
             concent1: concent1,
             concent1Shown: concent1Shown,
@@ -71,7 +84,7 @@ export const useRegisterPage = (kcContext: KcContext_Registration, onFormSubmit:
             tuggleConcent2: function () { setConcent2Shown(!concent2Shown) },
             onConcent2Clicked: function () { setConcent2(!concent2) },
         },
-        onSubmit: function () {
+        onSubmit: async function () {
             const residencyValid = fields.residency.validate();
             const typeValid = fields.clientType.validate();
             const legalValid = fields.legalRole.validate();
@@ -86,7 +99,30 @@ export const useRegisterPage = (kcContext: KcContext_Registration, onFormSubmit:
             const phoneNumberValid = fields.phoneNumber.validate();
 
             if (residencyValid && typeValid && legalValid && lastValid && firstValid && middleValid && emailValid && binValid && iinValid && passwordValid && confirmValid && phoneNumberValid) {
-                onFormSubmit();
+
+                if (resident && legal) {
+                    setSigning(true);
+                    try {
+                        const xml = '<registration></registration>'
+                        setMessage({ type: 'info', summary: 'ncaSignProgress' });
+                        const result = await signAuthXml(xml);
+                        edsRef.current!.value = result;
+                        setMessage({ type: 'success', summary: 'ncaSignFinished' });
+                        onFormSubmit();
+                    } catch (error) {
+                        console.error(error);
+                        if (error === ConnectionLost) {
+                            setMessage({ type: 'error', summary: 'ncaConnectionLost' });
+                        } else if (error === CancelledByUser) {
+                            setMessage({ type: 'error', summary: 'ncaCancelled' });
+                        } else {
+                            setMessage({ type: 'error', summary: 'ncaFailed' });
+                        }
+                    }
+                    setSigning(false);
+                } else {
+                    onFormSubmit();
+                }
             }
         }
     }
@@ -107,14 +143,14 @@ const useRegisterFields = (
     return {
         residency: useField(isNotEmpty, (value) => { onResidentChanged(value === 'resident') }, residency, extractError(kcContext, "residency")),
         clientType: useField(isNotEmpty, (value) => { onLegalChanged(value === 'legal') }, clientType, extractError(kcContext, "clientType")),
-        legalRole: useField(isNotEmptyOnLegal(() => legal), (value) => { onRoleChanged(value === 'head') }, legalRole, extractError(kcContext, "legalRole")),
-        lastName: useField(isNotEmpty, () => { }, lastName, extractError(kcContext, "lastName")),
-        firstName: useField(isNotEmpty, () => { }, firstName, extractError(kcContext, "firstName")),
+        legalRole: useField(isNotEmptyNorLegalResident(() => resident, () => legal), (value) => { onRoleChanged(value === 'head') }, legalRole, extractError(kcContext, "legalRole")),
+        lastName: useField(isNotEmptyNorLegalResident(() => resident, () => legal), () => { }, lastName, extractError(kcContext, "lastName")),
+        firstName: useField(isNotEmptyNorLegalResident(() => resident, () => legal), () => { }, firstName, extractError(kcContext, "firstName")),
         middleName: useField(allAllowed, () => { }, middleName, extractError(kcContext, "middleName")),
         email: useField(isNotEmpty, () => { }, email, extractError(kcContext, "email")),
         bin: useField(isBinIinOnLegalAndResident(() => legal, () => resident, () => head), () => { }, bin, extractError(kcContext, "bin")),
-        iin: useField(isBinIinOnResident(() => resident), () => { }, iin, extractError(kcContext, "iin")),
-        phoneNumber: useField(isNotEmpty, () => {}, phoneNumber, extractError(kcContext, "phoneNumber")),
+        iin: useField(isBinIinOnResident(() => resident, () => legal), () => { }, iin, extractError(kcContext, "iin")),
+        phoneNumber: useField(isNotEmpty, () => { }, phoneNumber, extractError(kcContext, "phoneNumber")),
         password: useField(isNotEmpty, () => { }, undefined, extractError(kcContext, "password")),
         passwordConfirm: useField(isNotEmpty, () => { }, undefined, extractError(kcContext, "password-confirm"))
     };
@@ -142,19 +178,21 @@ const useField = (validator: (value: string) => string | undefined, changeCallBa
     }
 }
 
-const isNotEmptyOnLegal = (legal: () => boolean) => (value: string): string | undefined => legal() ? isNotEmpty(value) : undefined;
+const isNotEmptyNorLegalResident = (resident: () => boolean, legal: () => boolean) =>
+    (value: string): string | undefined => resident() && legal() ? undefined : isNotEmpty(value);
 
-const isBinIinOnLegalAndResident = (legal: () => boolean, resident: () => boolean, head: () => boolean) => 
-    (value: string): string | undefined => legal() ? isValidBinOrCode(resident, head)(value) : undefined;
+const isBinIinOnLegalAndResident = (legal: () => boolean, resident: () => boolean, head: () => boolean) =>
+    (value: string): string | undefined => legal() ? isValidBinOrCode(resident, legal, head)(value) : undefined;
 
-const isValidBinOrCode = (resident: () => boolean, head: () => boolean) =>
-    (value: string): string | undefined => resident() ? isBinIinOnResident(resident)(value) : isValidOrgCode(head)(value);
+const isValidBinOrCode = (resident: () => boolean, legal: () => boolean, head: () => boolean) =>
+    (value: string): string | undefined => resident() ? isBinIinOnResident(resident, legal)(value) : isValidOrgCode(head)(value);
 
 const isValidOrgCode = (head: () => boolean) => (value: string): string | undefined => head() ? undefined : is12CharsAndStartsWithNR(value);
 
 const is12CharsAndStartsWithNR = (value: string): string | undefined => value.length !== 12 || !value.startsWith("NR") ? "invalidOrgCode" : undefined;
 
-const isBinIinOnResident = (resident: () => boolean) => (value: string): string | undefined => resident() ? isNotEmpty(value) || is12CharsAndNumeric(value) : undefined;
+const isBinIinOnResident = (resident: () => boolean, legal: () => boolean) =>
+    (value: string): string | undefined => resident() && !legal() ? isNotEmpty(value) || is12CharsAndNumeric(value) : undefined;
 
 const is12CharsAndNumeric = (value: string): string | undefined => value.length !== 12 || isNaN(+value) ? "only12Digits" : undefined;
 

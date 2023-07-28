@@ -1,17 +1,12 @@
 package kz.kacd.sso.external.model.profile;
 
-import kz.kacd.sso.external.model.OrganizationModel;
-import kz.kacd.sso.external.model.OrganizationProvider;
-import kz.kacd.sso.external.model.PositionModel;
-import kz.kacd.sso.external.model.page.ExternalRegistrationPage;
 import kz.kacd.sso.external.model.profile.validator.ExternalProfileValidator;
+import kz.kacd.sso.external.sign.SignatureSubject;
 import org.jboss.logging.Logger;
 import org.keycloak.models.KeycloakSession;
-import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
+import org.keycloak.sessions.AuthenticationSessionModel;
 import org.keycloak.userprofile.ValidationException;
-
-import java.util.Collections;
 
 public class ExternalUserProfile {
     private static final Logger log = Logger.getLogger(ExternalUserProfile.class);
@@ -38,90 +33,21 @@ public class ExternalUserProfile {
         log.debugf("Creating new user profile %s ...", username());
         user = session.users().addUser(session.getContext().getRealm(), username());
 
-        updateUserAttributes();
+        update();
 
         return user;
     }
 
+    public void rewriteFromSubject(SignatureSubject subject, AuthenticationSessionModel auth) {
+        new ProfileRewriteManager(attributes).rewriteFromSubject(subject, auth);
+    }
+
+    public void rewriteFromSession(AuthenticationSessionModel auth) {
+        new ProfileRewriteManager(attributes).rewriteFromSession(auth);
+    }
+
     public void update() {
-        updateUserAttributes();
-    }
-
-    private void updateUserAttributes() {
-        log.debug("Updating user attributes ...");
-        if (user == null) {
-            throw new IllegalStateException("Attempt to update user profile without user initialization!");
-        }
-
-        user.setEmail(email());
-        user.setFirstName(firstName());
-        user.setLastName(lastName());
-        user.setAttribute(ExternalRegistrationPage.FIELD_CLIENT_TYPE, Collections.singletonList(clientType()));
-        user.setAttribute(ExternalRegistrationPage.FIELD_MIDDLE_NAME, Collections.singletonList(middleName()));
-        user.setAttribute(ExternalRegistrationPage.FIELD_IIN, Collections.singletonList(iin()));
-        user.setAttribute(ExternalRegistrationPage.FIELD_RESIDENCY, Collections.singletonList(residency()));
-        user.setAttribute(ExternalRegistrationPage.FIELD_PHONE_NUMBER, Collections.singletonList(phoneNumber()));
-        if (!user.getAttributes().containsKey(ExternalRegistrationPage.FIELD_PHONE_VERIFIED)) {
-            user.setAttribute(ExternalRegistrationPage.FIELD_PHONE_VERIFIED, Collections.singletonList(Boolean.FALSE.toString()));
-        }
-        if (locale() != null) {
-            user.setAttribute(ExternalRegistrationPage.FIELD_LOCALE, Collections.singletonList(locale()));
-        }
-
-        if (ExternalRegistrationPage.CLIENT_LEGAL.equals(clientType())) {
-            processLegalClient();
-        }
-    }
-
-    private void processLegalClient() {
-        log.debug("Processing legal client profile ...");
-        RealmModel realm = session.getContext().getRealm();
-
-        OrganizationProvider provider = session.getProvider(OrganizationProvider.class);
-        OrganizationModel org;
-        if (resident() || nonResidentEmployee()) {
-            org = provider.getOrganizationByBin(realm, bin());
-        } else {
-            org = provider.getUserOrganizations(realm, user).findAny().orElse(null);
-        }
-        if (org == null && !ExternalRegistrationPage.ROLE_HEAD.equals(legalRole())) {
-            throw new IllegalStateException(
-                    "Illegal organization creation request! Only head of company can register new legal!"
-            );
-        }
-
-        if (org == null) {
-            log.debugf("Registering new organization %s with user %s ...", bin(), username());
-            org = provider.createOrganization(realm, user);
-
-            if (residency().equals(ExternalRegistrationPage.NON_RESIDENT)) {
-                org.setBin(provider.generateNonResidentOrganizationBin());
-            } else {
-                org.setBin(bin());
-            }
-            return;
-        }
-
-        PositionModel position = org.getPosition(user);
-        if (position != null) {
-            log.debugf("User %s has already requested membership in organization %s!", username(), bin());
-            return;
-        }
-
-        log.debugf("Requesting employee position for user %s in org %s ...", username(), bin());
-        org.requestPosition(PositionModel.EMPLOYEE, user);
-    }
-
-    private boolean resident() {
-        return residency() != null && residency().equals(ExternalRegistrationPage.RESIDENT);
-    }
-
-    private boolean nonResidentEmployee() {
-        return residency() != null
-                && residency().equals(ExternalRegistrationPage.NON_RESIDENT)
-                && clientType().equals(ExternalRegistrationPage.CLIENT_LEGAL)
-                && legalRole() != null
-                && legalRole().equals(ExternalRegistrationPage.ROLE_EMPLOYEE);
+        new ProfileUpdateManager(session, user, attributes).updateUserProfile();
     }
 
     public String email() {
@@ -170,5 +96,13 @@ public class ExternalUserProfile {
 
     public String phoneNumber() {
         return attributes.phoneNumber();
+    }
+
+    public String eds() {
+        return attributes.eds();
+    }
+
+    public String orgName() {
+        return attributes.orgName();
     }
 }

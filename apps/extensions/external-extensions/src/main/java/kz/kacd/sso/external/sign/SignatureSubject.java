@@ -31,6 +31,9 @@ public class SignatureSubject {
     }
 
     public String getFirstName() {
+        if (commonName == null) {
+            return null;
+        }
         return commonName.replace(surName + " ", "");
     }
 

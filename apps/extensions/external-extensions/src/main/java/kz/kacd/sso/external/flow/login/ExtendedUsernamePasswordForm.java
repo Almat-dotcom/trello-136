@@ -1,5 +1,6 @@
 package kz.kacd.sso.external.flow.login;
 
+import kz.kacd.sso.external.model.page.ExternalLoginPage;
 import kz.kacd.sso.external.model.page.ExternalRegistrationPage;
 import org.jboss.logging.Logger;
 import org.keycloak.authentication.AuthenticationFlowContext;
@@ -55,6 +56,10 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
 
                 ExtendedUsernamePasswordForm.super.action(context);
 
+                if (context.getStatus().equals(FlowStatus.SUCCESS)) {
+                    context.getEvent().detail(ExternalLoginPage.AUTHENTICATION_TYPE, "password");
+                }
+
                 if (isIin) {
                     rewriteContextIin(context, username);
                 }
@@ -92,6 +97,10 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
 
         if (context.getStatus().equals(FlowStatus.SUCCESS)) {
             processValidation(context);
+        }
+
+        if (!context.getStatus().equals(FlowStatus.SUCCESS)) {
+            context.getEvent().detail("error", context.getUserErrorMessage());
         }
     }
 

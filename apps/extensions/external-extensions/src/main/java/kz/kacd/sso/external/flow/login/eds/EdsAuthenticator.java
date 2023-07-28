@@ -4,12 +4,16 @@ import kz.kacd.sso.external.flow.login.AlternativeAuthenticator;
 import kz.kacd.sso.external.model.page.ExternalLoginPage;
 import kz.kacd.sso.external.model.page.ExternalMessages;
 import kz.kacd.sso.external.model.page.ExternalRegistrationPage;
+import kz.kacd.sso.external.model.profile.ExternalUserProfile;
+import kz.kacd.sso.external.model.profile.ExternalUserProfileProvider;
+import kz.kacd.sso.external.sign.SignatureSubject;
 import kz.kacd.sso.external.sign.SignatureValidator;
 import org.jboss.logging.Logger;
 import org.keycloak.authentication.AuthenticationFlowContext;
 import org.keycloak.authentication.authenticators.browser.UsernamePasswordForm;
 import org.keycloak.services.managers.AuthenticationManager;
 
+import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import java.util.Collections;
@@ -53,6 +57,7 @@ public class EdsAuthenticator extends UsernamePasswordForm implements Alternativ
                 break;
         }
 
+        context.getEvent().detail(ExternalLoginPage.AUTHENTICATION_TYPE, ExternalLoginPage.EDS_AUTHENTICATION);
         context.success();
     }
 
@@ -64,7 +69,23 @@ public class EdsAuthenticator extends UsernamePasswordForm implements Alternativ
             context.getAuthenticationSession().setAuthNote(ExternalRegistrationPage.FIELD_BIN, sign.getSubject().getBin());
         }
         userData.put(AuthenticationManager.FORM_USERNAME, Collections.singletonList(username));
-        return validateUser(context, userData);
+        boolean result = validateUser(context, userData);
+        if (
+                result
+                        && ExternalRegistrationPage.CLIENT_LEGAL
+                        .equals(context.getUser().getFirstAttribute(ExternalRegistrationPage.FIELD_CLIENT_TYPE))
+        ) {
+            updateProfile(context, sign.getSubject());
+        }
+        return result;
+    }
+
+    private void updateProfile(AuthenticationFlowContext context, SignatureSubject subject) {
+        ExternalUserProfileProvider provider = new ExternalUserProfileProvider(context.getSession());
+        ExternalUserProfile profile = provider.create(new MultivaluedHashMap<>(), context.getUser());
+        profile.rewriteFromSubject(subject, context.getAuthenticationSession());
+
+        profile.update();
     }
 
     private void failAuth(AuthenticationFlowContext context, String message) {
