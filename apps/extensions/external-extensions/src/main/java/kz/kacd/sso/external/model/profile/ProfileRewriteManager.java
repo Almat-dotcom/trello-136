@@ -39,6 +39,10 @@ public class ProfileRewriteManager {
                     ExternalRegistrationPage.FIELD_LEGAL_ROLE,
                     subject.ceo() ? ExternalRegistrationPage.ROLE_HEAD : ExternalRegistrationPage.ROLE_EMPLOYEE
             );
+            auth.setAuthNote(
+                    ExternalRegistrationPage.FIELD_CLIENT_TYPE,
+                    subject.legal() ? ExternalRegistrationPage.CLIENT_LEGAL : ExternalRegistrationPage.CLIENT_PHYSICAL
+            );
         }
         rewriteFromSession(auth);
     }
@@ -62,6 +66,9 @@ public class ProfileRewriteManager {
         }
         if (isNotBlank(auth.getAuthNote(ExternalRegistrationPage.FIELD_LEGAL_ROLE))) {
             overwrites.put(ExternalRegistrationPage.FIELD_LEGAL_ROLE, auth.getAuthNote(ExternalRegistrationPage.FIELD_LEGAL_ROLE));
+        }
+        if (isNotBlank(auth.getAuthNote(ExternalRegistrationPage.FIELD_CLIENT_TYPE))) {
+            overwrites.put(ExternalRegistrationPage.FIELD_CLIENT_TYPE, auth.getAuthNote(ExternalRegistrationPage.FIELD_CLIENT_TYPE));
         }
         attributes.add(overwrites);
     }
