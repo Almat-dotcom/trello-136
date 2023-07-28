@@ -32,7 +32,8 @@ public class MembersResource extends BaseOrganizationAdminResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public PageRepresentation<PositionRepresentation> findAll(
             @QueryParam("from") Integer fromArg,
-            @QueryParam("limit") Integer limitArg
+            @QueryParam("limit") Integer limitArg,
+            @QueryParam("userId") String userId
     ) {
         checkViewPermissions();
 
@@ -46,7 +47,7 @@ public class MembersResource extends BaseOrganizationAdminResource {
         }
 
         log.debugf("Finding members for organization %s ...", model.getId());
-        return model.getPositions(from, limit).map(it -> PositionRepresentation.from(session, realm, it));
+        return model.getPositions(userId, from, limit).map(it -> PositionRepresentation.from(session, realm, it));
     }
 
     @Path("{id}")

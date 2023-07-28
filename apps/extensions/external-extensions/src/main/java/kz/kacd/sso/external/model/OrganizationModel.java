@@ -42,7 +42,7 @@ public interface OrganizationModel {
 
     Stream<PositionModel> getPositions();
 
-    PageRepresentation<PositionModel> getPositions(int from, int limit);
+    PageRepresentation<PositionModel> getPositions(String userId, int from, int limit);
 
     PositionModel getPosition(UserModel user);
 
