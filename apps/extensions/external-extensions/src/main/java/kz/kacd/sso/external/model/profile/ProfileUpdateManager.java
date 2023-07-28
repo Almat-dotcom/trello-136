@@ -59,8 +59,6 @@ public class ProfileUpdateManager {
             user.setSingleAttribute(ExternalRegistrationPage.FIELD_LOCALE, attributes.locale());
         }
 
-        log.info(">>>>>><<<<<< CLIENT_TYPE: " + attributes.clientType() + " and in user: " + user.getFirstAttribute(ExternalRegistrationPage.FIELD_CLIENT_TYPE) + " should be equal " + ExternalRegistrationPage.CLIENT_LEGAL);
-        log.info(">>>>>><<<<<< So, result: " + (ExternalRegistrationPage.CLIENT_LEGAL.equals(attributes.clientType()) || ExternalRegistrationPage.CLIENT_LEGAL.equals(user.getFirstAttribute(ExternalRegistrationPage.FIELD_CLIENT_TYPE))));
         if (
                 ExternalRegistrationPage.CLIENT_LEGAL.equals(attributes.clientType())
                         || ExternalRegistrationPage.CLIENT_LEGAL.equals(user.getFirstAttribute(ExternalRegistrationPage.FIELD_CLIENT_TYPE))
@@ -70,7 +68,7 @@ public class ProfileUpdateManager {
     }
 
     private void processLegalClient() {
-        log.info("Processing legal client profile ...");
+        log.debugf("Processing legal client profile ...");
         OrganizationModel org = findOrCreateOrg();
         applyOrgAttributes(org);
         updatePositions(org);
@@ -185,6 +183,9 @@ public class ProfileUpdateManager {
     }
 
     private boolean resident() {
+        if (attributes.residency() == null && user != null) {
+            return ExternalRegistrationPage.RESIDENT.equals(user.getFirstAttribute(ExternalRegistrationPage.FIELD_RESIDENCY));
+        }
         return attributes.residency() != null && attributes.residency().equals(ExternalRegistrationPage.RESIDENT);
     }
 
