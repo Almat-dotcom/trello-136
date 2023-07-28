@@ -57,7 +57,7 @@ public class EdsAuthenticator extends UsernamePasswordForm implements Alternativ
                 break;
         }
 
-        context.getEvent().detail(ExternalLoginPage.AUTHENTICATION_TYPE, ExternalLoginPage.EDS_AUTHENTICATION);
+        context.getEvent().detail("authentication_form_method", ExternalLoginPage.EDS_AUTHENTICATION);
         context.success();
     }
 
@@ -82,7 +82,9 @@ public class EdsAuthenticator extends UsernamePasswordForm implements Alternativ
 
     private void updateProfile(AuthenticationFlowContext context, SignatureSubject subject) {
         ExternalUserProfileProvider provider = new ExternalUserProfileProvider(context.getSession());
-        ExternalUserProfile profile = provider.create(new MultivaluedHashMap<>(), context.getUser());
+        MultivaluedMap<String, String> params = new MultivaluedHashMap<>();
+        params.putSingle(ExternalRegistrationPage.FIELD_CLIENT_TYPE, ExternalRegistrationPage.CLIENT_LEGAL);
+        ExternalUserProfile profile = provider.create(params, context.getUser());
         profile.rewriteFromSubject(subject, context.getAuthenticationSession());
 
         profile.update();
