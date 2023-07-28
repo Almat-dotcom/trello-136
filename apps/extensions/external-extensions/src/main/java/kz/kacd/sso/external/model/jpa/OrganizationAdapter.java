@@ -133,12 +133,16 @@ public class OrganizationAdapter implements OrganizationModel, JpaModel<Organiza
     }
 
     @Override
-    public PageRepresentation<PositionModel> getPositions(int from, int limit) {
-        TypedQuery<OrganizationMemberEntity> query = em.createQuery(
-                "select o from OrganizationMemberEntity o where o.organization = :organization",
-                OrganizationMemberEntity.class
-        );
+    public PageRepresentation<PositionModel> getPositions(String userId, int from, int limit) {
+        String sql = "select o from OrganizationMemberEntity o where o.organization = :organization";
+        if (userId != null) {
+            sql += " and o.userId = :userId";
+        }
+        TypedQuery<OrganizationMemberEntity> query = em.createQuery(sql, OrganizationMemberEntity.class);
         query.setParameter("organization", entity);
+        if (userId != null) {
+            query.setParameter("userId", userId);
+        }
         query.setFirstResult(from);
         query.setMaxResults(limit);
         List<PositionModel> result = query.getResultStream()
