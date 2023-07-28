@@ -59,13 +59,16 @@ public class ProfileUpdateManager {
             user.setSingleAttribute(ExternalRegistrationPage.FIELD_LOCALE, attributes.locale());
         }
 
-        if (ExternalRegistrationPage.CLIENT_LEGAL.equals(attributes.clientType())) {
+        if (
+                ExternalRegistrationPage.CLIENT_LEGAL.equals(attributes.clientType())
+                        || ExternalRegistrationPage.CLIENT_LEGAL.equals(user.getFirstAttribute(ExternalRegistrationPage.FIELD_CLIENT_TYPE))
+        ) {
             processLegalClient();
         }
     }
 
     private void processLegalClient() {
-        log.debug("Processing legal client profile ...");
+        log.info("Processing legal client profile ...");
         OrganizationModel org = findOrCreateOrg();
         applyOrgAttributes(org);
         updatePositions(org);
@@ -130,14 +133,14 @@ public class ProfileUpdateManager {
 
         log.debugf("Creating new position for user %s in org %s ...", user.getId(), org.getBin());
         if (ExternalRegistrationPage.ROLE_HEAD.equals(attributes.legalRole())) {
-            log.debugf("Changing HEAD position in org %s to user %s ...", org.getBin(), user.getId());
+            log.infof("Changing HEAD position in org %s to user %s ...", org.getBin(), user.getId());
             removeExistingHead(org);
             PositionModel newHead = org.requestPosition(PositionModel.HEAD, user);
             org.confirmPosition(newHead);
             return;
         }
 
-        log.debugf("Requesting new EMPLOYEE position for user %s in org %s ...", user.getId(), org.getBin());
+        log.infof("Requesting new EMPLOYEE position for user %s in org %s ...", user.getId(), org.getBin());
         org.requestPosition(PositionModel.EMPLOYEE, user);
     }
 
@@ -147,7 +150,7 @@ public class ProfileUpdateManager {
         }
 
         if (ExternalRegistrationPage.ROLE_EMPLOYEE.equals(attributes.legalRole())) {
-            log.debugf("Changing position from HEAD to EMPLOYEE for user %s in org %s ...", user.getId(), org.getBin());
+            log.infof("Changing position from HEAD to EMPLOYEE for user %s in org %s ...", user.getId(), org.getBin());
             org.removePosition(position);
             org.requestPosition(PositionModel.EMPLOYEE, user);
             return;
@@ -155,7 +158,7 @@ public class ProfileUpdateManager {
 
         if (ExternalRegistrationPage.ROLE_HEAD.equals(attributes.legalRole())) {
             removeExistingHead(org);
-            log.debugf("Changing position from EMPLOYEE to HEAD for user %s in org %s ...", user.getId(), org.getBin());
+            log.infof("Changing position from EMPLOYEE to HEAD for user %s in org %s ...", user.getId(), org.getBin());
             org.removePosition(position);
             PositionModel newHead = org.requestPosition(PositionModel.HEAD, user);
             org.confirmPosition(newHead);
@@ -169,7 +172,7 @@ public class ProfileUpdateManager {
         }
 
         UserModel oldHeadUser = existingHead.getUser();
-        log.debugf("Changing position for user %s in org %s from HEAD to EMPLOYEE ...", oldHeadUser.getId(), org.getBin());
+        log.infof("Changing position for user %s in org %s from HEAD to EMPLOYEE ...", oldHeadUser.getId(), org.getBin());
         org.removePosition(existingHead);
         org.requestPosition(PositionModel.EMPLOYEE, oldHeadUser);
     }
