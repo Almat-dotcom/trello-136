@@ -11,7 +11,7 @@ import static kz.kacd.sso.realm.flow.AuthFlowConstants.*;
 public abstract class AbstractLoginBuilder extends AbstractFlowBuilder {
 
     private static final String BEHAVIOR = "behavior";
-    private static final String DENY_NEW = "Deny new session";
+    private static final String TERMINATE_OLD = "Terminate oldest session";
     private static final String SESSION_MESSAGE = "errorMessage";
     private static final String SESSION_DENIED = "too-many-sessions";
     private static final String USER_SESSION_LIMIT = "userRealmLimit";
@@ -78,7 +78,7 @@ public abstract class AbstractLoginBuilder extends AbstractFlowBuilder {
         target.setParentFlow(parent.getId());
         target.setAuthenticatorConfig(config(
                 SESSION_LIMIT_CONFIG,
-                BEHAVIOR, DENY_NEW,
+                BEHAVIOR, TERMINATE_OLD,
                 SESSION_MESSAGE, SESSION_DENIED,
                 USER_SESSION_LIMIT, "1",
                 USER_CLIENT_LIMIT, "0"
