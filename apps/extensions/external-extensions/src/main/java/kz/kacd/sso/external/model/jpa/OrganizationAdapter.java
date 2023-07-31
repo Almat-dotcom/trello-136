@@ -149,16 +149,23 @@ public class OrganizationAdapter implements OrganizationModel, JpaModel<Organiza
                 .map(it -> adaptersFactory.create(keycloakSession, it, realm))
                 .collect(Collectors.toList());
         return new PageRepresentation<>(
-                getPositionsCount(),
+                getPositionsCount(userId),
                 from,
                 limit,
                 result
         );
     }
 
-    private long getPositionsCount() {
-        Query query = em.createQuery("select count(o) from OrganizationMemberEntity o where o.organization = :organization");
+    private long getPositionsCount(String userId) {
+        String sql = "select count(o) from OrganizationMemberEntity o where o.organization = :organization";
+        if (userId != null) {
+            sql += " and userId = :userId";
+        }
+        Query query = em.createQuery(sql);
         query.setParameter("organization", entity);
+        if (userId != null) {
+            query.setParameter("userId", userId);
+        }
         return (Long) query.getSingleResult();
     }
 
