@@ -143,7 +143,7 @@ const useRegisterFields = (
     return {
         residency: useField(isNotEmpty, (value) => { onResidentChanged(value === 'resident') }, residency, extractError(kcContext, "residency")),
         clientType: useField(isNotEmpty, (value) => { onLegalChanged(value === 'legal') }, clientType, extractError(kcContext, "clientType")),
-        legalRole: useField(isNotEmptyNorLegalResident(() => resident, () => legal), (value) => { onRoleChanged(value === 'head') }, legalRole, extractError(kcContext, "legalRole")),
+        legalRole: useField(isNotEmptyForLegalNonResident(() => resident, () => legal), (value) => { onRoleChanged(value === 'head') }, legalRole, extractError(kcContext, "legalRole")),
         lastName: useField(isNotEmptyNorLegalResident(() => resident, () => legal), () => { }, lastName, extractError(kcContext, "lastName")),
         firstName: useField(isNotEmptyNorLegalResident(() => resident, () => legal), () => { }, firstName, extractError(kcContext, "firstName")),
         middleName: useField(allAllowed, () => { }, middleName, extractError(kcContext, "middleName")),
@@ -177,6 +177,9 @@ const useField = (validator: (value: string) => string | undefined, changeCallBa
         }
     }
 }
+
+const isNotEmptyForLegalNonResident = (resident: () => boolean, legal: () => boolean) =>
+    (value: string): string | undefined => !resident() && legal() ? isNotEmpty(value) : undefined;
 
 const isNotEmptyNorLegalResident = (resident: () => boolean, legal: () => boolean) =>
     (value: string): string | undefined => resident() && legal() ? undefined : isNotEmpty(value);
