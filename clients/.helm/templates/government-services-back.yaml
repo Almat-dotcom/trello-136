@@ -1,0 +1,27 @@
+apiVersion: sso.kacd.kz/v1
+kind: Client
+metadata:
+  name: government-services-back
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    kz-kacd-realm-name: external
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  displayedName: government-services-back
+  displayedDescription: Сервис доступа команды гос-услуг
+  access:
+    validRedirectUris:
+    - https://localhost:8080/*
+    webOrigins:
+    - "+"
+  capability:
+    type: CONFIDENTIAL
+    clientExistingSecret: government-services-back-secret
+    clientSecretKey: client_secret
+  attributes: []
+  roles: []
