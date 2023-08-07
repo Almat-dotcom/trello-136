@@ -60,6 +60,9 @@ spec:
     sso:
       sessionIdle: 30m
       sessionMax: 24h
+    client:
+      sessionIdle: 30m
+      sessionMax: 24h
   tokens:
     accessLifespan: 15m
     oidcAccessLifespan: 15m
