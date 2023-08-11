@@ -7,7 +7,7 @@ image: nexus.kacd.kz:5000/valyayev/test/keycloak:0.3
 
 replicaCount: 3
 
-clusterDomain: k8s-cluster-preprod.local
+clusterDomain: cluster.local
 
 hostname: sso-preprod.k8s-preprod.kacd.kz
 
