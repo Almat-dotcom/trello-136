@@ -29,6 +29,9 @@ public class ExternalAttributes {
         if (residency() == null || residency().equals(ExternalRegistrationPage.NON_RESIDENT)) {
             return email().toLowerCase();
         }
+        if (ExternalRegistrationPage.CLIENT_LEGAL.equals(clientType())) {
+            return iin() + "-" + bin() + "-" + clientType();
+        }
         return iin() + "-" + clientType();
     }
 

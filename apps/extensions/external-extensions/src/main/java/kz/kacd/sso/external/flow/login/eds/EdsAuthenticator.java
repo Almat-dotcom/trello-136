@@ -11,6 +11,7 @@ import kz.kacd.sso.external.sign.SignatureValidator;
 import org.jboss.logging.Logger;
 import org.keycloak.authentication.AuthenticationFlowContext;
 import org.keycloak.authentication.authenticators.browser.UsernamePasswordForm;
+import org.keycloak.models.KeycloakSession;
 import org.keycloak.services.managers.AuthenticationManager;
 
 import javax.ws.rs.core.MultivaluedHashMap;
@@ -63,7 +64,7 @@ public class EdsAuthenticator extends UsernamePasswordForm implements Alternativ
 
     private boolean validateUser(AuthenticationFlowContext context, SignatureValidator.Result sign) {
         MultivaluedMap<String, String> userData = context.getHttpRequest().getDecodedFormParameters();
-        String username = sign.getSubject().getIin() + "-" + (sign.getType() == SignatureValidator.Type.PHYSICAL ? "physical" : "legal");
+        String username = getUsername(context.getSession(), sign);
         if (sign.getType().equals(SignatureValidator.Type.LEGAL)) {
             context.getEvent().detail(ExternalRegistrationPage.FIELD_BIN, Collections.singletonList(sign.getSubject().getBin()));
             context.getAuthenticationSession().setAuthNote(ExternalRegistrationPage.FIELD_BIN, sign.getSubject().getBin());
@@ -78,6 +79,19 @@ public class EdsAuthenticator extends UsernamePasswordForm implements Alternativ
             updateProfile(context, sign.getSubject());
         }
         return result;
+    }
+
+    private String getUsername(KeycloakSession session, SignatureValidator.Result sign) {
+        if (SignatureValidator.Type.PHYSICAL.equals(sign.getType())) {
+            return sign.getSubject().getIin() + "-" + ExternalRegistrationPage.CLIENT_PHYSICAL;
+        }
+        String oldUsername = sign.getSubject().getIin() + "-" + ExternalRegistrationPage.CLIENT_LEGAL;
+        String newUsername = sign.getSubject().getIin() + "-" + sign.getSubject().getBin() + "-" + ExternalRegistrationPage.CLIENT_LEGAL;
+
+        if (session.users().getUserByUsername(session.getContext().getRealm(), oldUsername) != null) {
+            return oldUsername;
+        }
+        return newUsername;
     }
 
     private void updateProfile(AuthenticationFlowContext context, SignatureSubject subject) {
