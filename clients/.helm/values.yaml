@@ -44,4 +44,6 @@ clients:
   internalSsoApi:
     redirectUris: []
     webOrigins: []
-
+  armFrontOffice:
+    redirectUris: []
+    webOrigins: []

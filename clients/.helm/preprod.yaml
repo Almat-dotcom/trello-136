@@ -52,3 +52,8 @@ clients:
     - http://10.10.125.4:8085/*
     webOrigins:
     - "+"
+  armFrontOffice:
+    redirectUris:
+    - https://arm-front.k8s-preprod.kacd.kz/*
+    webOrigins:
+    - https://arm-front.k8s-preprod.kacd.kz
