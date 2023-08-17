@@ -29,3 +29,8 @@ clients:
     - http://10.10.125.4:8085/*
     webOrigins:
     - "+"
+  armFrontOffice:
+    redirectUris:
+    - https://fo.kacd.kz/*
+    webOrigins:
+    - https://fo.kacd.kz
