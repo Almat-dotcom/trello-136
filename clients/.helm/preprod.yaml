@@ -48,8 +48,9 @@ clients:
     - https://kacd-lk-admin.k8s-preprod.kacd.kz
   mt535:
     redirectUris:
-    - http://localhost:8184/*
-    - http://10.10.125.4:8085/*
+    - https://statement-balance-light.k8s-dev.kacd.kz/*
+    - https://statement-balance-light.k8s-preprod.kacd.kz/*
+    - http://localhost:8082/*
     webOrigins:
     - "+"
   armFrontOffice:
