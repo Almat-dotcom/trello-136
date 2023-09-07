@@ -31,7 +31,12 @@ spec:
   - LOCALE
   - IIN
   - PHONE_NUMBER
-  roles: [{
-    name: forex,
+  roles: 
+  - name: forex,
     roleDescription: Доступ к Forex
-  }]
+  - name: admin
+    roleDescription: Первый руководитель, лицо исполняющее обязанности первого руководителя или имеющее право подписи от имени первого руководителя
+  - name: editor
+    roleDescription: Старший сотрудник
+  - name: reader
+    roleDescription: Младший сотрудник
