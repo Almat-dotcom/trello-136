@@ -32,9 +32,12 @@ spec:
   - IIN
   - PHONE_NUMBER
   roles: [{
-    name: reader,
-    roleDescription: Доступ на чтение
+    name: custody,
+    roleDescription: Доступ к ЛК Кастодиан
   },{
-    name: editor,
-    roleDescription: Доступ к редактированию
+    name: broker,
+    roleDescription: Доступ к ЛК Брокер
+  },{
+    name: common,
+    roleDescription: Доступ к ЛК Общий
   }]
