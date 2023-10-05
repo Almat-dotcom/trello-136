@@ -56,5 +56,5 @@ spec:
         - dn: {{ .Values.external.ldap.groupsDn }}
           path: /
       hierarchy: false
-      mode: RW
+      mode: R
 {{- end }}
