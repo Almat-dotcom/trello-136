@@ -34,3 +34,8 @@ clients:
     - https://fo.kacd.kz/*
     webOrigins:
     - https://fo.kacd.kz
+  billing:
+    redirectUris:
+    - https://billing.kacd.kz/*
+    webOrigins:
+    - https://billing.kacd.kz

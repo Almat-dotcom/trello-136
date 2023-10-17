@@ -47,3 +47,12 @@ clients:
     webOrigins:
     - http://localhost:8080
     - https://arm-front.k8s-dev.kacd.kz
+  billing:
+    redirectUris:
+    - http://localhost:4200/*
+    - https://billing-dev.k8s-dev.kacd.kz/*
+    - https://billing-preprod.k8s-preprod.kacd.kz/*
+    webOrigins:
+    - http://localhost:4200
+    - https://billing-dev.k8s-dev.kacd.kz
+    - https://billing-preprod.k8s-preprod.kacd.kz
