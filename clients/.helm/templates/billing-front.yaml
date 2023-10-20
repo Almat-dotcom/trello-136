@@ -22,4 +22,11 @@ spec:
     {{- include "common.tplvalues.render" ( dict "value" .Values.clients.billing.webOrigins "context" $ ) | nindent 4 }}
   capability:
     type: PUBLIC
+  attributes:
+  - FIRST_NAME
+  - LAST_NAME
+  - MIDDLE_NAME
+  - GROUPS
+  - LOCALE
+  - DIVISION
   roles: []
