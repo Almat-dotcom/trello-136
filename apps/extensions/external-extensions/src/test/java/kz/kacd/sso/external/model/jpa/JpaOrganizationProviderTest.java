@@ -1,26 +1,25 @@
 package kz.kacd.sso.external.model.jpa;
 
+import jakarta.persistence.EntityManager;
 import kz.kacd.sso.external.model.OrganizationModel;
 import kz.kacd.sso.external.model.PositionModel;
 import kz.kacd.sso.external.model.jpa.entity.OrganizationEntity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.keycloak.models.*;
+import org.keycloak.models.KeycloakSession;
+import org.keycloak.models.KeycloakSessionFactory;
+import org.keycloak.models.RealmModel;
+import org.keycloak.models.UserModel;
 import org.keycloak.provider.ProviderEvent;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.persistence.EntityManager;
-
-import java.util.stream.Stream;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 class JpaOrganizationProviderTest {

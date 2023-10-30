@@ -1,5 +1,9 @@
 package kz.kacd.sso.external.resource;
 
+import jakarta.validation.Valid;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import kz.kacd.sso.external.model.OrganizationModel;
 import kz.kacd.sso.external.model.PositionModel;
 import kz.kacd.sso.external.representation.PageRepresentation;
@@ -11,13 +15,7 @@ import org.keycloak.events.admin.OperationType;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 
-import javax.validation.Valid;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.util.stream.Stream;
-
-public class MembersResource extends BaseOrganizationAdminResource {
+public class MembersResource extends BaseAdminResource {
     private static final Logger log = Logger.getLogger(MembersResource.class);
 
     private final OrganizationModel model;

@@ -1,5 +1,8 @@
 package kz.kacd.sso.external.model.jpa;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 import kz.kacd.sso.external.model.OrganizationModel;
 import kz.kacd.sso.external.model.OrganizationProvider;
 import kz.kacd.sso.external.model.PositionModel;
@@ -11,9 +14,6 @@ import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 import org.keycloak.models.utils.KeycloakModelUtils;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import java.math.BigInteger;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -92,11 +92,11 @@ public class JpaOrganizationProvider implements OrganizationProvider {
     public Stream<OrganizationModel> getOrganizations(RealmModel realm, Integer firstResult, Integer maxResult) {
         log.debug(
                 "Searching organizations in realm "
-                        + realm.getName()
-                        + " start from "
-                        + firstResult
-                        + " end with "
-                        + maxResult
+                + realm.getName()
+                + " start from "
+                + firstResult
+                + " end with "
+                + maxResult
         );
         TypedQuery<OrganizationEntity> query = em.createNamedQuery(
                 "OrganizationEntity.getOrgByRealmId",

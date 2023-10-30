@@ -1,6 +1,6 @@
 package kz.kacd.sso.external.model.jpa.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @NamedQuery(
         name = "PositionEntity.getPositionByName",

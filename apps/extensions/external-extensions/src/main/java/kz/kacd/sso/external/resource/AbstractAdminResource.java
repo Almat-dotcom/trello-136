@@ -1,6 +1,12 @@
 package kz.kacd.sso.external.resource;
 
-import kz.kacd.sso.external.resource.common.OrganizationAdminAuth;
+import jakarta.ws.rs.NotAuthorizedException;
+import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.MultivaluedMap;
+import jakarta.ws.rs.core.UriInfo;
+import kz.kacd.sso.external.resource.common.ExternalAdminAuth;
 import kz.kacd.sso.external.resource.cors.Cors;
 import kz.kacd.sso.external.resource.cors.CorsResource;
 import org.jboss.logging.Logger;
@@ -22,13 +28,6 @@ import org.keycloak.services.resources.admin.AdminEventBuilder;
 import org.keycloak.services.resources.admin.permissions.AdminPermissionEvaluator;
 import org.keycloak.services.resources.admin.permissions.AdminPermissions;
 
-import javax.ws.rs.NotAuthorizedException;
-import javax.ws.rs.NotFoundException;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.UriInfo;
-
 /**
  * Base class for admin resources.
  * </>
@@ -36,16 +35,14 @@ import javax.ws.rs.core.UriInfo;
  */
 public abstract class AbstractAdminResource {
     private static final Logger log = Logger.getLogger(AbstractAdminResource.class);
-
+    protected final RealmModel realm;
     @Context
     protected ClientConnection clientConnection;
     @Context
     protected HttpHeaders headers;
     @Context
     protected KeycloakSession session;
-
-    protected final RealmModel realm;
-    protected OrganizationAdminAuth auth;
+    protected ExternalAdminAuth auth;
     protected AdminPermissionEvaluator permissions;
     protected AdminEventBuilder adminEvent;
     protected UserModel user;
@@ -141,7 +138,7 @@ public abstract class AbstractAdminResource {
         }
 
         user = authResult.getUser();
-        auth = new OrganizationAdminAuth(realm, token, user, client);
+        auth = new ExternalAdminAuth(realm, token, user, client);
     }
 
     private void setupEvents() {

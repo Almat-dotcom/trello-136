@@ -1,5 +1,6 @@
 package kz.kacd.sso.external.flow.login.legal;
 
+import jakarta.ws.rs.core.MultivaluedMap;
 import kz.kacd.sso.external.flow.login.AuthenticatorValidator;
 import kz.kacd.sso.external.model.OrganizationModel;
 import kz.kacd.sso.external.model.OrganizationProvider;
@@ -14,7 +15,6 @@ import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 
-import javax.ws.rs.core.MultivaluedMap;
 import java.util.List;
 import java.util.stream.Collectors;
 

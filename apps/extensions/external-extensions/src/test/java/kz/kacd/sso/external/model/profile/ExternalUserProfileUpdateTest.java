@@ -1,5 +1,6 @@
 package kz.kacd.sso.external.model.profile;
 
+import jakarta.ws.rs.core.MultivaluedMap;
 import kz.kacd.sso.external.model.OrganizationModel;
 import kz.kacd.sso.external.model.OrganizationProvider;
 import kz.kacd.sso.external.model.PositionModel;
@@ -14,7 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.ws.rs.core.MultivaluedMap;
 import java.util.*;
 import java.util.stream.Stream;
 

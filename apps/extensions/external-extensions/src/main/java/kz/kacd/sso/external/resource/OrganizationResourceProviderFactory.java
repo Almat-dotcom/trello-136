@@ -4,7 +4,7 @@ import com.google.auto.service.AutoService;
 import kz.kacd.sso.external.model.OrganizationModel;
 import kz.kacd.sso.external.model.OrganizationProvider;
 import kz.kacd.sso.external.model.PositionModel;
-import kz.kacd.sso.external.resource.common.OrganizationAdminAuth;
+import kz.kacd.sso.external.resource.common.ExternalAdminAuth;
 import org.jboss.logging.Logger;
 import org.keycloak.Config;
 import org.keycloak.models.*;
@@ -81,16 +81,16 @@ public class OrganizationResourceProviderFactory implements RealmResourceProvide
                 .forEach(
                         realm -> {
                             ClientModel client = realm.getMasterAdminClient();
-                            if (client.getRole(OrganizationAdminAuth.ORGANIZATION_VIEW_ROLE) == null
-                                    || client.getRole(OrganizationAdminAuth.ORGANIZATION_MANAGE_ROLE) == null
-                                    || client.getRole(OrganizationAdminAuth.ORGANIZATION_CREATE_ROLE) == null) {
+                            if (client.getRole(ExternalAdminAuth.ORGANIZATION_VIEW_ROLE) == null
+                                    || client.getRole(ExternalAdminAuth.ORGANIZATION_MANAGE_ROLE) == null
+                                    || client.getRole(ExternalAdminAuth.ORGANIZATION_CREATE_ROLE) == null) {
                                 addMasterAdminRoles(manager, realm);
                             }
                             if (!realm.getName().equals(Config.getAdminRealm())) {
                                 client = realm.getClientByClientId(manager.getRealmAdminClientId(realm));
-                                if (client.getRole(OrganizationAdminAuth.ORGANIZATION_VIEW_ROLE) == null
-                                        || client.getRole(OrganizationAdminAuth.ORGANIZATION_MANAGE_ROLE) == null
-                                        || client.getRole(OrganizationAdminAuth.ORGANIZATION_CREATE_ROLE) == null) {
+                                if (client.getRole(ExternalAdminAuth.ORGANIZATION_VIEW_ROLE) == null
+                                        || client.getRole(ExternalAdminAuth.ORGANIZATION_MANAGE_ROLE) == null
+                                        || client.getRole(ExternalAdminAuth.ORGANIZATION_CREATE_ROLE) == null) {
                                     addRealmAdminRoles(manager, realm);
                                 }
                             }
@@ -125,15 +125,15 @@ public class OrganizationResourceProviderFactory implements RealmResourceProvide
     private void addRoles(ClientModel client, RoleModel parent) {
 
         String[] names = new String[]{
-                OrganizationAdminAuth.ORGANIZATION_VIEW_ROLE,
-                OrganizationAdminAuth.ORGANIZATION_MANAGE_ROLE
+                ExternalAdminAuth.ORGANIZATION_VIEW_ROLE,
+                ExternalAdminAuth.ORGANIZATION_MANAGE_ROLE
         };
 
         for (String name : names) {
             addRole(name, client, parent, true);
         }
 
-        addRole(OrganizationAdminAuth.ORGANIZATION_CREATE_ROLE, client, parent, false);
+        addRole(ExternalAdminAuth.ORGANIZATION_CREATE_ROLE, client, parent, false);
     }
 
     private void addRole(String name, ClientModel client, RoleModel parent, boolean composite) {

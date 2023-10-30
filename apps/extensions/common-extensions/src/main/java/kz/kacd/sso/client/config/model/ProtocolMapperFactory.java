@@ -54,8 +54,14 @@ public class ProtocolMapperFactory {
                 return phoneNumberVerified();
             case POSITION:
                 return position();
+            case EBR:
+                return ebr();
         }
         return null;
+    }
+
+    private static ProtocolMapperModel ebr() {
+        return attributeMapper("hasEBR", true);
     }
 
     private static ProtocolMapperModel firstName() {

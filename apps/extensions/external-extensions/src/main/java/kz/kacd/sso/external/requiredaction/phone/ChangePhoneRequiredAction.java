@@ -1,5 +1,7 @@
 package kz.kacd.sso.external.requiredaction.phone;
 
+import jakarta.ws.rs.core.MultivaluedMap;
+import jakarta.ws.rs.core.Response;
 import kz.kacd.sso.external.model.page.ExternalMessages;
 import kz.kacd.sso.external.model.page.ExternalRegistrationPage;
 import org.jboss.logging.Logger;
@@ -9,8 +11,6 @@ import org.keycloak.forms.login.LoginFormsProvider;
 import org.keycloak.models.UserModel;
 import org.keycloak.models.utils.FormMessage;
 
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
 import java.util.Collections;
 import java.util.List;
 

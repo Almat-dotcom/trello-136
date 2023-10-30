@@ -1,5 +1,8 @@
 package kz.kacd.sso.external.flow.login.eds;
 
+import jakarta.ws.rs.core.MultivaluedHashMap;
+import jakarta.ws.rs.core.MultivaluedMap;
+import jakarta.ws.rs.core.Response;
 import kz.kacd.sso.external.flow.login.AlternativeAuthenticator;
 import kz.kacd.sso.external.model.page.ExternalLoginPage;
 import kz.kacd.sso.external.model.page.ExternalMessages;
@@ -14,9 +17,6 @@ import org.keycloak.authentication.authenticators.browser.UsernamePasswordForm;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.services.managers.AuthenticationManager;
 
-import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
 import java.util.Collections;
 
 public class EdsAuthenticator extends UsernamePasswordForm implements AlternativeAuthenticator {
@@ -73,7 +73,7 @@ public class EdsAuthenticator extends UsernamePasswordForm implements Alternativ
         boolean result = validateUser(context, userData);
         if (
                 result
-                        && ExternalRegistrationPage.CLIENT_LEGAL
+                && ExternalRegistrationPage.CLIENT_LEGAL
                         .equals(context.getUser().getFirstAttribute(ExternalRegistrationPage.FIELD_CLIENT_TYPE))
         ) {
             updateProfile(context, sign.getSubject());

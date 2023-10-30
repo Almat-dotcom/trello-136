@@ -113,6 +113,7 @@ spec:
                   - PHONE_NUMBER
                   - PHONE_NUMBER_VERIFIED
                   - POSITION
+                  - EBR
                   type: string
                 type: array
               roles:

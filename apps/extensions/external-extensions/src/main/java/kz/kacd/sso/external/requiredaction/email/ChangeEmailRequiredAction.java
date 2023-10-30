@@ -1,5 +1,6 @@
 package kz.kacd.sso.external.requiredaction.email;
 
+import jakarta.ws.rs.core.MultivaluedMap;
 import org.jboss.logging.Logger;
 import org.keycloak.authentication.InitiatedActionSupport;
 import org.keycloak.authentication.RequiredActionContext;
@@ -10,7 +11,6 @@ import org.keycloak.models.UserModel;
 import org.keycloak.models.utils.FormMessage;
 import org.keycloak.services.messages.Messages;
 
-import javax.ws.rs.core.MultivaluedMap;
 import java.util.stream.Collectors;
 
 public class ChangeEmailRequiredAction implements RequiredActionProvider {

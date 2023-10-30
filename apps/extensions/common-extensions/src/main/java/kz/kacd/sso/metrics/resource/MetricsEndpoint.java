@@ -2,17 +2,16 @@ package kz.kacd.sso.metrics.resource;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import kz.kacd.sso.metrics.MetricsRegistryProvider;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.services.resource.RealmResourceProvider;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 public class MetricsEndpoint implements RealmResourceProvider {
 
@@ -35,7 +34,7 @@ public class MetricsEndpoint implements RealmResourceProvider {
     public Response get(@Context HttpHeaders headers) {
         if (
                 !headers.getRequestHeader("x-forwarded-host").isEmpty()
-                        && !System.getenv("KC_HOSTNAME").equals(headers.getRequestHeader("x-forwarded-host").get(0))
+                && !System.getenv("KC_HOSTNAME").equals(headers.getRequestHeader("x-forwarded-host").get(0))
         ) {
             return Response.status(403).build();
         }

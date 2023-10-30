@@ -1,5 +1,8 @@
 package kz.kacd.sso.external.model.jpa;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 import kz.kacd.sso.external.model.OrganizationModel;
 import kz.kacd.sso.external.model.PositionModel;
 import kz.kacd.sso.external.model.jpa.entity.OrganizationEntity;
@@ -11,9 +14,6 @@ import org.keycloak.models.*;
 import org.keycloak.models.jpa.JpaModel;
 import org.keycloak.models.utils.KeycloakModelUtils;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;

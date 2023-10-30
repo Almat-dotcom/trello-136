@@ -1,22 +1,23 @@
 package kz.kacd.sso.external.resource;
 
+import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.NotAuthorizedException;
+import jakarta.ws.rs.NotFoundException;
 import kz.kacd.sso.external.model.OrganizationProvider;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.keycloak.models.RealmModel;
+import org.keycloak.models.UserProvider;
 
-import javax.ws.rs.BadRequestException;
-import javax.ws.rs.NotAuthorizedException;
-import javax.ws.rs.NotFoundException;
-
-public abstract class BaseOrganizationAdminResource extends AbstractAdminResource {
+public abstract class BaseAdminResource extends AbstractAdminResource {
 
     protected OrganizationProvider orgs;
+    protected UserProvider users;
 
-    protected BaseOrganizationAdminResource(RealmModel realm) {
+    protected BaseAdminResource(RealmModel realm) {
         super(realm);
     }
 
-    protected <T extends BaseOrganizationAdminResource> T setupResource(T resource) {
+    protected <T extends BaseAdminResource> T setupResource(T resource) {
         ResteasyProviderFactory.getInstance().injectProperties(resource);
         resource.setup();
         return resource;
@@ -49,5 +50,6 @@ public abstract class BaseOrganizationAdminResource extends AbstractAdminResourc
     @Override
     protected final void init() {
         this.orgs = session.getProvider(OrganizationProvider.class);
+        this.users = session.users();
     }
 }

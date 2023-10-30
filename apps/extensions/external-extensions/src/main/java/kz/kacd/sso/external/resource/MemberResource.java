@@ -1,5 +1,11 @@
 package kz.kacd.sso.external.resource;
 
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.PATCH;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import kz.kacd.sso.external.model.OrganizationModel;
 import kz.kacd.sso.external.model.PositionModel;
 import kz.kacd.sso.external.representation.PositionRepresentation;
@@ -8,14 +14,7 @@ import org.jboss.logging.Logger;
 import org.keycloak.events.admin.OperationType;
 import org.keycloak.models.RealmModel;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.PATCH;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-public class MemberResource extends BaseOrganizationAdminResource {
+public class MemberResource extends BaseAdminResource {
     private static final Logger log = Logger.getLogger(MemberResource.class);
 
     private final OrganizationModel org;
