@@ -14,7 +14,6 @@ metadata:
 data:
   KEYCLOAK_ADMIN: {{ .Values.auth.adminUser | quote }}
   KC_HOSTNAME: {{ .Values.hostname | quote }}
-  KC_HOSTNAME_ADMIN: {{ .Values.hostname | quote }}
   KC_HTTP_PORT: {{ .Values.containerPorts.http | quote }}
   KC_PROXY: {{ .Values.proxy | quote }}
   KC_METRICS_ENABLED: {{ ternary "true" "false" .Values.metrics.enabled | quote }}
