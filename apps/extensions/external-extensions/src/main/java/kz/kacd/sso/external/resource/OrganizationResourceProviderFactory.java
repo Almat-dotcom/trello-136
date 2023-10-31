@@ -82,20 +82,19 @@ public class OrganizationResourceProviderFactory implements RealmResourceProvide
                         realm -> {
                             ClientModel client = realm.getMasterAdminClient();
                             if (client.getRole(ExternalAdminAuth.ORGANIZATION_VIEW_ROLE) == null
-                                    || client.getRole(ExternalAdminAuth.ORGANIZATION_MANAGE_ROLE) == null
-                                    || client.getRole(ExternalAdminAuth.ORGANIZATION_CREATE_ROLE) == null) {
+                                || client.getRole(ExternalAdminAuth.ORGANIZATION_MANAGE_ROLE) == null
+                                || client.getRole(ExternalAdminAuth.ORGANIZATION_CREATE_ROLE) == null) {
                                 addMasterAdminRoles(manager, realm);
                             }
                             if (!realm.getName().equals(Config.getAdminRealm())) {
                                 client = realm.getClientByClientId(manager.getRealmAdminClientId(realm));
                                 if (client.getRole(ExternalAdminAuth.ORGANIZATION_VIEW_ROLE) == null
-                                        || client.getRole(ExternalAdminAuth.ORGANIZATION_MANAGE_ROLE) == null
-                                        || client.getRole(ExternalAdminAuth.ORGANIZATION_CREATE_ROLE) == null) {
+                                    || client.getRole(ExternalAdminAuth.ORGANIZATION_MANAGE_ROLE) == null
+                                    || client.getRole(ExternalAdminAuth.ORGANIZATION_CREATE_ROLE) == null) {
                                     addRealmAdminRoles(manager, realm);
                                 }
                             }
                         });
-        log.infof("NEW BIN: %s", session.getProvider(OrganizationProvider.class).generateNonResidentOrganizationBin());
     }
 
     private void realmPostCreate(RealmModel.RealmPostCreateEvent event) {

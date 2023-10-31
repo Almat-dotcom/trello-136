@@ -133,7 +133,7 @@ public class JpaOrganizationProvider implements OrganizationProvider {
     public String generateNonResidentOrganizationBin() {
         log.debug("Generating new bin for non-resident organization ...");
         Query query = em.createNamedQuery("OrganizationEntity.nextBin");
-        Long id = ((BigInteger) query.getSingleResult()).longValue();
+        Long id = (Long) query.getSingleResult();
         return String.format("NR%010d", id);
     }
 
