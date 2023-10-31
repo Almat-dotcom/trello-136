@@ -16,7 +16,7 @@ import org.keycloak.models.UserModel;
  * Establishing business relations resource
  */
 public class EBRResource extends BaseAdminResource {
-    private static final Logger log = Logger.getLogger(OrganizationsResource.class);
+    private static final Logger log = Logger.getLogger(EBRResource.class);
 
     protected EBRResource(RealmModel realm) {
         super(realm);
@@ -79,5 +79,21 @@ public class EBRResource extends BaseAdminResource {
     public static final class EBRRequest {
         private String id;
         private boolean sign;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public boolean isSign() {
+            return sign;
+        }
+
+        public void setSign(boolean sign) {
+            this.sign = sign;
+        }
     }
 }
