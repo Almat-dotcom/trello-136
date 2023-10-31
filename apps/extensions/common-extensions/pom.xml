@@ -15,7 +15,7 @@
 
     <properties>
         <keycloak.version>22.0.5</keycloak.version>
-        <fabric8.k8s.version>6.9.1</fabric8.k8s.version>
+        <fabric8.k8s.version>6.8.1</fabric8.k8s.version>
         <lettuce.version>6.2.3.RELEASE</lettuce.version>
 
         <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
