@@ -91,7 +91,7 @@ containerPorts:
 # reverse Proxy mode edge, reencrypt, passthrough or none
 # ref: https://www.keycloak.org/server/reverseproxy
 #
-proxy: passthrough
+proxy: edge
 
 #
 # Settings of keycloak metrics

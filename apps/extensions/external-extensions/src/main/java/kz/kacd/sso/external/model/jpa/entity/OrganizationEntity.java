@@ -1,6 +1,7 @@
 package kz.kacd.sso.external.model.jpa.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;

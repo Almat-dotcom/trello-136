@@ -1,5 +1,6 @@
 package kz.kacd.sso.external.model.profile;
 
+import jakarta.ws.rs.core.MultivaluedMap;
 import kz.kacd.sso.external.model.page.ExternalRegistrationPage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,8 +9,6 @@ import org.keycloak.models.UserModel;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import javax.ws.rs.core.MultivaluedMap;
 
 import static kz.kacd.sso.external.model.profile.TestProfileFactory.originalForm;
 import static kz.kacd.sso.external.model.profile.TestProfileFactory.validPhysicalResident;

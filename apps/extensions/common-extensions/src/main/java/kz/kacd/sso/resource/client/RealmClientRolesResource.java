@@ -1,12 +1,12 @@
 package kz.kacd.sso.resource.client;
 
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.jboss.logging.Logger;
 import org.keycloak.models.ClientModel;
 import org.keycloak.models.RealmModel;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,9 +51,9 @@ public class RealmClientRolesResource extends BaseClientRealmResource {
 
     private boolean protectedClients(String clientId) {
         return clientId.equals("realm-management")
-                || clientId.equals("admin-cli")
-                || clientId.equals("broker")
-                || clientId.equals("realm-admin")
-                || clientId.equals("security-admin-console");
+               || clientId.equals("admin-cli")
+               || clientId.equals("broker")
+               || clientId.equals("realm-admin")
+               || clientId.equals("security-admin-console");
     }
 }

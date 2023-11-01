@@ -1,10 +1,10 @@
 package kz.kacd.sso.external.model.profile;
 
+import jakarta.ws.rs.core.MultivaluedHashMap;
+import jakarta.ws.rs.core.MultivaluedMap;
 import kz.kacd.sso.external.model.page.ExternalRegistrationPage;
 import org.keycloak.authentication.forms.RegistrationPage;
 
-import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.MultivaluedMap;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;

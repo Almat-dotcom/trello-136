@@ -1,5 +1,8 @@
 package kz.kacd.sso.resource.profile;
 
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import kz.kacd.sso.resource.common.Page;
 import kz.kacd.sso.resource.common.ProfileResourceRepresentation;
 import org.jboss.logging.Logger;
@@ -11,9 +14,6 @@ import org.keycloak.models.RoleModel;
 import org.keycloak.models.UserModel;
 import org.keycloak.models.utils.ModelToRepresentation;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

@@ -3,7 +3,7 @@ package kz.kacd.sso.external.model.profile;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.UserModel;
 
-import javax.ws.rs.core.MultivaluedMap;
+import jakarta.ws.rs.core.MultivaluedMap;
 import java.util.AbstractMap;
 import java.util.Map;
 import java.util.stream.Collectors;

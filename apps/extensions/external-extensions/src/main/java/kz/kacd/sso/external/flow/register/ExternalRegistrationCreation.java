@@ -1,5 +1,6 @@
 package kz.kacd.sso.external.flow.register;
 
+import jakarta.ws.rs.core.MultivaluedMap;
 import kz.kacd.sso.external.bmg.MobilePhoneValidator;
 import kz.kacd.sso.external.model.page.ExternalRegistrationPage;
 import kz.kacd.sso.external.model.profile.ExternalUserProfile;
@@ -16,8 +17,6 @@ import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 import org.keycloak.sessions.AuthenticationSessionModel;
-
-import javax.ws.rs.core.MultivaluedMap;
 
 /**
  * This execution is aimed to create external user on registration.
@@ -60,7 +59,7 @@ public class ExternalRegistrationCreation implements FormAction {
 
         if (
                 profile.residency().equals(ExternalRegistrationPage.RESIDENT)
-                        && profile.clientType().equals(ExternalRegistrationPage.CLIENT_PHYSICAL)
+                && profile.clientType().equals(ExternalRegistrationPage.CLIENT_PHYSICAL)
         ) {
             validatePhone(user, context.getSession());
         }

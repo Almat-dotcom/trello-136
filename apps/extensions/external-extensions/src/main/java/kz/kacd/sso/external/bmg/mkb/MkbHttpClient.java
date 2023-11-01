@@ -1,5 +1,6 @@
 package kz.kacd.sso.external.bmg.mkb;
 
+import jakarta.ws.rs.core.HttpHeaders;
 import kz.kacd.sso.external.bmg.exception.IOFailed;
 import kz.kacd.sso.external.bmg.exception.UnexpectedResponseStatusException;
 import okhttp3.Call;
@@ -8,7 +9,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.jboss.logging.Logger;
 
-import javax.ws.rs.core.HttpHeaders;
 import java.io.IOException;
 
 public class MkbHttpClient {
@@ -31,7 +31,7 @@ public class MkbHttpClient {
                 .get()
                 .build();
         Call call = client.newCall(request);
-        try(Response response = call.execute()) {
+        try (Response response = call.execute()) {
             if (response.isSuccessful()) {
                 return true;
             } else if (response.code() == 404) {

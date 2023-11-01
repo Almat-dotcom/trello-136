@@ -1,12 +1,11 @@
 package kz.kacd.sso.external.model.jpa;
 
+import jakarta.persistence.EntityManager;
 import kz.kacd.sso.external.model.OrganizationModel;
 import kz.kacd.sso.external.model.jpa.entity.OrganizationEntity;
 import kz.kacd.sso.external.model.jpa.entity.OrganizationMemberEntity;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
-
-import javax.persistence.EntityManager;
 
 public class AdaptersFactory {
 

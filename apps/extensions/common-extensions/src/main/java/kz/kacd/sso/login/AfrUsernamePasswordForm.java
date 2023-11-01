@@ -1,5 +1,7 @@
 package kz.kacd.sso.login;
 
+import jakarta.ws.rs.core.MultivaluedMap;
+import jakarta.ws.rs.core.Response;
 import kz.kacd.sso.sign.SignatureValidator;
 import org.keycloak.authentication.AuthenticationFlowContext;
 import org.keycloak.authentication.Authenticator;
@@ -8,9 +10,6 @@ import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 import org.keycloak.services.messages.Messages;
-
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
 
 public class AfrUsernamePasswordForm extends UsernamePasswordForm implements Authenticator {
 
@@ -61,7 +60,7 @@ public class AfrUsernamePasswordForm extends UsernamePasswordForm implements Aut
 
         if (
                 !signature.getIin().equals(user.getFirstAttribute(AfrPage.IIN))
-                        || (signature.getBin() != null && !signature.getBin().equals(user.getFirstAttribute(AfrPage.BIN)))
+                || (signature.getBin() != null && !signature.getBin().equals(user.getFirstAttribute(AfrPage.BIN)))
         ) {
             failAuth(context, Messages.INVALID_USER);
             return;

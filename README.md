@@ -337,3 +337,41 @@
     "description": "Депонент"
 }]
 ```
+
+---
+## Задать признак прохождения УДО ФЛ
+
+### Request
+
+**POST** `/ebr/physical`
+
+**Body**:
+```json
+{
+    "id": "123kjakd-jkjakskda-213123-asdhjkasd",
+    "sign": true
+}
+```
+
+### Response
+
+**responseCode** `202`
+
+---
+## Задать признак прохождения УДО ЮЛ
+
+### Request
+
+**POST** `/ebr/legal`
+
+**Body**:
+```json
+{
+    "id": "123kjakd-jkjakskda-213123-asdhjkasd",
+    "sign": true
+}
+```
+
+### Response
+
+**responseCode** `202`

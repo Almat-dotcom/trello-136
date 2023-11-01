@@ -7,15 +7,15 @@
     <parent>
         <artifactId>keycloak-parent</artifactId>
         <groupId>org.keycloak</groupId>
-        <version>21.0.0</version>
+        <version>22.0.5</version>
     </parent>
 
     <groupId>kz.kacd.sso</groupId>
     <artifactId>ldap-mappers</artifactId>
 
     <properties>
-        <keycloak.version>21.0.0</keycloak.version>
-        <fabric8.k8s.version>6.2.0</fabric8.k8s.version>
+        <keycloak.version>22.0.5</keycloak.version>
+        <fabric8.k8s.version>6.9.1</fabric8.k8s.version>
         <lettuce.version>6.2.3.RELEASE</lettuce.version>
 
         <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
@@ -53,7 +53,7 @@
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
-            <version>1.10.4</version>
+            <version>1.11.5</version>
         </dependency>
 
         <dependency>
@@ -121,12 +121,27 @@
         </dependency>
         <dependency>
             <groupId>io.fabric8</groupId>
+            <artifactId>kubernetes-client-api</artifactId>
+            <version>${fabric8.k8s.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.fabric8</groupId>
             <artifactId>kubernetes-client</artifactId>
             <version>${fabric8.k8s.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.fabric8</groupId>
+                    <artifactId>kubernetes-client-api</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>

@@ -1,5 +1,6 @@
 package kz.kacd.sso.external.flow.login;
 
+import jakarta.ws.rs.core.Response;
 import kz.kacd.sso.external.model.page.ExternalLoginPage;
 import kz.kacd.sso.external.model.page.ExternalRegistrationPage;
 import org.jboss.logging.Logger;
@@ -10,7 +11,6 @@ import org.keycloak.authentication.authenticators.browser.UsernamePasswordForm;
 import org.keycloak.models.UserModel;
 import org.keycloak.services.managers.AuthenticationManager;
 
-import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 

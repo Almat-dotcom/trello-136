@@ -1,6 +1,6 @@
 package kz.kacd.sso.external.representation;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 public class RequestMember {
 

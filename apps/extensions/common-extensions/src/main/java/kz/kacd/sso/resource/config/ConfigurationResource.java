@@ -1,5 +1,8 @@
 package kz.kacd.sso.resource.config;
 
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import kz.kacd.sso.client.config.ClientConfigurer;
 import kz.kacd.sso.federation.FederationConfigurer;
 import kz.kacd.sso.k8s.client.K8sClient;
@@ -17,10 +20,6 @@ import org.jboss.logging.Logger;
 import org.keycloak.events.admin.OperationType;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.utils.ModelToRepresentation;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 public class ConfigurationResource extends BaseConfigAdminResource {
     private static final Logger log = Logger.getLogger(ConfigurationResource.class);

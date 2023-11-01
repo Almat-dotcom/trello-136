@@ -1,9 +1,8 @@
 package kz.kacd.sso.resource.client;
 
+import jakarta.ws.rs.ForbiddenException;
 import kz.kacd.sso.resource.AbstractAdminResource;
 import org.keycloak.models.RealmModel;
-
-import javax.ws.rs.ForbiddenException;
 
 public class BaseClientRealmResource extends AbstractAdminResource {
 

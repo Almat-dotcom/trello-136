@@ -1,14 +1,13 @@
 package kz.kacd.sso.external.model.jpa;
 
 import com.google.auto.service.AutoService;
+import jakarta.persistence.EntityManager;
 import kz.kacd.sso.external.model.OrganizationProvider;
 import kz.kacd.sso.external.model.OrganizationProviderFactory;
 import org.keycloak.Config;
 import org.keycloak.connections.jpa.JpaConnectionProvider;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
-
-import javax.persistence.EntityManager;
 
 @AutoService(value = {OrganizationProviderFactory.class})
 public class JpaOrganizationProviderFactory implements OrganizationProviderFactory {

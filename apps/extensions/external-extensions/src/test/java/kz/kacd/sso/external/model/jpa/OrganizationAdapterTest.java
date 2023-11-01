@@ -1,5 +1,7 @@
 package kz.kacd.sso.external.model.jpa;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import kz.kacd.sso.external.model.PositionModel;
 import kz.kacd.sso.external.model.jpa.entity.OrganizationEntity;
 import kz.kacd.sso.external.model.jpa.entity.OrganizationMemberEntity;
@@ -11,9 +13,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 
 import java.util.UUID;
 import java.util.stream.Stream;
