@@ -36,6 +36,7 @@ spec:
   - DIVISION
   - PHONE_NUMBER
   - PHONE_NUMBER_VERIFIED
+  - EBR
   roles: [{
     name: issuer,
     roleDescription: Эмитент

@@ -32,7 +32,7 @@ public class EBRResource extends BaseAdminResource {
 
         log.debugf("Adding EBR %b to org %s ...", request.sign, request.id);
         if (addEBRToOrg(request.id, request.sign)) {
-            return Response.accepted().build();
+            return Response.accepted("{}").build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
@@ -59,7 +59,7 @@ public class EBRResource extends BaseAdminResource {
 
         log.debugf("Adding EBR %b to user %s ...", request.sign, request.id);
         if (addEBRToUser(request.id, request.sign)) {
-            return Response.accepted().build();
+            return Response.accepted("{}").build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
