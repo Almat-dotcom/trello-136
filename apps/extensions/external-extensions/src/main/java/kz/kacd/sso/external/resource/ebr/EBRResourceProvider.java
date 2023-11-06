@@ -1,5 +1,6 @@
-package kz.kacd.sso.external.resource;
+package kz.kacd.sso.external.resource.ebr;
 
+import kz.kacd.sso.external.resource.BaseRealmResourceProvider;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;

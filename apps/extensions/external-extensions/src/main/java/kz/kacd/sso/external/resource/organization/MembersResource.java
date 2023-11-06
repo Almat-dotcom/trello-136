@@ -1,4 +1,4 @@
-package kz.kacd.sso.external.resource;
+package kz.kacd.sso.external.resource.organization;
 
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -9,6 +9,7 @@ import kz.kacd.sso.external.model.PositionModel;
 import kz.kacd.sso.external.representation.PageRepresentation;
 import kz.kacd.sso.external.representation.PositionRepresentation;
 import kz.kacd.sso.external.representation.RequestMember;
+import kz.kacd.sso.external.resource.BaseAdminResource;
 import kz.kacd.sso.external.resource.common.OrganizationResourceType;
 import org.jboss.logging.Logger;
 import org.keycloak.events.admin.OperationType;

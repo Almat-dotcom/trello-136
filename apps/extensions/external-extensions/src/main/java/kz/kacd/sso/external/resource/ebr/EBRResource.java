@@ -1,4 +1,4 @@
-package kz.kacd.sso.external.resource;
+package kz.kacd.sso.external.resource.ebr;
 
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
@@ -8,6 +8,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import kz.kacd.sso.external.model.OrganizationModel;
 import kz.kacd.sso.external.model.page.ExternalRegistrationPage;
+import kz.kacd.sso.external.resource.BaseAdminResource;
 import org.jboss.logging.Logger;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;

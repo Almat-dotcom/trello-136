@@ -1,4 +1,4 @@
-package kz.kacd.sso.external.resource;
+package kz.kacd.sso.external.resource.organization;
 
 import com.google.auto.service.AutoService;
 import kz.kacd.sso.external.model.OrganizationModel;

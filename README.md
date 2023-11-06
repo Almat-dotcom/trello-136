@@ -375,3 +375,40 @@
 ### Response
 
 **responseCode** `202`
+
+---
+## Получить id пользователя по ИИНу
+
+### Request
+
+**GET** `/id/physical/{idn}`
+
+**PATH**
+- idn - ИИН пользователя
+
+### Response
+
+**responseCode** `200`
+
+**Body**
+```json
+{"id": "asdjkjalksd-asdkjalksd-asdjaklsjdlk"}
+```
+---
+## Получить id организации по БИНу
+
+### Request
+
+**GET** `/id/legal/{idn}`
+
+**PATH**
+- idn - БИН организации
+
+### Response
+
+**responseCode** `200`
+
+**Body**
+```json
+{"id": "asdjkjalksd-asdkjalksd-asdjaklsjdlk"}
+```
