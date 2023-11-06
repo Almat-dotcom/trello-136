@@ -1,4 +1,4 @@
-package kz.kacd.sso.external.resource;
+package kz.kacd.sso.external.resource.ebr;
 
 import com.google.auto.service.AutoService;
 import org.keycloak.Config;
@@ -10,7 +10,6 @@ import org.keycloak.services.resource.RealmResourceProviderFactory;
 @AutoService(RealmResourceProviderFactory.class)
 public class EBRResourceProviderFactory implements RealmResourceProviderFactory {
     public static final String PROVIDER_ID = "ebr";
-
 
     @Override
     public RealmResourceProvider create(KeycloakSession session) {
