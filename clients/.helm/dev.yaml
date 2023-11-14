@@ -56,3 +56,8 @@ clients:
     - http://localhost:4200
     - https://billing-dev.k8s-dev.kacd.kz
     - https://billing-preprod.k8s-preprod.kacd.kz
+  tophrInternal:
+    redirectUris:
+    - https://tophr-preprod.kcsd.kz/*
+    webOrigins:
+    - https://tophr-preprod.kcsd.kz
