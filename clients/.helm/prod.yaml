@@ -39,3 +39,8 @@ clients:
     - https://billing.kacd.kz/*
     webOrigins:
     - https://billing.kacd.kz
+  tophrInternal:
+    redirectUris:
+    - https://tophr.kcsd.kz/*
+    webOrigins:
+    - https://tophr.kcsd.kz
