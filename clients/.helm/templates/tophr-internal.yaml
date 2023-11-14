@@ -17,9 +17,9 @@ spec:
   displayedDescription: Web системы TopHR
   access:
     validRedirectUris:
-    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.lkShellFrontInternal.redirectUris "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.tophrInternal.redirectUris "context" $ ) | nindent 4 }}
     webOrigins:
-    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.lkShellFrontInternal.webOrigins "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.tophrInternal.webOrigins "context" $ ) | nindent 4 }}
   capability:
     type: PUBLIC
   attributes:
