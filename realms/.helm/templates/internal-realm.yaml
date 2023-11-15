@@ -58,14 +58,14 @@ spec:
   # Настройки сессий
   sessions:
     sso:
-      sessionIdle: 30m
+      sessionIdle: 60m
       sessionMax: 24h
     client:
-      sessionIdle: 30m
+      sessionIdle: 60m
       sessionMax: 24h
   tokens:
-    accessLifespan: 15m
-    oidcAccessLifespan: 15m
+    accessLifespan: 30m
+    oidcAccessLifespan: 30m
   security:
     # Включить защиту от взлома пароля по методу brute force
     bruteForce:
