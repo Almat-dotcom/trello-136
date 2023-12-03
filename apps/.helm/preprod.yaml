@@ -47,9 +47,9 @@ database:
   existingSecretPasswordKey: password
 
 kafka:
-  enabled: true
-  bootstrapServers: "kafka-preprod.kacd.kz:9092"
-  groupId: keycloak-preprod
+  enabled: true
+  bootstrapServers: "rc-kafka-preprod-01.kacd.kz:9092,rc-kafka-preprod-02.kacd.kz:9092,rc-kafka-preprod-03.kacd.kz:9092"
+  groupId: keycloak-preprod
 
 service:
   type: ClusterIP
