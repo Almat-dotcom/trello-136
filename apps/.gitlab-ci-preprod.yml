@@ -168,7 +168,6 @@ build-docker-keycloak:
       --use-new-run=true \
       --context=${CI_PROJECT_DIR}/apps \
       --destination=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/keycloak:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA} \
-      --destination=nexus.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/keycloak:latest
   cache:
   - key: kaniko-cache-keycloak
     paths:
