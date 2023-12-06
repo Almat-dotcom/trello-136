@@ -33,10 +33,10 @@ clients:
   armFrontOffice:
     redirectUris:
     - https://fo.kacd.kz/*
-    - https://fo-canary.kacd.kz/*
+    - http://fo-canary.kacd.kz/*
     webOrigins:
     - https://fo.kacd.kz
-    - https://fo-canary.kacd.kz
+    - http://fo-canary.kacd.kz
   billing:
     redirectUris:
     - https://billing.kacd.kz/*
