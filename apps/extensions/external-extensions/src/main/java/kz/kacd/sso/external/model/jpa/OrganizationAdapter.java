@@ -1,8 +1,11 @@
 package kz.kacd.sso.external.model.jpa;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import kz.kacd.sso.external.model.OrganizationModel;
 import kz.kacd.sso.external.model.PositionModel;
 import kz.kacd.sso.external.model.jpa.entity.OrganizationEntity;
@@ -15,6 +18,7 @@ import org.keycloak.models.jpa.JpaModel;
 import org.keycloak.models.utils.KeycloakModelUtils;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -128,45 +132,78 @@ public class OrganizationAdapter implements OrganizationModel, JpaModel<Organiza
     }
 
     @Override
+    public PositionModel getHead() {
+        List<PositionModel> pos = getPositions(PositionModel.HEAD, null, 0, 1).getContent();
+        if (pos.isEmpty()) {
+            return null;
+        }
+        return pos.get(0);
+    }
+
+    @Override
     public Stream<PositionModel> getPositions() {
         return entity.getMembers().stream().map(it -> adaptersFactory.create(keycloakSession, it, realm));
     }
 
     @Override
-    public PageRepresentation<PositionModel> getPositions(String userId, int from, int limit) {
-        String sql = "select o from OrganizationMemberEntity o where o.organization = :organization";
-        if (userId != null) {
-            sql += " and o.userId = :userId";
+    public PageRepresentation<PositionModel> getPositions(String position, String userId, int from, int limit) {
+        long count = getPositionsCount(position, userId);
+        if (count <= 0) {
+            return new PageRepresentation<>(0, from, limit, Collections.emptyList());
         }
-        TypedQuery<OrganizationMemberEntity> query = em.createQuery(sql, OrganizationMemberEntity.class);
-        query.setParameter("organization", entity);
-        if (userId != null) {
-            query.setParameter("userId", userId);
-        }
-        query.setFirstResult(from);
-        query.setMaxResults(limit);
-        List<PositionModel> result = query.getResultStream()
-                .map(it -> adaptersFactory.create(keycloakSession, it, realm))
-                .collect(Collectors.toList());
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<OrganizationMemberEntity> query = cb.createQuery(OrganizationMemberEntity.class);
+        Root<OrganizationMemberEntity> root = query.from(OrganizationMemberEntity.class);
+
+        Predicate predicate = createPositionsPredicate(position, userId, root, cb);
+
+        List<PositionModel> result = em.createQuery(
+                query.select(root).where(predicate).orderBy(cb.asc(root.get("createdAt")))
+        ).setFirstResult(from).setMaxResults(limit).getResultList().stream().map(entity ->
+                adaptersFactory.create(keycloakSession, entity, realm)
+        ).collect(Collectors.toList());
         return new PageRepresentation<>(
-                getPositionsCount(userId),
+                count,
                 from,
                 limit,
                 result
         );
     }
 
-    private long getPositionsCount(String userId) {
-        String sql = "select count(o) from OrganizationMemberEntity o where o.organization = :organization";
-        if (userId != null) {
-            sql += " and userId = :userId";
+    private long getPositionsCount(String position, String userId) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Long> query = cb.createQuery(Long.class);
+        Root<OrganizationMemberEntity> root = query.from(OrganizationMemberEntity.class);
+
+        Predicate condition = createPositionsPredicate(position, userId, root, cb);
+        if (condition == null) {
+            return -1;
         }
-        Query query = em.createQuery(sql);
-        query.setParameter("organization", entity);
-        if (userId != null) {
-            query.setParameter("userId", userId);
+
+        return em.createQuery(query.select(cb.count(root)).where(condition)).getSingleResult();
+    }
+
+    private Predicate createPositionsPredicate(
+            String position,
+            String userId,
+            Root<OrganizationMemberEntity> root,
+            CriteriaBuilder cb
+    ) {
+        Predicate predicate = cb.equal(root.get("organization"), entity);
+        if (position != null) {
+            PositionEntity entity = findPosition(position);
+            if (entity == null) {
+                log.warn("Wrong position name " + position);
+                return null;
+            }
+            predicate = cb.and(predicate, cb.equal(root.get("position"), entity));
         }
-        return (Long) query.getSingleResult();
+
+        if (userId != null) {
+            predicate = cb.and(predicate, cb.equal(root.get("userId"), userId));
+        }
+        return predicate;
     }
 
     @Override

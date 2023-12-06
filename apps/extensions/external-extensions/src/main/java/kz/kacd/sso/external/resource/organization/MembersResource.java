@@ -32,7 +32,8 @@ public class MembersResource extends BaseAdminResource {
     public PageRepresentation<PositionRepresentation> findAll(
             @QueryParam("from") Integer fromArg,
             @QueryParam("limit") Integer limitArg,
-            @QueryParam("userId") String userId
+            @QueryParam("userId") String userId,
+            @QueryParam("position") String position
     ) {
         checkViewPermissions();
 
@@ -46,7 +47,7 @@ public class MembersResource extends BaseAdminResource {
         }
 
         log.debugf("Finding members for organization %s ...", model.getId());
-        return model.getPositions(userId, from, limit).map(it -> PositionRepresentation.from(session, realm, it));
+        return model.getPositions(position, userId, from, limit).map(it -> PositionRepresentation.from(session, realm, it));
     }
 
     @Path("{id}")
