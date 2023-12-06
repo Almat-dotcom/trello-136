@@ -61,7 +61,7 @@ public class ProfileUpdateManager {
 
         if (
                 ExternalRegistrationPage.CLIENT_LEGAL.equals(attributes.clientType())
-                        || ExternalRegistrationPage.CLIENT_LEGAL.equals(user.getFirstAttribute(ExternalRegistrationPage.FIELD_CLIENT_TYPE))
+                || ExternalRegistrationPage.CLIENT_LEGAL.equals(user.getFirstAttribute(ExternalRegistrationPage.FIELD_CLIENT_TYPE))
         ) {
             processLegalClient();
         }
@@ -70,6 +70,13 @@ public class ProfileUpdateManager {
     private void processLegalClient() {
         log.debugf("Processing legal client profile ...");
         OrganizationModel org = findOrCreateOrg();
+        PositionModel head = org.getHead();
+        if (head != null && head.getUser().getFirstAttribute(ExternalRegistrationPage.FIELD_HAS_EBR) != null) {
+            user.setSingleAttribute(
+                    ExternalRegistrationPage.FIELD_HAS_EBR,
+                    head.getUser().getFirstAttribute(ExternalRegistrationPage.FIELD_HAS_EBR)
+            );
+        }
         applyOrgAttributes(org);
         updatePositions(org);
     }
@@ -95,8 +102,8 @@ public class ProfileUpdateManager {
         }
         if (
                 org == null
-                        && !ExternalRegistrationPage.RESIDENT.equals(attributes.residency())
-                        && !ExternalRegistrationPage.ROLE_HEAD.equals(attributes.legalRole())
+                && !ExternalRegistrationPage.RESIDENT.equals(attributes.residency())
+                && !ExternalRegistrationPage.ROLE_HEAD.equals(attributes.legalRole())
         ) {
             throw new IllegalStateException(
                     "Illegal organization creation request! Only head of company can register new legal!"
@@ -191,9 +198,9 @@ public class ProfileUpdateManager {
 
     private boolean nonResidentEmployee() {
         return attributes.residency() != null
-                && attributes.residency().equals(ExternalRegistrationPage.NON_RESIDENT)
-                && attributes.clientType().equals(ExternalRegistrationPage.CLIENT_LEGAL)
-                && attributes.legalRole() != null
-                && attributes.legalRole().equals(ExternalRegistrationPage.ROLE_EMPLOYEE);
+               && attributes.residency().equals(ExternalRegistrationPage.NON_RESIDENT)
+               && attributes.clientType().equals(ExternalRegistrationPage.CLIENT_LEGAL)
+               && attributes.legalRole() != null
+               && attributes.legalRole().equals(ExternalRegistrationPage.ROLE_EMPLOYEE);
     }
 }

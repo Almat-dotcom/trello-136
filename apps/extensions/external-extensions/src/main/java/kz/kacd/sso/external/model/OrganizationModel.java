@@ -7,7 +7,6 @@ import org.keycloak.models.UserModel;
 import org.keycloak.provider.ProviderEvent;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.stream.Stream;
 
 public interface OrganizationModel {
@@ -40,9 +39,11 @@ public interface OrganizationModel {
 
     LocalDateTime getUpdatedAt();
 
+    PositionModel getHead();
+
     Stream<PositionModel> getPositions();
 
-    PageRepresentation<PositionModel> getPositions(String userId, int from, int limit);
+    PageRepresentation<PositionModel> getPositions(String position, String userId, int from, int limit);
 
     PositionModel getPosition(UserModel user);
 
