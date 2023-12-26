@@ -22,11 +22,15 @@ clients:
     redirectUris:
     - https://kacd-lk-shell.k8s-dev.kacd.kz/*
     - http://localhost:4200/*
+    - http://localhost:8080/*
+    - https://cabinet-test-features.k8s-dev.kacd.kz/*
     - http://kacd-lk-shell.k8s-dev.kacd.kz/*
     - https://cabinet.k8s-preprod.kacd.kz/*
     webOrigins:
     - https://kacd-lk-shell.k8s-dev.kacd.kz
     - http://localhost:4200
+    - http://localhost:8080
+    - https://cabinet-test-features.k8s-dev.kacd.kz
     - http://kacd-lk-shell.k8s-dev.kacd.kz
     - https://cabinet.k8s-preprod.kacd.kz
   lkShellFrontInternal:

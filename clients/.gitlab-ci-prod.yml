@@ -1,7 +1,7 @@
 stages:
 - prod-deploy
 
-prod-deploy-realms:
+prod-deploy-clients:
   stage: prod-deploy
   image: 'nexus.kacd.kz:5000/devops-utils/alpine-helm-docker:3.15al-3.11he-20.10d'
   # only:
