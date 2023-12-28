@@ -3,7 +3,7 @@
 #
 internal:
   # Доменое имя внутреннего реалма
-  hostname: internal-preprod.k8s-preprod.kacd.kz
+  hostname: internal-preprod.preprod.kacd.kz
   # Настройки взаимодействия с Active Directory
   ldap:
     url: ldap://csdepo.net:389
@@ -24,7 +24,7 @@ internal:
 #
 external:
   # Доменое имя внешнего реалма
-  hostname: external-preprod.k8s-preprod.kacd.kz
+  hostname: external-preprod.preprod.kacd.kz
   # Настройки взаимодействия с Active Directory
   ldap:
     url: ldap://csdepo.net:389
@@ -43,7 +43,7 @@ external:
 # Конфигурация реалма АРРФР
 afr:
   enabled: true
-  hostname: ardfm-sso.k8s-preprod.kacd.kz
+  hostname: ardfm-sso.preprod.kacd.kz
   # Настройки службы ingress
   ingress:
     serviceName: sso-keycloak
