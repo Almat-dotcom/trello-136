@@ -1,0 +1,27 @@
+apiVersion: sso.kacd.kz/v1
+kind: Client
+metadata:
+  name: otc
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: internal-realm
+    kz-kacd-realm-name: internal
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  displayedName: otc service
+  displayedDescription: Back-end сервис для организации торгов на внебиржевом рынке
+  access:
+    validRedirectUris:
+    - http://localhost
+    webOrigins:
+    - http://localhost
+  capability:
+    type: CONFIDENTIAL
+    clientExistingSecret: otc-secret
+    clientSecretKey: client_secret
+  roles: []
