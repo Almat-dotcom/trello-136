@@ -2,10 +2,10 @@ clients:
   afrAuthorityServicesFront:
     redirectUris:
     - http://localhost:4200/*
-    - https://ardfm.k8s-dev.kacd.kz/*
+    - https://ardfm.dev.kacd.kz/*
     webOrigins:
     - http://localhost:4200
-    - https://ardfm.k8s-dev.kacd.kz
+    - https://ardfm.dev.kacd.kz
   deponentReport:
     redirectUris:
     - http://localhost:8080/*
@@ -18,22 +18,22 @@ clients:
     - "+"
   lkShellFront:
     redirectUris:
-    - https://kacd-lk-shell.k8s-dev.kacd.kz/*
+    - https://kacd-lk-shell.dev.kacd.kz/*
     - http://localhost:4200/*
-    - http://kacd-lk-shell.k8s-dev.kacd.kz/*
+    - http://kacd-lk-shell.dev.kacd.kz/*
     webOrigins:
-    - https://kacd-lk-shell.k8s-dev.kacd.kz
+    - https://kacd-lk-shell.dev.kacd.kz
     - http://localhost:4200
-    - http://kacd-lk-shell.k8s-dev.kacd.kz
+    - http://kacd-lk-shell.dev.kacd.kz
   lkShellFrontInternal:
     redirectUris:
-    - https://kacd-lk-shell.k8s-dev.kacd.kz/admin/*
+    - https://kacd-lk-shell.dev.kacd.kz/admin/*
     - http://localhost:4200/admin/*
-    - http://kacd-lk-shell.k8s-dev.kacd.kz/admin/*
+    - http://kacd-lk-shell.dev.kacd.kz/admin/*
     webOrigins:
-    - https://kacd-lk-shell.k8s-dev.kacd.kz
+    - https://kacd-lk-shell.dev.kacd.kz
     - http://localhost:4200
-    - http://kacd-lk-shell.k8s-dev.kacd.kz
+    - http://kacd-lk-shell.dev.kacd.kz
   mt535:
     redirectUris:
     - http://localhost:8184/*
@@ -43,19 +43,19 @@ clients:
   armFrontOffice:
     redirectUris:
     - http://localhost:8080/*
-    - https://arm-front.k8s-dev.kacd.kz/*
+    - https://arm-front.dev.kacd.kz/*
     webOrigins:
     - http://localhost:8080
-    - https://arm-front.k8s-dev.kacd.kz
+    - https://arm-front.dev.kacd.kz
   billing:
     redirectUris:
     - http://localhost:4200/*
-    - https://billing-dev.k8s-dev.kacd.kz/*
-    - https://billing-preprod.k8s-preprod.kacd.kz/*
+    - https://billing-dev.dev.kacd.kz/*
+    - https://billing-preprod.preprod.kacd.kz/*
     webOrigins:
     - http://localhost:4200
-    - https://billing-dev.k8s-dev.kacd.kz
-    - https://billing-preprod.k8s-preprod.kacd.kz
+    - https://billing-dev.dev.kacd.kz
+    - https://billing-preprod.preprod.kacd.kz
   tophrInternal:
     redirectUris:
     - https://tophr-preprod.kcsd.kz/*

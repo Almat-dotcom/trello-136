@@ -32,7 +32,7 @@ class KeycloakSelfClientTest {
 
     @Test
     void should_call_well_known_configuration() throws Exception {
-        String issuer = "https://internal-dev.k8s-dev.kacd.kz/realms/internal";
+        String issuer = "https://internal-dev.dev.kacd.kz/realms/internal";
         String expected = issuer + "/protocol/openid-connect/token";
         ArgumentCaptor<Request> captor = ArgumentCaptor.forClass(Request.class);
         given(client.newCall(captor.capture())).willReturn(call);
@@ -71,7 +71,7 @@ class KeycloakSelfClientTest {
 
     @Test
     void should_throw_retrieve_token_failure() throws Exception {
-        String issuer = "https://internal-dev.k8s-dev.kacd.kz/realms/internal";
+        String issuer = "https://internal-dev.dev.kacd.kz/realms/internal";
         given(client.newCall(any())).willReturn(call);
         given(call.execute()).willReturn(response);
         given(response.isSuccessful()).willReturn(false);
@@ -86,7 +86,7 @@ class KeycloakSelfClientTest {
 
     @Test
     void should_throw_io_failed() throws Exception {
-        String issuer = "https://internal-dev.k8s-dev.kacd.kz/realms/internal";
+        String issuer = "https://internal-dev.dev.kacd.kz/realms/internal";
         given(client.newCall(any())).willReturn(call);
         given(call.execute()).willThrow(new IOException());
 

@@ -3,7 +3,7 @@
 #
 internal:
   # Доменое имя внутреннего реалма
-  hostname: internal-dev.k8s-dev.kacd.kz
+  hostname: internal-dev.dev.kacd.kz
   # Настройки взаимодействия с Active Directory
   ldap:
     url: ldap://10.10.128.3:389
@@ -24,7 +24,7 @@ internal:
 #
 external:
   # Доменое имя внешнего реалма
-  hostname: external-dev.k8s-dev.kacd.kz
+  hostname: external-dev.dev.kacd.kz
   # Настройки взаимодействия с Active Directory
   ldap:
     url: ldap://10.10.128.3:389
@@ -43,7 +43,7 @@ external:
 # Конфигурация реалма АРРФР
 afr:
   enabled: true
-  hostname: afr-dev.k8s-dev.kacd.kz
+  hostname: afr-dev.dev.kacd.kz
   # Настройки службы ingress
   ingress:
     serviceName: sso-keycloak
