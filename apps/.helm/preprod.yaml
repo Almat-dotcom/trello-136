@@ -9,7 +9,7 @@ replicaCount: 3
 
 clusterDomain: k8s-cluster-preprod.local
 
-hostname: sso-preprod.k8s-preprod.kacd.kz
+hostname: sso-preprod.preprod.kacd.kz
 
 enabledMasterRealm: "true"
 
@@ -23,9 +23,9 @@ resources:
     memory: "512Mi"
     cpu: "400m"
 
-ncaUrl: https://kcsd-secure-nca.k8s-preprod.kacd.kz/platform/services/secure/nca/auth/v1/authenticate
+ncaUrl: https://kcsd-secure-nca.preprod.kacd.kz/platform/services/secure/nca/auth/v1/authenticate
 
-mkbUrl: https://mkb-preprod.k8s-preprod.kacd.kz
+mkbUrl: https://mkb-preprod.preprod.kacd.kz
 
 tls:
   enabled: true
@@ -60,7 +60,7 @@ service:
 
 ingress:
   enabled: true
-  hostname: sso-preprod.k8s-preprod.kacd.kz
+  hostname: sso-preprod.preprod.kacd.kz
   tls: true
   secretName: kacd-tls
 

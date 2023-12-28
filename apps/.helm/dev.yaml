@@ -11,7 +11,7 @@ replicaCount: 1
 
 clusterDomain: k8s-cluster-prod.local
 
-hostname: sso-dev.k8s-dev.kacd.kz
+hostname: sso-dev.dev.kacd.kz
 
 enabledMasterRealm: "true"
 
@@ -23,9 +23,9 @@ resources:
     memory: "512Mi"
     cpu: "400m"
 
-ncaUrl: https://kcsd-secure-nca.k8s-dev.kacd.kz/platform/services/secure/nca/auth/v1/authenticate
+ncaUrl: https://kcsd-secure-nca.dev.kacd.kz/platform/services/secure/nca/auth/v1/authenticate
 
-mkbUrl: https://mkb-dev.k8s-dev.kacd.kz
+mkbUrl: https://mkb-dev.dev.kacd.kz
 
 tls:
   enabled: true
@@ -60,7 +60,7 @@ service:
 
 ingress:
   enabled: true
-  hostname: sso-dev.k8s-dev.kacd.kz
+  hostname: sso-dev.dev.kacd.kz
   tls: true
   secretName: kacd-tls
 
