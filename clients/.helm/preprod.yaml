@@ -60,12 +60,16 @@ clients:
   armFrontOffice:
     redirectUris:
     - https://arm-front.preprod.kacd.kz/*
+    - http://arm-front.preprod.kacd.kz/*
     - http://localhost:8080/*
     - https://arm-front.k-dev.kacd.kz/*
+    - http://arm-front.k-dev.kacd.kz/*
     webOrigins:
     - https://arm-front.preprod.kacd.kz
+    - http://arm-front.preprod.kacd.kz
     - http://localhost:8080
     - https://arm-front.dev.kacd.kz
+    - http://arm-front.dev.kacd.kz
   billing:
     redirectUris:
     - http://localhost:4200/*
