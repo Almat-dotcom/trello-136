@@ -108,7 +108,10 @@
 ```json
 {
     "newEmail": "test@example.com",
-    "newPhoneNumber": "+77777777777"
+    "newPhoneNumber": "+77777777777",
+    "firstName": "Иван",
+    "lastName": "Иванов",
+    "middleName": "Иванович"
 }
 ```
 

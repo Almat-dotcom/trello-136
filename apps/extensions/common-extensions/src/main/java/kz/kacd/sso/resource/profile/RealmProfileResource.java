@@ -91,7 +91,7 @@ public class RealmProfileResource extends BaseProfileRealmResource {
         }
 
         if (request.getNewEmail() != null) {
-            log.infof("Updating email for user {} ...", user.getUsername());
+            log.infof("Updating email for user %s ...", user.getUsername());
             user.setEmail(request.getNewEmail());
             user.setEmailVerified(false);
             user.addRequiredAction(UserModel.RequiredAction.VERIFY_EMAIL);
@@ -100,9 +100,27 @@ public class RealmProfileResource extends BaseProfileRealmResource {
         }
 
         if (request.getNewPhoneNumber() != null) {
-            log.infof("Updating phone number for user {} ...", user.getUsername());
+            log.infof("Updating phone number for user %s ...", user.getUsername());
             user.setSingleAttribute("phoneNumber", request.getNewPhoneNumber());
 
+            adminEvent(user);
+        }
+
+        if (request.getFirstName() != null) {
+            user.setFirstName(request.getFirstName());
+        }
+        if (request.getLastName() != null) {
+            user.setLastName(request.getLastName());
+        }
+        if (request.getMiddleName() != null) {
+            user.setSingleAttribute("middleName", request.getMiddleName());
+        }
+        if (
+                request.getFirstName() != null
+                || request.getLastName() != null
+                || request.getMiddleName() != null
+        ) {
+            log.infof("Updated full name of user %s ...", user.getUsername());
             adminEvent(user);
         }
 
