@@ -23,14 +23,16 @@ clients:
     - https://kacd-lk-shell.dev.kacd.kz/*
     - http://localhost:4200/*
     - http://localhost:8080/*
-    - https://cabinet-test-features.dev.kacd.kz/*
+    - https://cabinet.dev.kacd.kz/*
+    - https://cabinet-test.dev.kacd.kz/*
     - http://kacd-lk-shell.dev.kacd.kz/*
     - https://cabinet.preprod.kacd.kz/*
     webOrigins:
     - https://kacd-lk-shell.dev.kacd.kz
     - http://localhost:4200
     - http://localhost:8080
-    - https://cabinet-test-features.dev.kacd.kz
+    - https://cabinet.dev.kacd.kz
+    - https://cabinet-test.dev.kacd.kz
     - http://kacd-lk-shell.dev.kacd.kz
     - https://cabinet.preprod.kacd.kz
   lkShellFrontInternal:
