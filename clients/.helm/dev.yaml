@@ -19,10 +19,14 @@ clients:
   lkShellFront:
     redirectUris:
     - https://kacd-lk-shell.dev.kacd.kz/*
+    - https://cabinet.dev.kacd.kz/*
+    - https://cabinet-test.dev.kacd.kz/*
     - http://localhost:4200/*
     - http://kacd-lk-shell.dev.kacd.kz/*
     webOrigins:
     - https://kacd-lk-shell.dev.kacd.kz
+    - https://cabinet.dev.kacd.kz
+    - https://cabinet-test.dev.kacd.kz
     - http://localhost:4200
     - http://kacd-lk-shell.dev.kacd.kz
   lkShellFrontInternal:
