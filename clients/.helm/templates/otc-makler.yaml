@@ -28,3 +28,8 @@ spec:
   - MIDDLE_NAME
   - GROUPS
   - LOCALE
+  roles:
+  - name: reporter
+    roleDescription: Доступ на просмотр в модуль Маклера
+  - name: makler
+    roleDescription: Доступ на чтение и редактирования в модуль Маклера
