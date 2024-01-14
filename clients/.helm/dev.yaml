@@ -62,9 +62,9 @@ clients:
     - https://billing-preprod.preprod.kacd.kz
   tophrInternal:
     redirectUris:
-    - https://tophr-preprod.kasd.kz/*
+    - https://tophr-preprod.kacd.kz/*
     webOrigins:
-    - https://tophr-preprod.kasd.kz
+    - https://tophr-preprod.kacd.kz
   helpdeskFreescoutInternal:
     redirectUris:
     - https://helpdesk.dev.kacd.kz/*
