@@ -14,14 +14,17 @@ metadata:
   {{- end }}
 spec:
   displayedName: Helpdesk Freescout internal
-  displayedDescription: Web системы Helpdesk от Freescout
+  displayedDescription: Web система Helpdesk от Freescout
   access:
     validRedirectUris:
     {{- include "common.tplvalues.render" ( dict "value" .Values.clients.helpdeskFreescoutInternal.redirectUris "context" $ ) | nindent 4 }}
     webOrigins:
     {{- include "common.tplvalues.render" ( dict "value" .Values.clients.helpdeskFreescoutInternal.webOrigins "context" $ ) | nindent 4 }}
   capability:
-    type: PUBLIC
+    # type: PUBLIC
+    type: CONFIDENTIAL
+    clientExistingSecret: helpdesk-freescout-secret
+    clientSecretKey: client_secret
   attributes:
   - FIRST_NAME
   - LAST_NAME
