@@ -65,3 +65,10 @@ clients:
     - https://tophr-preprod.kcsd.kz/*
     webOrigins:
     - https://tophr-preprod.kcsd.kz
+  helpdeskFreescoutInternal:
+    redirectUris:
+    - https://helpdesk.dev.kacd.kz/*
+    - https://helpdesk.preprod.kacd.kz/*
+    webOrigins:
+    - https://helpdesk.dev.kacd.kz
+    - https://helpdesk.preprod.kacd.kz

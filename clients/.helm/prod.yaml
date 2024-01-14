@@ -47,3 +47,8 @@ clients:
     - https://tophr.kacd.kz/*
     webOrigins:
     - https://tophr.kacd.kz
+  helpdeskFreescoutInternal:
+    redirectUris:
+    - https://helpdesk.kacd.kz/*
+    webOrigins:
+    - https://helpdesk.kacd.kz

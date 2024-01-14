@@ -47,3 +47,6 @@ clients:
   armFrontOffice:
     redirectUris: []
     webOrigins: []
+  helpdeskFreescoutInternal:
+    redirectUris: []
+    webOrigins: []
