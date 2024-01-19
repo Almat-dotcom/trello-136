@@ -32,7 +32,7 @@ spec:
   - IIN
   - PHONE_NUMBER
   roles: 
-  - name: editor,
+  - name: editor
     roleDescription: Доступ на чтение и редактирование
   - name: reader
     roleDescription: Доступ только на чтение
