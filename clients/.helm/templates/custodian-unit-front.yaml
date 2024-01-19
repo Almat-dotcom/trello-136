@@ -34,5 +34,5 @@ spec:
   roles: 
   - name: editor
     roleDescription: Доступ на чтение и редактирование
-  - name: reader
-    roleDescription: Доступ только на чтение
+  - name: signer
+    roleDescription: Доступ только на подписание
