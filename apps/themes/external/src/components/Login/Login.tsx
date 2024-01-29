@@ -35,7 +35,7 @@ const Login = memo(({ kcContext, i18n, ...props }: { kcContext: KcContextLogin; 
                 { id: "email", label: msgStr("email"), icon: Email }
             ],
             legal: [
-                { id: "email", label: msgStr("email"), icon: Email }
+                { id: "eds", label: msgStr("eds"), icon: Key }
             ]
         }
     }
