@@ -44,7 +44,6 @@ type RegisterForm = {
     fields: RegisterFields,
     legal: boolean,
     resident: boolean,
-    head: boolean,
     buttonDisabled: boolean,
     concents: Concents,
     onSubmit: () => Promise<void>
@@ -59,18 +58,16 @@ export const useRegisterPage = (
     const [message, setMessage] = useState(kcContext.message);
     const [legal, setLegal] = useState(kcContext.register.formData.clientType === 'legal');
     const [resident, setResident] = useState(kcContext.register.formData.residency === 'resident');
-    const [head, setHead] = useState(kcContext.register.formData.legalRole === "head");
     const [concent1, setConcent1] = useState(false);
     const [concent1Shown, setConcent1Shown] = useState(false);
     const [concent2, setConcent2] = useState(false);
     const [concent2Shown, setConcent2Shown] = useState(false);
-    const fields = useRegisterFields(kcContext, legal, (value) => setLegal(value), resident, (value) => setResident(value), head, (value) => setHead(value));
+    const fields = useRegisterFields(kcContext, legal, (value) => setLegal(value), resident, (value) => setResident(value));
     return {
         message: message,
         fields: fields,
         legal: legal,
         resident: resident,
-        head: head,
         buttonDisabled: signing || !concent1 || !concent2,
         concents: {
             concent1: concent1,
@@ -129,13 +126,11 @@ const useRegisterFields = (
     legal: boolean,
     onLegalChanged: (legal: boolean) => void,
     resident: boolean,
-    onResidentChanged: (resident: boolean) => void,
-    head: boolean,
-    onRoleChanged: (head: boolean) => void
+    onResidentChanged: (resident: boolean) => void
 ): RegisterFields => {
     const { register } = kcContext;
     const { formData } = register;
-    const { residency, clientType, legalRole, lastName, firstName, middleName, email, phoneNumber, bin, iin } = formData;
+    const { residency, clientType, lastName, firstName, middleName, email, phoneNumber, iin } = formData;
     return {
         residency: useField(isNotEmpty, (value) => { onResidentChanged(value === 'resident') }, residency, extractError(kcContext, "residency")),
         clientType: useField(isNotEmpty, (value) => { onLegalChanged(value === 'legal') }, clientType, extractError(kcContext, "clientType")),

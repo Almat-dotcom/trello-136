@@ -22,7 +22,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
     const formRef = useRef<HTMLFormElement>(null);
     const edsRef = useRef<HTMLInputElement>(null);
 
-    const { message, fields, legal, resident, head, buttonDisabled, concents, onSubmit } = useRegisterPage(kcContext, edsRef, () => formRef.current?.submit())
+    const { message, fields, legal, resident, buttonDisabled, concents, onSubmit } = useRegisterPage(kcContext, edsRef, () => formRef.current?.submit())
     const setResident = () => {
         fields.residency.onChange("resident");
     }
