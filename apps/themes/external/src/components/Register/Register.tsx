@@ -106,7 +106,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                             error={error(fields.clientType.error)}
                             onValueChange={(option) => { fields.clientType.onChange(option.value) }}
                         />
-                        {legal && !resident ? (
+                        {/* {legal && !resident ? (
                             <InputSelect
                                 fieldName="legalRole"
                                 label={msgStr("legalRole")}
@@ -122,8 +122,9 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                                 error={error(fields.legalRole.error)}
                                 onValueChange={(option) => fields.legalRole.onChange(option.value)}
                             />
-                        ) : null}
-                        {!legal || !resident ? (
+                        ) : null} */}
+                        {/* {!legal || !resident ? ( */}
+                        {!legal ? (
                             <>
                                 <InputField
                                     fieldName="lastName"
@@ -172,7 +173,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                             error={error(fields.email.error)}
                             onChange={(event) => { fields.email.onChange(event.target.value) }}
                         />
-                        {legal && !resident && !head ? (
+                        {/* {legal && !resident && !head ? (
                             <InputField
                                 fieldName="bin"
                                 label={resident ? msgStr("bin") : msgStr("orgCode")}
@@ -183,7 +184,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                                 maxLength={12}
                                 onChange={(event) => fields.bin.onChange(event.target.value)}
                             />
-                        ) : null}
+                        ) : null} */}
                         {resident && !legal ? (
                             <InputField
                                 fieldName="iin"
