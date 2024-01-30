@@ -30,18 +30,14 @@ public class LegalClientValidator {
         RealmModel realm = session.getContext().getRealm();
         OrganizationProvider orgs = session.getProvider(OrganizationProvider.class);
 
-        if (attributes.legalRole().equals(ExternalRegistrationPage.ROLE_HEAD)) {
-            OrganizationModel found = orgs.getOrganizationByBin(realm, attributes.bin());
-            if (found != null && ExternalRegistrationPage.NON_RESIDENT.equals(attributes.residency())) {
-                listener.accept(error(ExternalRegistrationPage.FIELD_BIN, ExternalMessages.DUPLICATE_BIN));
+        OrganizationModel found = orgs.getOrganizationByBin(realm, attributes.bin());
+
+        if (!attributes.legalRole().equals(ExternalRegistrationPage.ROLE_HEAD)) {
+            if (found == null) {
+                listener.accept(error(ExternalRegistrationPage.FIELD_BIN, ExternalMessages.ATTEMPT_TO_REGISTER_LEGAL_BY_EMPLOYEE));
             }
-            return;
         }
 
-        OrganizationModel found = orgs.getOrganizationByBin(realm, attributes.bin());
-        if (found == null) {
-            listener.accept(error(ExternalRegistrationPage.FIELD_BIN, ExternalMessages.ATTEMPT_TO_REGISTER_LEGAL_BY_EMPLOYEE));
-        }
     }
 
     private ValidationError error(String field, String message, Object... args) {

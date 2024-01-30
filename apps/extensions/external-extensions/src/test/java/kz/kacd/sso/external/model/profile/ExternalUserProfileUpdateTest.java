@@ -138,13 +138,13 @@ class ExternalUserProfileUpdateTest {
         given(keycloakSession.getContext()).willReturn(context);
         given(context.getRealm()).willReturn(realm);
         given(keycloakSession.getProvider(OrganizationProvider.class)).willReturn(organizationProvider);
-        given(organizationProvider.getUserOrganizations(realm, user)).willReturn(Stream.of(org));
         given(org.getPosition(user)).willReturn(position);
+        given(organizationProvider.createOrganization(realm, user)).willReturn(org);
         ExternalUserProfile profile = profileProvider.create(formData, user);
 
         profile.update();
 
-        then(organizationProvider).should().getUserOrganizations(realm, user);
+        then(organizationProvider).should().getOrganizationByBin(realm, expected.bin());
     }
 
     @Test
