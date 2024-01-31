@@ -95,14 +95,10 @@ public class ProfileUpdateManager {
         RealmModel realm = session.getContext().getRealm();
         OrganizationProvider provider = session.getProvider(OrganizationProvider.class);
         OrganizationModel org;
-        if (resident() || nonResidentEmployee()) {
-            org = provider.getOrganizationByBin(realm, attributes.bin());
-        } else {
-            org = provider.getUserOrganizations(realm, user).findAny().orElse(null);
-        }
+        org = provider.getOrganizationByBin(realm, attributes.bin());
+
         if (
                 org == null
-                && !ExternalRegistrationPage.RESIDENT.equals(attributes.residency())
                 && !ExternalRegistrationPage.ROLE_HEAD.equals(attributes.legalRole())
         ) {
             throw new IllegalStateException(
@@ -113,13 +109,9 @@ public class ProfileUpdateManager {
     }
 
     private void applyOrgAttributes(OrganizationModel org) {
-        if (ExternalRegistrationPage.RESIDENT.equals(attributes.residency())) {
-            org.setBin(attributes.bin());
-            org.setName(attributes.orgName());
-            org.setDisplayName(attributes.orgName());
-        } else if (org.getBin() == null) {
-            org.setBin(session.getProvider(OrganizationProvider.class).generateNonResidentOrganizationBin());
-        }
+        org.setBin(attributes.bin());
+        org.setName(attributes.orgName());
+        org.setDisplayName(attributes.orgName());
     }
 
     private void updatePositions(OrganizationModel org) {
@@ -132,27 +124,20 @@ public class ProfileUpdateManager {
     }
 
     private void createNewPosition(OrganizationModel org) {
-        if (!resident() && ExternalRegistrationPage.ROLE_HEAD.equals(attributes.legalRole())) {
-            throw new IllegalStateException(
-                    "Cannot create new HEAD position for org " + org.getBin() + " because it is not resident!"
-            );
-        }
-
         log.debugf("Creating new position for user %s in org %s ...", user.getId(), org.getBin());
         if (ExternalRegistrationPage.ROLE_HEAD.equals(attributes.legalRole())) {
             log.infof("Changing HEAD position in org %s to user %s ...", org.getBin(), user.getId());
             removeExistingHead(org);
             PositionModel newHead = org.requestPosition(PositionModel.HEAD, user);
             org.confirmPosition(newHead);
-            return;
+        } else {
+            log.infof("Requesting new EMPLOYEE position for user %s in org %s ...", user.getId(), org.getBin());
+            org.requestPosition(PositionModel.EMPLOYEE, user);
         }
-
-        log.infof("Requesting new EMPLOYEE position for user %s in org %s ...", user.getId(), org.getBin());
-        org.requestPosition(PositionModel.EMPLOYEE, user);
     }
 
     private void updatePosition(OrganizationModel org, PositionModel position) {
-        if (!resident() || attributes.legalRole().equalsIgnoreCase(position.getName())) {
+        if (attributes.legalRole().equalsIgnoreCase(position.getName())) {
             return;
         }
 

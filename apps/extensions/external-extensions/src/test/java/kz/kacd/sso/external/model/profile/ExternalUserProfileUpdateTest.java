@@ -138,13 +138,13 @@ class ExternalUserProfileUpdateTest {
         given(keycloakSession.getContext()).willReturn(context);
         given(context.getRealm()).willReturn(realm);
         given(keycloakSession.getProvider(OrganizationProvider.class)).willReturn(organizationProvider);
-        given(organizationProvider.getUserOrganizations(realm, user)).willReturn(Stream.of(org));
         given(org.getPosition(user)).willReturn(position);
+        given(organizationProvider.createOrganization(realm, user)).willReturn(org);
         ExternalUserProfile profile = profileProvider.create(formData, user);
 
         profile.update();
 
-        then(organizationProvider).should().getUserOrganizations(realm, user);
+        then(organizationProvider).should().getOrganizationByBin(realm, expected.bin());
     }
 
     @Test
@@ -307,6 +307,119 @@ class ExternalUserProfileUpdateTest {
         then(org).should().removePosition(oldHead);
         then(org).should().removePosition(oldEmployee);
         then(org).should().requestPosition(PositionModel.EMPLOYEE, oldHeadUser);
+        then(org).should().confirmPosition(position);
+    }
+
+    @Test
+    void should_swap_head_in_non_resident_legal() {
+        ExternalAttributes expected = validLegalNonResidentHead();
+        MultivaluedMap<String, String> formData = originalForm(expected);
+        UserModel oldHeadUser = mock(UserModel.class);
+        given(oldHeadUser.getId()).willReturn(UUID.randomUUID().toString());
+        PositionModel oldHead = mock(PositionModel.class);
+        given(oldHead.getUser()).willReturn(oldHeadUser);
+        given(oldHead.getName()).willReturn(PositionModel.HEAD);
+        PositionModel oldEmployee = mock(PositionModel.class);
+        given(oldEmployee.getName()).willReturn(PositionModel.EMPLOYEE);
+        given(keycloakSession.getContext()).willReturn(context);
+        given(context.getRealm()).willReturn(realm);
+        given(keycloakSession.getProvider(OrganizationProvider.class)).willReturn(organizationProvider);
+        given(organizationProvider.getOrganizationByBin(realm, expected.bin())).willReturn(org);
+        given(org.getPositions()).willReturn(Stream.of(oldHead, oldEmployee));
+        given(org.getPosition(user)).willReturn(oldEmployee);
+        given(org.requestPosition(expected.legalRole().toUpperCase(), user)).willReturn(position);
+        given(org.requestPosition(PositionModel.EMPLOYEE, oldHeadUser)).willReturn(null);
+        ExternalUserProfile profile = profileProvider.create(formData, user);
+
+        profile.update();
+
+        then(org).should().removePosition(oldHead);
+        then(org).should().removePosition(oldEmployee);
+        then(org).should().requestPosition(PositionModel.EMPLOYEE, oldHeadUser);
+        then(org).should().confirmPosition(position);
+    }
+
+    @Test
+    void should_make_fake_employee_head_in_non_resident_legal() {
+        ExternalAttributes expected = validLegalNonResidentHead();
+        MultivaluedMap<String, String> formData = originalForm(expected);
+        PositionModel oldEmployee = mock(PositionModel.class);
+        given(oldEmployee.getName()).willReturn(PositionModel.EMPLOYEE);
+        given(keycloakSession.getContext()).willReturn(context);
+        given(context.getRealm()).willReturn(realm);
+        given(keycloakSession.getProvider(OrganizationProvider.class)).willReturn(organizationProvider);
+        given(organizationProvider.getOrganizationByBin(realm, expected.bin())).willReturn(org);
+        given(org.getPositions()).willReturn(Stream.empty());
+        given(org.getPosition(user)).willReturn(oldEmployee);
+        given(org.requestPosition(expected.legalRole().toUpperCase(), user)).willReturn(position);
+        ExternalUserProfile profile = profileProvider.create(formData, user);
+
+        profile.update();
+
+        then(org).should().removePosition(oldEmployee);
+        then(org).should().confirmPosition(position);
+    }
+
+    @Test
+    void should_make_fake_head_employee_in_non_resident_legal() {
+        ExternalAttributes expected = validLegalNonResidentEmployee();
+        MultivaluedMap<String, String> formData = originalForm(expected);
+        PositionModel oldHead = mock(PositionModel.class);
+        given(oldHead.getName()).willReturn(PositionModel.HEAD);
+        given(keycloakSession.getContext()).willReturn(context);
+        given(context.getRealm()).willReturn(realm);
+        given(keycloakSession.getProvider(OrganizationProvider.class)).willReturn(organizationProvider);
+        given(organizationProvider.getOrganizationByBin(realm, expected.bin())).willReturn(org);
+        given(org.getPosition(user)).willReturn(oldHead);
+        given(org.requestPosition(expected.legalRole().toUpperCase(), user)).willReturn(position);
+        ExternalUserProfile profile = profileProvider.create(formData, user);
+
+        profile.update();
+
+        then(org).should().removePosition(oldHead);
+        then(org).should().requestPosition(PositionModel.EMPLOYEE, user);
+    }
+
+    @Test
+    void should_remove_old_head_when_new_head_is_creating_in_non_resident_legal() {
+        ExternalAttributes expected = validLegalNonResidentHead();
+        MultivaluedMap<String, String> formData = originalForm(expected);
+        UserModel oldHeadUser = mock(UserModel.class);
+        given(oldHeadUser.getId()).willReturn(UUID.randomUUID().toString());
+        PositionModel oldHead = mock(PositionModel.class);
+        given(oldHead.getUser()).willReturn(oldHeadUser);
+        given(oldHead.getName()).willReturn(PositionModel.HEAD);
+        given(keycloakSession.getContext()).willReturn(context);
+        given(context.getRealm()).willReturn(realm);
+        given(keycloakSession.getProvider(OrganizationProvider.class)).willReturn(organizationProvider);
+        given(organizationProvider.getOrganizationByBin(realm, expected.bin())).willReturn(org);
+        given(org.getPositions()).willReturn(Stream.of(oldHead));
+        given(org.getPosition(user)).willReturn(null);
+        given(org.requestPosition(expected.legalRole().toUpperCase(), user)).willReturn(position);
+        given(org.requestPosition(PositionModel.EMPLOYEE, oldHeadUser)).willReturn(null);
+        ExternalUserProfile profile = profileProvider.create(formData, user);
+
+        profile.update();
+
+        then(org).should().removePosition(oldHead);
+        then(org).should().requestPosition(PositionModel.EMPLOYEE, oldHeadUser);
+    }
+
+    @Test
+    void should_create_new_head_in_existing_non_resident_legal() {
+        ExternalAttributes expected = validLegalNonResidentHead();
+        MultivaluedMap<String, String> formData = originalForm(expected);
+        given(keycloakSession.getContext()).willReturn(context);
+        given(context.getRealm()).willReturn(realm);
+        given(keycloakSession.getProvider(OrganizationProvider.class)).willReturn(organizationProvider);
+        given(organizationProvider.getOrganizationByBin(realm, expected.bin())).willReturn(org);
+        given(org.getPositions()).willReturn(Stream.empty());
+        given(org.getPosition(user)).willReturn(null);
+        given(org.requestPosition(expected.legalRole().toUpperCase(), user)).willReturn(position);
+        ExternalUserProfile profile = profileProvider.create(formData, user);
+
+        profile.update();
+
         then(org).should().confirmPosition(position);
     }
 }

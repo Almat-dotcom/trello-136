@@ -95,24 +95,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Kalkan signature libraries -->
-        <dependency>
-            <groupId>org.apache.santuario</groupId>
-            <artifactId>xmlsec</artifactId>
-            <version>1.5.8</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>kz.gov.pki.kalkan</groupId>
-            <artifactId>kalkancrypt_xmldsig</artifactId>
-            <version>0.4</version>
-        </dependency>
-        <dependency>
-            <groupId>kz.gov.pki.kalkan</groupId>
-            <artifactId>kalkancrypt</artifactId>
-            <version>0.7</version>
-        </dependency>
-
         <!-- override jackson version for version problem. -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
