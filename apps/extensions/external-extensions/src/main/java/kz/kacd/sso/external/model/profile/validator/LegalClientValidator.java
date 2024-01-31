@@ -32,10 +32,8 @@ public class LegalClientValidator {
 
         OrganizationModel found = orgs.getOrganizationByBin(realm, attributes.bin());
 
-        if (!attributes.legalRole().equals(ExternalRegistrationPage.ROLE_HEAD)) {
-            if (found == null) {
-                listener.accept(error(ExternalRegistrationPage.FIELD_BIN, ExternalMessages.ATTEMPT_TO_REGISTER_LEGAL_BY_EMPLOYEE));
-            }
+        if (found == null && attributes.legalRole().equals(ExternalRegistrationPage.ROLE_EMPLOYEE)) {
+            listener.accept(error(ExternalRegistrationPage.FIELD_BIN, ExternalMessages.ATTEMPT_TO_REGISTER_LEGAL_BY_EMPLOYEE));
         }
 
     }

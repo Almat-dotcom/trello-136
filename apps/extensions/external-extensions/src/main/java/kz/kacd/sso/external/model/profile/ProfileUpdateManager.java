@@ -130,11 +130,10 @@ public class ProfileUpdateManager {
             removeExistingHead(org);
             PositionModel newHead = org.requestPosition(PositionModel.HEAD, user);
             org.confirmPosition(newHead);
-            return;
+        } else {
+            log.infof("Requesting new EMPLOYEE position for user %s in org %s ...", user.getId(), org.getBin());
+            org.requestPosition(PositionModel.EMPLOYEE, user);
         }
-
-        log.infof("Requesting new EMPLOYEE position for user %s in org %s ...", user.getId(), org.getBin());
-        org.requestPosition(PositionModel.EMPLOYEE, user);
     }
 
     private void updatePosition(OrganizationModel org, PositionModel position) {
