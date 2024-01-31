@@ -70,8 +70,7 @@ public class ExternalRegistrationProfile implements FormAction {
 
     private boolean validateEds(ExternalUserProfile profile, ValidationContext context) {
         if (
-                ExternalRegistrationPage.RESIDENT.equals(profile.residency())
-                        && ExternalRegistrationPage.CLIENT_LEGAL.equals(profile.clientType())
+                ExternalRegistrationPage.CLIENT_LEGAL.equals(profile.clientType())
         ) {
             if (profile.eds() == null) {
                 failEds(context);

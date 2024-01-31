@@ -47,11 +47,11 @@ public class FieldConsistencyValidator {
     }
 
     private void validateLegalNonResident(ExternalAttributes attributes) {
-        if (
-                ExternalRegistrationPage.ROLE_EMPLOYEE.equals(attributes.legalRole())
-                        && (attributes.bin() == null || attributes.bin().isEmpty())
-        ) {
-            listener.accept(error(ExternalRegistrationPage.FIELD_BIN, ExternalMessages.INVALID_BIN));
+        if (attributes.bin() == null || attributes.bin().isEmpty()) {
+            listener.accept(error(ExternalRegistrationPage.FIELD_BIN, ExternalMessages.MISSING_BIN));
+        }
+        if (attributes.eds() == null || attributes.eds().isEmpty()) {
+            listener.accept(error(ExternalRegistrationPage.FIELD_EDS, ExternalMessages.MISSING_EDS));
         }
     }
 
