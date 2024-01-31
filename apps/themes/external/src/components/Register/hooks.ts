@@ -100,7 +100,7 @@ export const useRegisterPage = (
 
             if (residencyValid && typeValid && legalValid && lastValid && firstValid && middleValid && emailValid && binValid && iinValid && passwordValid && confirmValid && phoneNumberValid) {
 
-                if (resident && legal) {
+                if (legal) {
                     setSigning(true);
                     try {
                         const xml = '<registration></registration>'
