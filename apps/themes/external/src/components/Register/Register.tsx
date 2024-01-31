@@ -106,24 +106,6 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                             error={error(fields.clientType.error)}
                             onValueChange={(option) => { fields.clientType.onChange(option.value) }}
                         />
-                        {/* {legal && !resident ? (
-                            <InputSelect
-                                fieldName="legalRole"
-                                label={msgStr("legalRole")}
-                                options={[{
-                                    value: "head",
-                                    label: msgStr("head")
-                                }, {
-                                    value: "employee",
-                                    label: msgStr("employee")
-                                }]}
-                                value={fields.legalRole.value}
-                                required
-                                error={error(fields.legalRole.error)}
-                                onValueChange={(option) => fields.legalRole.onChange(option.value)}
-                            />
-                        ) : null} */}
-                        {/* {!legal || !resident ? ( */}
                         {!legal ? (
                             <>
                                 <InputField
@@ -173,18 +155,6 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                             error={error(fields.email.error)}
                             onChange={(event) => { fields.email.onChange(event.target.value) }}
                         />
-                        {/* {legal && !resident && !head ? (
-                            <InputField
-                                fieldName="bin"
-                                label={resident ? msgStr("bin") : msgStr("orgCode")}
-                                type="text"
-                                value={fields.bin.value}
-                                required
-                                error={error(fields.bin.error)}
-                                maxLength={12}
-                                onChange={(event) => fields.bin.onChange(event.target.value)}
-                            />
-                        ) : null} */}
                         {resident && !legal ? (
                             <InputField
                                 fieldName="iin"

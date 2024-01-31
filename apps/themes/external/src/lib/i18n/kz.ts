@@ -28,6 +28,7 @@ export const kz = {
     "usernameOrEmail": "Логин немесе электрондық почта",
     "firstName": "Есімі",
     "lastName": "Тегі",
+    "phoneNumber": "Ұялы телефон нөмірі",
     "email": "Электрондық почта",
     "password": "Құпиясөз",
     "passwordConfirm": "Құпиясөзді қабылдау",

@@ -28,6 +28,7 @@ export const en = {
     "usernameOrEmail": "User name or email",
     "firstName": "First name",
     "lastName": "Last name",
+    "phoneNumber": "Phone number",
     "email": "Email",
     "password": "Password",
     "passwordConfirm": "Confirm password",
