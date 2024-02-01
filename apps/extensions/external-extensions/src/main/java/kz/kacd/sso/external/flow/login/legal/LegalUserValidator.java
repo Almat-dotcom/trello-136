@@ -31,7 +31,7 @@ public class LegalUserValidator implements AuthenticatorValidator {
             return null;
         }
 
-        if (resident(user) && notEdsAuth(context)) {
+        if (notEdsAuth(context)) {
             return new Error(Errors.INVALID_USER_CREDENTIALS, null);
         }
 

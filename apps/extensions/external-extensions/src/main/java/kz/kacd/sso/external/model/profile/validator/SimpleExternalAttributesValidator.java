@@ -101,7 +101,7 @@ public class SimpleExternalAttributesValidator {
         if (value == null || value.isEmpty()) {
             return;
         }
-        if (value.length() != 12 || (!value.matches("\\d+") && !value.startsWith("NR"))) {
+        if (value.length() != 12 || !value.matches("\\d+")) {
             listener.accept(error(ExternalRegistrationPage.FIELD_BIN, ExternalMessages.INVALID_BIN));
         }
     }

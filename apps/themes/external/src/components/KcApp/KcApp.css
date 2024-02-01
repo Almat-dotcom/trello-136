@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-	font-family: "Roboto";
+	/* font-family: "Roboto" !important; */
 }
 
 .p-carousel-indicator .p-link {
@@ -21,7 +21,7 @@ body {
 }
 
 .p-inputmask {
-	font-family: "Roboto" !important;
+	/* font-family: "Roboto" !important; */
 	font-size: 0.875rem !important;
 	color: black !important;
 	padding-top: 0.5rem !important;

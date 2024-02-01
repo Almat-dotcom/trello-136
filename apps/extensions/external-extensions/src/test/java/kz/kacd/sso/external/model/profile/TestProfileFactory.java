@@ -106,6 +106,9 @@ public class TestProfileFactory {
         result.put(ExternalRegistrationPage.FIELD_EMAIL, "test@test.com");
         result.put(ExternalRegistrationPage.FIELD_PASSWORD, "testPassword");
         result.put(ExternalRegistrationPage.FIELD_PASSWORD_CONFIRM, "testPassword");
+        result.put(ExternalRegistrationPage.FIELD_BIN, "123456789012");
+        result.put(ExternalRegistrationPage.FIELD_IIN, "123456789012");
+        result.put(ExternalRegistrationPage.FIELD_EDS, "some signed XML");
         return new ExternalAttributes(result);
     }
 
@@ -121,7 +124,9 @@ public class TestProfileFactory {
         result.put(ExternalRegistrationPage.FIELD_EMAIL, "test@test.com");
         result.put(ExternalRegistrationPage.FIELD_PASSWORD, "testPassword");
         result.put(ExternalRegistrationPage.FIELD_PASSWORD_CONFIRM, "testPassword");
-        result.put(ExternalRegistrationPage.FIELD_BIN, "NR0000000123");
+        result.put(ExternalRegistrationPage.FIELD_BIN, "123456789012");
+        result.put(ExternalRegistrationPage.FIELD_IIN, "123456789012");
+        result.put(ExternalRegistrationPage.FIELD_EDS, "some signed XML");
         return new ExternalAttributes(result);
     }
 }

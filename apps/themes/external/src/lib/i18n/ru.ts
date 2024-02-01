@@ -28,6 +28,7 @@ export const ru = {
     "usernameOrEmail": "Логин или email",
     "firstName": "Имя",
     "lastName": "Фамилия",
+    "phoneNumber": "Номер телефона",
     "email": "Email",
     "password": "Пароль",
     "passwordConfirm": "Повторите пароль",
