@@ -26,13 +26,20 @@ public class ExternalAttributes {
     }
 
     public String username() {
-        if (residency() == null || residency().equals(ExternalRegistrationPage.NON_RESIDENT)) {
+        if (
+            residency() == null || isPhysicalNonResident()
+        ) {
             return email().toLowerCase();
         }
         if (ExternalRegistrationPage.CLIENT_LEGAL.equals(clientType())) {
             return iin() + "-" + bin() + "-" + clientType();
         }
         return iin() + "-" + clientType();
+    }
+
+    private boolean isPhysicalNonResident() {
+        return residency().equals(ExternalRegistrationPage.NON_RESIDENT) &&
+               ExternalRegistrationPage.CLIENT_PHYSICAL.equals(clientType());
     }
 
     public String iin() {
