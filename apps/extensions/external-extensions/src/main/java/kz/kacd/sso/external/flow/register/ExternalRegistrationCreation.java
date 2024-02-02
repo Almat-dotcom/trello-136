@@ -58,8 +58,7 @@ public class ExternalRegistrationCreation implements FormAction {
         user.setEnabled(true);
 
         if (
-                profile.residency().equals(ExternalRegistrationPage.RESIDENT)
-                && profile.clientType().equals(ExternalRegistrationPage.CLIENT_PHYSICAL)
+            isPhysicalResident(profile)
         ) {
             validatePhone(user, context.getSession());
         }
@@ -76,6 +75,11 @@ public class ExternalRegistrationCreation implements FormAction {
         if (authType != null) {
             context.getEvent().detail(Details.AUTH_TYPE, authType);
         }
+    }
+
+    private boolean isPhysicalResident(ExternalUserProfile profile) {
+        return profile.residency().equals(ExternalRegistrationPage.RESIDENT)
+               && profile.clientType().equals(ExternalRegistrationPage.CLIENT_PHYSICAL);
     }
 
     private ExternalUserProfile registerProfile(FormContext context) {
