@@ -14,7 +14,7 @@ metadata:
   {{- end }}
 spec:
   displayedName: backoffice service
-  displayedDescription: сервис для ЛК бэкофис
+  displayedDescription: сервис для ЛК бэкофис.
   access:
     validRedirectUris:
     - http://localhost
