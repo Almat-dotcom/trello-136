@@ -34,7 +34,7 @@ RUN /opt/keycloak/bin/kc.sh build && mkdir -p /opt/keycloak/.kacd/import
 
 # Running keycloak
 FROM nexus.kacd.kz:5000/devops-tools/keycloak/keycloak:22.0.5
-ENV TZ="Asia/Almaty"
+# ENV TZ="Asia/Almaty"
 
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
 
