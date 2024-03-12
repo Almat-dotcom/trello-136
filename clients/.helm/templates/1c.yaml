@@ -22,6 +22,6 @@ spec:
     - http://localhost
   capability:
     type: CONFIDENTIAL
-    clientExistingSecret: 1C-secret
+    clientExistingSecret: 1c-secret
     clientSecretKey: client_secret
   roles: []
