@@ -1,7 +1,7 @@
 apiVersion: sso.kacd.kz/v1
 kind: Client
 metadata:
-  name: 1C
+  name: 1c
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: internal-realm
@@ -13,8 +13,8 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  displayedName: 1C
-  displayedDescription: Сервис для работы с 1C
+  displayedName: 1c
+  displayedDescription: Сервис для работы с 1c
   access:
     validRedirectUris:
     - http://localhost
