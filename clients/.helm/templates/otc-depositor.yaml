@@ -1,0 +1,46 @@
+apiVersion: sso.kacd.kz/v1
+kind: Client
+metadata:
+  name: otc-depositor
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: intenral-realm
+    kz-kacd-realm-name: external
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  displayedName: OTC depositor LK Front-End
+  displayedDescription: Фронт приложение OTC depositor
+  access:
+    validRedirectUris:
+    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.lkShellFront.redirectUris "context" $ ) | nindent 4 }}
+    webOrigins:
+    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.lkShellFront.webOrigins "context" $ ) | nindent 4 }}
+  capability:
+    type: PUBLIC
+  attributes:
+  - FIRST_NAME
+  - LAST_NAME
+  - MIDDLE_NAME
+  - GROUPS
+  - LOCALE
+  - ORG
+  - CLIENT_TYPE
+  - IIN
+  - EMAIL_VERIFIED
+  - RESIDENCY
+  - DIVISION
+  - PHONE_NUMBER
+  - PHONE_NUMBER_VERIFIED
+  - EBR
+  roles: [{
+    name: trader,
+    roleDescription: Отвечает за возможность подачи заявок и заключения сделок, просмотр торгов,  а также возможностью  скачивания и просмотра отчетов, уведомлений
+  }, {
+    name: reporter,
+    roleDescription: Отвечает за возможность скачивания и просмотра отчетных документов, хода торгов без права и возможности подачи заявок и заключения сделок
+  }]
