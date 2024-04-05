@@ -96,7 +96,7 @@ export const useRegisterPage = (
                 if (legal) {
                     setSigning(true);
                     try {
-                        const xml = '<registration></registration>'
+                        const xml = `<registration>${Date.now()}</registration>`
                         setMessage({ type: 'info', summary: 'ncaSignProgress' });
                         const result = await signAuthXml(xml);
                         edsRef.current!.value = result;
