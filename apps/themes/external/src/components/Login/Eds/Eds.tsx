@@ -1,21 +1,18 @@
 import Button from "components/parts/Button";
 import { I18n } from "lib/i18n";
-import { KcContext } from "lib/kc";
 import { signAuthXml } from "lib/ncalayer";
 import { CancelledByUser, ConnectionLost } from "lib/ncalayer/NCALayer";
 import { useRef, useState } from "react";
 import Alert from "../../parts/Alert";
 
-const Eds = ({ kcContext, i18n, hidden, onFormSubmit }: { kcContext: KcContext, i18n: I18n, hidden: boolean, onFormSubmit: () => void }) => {
-    const { client, realm } = kcContext;
-    const token = client.clientId + realm.name;
+const Eds = ({ i18n, hidden, onFormSubmit }: { i18n: I18n, hidden: boolean, onFormSubmit: () => void }) => {
     const { msgStr } = i18n
 
     const [error, setError] = useState('');
 
     const edsRef = useRef<HTMLInputElement>(null);
 
-    const xml = `<Authentication><token>${token}</token></Authentication>`;
+    const xml = `<Authentication><token>${Date.now()}</token></Authentication>`;
     const onClick = async () => {
         try {
             setError('ncaSignProgress');

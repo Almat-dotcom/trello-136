@@ -107,7 +107,7 @@ const Login = memo(({ kcContext, i18n, ...props }: { kcContext: KcContextLogin; 
                                     activeId={currentTab}
                                     onChange={(id) => setCurrentTab(id)} />
 
-                                <Eds kcContext={kcContext} i18n={i18n} hidden={currentTab !== "eds"} onFormSubmit={onFormSubmit} />
+                                <Eds i18n={i18n} hidden={currentTab !== "eds"} onFormSubmit={onFormSubmit} />
                                 {currentTab === "email" ? (
                                     <UsernamePassword
                                         kcContext={kcContext}
