@@ -32,10 +32,12 @@ clients:
   lkShellFrontInternal:
     redirectUris:
     - https://kacd-lk-shell.dev.kacd.kz/admin/*
+    - https://cabinet.dev.kacd.kz/admin/*
     - http://localhost:4200/admin/*
     - http://kacd-lk-shell.dev.kacd.kz/admin/*
     webOrigins:
     - https://kacd-lk-shell.dev.kacd.kz
+    - https://cabinet.dev.kacd.kz
     - http://localhost:4200
     - http://kacd-lk-shell.dev.kacd.kz
   mt535:
