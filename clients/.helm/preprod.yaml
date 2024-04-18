@@ -20,40 +20,30 @@ clients:
     - "+"
   lkShellFront:
     redirectUris:
-    - https://kacd-lk-shell.dev.kacd.kz/*
     - http://localhost:4200/*
     - http://localhost:8080/*
     - https://cabinet.dev.kacd.kz/*
     - https://cabinet-test.dev.kacd.kz/*
-    - http://kacd-lk-shell.dev.kacd.kz/*
     - https://cabinet.preprod.kacd.kz/*
     webOrigins:
-    - https://kacd-lk-shell.dev.kacd.kz
     - http://localhost:4200
     - http://localhost:8080
     - https://cabinet.dev.kacd.kz
     - https://cabinet-test.dev.kacd.kz
-    - http://kacd-lk-shell.dev.kacd.kz
     - https://cabinet.preprod.kacd.kz
   lkShellFrontInternal:
     redirectUris:
-    - https://kacd-lk-shell.dev.kacd.kz/admin/*
     - https://cabinet.dev.kacd.kz/admin/*
     - http://localhost:4200/admin/*
     - http://localhost:4600/*
-    - http://kacd-lk-shell.dev.kacd.kz/admin/*
     - http://cabinet.dev.kacd.kz/admin/*
-    - http://backoffice.dev.kacd.kz/*
     - https://cabinet.preprod.kacd.kz/admin/*
     - https://backoffice.dev.kacd.kz/*
     - https://backoffice.preprod.kacd.kz/*
     webOrigins:
-    - https://kacd-lk-shell.dev.kacd.kz
     - https://cabinet.dev.kacd.kz
     - http://localhost:4200
     - http://localhost:4600
-    - http://backoffice.dev.kacd.kz
-    - http://kacd-lk-shell.dev.kacd.kz
     - http://cabinet.dev.kacd.kz
     - https://cabinet.preprod.kacd.kz
     - https://backoffice.dev.kacd.kz
