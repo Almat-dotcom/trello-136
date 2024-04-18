@@ -44,7 +44,6 @@ clients:
     - http://kacd-lk-shell.dev.kacd.kz/admin/*
     - http://cabinet.dev.kacd.kz/admin/*
     - https://cabinet.preprod.kacd.kz/admin/*
-    - https://kacd-lk-admin.dev.kacd.kz/*
     - https://backoffice.dev.kacd.kz/*
     - https://backoffice.preprod.kacd.kz/*
     webOrigins:
@@ -55,7 +54,6 @@ clients:
     - http://kacd-lk-shell.dev.kacd.kz
     - http://cabinet.dev.kacd.kz
     - https://cabinet.preprod.kacd.kz
-    - https://kacd-lk-admin.dev.kacd.kz
     - https://backoffice.dev.kacd.kz
     - https://backoffice.preprod.kacd.kz
   mt535:
