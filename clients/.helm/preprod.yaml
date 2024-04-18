@@ -38,19 +38,25 @@ clients:
   lkShellFrontInternal:
     redirectUris:
     - https://kacd-lk-shell.dev.kacd.kz/admin/*
+    - https://cabinet.dev.kacd.kz/admin/*
     - http://localhost:4200/admin/*
     - http://localhost:4600/*
     - http://kacd-lk-shell.dev.kacd.kz/admin/*
+    - http://cabinet.dev.kacd.kz/admin/*
     - https://cabinet.preprod.kacd.kz/admin/*
     - https://kacd-lk-admin.dev.kacd.kz/*
+    - https://backoffice.dev.kacd.kz/*
     - https://backoffice.preprod.kacd.kz/*
     webOrigins:
     - https://kacd-lk-shell.dev.kacd.kz
+    - https://cabinet.dev.kacd.kz
     - http://localhost:4200
     - http://localhost:4600
     - http://kacd-lk-shell.dev.kacd.kz
+    - http://cabinet.dev.kacd.kz
     - https://cabinet.preprod.kacd.kz
     - https://kacd-lk-admin.dev.kacd.kz
+    - https://backoffice.dev.kacd.kz
     - https://backoffice.preprod.kacd.kz
   mt535:
     redirectUris:
