@@ -41,6 +41,6 @@ spec:
     name: reader,
     roleDescription: Доступ на чтение
   },{
-    name: signer_fin,
+    name: signer,
     roleDescription: Доступ для подписания финансовых документов
   }]
