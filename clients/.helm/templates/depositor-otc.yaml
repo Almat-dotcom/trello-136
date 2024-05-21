@@ -1,7 +1,7 @@
 apiVersion: sso.kacd.kz/v1
 kind: Client
 metadata:
-  name: otc-depositor
+  name: depositor-otc
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: intenral-realm
@@ -13,8 +13,8 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  displayedName: OTC depositor LK Front-End
-  displayedDescription: Фронт приложение OTC depositor
+  displayedName: depositor OTC LK Front-End
+  displayedDescription: Фронт приложение depositor OTC
   access:
     validRedirectUris:
     {{- include "common.tplvalues.render" ( dict "value" .Values.clients.lkShellFront.redirectUris "context" $ ) | nindent 4 }}
