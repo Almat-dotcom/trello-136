@@ -32,7 +32,7 @@ const Footer = ({ i18n }: { i18n: I18n }) => {
                         <img className="inline-block mr-2" alt="net" src={Phone}/><a className="hover:underline focus:underline" href="tel:+7(727)355-47-60">+7 (727) 355 47 60</a>
                     </li>
                     <li className="flex items-center justify-start mb-1">
-                        <img className="inline-block mr-2" alt="net" src={Mail}/><a className="hover:underline focus:underline" href="mailto:csd@kacd.kz">csd@kacd.kz</a>
+                        <img className="inline-block mr-2" alt="net" src={Mail}/><a className="hover:underline focus:underline" href="mailto:helpdesk@kacd.kz">helpdesk@kacd.kz</a>
                     </li>
                 </ul>
             </div>
