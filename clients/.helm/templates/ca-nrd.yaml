@@ -25,4 +25,3 @@ spec:
     clientExistingSecret: canrd-secret
     clientSecretKey: client_secret
   roles: []
-
