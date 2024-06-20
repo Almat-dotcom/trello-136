@@ -32,9 +32,6 @@ spec:
   - IIN
   - PHONE_NUMBER
   roles: [{
-    name: admin,
-    roleDescription: Администратор
-  },{
     name: editor,
     roleDescription: Доступ к редактированию
   },{
