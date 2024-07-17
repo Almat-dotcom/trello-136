@@ -19,7 +19,7 @@ const Footer = ({ i18n }: { i18n: I18n }) => {
                     </a>
                 </div>
                 <div>
-                    <span className="text-gray-500 text-sm">{"© " + msgStr("copyright")}</span>
+                    <span className="text-gray-500 text-sm">{"© " + msgStr("copyright") + new Date().getUTCFullYear()}</span>
                 </div>
             </div>
             <div className="w-64 md:w-auto pb-4 md:pb-0">

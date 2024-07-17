@@ -153,7 +153,7 @@ export const ru = {
     "invalidResidency": "Выберите тип резидентства",
     "goToSite": "Перейти на сайт",
     "checkDoc": "Проверить документ",
-    "copyright": "Все права защищены, 2023",
+    "copyright": "Все права защищены, ",
     "contacts": "Контакты",
     "address": "Адрес",
     "allNews": "Все новости",
