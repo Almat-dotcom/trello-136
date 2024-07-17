@@ -153,7 +153,7 @@ export const en = {
     "invalidResidency": "Select residence type",
     "goToSite": "Go to website",
     "checkDoc": "Verify document",
-    "copyright": "All rights reserved, 2023",
+    "copyright": "All rights reserved, ",
     "contacts": "Contacts",
     "address": "Location",
     "allNews": "All news",
