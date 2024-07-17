@@ -7,6 +7,8 @@ import Mail from './mail.svg';
 const Footer = ({ i18n }: { i18n: I18n }) => {
     const { msgStr } = i18n;
 
+    const currentYear = new Date().getUTCFullYear();
+
     return (
         <div className="flex flex-col-reverse md:flex-row items-center md:items-stretch md:justify-between w-full px-1 md:px-8 lg:px-24 xl:px-44 py-8 md:py-12 bg-secondary-background">
             <div className="flex flex-col justify-between md:w-auto">
@@ -19,7 +21,7 @@ const Footer = ({ i18n }: { i18n: I18n }) => {
                     </a>
                 </div>
                 <div>
-                    <span className="text-gray-500 text-sm">{"© " + msgStr("copyright") + new Date().getUTCFullYear()}</span>
+                    <span className="text-gray-500 text-sm">{"© " + msgStr("copyright") + currentYear }</span>
                 </div>
             </div>
             <div className="w-64 md:w-auto pb-4 md:pb-0">
