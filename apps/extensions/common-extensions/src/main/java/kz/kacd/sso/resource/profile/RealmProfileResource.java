@@ -76,6 +76,30 @@ public class RealmProfileResource extends BaseProfileRealmResource {
         return Response.ok(ProfileResourceRepresentation.of(session, realm, user)).build();
     }
 
+    @GET
+    @Path("is-email-exist/{email}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response isEmailExist(@PathParam("email") String email) {
+        hasReadPermission();
+
+        log.debugf("Getting profile by user email {} ...", email);
+        UserModel user = session.users().getUserByEmail(realm, email);
+
+        return Response.ok(user != null).build();
+    }
+
+    @GET
+    @Path("is-phone-exist/{phone}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response isPhoneExist(@PathParam("phone") String phone) {
+        hasReadPermission();
+
+        log.debugf("Getting profile by user phone {} ...", phone);
+        List<UserModel> users = session.users().searchForUserByUserAttributeStream(realm, "phoneNumber", phone).collect(Collectors.toList());
+
+        return Response.ok(!users.isEmpty()).build();
+    }
+
     @PATCH
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
