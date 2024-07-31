@@ -1,12 +1,14 @@
 package kz.kacd.sso.external.model;
 
 import kz.kacd.sso.external.representation.PageRepresentation;
+import org.keycloak.models.ClientModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 import org.keycloak.provider.ProviderEvent;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.stream.Stream;
 
 public interface OrganizationModel {
@@ -70,6 +72,37 @@ public interface OrganizationModel {
      * Removes membership if user has been removed.
      */
     void removePosition(PositionModel position);
+
+    /**
+     * Searches clients.
+     *
+     * @param active show only active or non-active
+     */
+    List<ClientModel> getClients(Boolean active);
+
+    /**
+     * Gets organization's client by clientId
+     */
+    ClientModel getClient(String clientId);
+
+    /**
+     * Creates new client for organization.
+     *
+     * @param clientId    id of the client
+     * @param description description
+     * @param scopes      list of scopes available for client
+     */
+    String createClient(String clientId, String description, List<String> scopes);
+
+    /**
+     * Updates client
+     */
+    void updateClient(String clientId, String description, boolean active);
+
+    /**
+     * Creates new client secret
+     */
+    String resetClientSecret(String clientId);
 
     interface OrganizationEvent extends ProviderEvent {
         OrganizationModel getOrganization();
