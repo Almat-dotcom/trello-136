@@ -33,12 +33,17 @@ public class ClientsResource extends BaseAdminResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Content<OrganizationClientRepresentation> findAll(@QueryParam("active") Boolean active) {
         checkViewPermissions();
-        return new Content<>(
-                model.getClients(active)
-                        .stream()
-                        .map(OrganizationClientRepresentation::of)
-                        .collect(Collectors.toList())
-        );
+        try {
+            return new Content<>(
+                    model.getClients(active)
+                            .stream()
+                            .map(OrganizationClientRepresentation::of)
+                            .collect(Collectors.toList())
+            );
+        } catch (Exception e) {
+            log.error("Error on finding clients", e);
+            throw e;
+        }
     }
 
     @POST
