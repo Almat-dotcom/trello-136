@@ -300,6 +300,147 @@
 **responseCode** `202`
 
 ---
+## Получить список клиентов организации
+
+### Request
+
+**GET** `/orgs/{id}/clients`
+
+**PATH**
+- id - Идентификатор организации
+
+**QUERY**
+- active - если true, то выводятся только активные клиенты
+
+### Response
+
+**responseCode** `200`
+
+**Body**
+
+```json
+{
+    "content": [{
+        "clientId": "test-client",
+        "description": "Some client",
+        "active": true,
+        "scopes": ["deponent_report", "abs_requests"]
+    }]
+}
+```
+
+---
+## Создать нового клиента организации
+
+### Request
+
+**POST** `/orgs/{id}/clients`
+
+**PATH**
+- id - Идентификатор организации
+
+**Body**
+
+```json
+{
+    "clientId": "test-client",
+    "description": "Some client",
+    "scopes": ["deponent_report", "abs_requests"]
+}
+```
+
+### Response
+
+**responseCode** `200`
+
+**Body**
+
+```json
+{
+    "clientSecret": "laskdka-ksajdlk123lk-asdkdjlka2113"
+}
+```
+
+---
+## Обновить клиента
+
+### Request
+
+**PUT** `/orgs/{id}/clients/{clientId}`
+
+**PATH**
+- id - Идентификатор организации
+- clientId - Название клиента 
+
+**Body**
+
+```json
+{
+    "description": "Some client",
+    "active": false
+}
+```
+
+### Response
+
+**responseCode** `202`
+
+---
+## Сбросить client secret
+
+### Request
+
+**POST** `/orgs/{id}/clients/{clientId}/credentials`
+
+**PATH**
+- id - Идентификатор организации
+- clientId - Название клиента
+
+### Response
+
+**responseCode** `200`
+
+**Body**
+
+```json
+{
+    "clientSecret": "ASSDJHKJ2i1hkjashdiuHKJSAD"
+}
+```
+
+---
+## Добавить scope в клиент организации
+
+### Request
+
+**POST** `/orgs/{id}/clients/{clientId}/scope/{name}`
+
+**PATH**
+- id - Идентификатор организации
+- clientId - Название клиента
+- name - наименование скоупа
+
+### Response
+
+**responseCode** `202`
+
+---
+## Убрать scope в клиент организации
+
+### Request
+
+**DELETE** `/orgs/{id}/clients/{clientId}/scope/{name}`
+
+**PATH**
+- id - Идентификатор организации
+- clientId - Название клиента
+- name - наименование скоупа
+
+### Response
+
+**responseCode** `202`
+
+---
 ## Получить список клиентов
 
 ### Request

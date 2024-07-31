@@ -82,4 +82,10 @@ public class OrganizationResource extends BaseAdminResource {
         checkViewPermissions();
         return setupResource(new MembersResource(realm, model));
     }
+
+    @Path("clients")
+    public ClientsResource clients() {
+        checkViewPermissions();
+        return setupResource(new ClientsResource(realm, model));
+    }
 }
