@@ -34,6 +34,7 @@ public class OrganizationAdapter implements OrganizationModel, JpaModel<Organiza
     private final AdaptersFactory adaptersFactory;
     private final EntityManager em;
     private final RealmModel realm;
+    private final OrganizationClientManager clientManager;
 
     private UserModel createdBy;
 
@@ -49,6 +50,7 @@ public class OrganizationAdapter implements OrganizationModel, JpaModel<Organiza
         this.adaptersFactory = adaptersFactory;
         this.em = em;
         this.realm = realm;
+        clientManager = new OrganizationClientManager(keycloakSession, entity, realm);
     }
 
     @Override
@@ -283,6 +285,31 @@ public class OrganizationAdapter implements OrganizationModel, JpaModel<Organiza
         if (PositionModel.HEAD.equals(position.getName())) {
             revokeCeo(position.getUser());
         }
+    }
+
+    @Override
+    public List<ClientModel> getClients(Boolean active) {
+        return clientManager.getClients(active);
+    }
+
+    @Override
+    public ClientModel getClient(String clientId) {
+        return clientManager.getClient(clientId);
+    }
+
+    @Override
+    public String createClient(String clientId, String description, List<String> scopes) {
+        return clientManager.createClient(clientId, description, scopes);
+    }
+
+    @Override
+    public void updateClient(String clientId, String description, boolean active) {
+        clientManager.updateClient(clientId, description, active);
+    }
+
+    @Override
+    public String resetClientSecret(String clientId) {
+        return clientManager.resetClientSecret(clientId);
     }
 
     private void revokeCeo(UserModel user) {
