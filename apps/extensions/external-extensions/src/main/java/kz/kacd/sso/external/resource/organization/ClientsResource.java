@@ -66,7 +66,7 @@ public class ClientsResource extends BaseAdminResource {
     public ClientResource client(@PathParam("clientId") String clientId) {
         try {
             ClientModel client = model.getClient(clientId);
-            return new ClientResource(realm, model, client);
+            return setupResource(new ClientResource(realm, model, client));
         } catch (ClientNotFoundException e) {
             throw new NotFoundException();
         }
