@@ -216,9 +216,9 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                                 />
                             </div>
                             <div className="text-sm ml-3">
-                                <button type="button" className="bg-none border-none text-start text-sm text-secondary-dark font-semibold underline" onClick={concents.tuggleConcent1}>
+                                <a href="https://cabinet.kacd.kz/agreements/agreements-of-processing" rel="noopener noreferrer" target="_blank" type="button" className="bg-none border-none text-start text-sm text-secondary-dark font-semibold underline">
                                     {msgStr("concentOnCollectingData")}
-                                </button>
+                                </a>
                             </div>
                         </div>
 
@@ -235,9 +235,9 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                                 />
                             </div>
                             <div className="text-sm ml-3">
-                                <button type="button" className="bg-none border-none text-start text-sm text-secondary-dark font-semibold underline" onClick={concents.tuggleConcent2}>
+                                <a type="button" href="https://cabinet.kacd.kz/agreements/agreements-of-use" target="_blank" rel="noopener noreferrer" className="bg-none border-none text-start text-sm text-secondary-dark font-semibold underline">
                                     {msgStr("concentLK")}
-                                </button>
+                                </a>
                             </div>
                         </div>
 
