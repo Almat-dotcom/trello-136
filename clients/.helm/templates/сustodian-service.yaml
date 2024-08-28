@@ -1,7 +1,7 @@
 apiVersion: sso.kacd.kz/v1
 kind: Client
 metadata:
-  name: сustodian-service
+  name: custodian-service
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: internal-realm
@@ -13,7 +13,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  displayedName: сustodian-service
+  displayedName: custodian-service
   displayedDescription: Сервис для работы с custodian
   access:
     validRedirectUris:
