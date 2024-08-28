@@ -22,6 +22,6 @@ spec:
     - http://localhost
   capability:
     type: CONFIDENTIAL
-    clientExistingSecret: сustodian-service-secret
+    clientExistingSecret: custodian-service-secret
     clientSecretKey: client_secret
   roles: []
