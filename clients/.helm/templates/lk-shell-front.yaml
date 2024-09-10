@@ -61,4 +61,7 @@ spec:
   }, {
     name: admin,
     roleDescription: Администратор
+  }, {
+    name: otc,
+    roleDescription: OTC
   }]
