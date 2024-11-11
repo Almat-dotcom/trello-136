@@ -1,7 +1,7 @@
 apiVersion: sso.kacd.kz/v1
 kind: Client
 metadata:
-  name: currency-rate-kuber
+  name: currencyratekuber
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: intenral-realm
@@ -13,13 +13,14 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  displayedName: currency-rate-kuber
-  displayedDescription: currency-rate-kuber
+  displayedName: currencyratekuber
+  displayedDescription: currencyratekuber
   access:
     validRedirectUris:
-    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.mt535.redirectUris "context" $ ) | nindent 4 }}
+    - http://localhost:8082/*
     webOrigins:
-    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.mt535.webOrigins "context" $ ) | nindent 4 }}
+    - http://localhost:8082/*
   capability:
     type: PUBLIC
   roles: []
+
