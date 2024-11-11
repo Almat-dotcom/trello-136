@@ -17,9 +17,9 @@ spec:
   displayedDescription: currencyratekuber
   access:
     validRedirectUris:
-    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.currencyratekuber.redirectUris "context" $ ) | nindent 4 }}
+    - http://localhost:8082/*
     webOrigins:
-    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.currencyratekuber.webOrigins "context" $ ) | nindent 4 }}
+    - http://localhost:8082/*
   capability:
     type: PUBLIC
   roles: []
