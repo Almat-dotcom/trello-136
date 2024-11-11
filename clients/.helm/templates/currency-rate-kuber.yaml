@@ -17,9 +17,9 @@ spec:
   displayedDescription: currency-rate-kuber
   access:
     validRedirectUris:
-    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.mt535.redirectUris "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.currency-rate-kuber.redirectUris "context" $ ) | nindent 4 }}
     webOrigins:
-    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.mt535.webOrigins "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.currency-rate-kuber.webOrigins "context" $ ) | nindent 4 }}
   capability:
     type: PUBLIC
   roles: []
