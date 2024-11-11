@@ -89,3 +89,10 @@ clients:
     webOrigins:
     - https://helpdesk.dev.kacd.kz
     - https://helpdesk.preprod.kacd.kz
+  currencyRateKuber:
+    redirectUris:
+    - https://currency-rate-kuber.dev.kacd.kz/*
+    - http://localhost:8082/*
+    - https://currency-rate-kuber.preprod.kacd.kz/*
+    webOrigins:
+    - "+"

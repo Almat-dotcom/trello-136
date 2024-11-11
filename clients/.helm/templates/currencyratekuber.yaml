@@ -17,10 +17,12 @@ spec:
   displayedDescription: currencyratekuber
   access:
     validRedirectUris:
-    - http://localhost:8082/*
+    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.currencyRateKuber.redirectUris "context" $ ) | nindent 4 }}
     webOrigins:
-    - http://localhost:8082/*
+    {{- include "common.tplvalues.render" ( dict "value" .Values.clients.currencyRateKuber.webOrigins "context" $ ) | nindent 4 }}
   capability:
     type: PUBLIC
+  attributes:
+  - DIVISION
   roles: []
 

@@ -50,3 +50,6 @@ clients:
   helpdeskFreescoutInternal:
     redirectUris: []
     webOrigins: []
+  currencyRateKuber:
+    redirectUris: []
+    webOrigins: []
