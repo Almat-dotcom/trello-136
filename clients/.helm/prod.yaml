@@ -52,3 +52,9 @@ clients:
     - https://helpdesk.kacd.kz/*
     webOrigins:
     - https://helpdesk.kacd.kz
+  currencyRateKuber:
+    redirectUris:
+    - https://currency-rate-kuber.kacd.kz/*
+    webOrigins:
+    - "+"
+
