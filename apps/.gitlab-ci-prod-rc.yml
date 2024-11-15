@@ -81,7 +81,7 @@ stages:
 #     paths:
 #     - .cache/
 #   tags:
-#   - global_runner_2
+#   - global_runner_3
 
 # Deploying helm chart to prod-rc
 k8s-prod-rc-deploy:
