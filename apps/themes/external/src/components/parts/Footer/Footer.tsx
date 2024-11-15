@@ -1,10 +1,12 @@
 import type { I18n } from "lib/i18n";
+import { KcContext } from "lib/kc";
 import Network from "./network.svg";
 import Document from "./document.svg";
 import Phone from './phone.svg';
 import Mail from './mail.svg';
+import Security from './security.svg';
 
-const Footer = ({ i18n }: { i18n: I18n }) => {
+const Footer = ({kcContext, i18n }: { kcContext: KcContext, i18n: I18n }) => {
     const { msgStr } = i18n;
 
     const currentYear = new Date().getUTCFullYear();
@@ -18,6 +20,9 @@ const Footer = ({ i18n }: { i18n: I18n }) => {
                     </a>
                     <a className="flex justify-center my-1 py-1.5 border border-dark-text hover:border-primary-focus rounded-sm text-center text-dark-text hover:text-primary-focus" href="https://cabinet.kacd.kz/checkdoc">
                         <img className="inline-block mr-2" alt="net" src={Document}/>{msgStr("checkDoc")}
+                    </a>
+                    <a className="flex justify-center my-1 py-1.5 border border-dark-text hover:border-primary-focus rounded-sm text-center text-dark-text hover:text-primary-focus" href={kcContext.url.resourcesPath + "/build/securityRecommendation.pdf"} download>
+                        <img className="inline-block mr-2" alt="net" src={Security}/>{msgStr("securityRecommendation")}
                     </a>
                 </div>
                 <div>

@@ -38,7 +38,7 @@ const LayoutWithCarousel = ({ children, kcContext, i18n, ...props }: { children:
                     </div>
                 </div>
             </div>
-            <Footer i18n={i18n} />
+            <Footer i18n={i18n} kcContext={kcContext}/>
         </div>
     );
 }
