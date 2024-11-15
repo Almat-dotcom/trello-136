@@ -25,7 +25,7 @@ const Layout = ({ children, kcContext, i18n, ...props }: { children: any, kcCont
                     </div>
                 </div>
             </div>
-            <Footer i18n={i18n} />
+            <Footer i18n={i18n} kcContext={kcContext} />
         </div>
     );
 };
