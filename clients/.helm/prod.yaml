@@ -57,4 +57,9 @@ clients:
     - https://currency-rate-kuber.kacd.kz/*
     webOrigins:
     - "+"
+  matrix:
+    redirectUris:
+    - https://matrix.kacd.kz/*
+    webOrigins:
+    - https://matrix.kacd.kz
 

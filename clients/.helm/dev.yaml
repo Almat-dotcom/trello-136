@@ -81,4 +81,11 @@ clients:
     - https://currency-rate-kuber.preprod.kacd.kz/*
     webOrigins:
     - "+"
+  matrix:
+    redirectUris:
+    - https://matrix.dev.kacd.kz/*
+    - https://matrix.preprod.kacd.kz/*
+    webOrigins:
+    - https://matrix.dev.kacd.kz
+    - https://matrix.preprod.kacd.kz
 
