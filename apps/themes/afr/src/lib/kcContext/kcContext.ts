@@ -7,7 +7,22 @@ export const { kcContext } = getKcContext({
 		{
 			pageId: "login.ftl",
 			locale: {
-				currentLanguageTag: "ru",
+				currentLanguageTag: "kz",
+				supported: [{
+					url: "mockurl-ru",
+					label: "Русский",
+					languageTag: "ru"
+				},
+				{
+					url: "mockurl-kz",
+					label: "Қазақ",
+					languageTag: "kz"
+				},
+				{
+					url: "mockurl-en",
+					label: "English",
+					languageTag: "en"
+				}]
 			},
 			realm: {
 				displayNameHtml: 'AFR',

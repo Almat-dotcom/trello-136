@@ -36,14 +36,14 @@ spec:
     encryption: []
   # Настройки тем для модулей входа, админки, профиля и почтовой рассылки
   themes: 
-    login: keycloak
+    login: afr
     account: keycloak.v2
     admin: keycloak.v2
     email: afr
     # Локализация на 3 языка
     localization:
       i18n: true
-      supportedLocales: ["ru"]
+      supportedLocales: ["en", "ru", "kz"]
       defaultLocale: ru
   events:
     # Список слушателей событий. Стандартный слушатель для логирования событий.
