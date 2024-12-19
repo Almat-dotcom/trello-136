@@ -32,9 +32,9 @@ const NCAMessage = ({ message, i18n }: { message: string, i18n: I18n }) => {
             borderRadius: '5px',
             paddingTop: '1rem',
             paddingBottom: '1rem',
-            paddingLeft: '1.5rem',
-            paddingRight: '1.5rem',
-            fontSize: '1.5rem'
+            paddingLeft: '1rem',
+            paddingRight: '1rem',
+            fontSize: '1rem'
         }}>
             {i18n.advancedMsgStr(message)}
         </div>
@@ -44,9 +44,9 @@ const NCAMessage = ({ message, i18n }: { message: string, i18n: I18n }) => {
 const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I18n>) => {
     const { kcContext, i18n, Template, ...kcProps } = props;
 
-    const { social, realm, url, usernameEditDisabled, login, client } = kcContext;
+    const { social, locale, realm, url, usernameEditDisabled, login, client, message } = kcContext;
 
-    const { msg, msgStr, advancedMsg } = i18n;
+    const { msg, msgStr, advancedMsg, advancedMsgStr } = i18n;
 
     const [ncaMessage, setNcaMessage] = useState('');
     const edsRef = useRef<HTMLInputElement>(null);
@@ -87,12 +87,13 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
         }
     }
 
-    const languages = kcContext.locale!.supported
-        .map(supported =>
-            <li key={supported.languageTag} className="kc-dropdown-item"><a href={supported.url}>{advancedMsg(supported.languageTag)}</a></li>
+    const { currentLanguageTag, supported } = locale!;
+    const languages = supported
+        .map(it =>
+            <li key={it.languageTag} className="kc-dropdown-item"><a href={it.url}>{advancedMsg(it.languageTag)}</a></li>
         );
 
-    const currentLang = kcContext.locale!.supported.find(it => it.languageTag === kcContext.locale!.currentLanguageTag);
+    const currentLang = supported.find(it => it.languageTag === currentLanguageTag);
 
     return (
         <div className="afr-login">
@@ -111,7 +112,12 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
                             </div>
                         </div>
                     </div>
-                    <h1 id="kc-page-title"><span>Кіру</span></h1>
+                    <h1 id="kc-page-title"><span>{msg("doLogIn")}</span></h1>
+                    <div className={message ? `afr-message-container afr-message-container-${message.type}` : "afr-message-container-hidden"}>
+                        <div className={message ? `afr-message afr-message-${message.type}` : "afr-message-hidden"}>
+                            {message ? advancedMsgStr(message.summary) : ""}
+                        </div>
+                    </div>
                 </header>
                 <div id="kc-form" className={clsx(realm.password && social.providers !== undefined && kcProps.kcContentWrapperClass)}>
                     <div
@@ -129,27 +135,31 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
                                     <label htmlFor="username" className={clsx(kcProps.kcLabelClass)}>
                                         {msg("email")}
                                     </label>
-                                    <input
-                                        id="username"
-                                        className={clsx(kcProps.kcInputClass)}
-                                        //NOTE: This is used by Google Chrome auto fill so we use it to tell
-                                        //the browser how to pre fill the form but before submit we put it back
-                                        //to username because it is what keycloak expects.
-                                        name="username"
-                                        type="text"
-                                        ref={usernameRef}
-                                    />
+                                    <div className="afr-input-wrapper">
+                                        <input
+                                            id="username"
+                                            className={clsx(kcProps.kcInputClass)}
+                                            //NOTE: This is used by Google Chrome auto fill so we use it to tell
+                                            //the browser how to pre fill the form but before submit we put it back
+                                            //to username because it is what keycloak expects.
+                                            name="username"
+                                            type="text"
+                                            ref={usernameRef}
+                                        />
+                                    </div>
                                     <div className={clsx(kcProps.kcFormGroupClass)}>
                                         <label htmlFor="password" className={clsx(kcProps.kcLabelClass)}>
                                             {msg("password")}
                                         </label>
-                                        <input
-                                            id="password"
-                                            className={clsx(kcProps.kcInputClass)}
-                                            name="password"
-                                            type="password"
-                                            ref={passwordRef}
-                                        />
+                                        <div className="afr-input-wrapper">
+                                            <input
+                                                id="password"
+                                                className={clsx(kcProps.kcInputClass)}
+                                                name="password"
+                                                type="password"
+                                                ref={passwordRef}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                                 <div className={clsx(kcProps.kcFormGroupClass, kcProps.kcFormSettingClass)}>

@@ -7,7 +7,7 @@ export const { kcContext } = getKcContext({
 		{
 			pageId: "login.ftl",
 			locale: {
-				currentLanguageTag: "kz",
+				currentLanguageTag: "ru",
 				supported: [{
 					url: "mockurl-ru",
 					label: "Русский",
@@ -29,7 +29,7 @@ export const { kcContext } = getKcContext({
 				registrationAllowed: false
 			},
 			message: {
-				type: 'error'
+				type: 'success'
 			},
 			messagesPerField: {
 				existsError: (name: string) => true,
