@@ -46,27 +46,37 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
 
     const { social, realm, url, usernameEditDisabled, login, registrationDisabled, client } = kcContext;
 
-    const { msg, msgStr } = i18n;
+    const { msg, msgStr, advancedMsg } = i18n;
 
-    const [inputDisabled, setInputDisabled] = useState(false);
     const [ncaMessage, setNcaMessage] = useState('');
-    const [username, setUsername] = useState(login.username ?? '');
-    const [password, setPassword] = useState('');
     const edsRef = useRef<HTMLInputElement>(null);
     const formRef = useRef<HTMLFormElement>(null);
+    const usernameRef = useRef<HTMLInputElement>(null);
+    const passwordRef = useRef<HTMLInputElement>(null);
+    const rememberMeRef = useRef<HTMLInputElement>(null);
+    const loginRef = useRef<HTMLInputElement>(null);
+
+    const setDisabled = (disabled: boolean) => {
+        usernameRef.current!.disabled = disabled;
+        passwordRef.current!.disabled = disabled;
+        rememberMeRef.current!.disabled = disabled;
+    }
 
     const onSubmit = async () => {
-        setInputDisabled(true);
+        setDisabled(true);
+        loginRef.current!.disabled = true;
         setNcaMessage('ncaSignProgress');
         const xml = `<Authentication><signature>${client.clientId}${realm.name}</signature></Authentication>`;
         try {
             const signature = await signAuthXml(xml);
             edsRef.current!.value = signature;
             setNcaMessage('ncaSignFinished');
+            setDisabled(false);
 
             formRef.current!.submit();
         } catch (error) {
-            setInputDisabled(false);
+            setDisabled(false);
+            loginRef.current!.disabled = false;
             if (error === ConnectionLost) {
                 setNcaMessage('ncaConnectionLost');
             } else if (error === CancelledByUser) {
@@ -77,13 +87,29 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
         }
     }
 
+    const languages = kcContext.locale!.supported
+        .map(supported =>
+            <li key={supported.languageTag} className="kc-dropdown-item"><a href={supported.url}>{advancedMsg(supported.languageTag)}</a></li>
+        );
+
     return (
-        <Template
-            {...{ kcContext, i18n, doFetchDefaultThemeResources, ...kcProps }}
-            displayInfo={social.displayInfo}
-            displayWide={realm.password && social.providers !== undefined}
-            headerNode={msg("doLogIn")}
-            formNode={
+        <div className="afr-login">
+            <div id="kc-header" className="afr-header">
+                <div id="kc-header-wrapper" className="afr-header-wrapper"><span>AFR</span></div>
+            </div>
+            <div className="afr-card">
+                <header className="login-pf-header">
+                    <div id="kc-locale">
+                        <div id="kc-locale-wrapper" className="">
+                            <div className="kc-dropdown" id="kc-locale-dropdown"><a href="#" id="kc-current-locale-link">kz</a>
+                                <ul>
+                                    {languages}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <h1 id="kc-page-title"><span>Кіру</span></h1>
+                </header>
                 <div id="kc-form" className={clsx(realm.password && social.providers !== undefined && kcProps.kcContentWrapperClass)}>
                     <div
                         id="kc-form-wrapper"
@@ -107,15 +133,8 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
                                         //the browser how to pre fill the form but before submit we put it back
                                         //to username because it is what keycloak expects.
                                         name="username"
-                                        value={username}
-                                        onChange={e => setUsername(e.target.value)}
                                         type="text"
-                                        {...(usernameEditDisabled || inputDisabled
-                                            ? { "disabled": true }
-                                            : {
-                                                "autoFocus": true,
-                                                "autoComplete": "off"
-                                            })}
+                                        ref={usernameRef}
                                     />
                                     <div className={clsx(kcProps.kcFormGroupClass)}>
                                         <label htmlFor="password" className={clsx(kcProps.kcLabelClass)}>
@@ -126,10 +145,7 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
                                             className={clsx(kcProps.kcInputClass)}
                                             name="password"
                                             type="password"
-                                            value={password}
-                                            onChange={e => setPassword(e.target.value)}
-                                            autoComplete="off"
-                                            disabled={inputDisabled}
+                                            ref={passwordRef}
                                         />
                                     </div>
                                 </div>
@@ -143,7 +159,7 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
                                                         id="rememberMe"
                                                         name="rememberMe"
                                                         type="checkbox"
-                                                        disabled={inputDisabled}
+                                                        ref={rememberMeRef}
                                                         {...(login.rememberMe
                                                             ? {
                                                                 "checked": true
@@ -181,7 +197,7 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
                                         id="kc-login"
                                         type="submit"
                                         value={msgStr("doLogIn")}
-                                        disabled={inputDisabled}
+                                        ref={loginRef}
                                         onClick={e => onSubmit()}
                                     />
                                 </div>
@@ -207,22 +223,8 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
                         </div>
                     )}
                 </div>
-            }
-            infoNode={
-                realm.password &&
-                realm.registrationAllowed &&
-                !registrationDisabled && (
-                    <div id="kc-registration">
-                        <span>
-                            {msg("noAccount")}
-                            <a tabIndex={6} href={url.registrationUrl}>
-                                {msg("doRegister")}
-                            </a>
-                        </span>
-                    </div>
-                )
-            }
-        />
+            </div>
+        </div>
     );
 }
 

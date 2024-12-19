@@ -3,15 +3,18 @@ package kz.kacd.sso.login;
 import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.Response;
 import kz.kacd.sso.sign.SignatureValidator;
+import org.jboss.logging.Logger;
 import org.keycloak.authentication.AuthenticationFlowContext;
 import org.keycloak.authentication.Authenticator;
 import org.keycloak.authentication.authenticators.browser.UsernamePasswordForm;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
+import org.keycloak.services.managers.AuthenticationManager;
 import org.keycloak.services.messages.Messages;
 
 public class AfrUsernamePasswordForm extends UsernamePasswordForm implements Authenticator {
+    private static final Logger log = Logger.getLogger(AfrUsernamePasswordForm.class);
 
     private final SignatureValidator validator;
 
@@ -43,7 +46,7 @@ public class AfrUsernamePasswordForm extends UsernamePasswordForm implements Aut
 
     private void checkUser(AuthenticationFlowContext context, SignatureValidator.Result signature) {
         MultivaluedMap<String, String> formData = context.getHttpRequest().getDecodedFormParameters();
-        String email = formData.getFirst("username");
+        String email = formData.getFirst(AuthenticationManager.FORM_USERNAME);
 
         log.infof("email: %s", email);
 
