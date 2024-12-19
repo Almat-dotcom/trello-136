@@ -15,7 +15,7 @@ export const { kcContext } = getKcContext({
 				},
 				{
 					url: "mockurl-kz",
-					label: "Қазақ",
+					label: "kz",
 					languageTag: "kz"
 				},
 				{

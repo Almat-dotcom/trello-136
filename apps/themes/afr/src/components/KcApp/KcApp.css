@@ -784,6 +784,8 @@ body {
     flex-direction: column;
     padding: 14px;
 
+    margin-top: 8px;
+
     box-shadow: 0px 0px 6px 0px rgba(179,179,179,1);
     border-radius: 4px;
 }
@@ -897,6 +899,10 @@ body {
 
 .afr-button:hover {
     background-color: rgb(18, 35, 77);
+}
+
+.afr-button:disabled {
+  background-color: rgb(146, 146, 146);
 }
 
 
