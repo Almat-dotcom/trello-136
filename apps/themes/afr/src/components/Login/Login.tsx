@@ -42,9 +42,9 @@ const NCAMessage = ({ message, i18n }: { message: string, i18n: I18n }) => {
 }
 
 const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I18n>) => {
-    const { kcContext, i18n, doFetchDefaultThemeResources = true, Template, ...kcProps } = props;
+    const { kcContext, i18n, Template, ...kcProps } = props;
 
-    const { social, realm, url, usernameEditDisabled, login, registrationDisabled, client } = kcContext;
+    const { social, realm, url, usernameEditDisabled, login, client } = kcContext;
 
     const { msg, msgStr, advancedMsg } = i18n;
 
@@ -92,6 +92,8 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
             <li key={supported.languageTag} className="kc-dropdown-item"><a href={supported.url}>{advancedMsg(supported.languageTag)}</a></li>
         );
 
+    const currentLang = kcContext.locale!.supported.find(it => it.languageTag === kcContext.locale!.currentLanguageTag);
+
     return (
         <div className="afr-login">
             <div id="kc-header" className="afr-header">
@@ -101,7 +103,8 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
                 <header className="login-pf-header">
                     <div id="kc-locale">
                         <div id="kc-locale-wrapper" className="">
-                            <div className="kc-dropdown" id="kc-locale-dropdown"><a href="#" id="kc-current-locale-link">kz</a>
+                            <div className="kc-dropdown" id="kc-locale-dropdown">
+                                <a href={currentLang!.url} id="kc-current-locale-link">{advancedMsg(currentLang!.label)}</a>
                                 <ul>
                                     {languages}
                                 </ul>
