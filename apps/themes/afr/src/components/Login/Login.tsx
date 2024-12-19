@@ -9,7 +9,7 @@ import { useRef, useState } from "react";
 const NCAMessage = ({ message, i18n }: { message: string, i18n: I18n }) => {
     const dark = (message: string) => {
         switch (message) {
-            case 'ncaSignInProgress': return '#8b8d8f';
+            case 'ncaSignProgress': return '#8b8d8f';
             case 'ncaSignFinished': return '#3f9c35';
             case 'ncaCancelled': return '#ec7a08';
             default: return '#cc0000';
@@ -57,7 +57,7 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
 
     const onSubmit = async () => {
         setInputDisabled(true);
-        setNcaMessage('ncaSignInProgress');
+        setNcaMessage('ncaSignProgress');
         const xml = `<Authentication><signature>${client.clientId}${realm.name}</signature></Authentication>`;
         try {
             const signature = await signAuthXml(xml);
