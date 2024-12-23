@@ -46,6 +46,7 @@ export const kz = {
     "pageExpiredMsg1": "Жүйеге кіру процесін қайта бастау",
     "pageExpiredMsg2": "Жүйеге кіру процесін жалғастыру",
     "invalidUserMessage": "Логин немесе құпиясөз дұрыс емес",
+    "Invalid username or password.": "Логин немесе құпиясөз дұрыс емес",
     "invalidUsernameMessage": "Логин дұрыс емес",
     "invalidUsernameOrEmailMessage": "Логин немесе электрондық почтаның адресі дұрыс емес.",
     "invalidPasswordMessage": "Құпиясөз дұрыс емес",
