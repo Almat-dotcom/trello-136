@@ -46,6 +46,7 @@ export const en = {
     "pageExpiredMsg1": "To restart the login process",
     "pageExpiredMsg2": "To continue the login process",
     "invalidUserMessage": "Invalid username or password.",
+    "Invalid username or password.": "Invalid username or password.",
     "invalidUsernameMessage": "Invalid username.",
     "invalidUsernameOrEmailMessage": "Invalid username or email.",
     "invalidPasswordMessage": "Invalid password.",

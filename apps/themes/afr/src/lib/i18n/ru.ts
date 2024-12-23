@@ -46,6 +46,7 @@ export const ru = {
     "pageExpiredMsg1": "запустить авторизацию сначала",
     "pageExpiredMsg2": "продолжить процесс входа в систему",
     "invalidUserMessage": "Неверный логин или пароль.",
+    "Invalid username or password.": "Неверный логин или пароль",
     "invalidUsernameMessage": "Неверный логин.",
     "invalidUsernameOrEmailMessage": "Неверный логин или email.",
     "invalidPasswordMessage": "Нверный пароль.",
