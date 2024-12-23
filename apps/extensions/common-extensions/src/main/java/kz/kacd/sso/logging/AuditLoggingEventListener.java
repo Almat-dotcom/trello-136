@@ -20,12 +20,24 @@ public class AuditLoggingEventListener implements EventListenerProvider, EventLi
     @Override
     public void onEvent(Event event) {
         MDC.clear();
-        MDC.put("realmId", event.getRealmId());
-        MDC.put("clientId", event.getClientId());
-        MDC.put("sessionId", event.getSessionId());
-        MDC.put("userId", event.getUserId());
-        MDC.put("ipAddress", event.getIpAddress());
-        MDC.put("error", event.getError() != null ? event.getError() : "");
+        if (event.getRealmId() != null) {
+            MDC.put("realmId", event.getRealmId());
+        }
+        if (event.getClientId() != null) {
+            MDC.put("clientId", event.getClientId());
+        }
+        if (event.getSessionId() != null) {
+            MDC.put("sessionId", event.getSessionId());
+        }
+        if (event.getUserId() != null) {
+            MDC.put("userId", event.getUserId());
+        }
+        if (event.getIpAddress() != null) {
+            MDC.put("ipAddress", event.getIpAddress());
+        }
+        if (event.getError() != null) {
+            MDC.put("error", event.getError());
+        }
         MDC.put("type", event.getType());
         MDC.put("time", event.getTime());
         event.getDetails().forEach((k, v) -> {
@@ -37,14 +49,32 @@ public class AuditLoggingEventListener implements EventListenerProvider, EventLi
     @Override
     public void onEvent(AdminEvent event, boolean includeRepresentation) {
         MDC.clear();
-        MDC.put("realmId", event.getRealmId());
-        MDC.put("resourcePath", event.getResourcePath());
-        MDC.put("operationType", event.getOperationType());
-        MDC.put("error", event.getError() != null ? event.getError() : "");
-        MDC.put("authRealmId", event.getAuthDetails().getRealmId());
-        MDC.put("authClientId", event.getAuthDetails().getClientId());
-        MDC.put("authUserId", event.getAuthDetails().getUserId());
-        MDC.put("authIpAddress", event.getAuthDetails().getIpAddress());
+        if (event.getRealmId() != null) {
+            MDC.put("realmId", event.getRealmId());
+        }
+        if (event.getResourcePath() != null) {
+            MDC.put("resourcePath", event.getResourcePath());
+        }
+        if (event.getOperationType() != null) {
+            MDC.put("operationType", event.getOperationType());
+        }
+        if (event.getError() != null) {
+            MDC.put("error", event.getError());
+        }
+        if (event.getAuthDetails() != null) {
+            if (event.getAuthDetails().getRealmId() != null) {
+                MDC.put("authRealmId", event.getAuthDetails().getRealmId());
+            }
+            if (event.getAuthDetails().getClientId() != null) {
+                MDC.put("authClientId", event.getAuthDetails().getClientId());
+            }
+            if (event.getAuthDetails().getUserId() != null) {
+                MDC.put("authUserId", event.getAuthDetails().getUserId());
+            }
+            if (event.getAuthDetails().getIpAddress() != null) {
+                MDC.put("authIpAddress", event.getAuthDetails().getIpAddress());
+            }
+        }
         MDC.put("time", event.getTime());
         log.info("Audit event.");
     }
