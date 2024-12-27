@@ -26,7 +26,7 @@ spec:
       rememberMe: true
     email:
       loginWithEmail: true
-      verifyEmail: false
+      verifyEmail: true
   # Настройки SMTP сервера для рассылки
   email:
     from: sso@kacd.kz
