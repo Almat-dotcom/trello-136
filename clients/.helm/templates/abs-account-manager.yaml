@@ -4,8 +4,8 @@ metadata:
   name: abs-account-manager
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: internal-realm
-    kz-kacd-realm-name: internal
+    app.kubernetes.io/component: external-realm
+    kz-kacd-realm-name: external
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -13,15 +13,17 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  displayedName: account manager service
+  displayedName: ABS+ Account Manager
   displayedDescription: сервис для ABS+ Account Manager 
   access:
     validRedirectUris:
-    - http://localhost
+    - http://localhost:8080/*
     webOrigins:
-    - http://localhost
+    - "+"
   capability:
     type: CONFIDENTIAL
     clientExistingSecret: abs-account-manager-secret
     clientSecretKey: client_secret
-  roles: []
+  roles:
+  - name: bank-client-front-direct-holder
+    roleDescription: Роль для доступа на просмотр блоков abs+
