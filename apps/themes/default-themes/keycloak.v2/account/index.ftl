@@ -80,7 +80,7 @@
         <link rel="icon" href="${resourceUrl}/public/favicon.ico" type="image/x-icon"/>
         </#if>
 
-<#--        <script src="${authUrl}js/keycloak.js"></script>-->
+        <script src="${authUrl}/realms/external/js/keycloak.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/keycloak-js@latest/dist/keycloak.min.js"></script>
 
         <#if properties.developmentMode?has_content && properties.developmentMode == "true">
