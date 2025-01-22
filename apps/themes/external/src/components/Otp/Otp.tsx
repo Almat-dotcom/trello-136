@@ -1,7 +1,5 @@
 import { Layout } from "components/Layout";
-import Alert from "components/parts/Alert";
 import Button from "components/parts/Button";
-import { InputField } from "components/parts/Input";
 import { KcProps } from "keycloakify";
 import { I18n } from "lib/i18n";
 import { KcContext } from "lib/kc";
