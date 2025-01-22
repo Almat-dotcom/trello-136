@@ -70,10 +70,12 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
     }
 
     private String extractUsername(AuthenticationFlowContext context) {
+        log.info("KACD");
         return context.getHttpRequest().getDecodedFormParameters().getFirst(AuthenticationManager.FORM_USERNAME);
     }
 
     private boolean isIin(String username) {
+        log.info("is IIN");
         return username.length() == 12 && username.matches("\\d+");
     }
 

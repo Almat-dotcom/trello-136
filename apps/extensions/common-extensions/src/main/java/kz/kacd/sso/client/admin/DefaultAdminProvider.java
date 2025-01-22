@@ -25,7 +25,7 @@ public class DefaultAdminProvider implements AdminClientProvider {
 
     @Override
     public ClientModel configureAdminClient(RealmModel realm) {
-        log.debugf("Configuring admin client for realm %s ...", realm.getName());
+        log.infof("Configuring admin client for realm %s ...", realm.getName());
 
         ClientModel result = session.clients().getClientByClientId(realm, ADMIN_CLIENT);
         if (result != null) {

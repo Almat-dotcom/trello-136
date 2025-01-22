@@ -2,6 +2,7 @@ package kz.kacd.sso.login;
 
 import com.google.auto.service.AutoService;
 import kz.kacd.sso.sign.SignatureValidator;
+import org.jboss.logging.Logger;
 import org.keycloak.Config;
 import org.keycloak.authentication.Authenticator;
 import org.keycloak.authentication.AuthenticatorFactory;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @AutoService(AuthenticatorFactory.class)
 public class AfrUsernamePasswordFormFactory implements AuthenticatorFactory {
+    private static final Logger log = Logger.getLogger(AfrUsernamePasswordFormFactory.class);
 
     public static final String PROVIDER_ID = "afr-username-password-form";
 
@@ -26,6 +28,7 @@ public class AfrUsernamePasswordFormFactory implements AuthenticatorFactory {
 
     @Override
     public String getDisplayType() {
+        log.info("Afr user factory page");
         return "AFR Username Password form";
     }
 

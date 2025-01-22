@@ -34,6 +34,7 @@ public class DefaultClientConfigurer implements ClientConfigurer {
 
     @Override
     public void configure(RealmModel realm, String clientId, ClientSpec client) {
+        log.info("Configure client");
         if (client == null) {
             return;
         }

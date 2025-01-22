@@ -30,6 +30,7 @@ public class EdsOrUsernamePasswordFormFactory implements AuthenticatorFactory {
 
     @Override
     public String getDisplayType() {
+        log.info("Eds Form Factory");
         return "EDS or Username Password Form";
     }
 
