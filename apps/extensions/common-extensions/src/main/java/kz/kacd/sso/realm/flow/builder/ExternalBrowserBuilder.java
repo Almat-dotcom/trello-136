@@ -1,5 +1,6 @@
 package kz.kacd.sso.realm.flow.builder;
 
+import org.jboss.logging.Logger;
 import org.keycloak.models.AuthenticationExecutionModel;
 import org.keycloak.models.AuthenticationFlowModel;
 import org.keycloak.models.RealmModel;
@@ -7,6 +8,7 @@ import org.keycloak.models.RealmModel;
 import static kz.kacd.sso.realm.flow.AuthFlowConstants.*;
 
 public class ExternalBrowserBuilder extends AbstractLoginBuilder {
+    private static final Logger log = Logger.getLogger(ExternalBrowserBuilder.class);
 
     public ExternalBrowserBuilder(RealmModel realm) {
         super(realm);
@@ -24,6 +26,7 @@ public class ExternalBrowserBuilder extends AbstractLoginBuilder {
 
     @Override
     protected void addFormsExecutions(AuthenticationFlowModel restrictedForm, AuthenticationFlowModel standardForm) {
+        log.info("We are here Form");
         AuthenticationExecutionModel prev = addEDSOrPasswordForm(restrictedForm, standardForm);
         AuthenticationExecutionModel totpExecution = addOTPForm(restrictedForm, prev);
         addSessionCountLimiter(restrictedForm, totpExecution);
@@ -49,6 +52,7 @@ public class ExternalBrowserBuilder extends AbstractLoginBuilder {
             AuthenticationFlowModel parent,
             AuthenticationExecutionModel prev
     ) {
+        log.info("OTP is start");
         // Штатный аутентификатор Keycloak для TOTP
         AuthenticationExecutionModel otpExecution = new AuthenticationExecutionModel();
         otpExecution.setRequirement(AuthenticationExecutionModel.Requirement.REQUIRED);
