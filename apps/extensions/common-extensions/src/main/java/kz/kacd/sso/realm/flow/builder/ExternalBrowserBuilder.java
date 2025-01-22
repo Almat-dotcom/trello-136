@@ -25,7 +25,8 @@ public class ExternalBrowserBuilder extends AbstractLoginBuilder {
     @Override
     protected void addFormsExecutions(AuthenticationFlowModel restrictedForm, AuthenticationFlowModel standardForm) {
         AuthenticationExecutionModel prev = addEDSOrPasswordForm(restrictedForm, standardForm);
-        addSessionCountLimiter(restrictedForm, prev);
+        AuthenticationExecutionModel totpExecution = addOTPForm(restrictedForm, prev);
+        addSessionCountLimiter(restrictedForm, totpExecution);
     }
 
     private AuthenticationExecutionModel addEDSOrPasswordForm(AuthenticationFlowModel parent, AuthenticationFlowModel forms) {
@@ -42,5 +43,20 @@ public class ExternalBrowserBuilder extends AbstractLoginBuilder {
         target.setParentFlow(parent.getId());
         target.setAuthenticatorFlow(source.isAuthenticatorFlow());
         return realm.addAuthenticatorExecution(target);
+    }
+
+    private AuthenticationExecutionModel addOTPForm(
+            AuthenticationFlowModel parent,
+            AuthenticationExecutionModel prev
+    ) {
+        // Штатный аутентификатор Keycloak для TOTP
+        AuthenticationExecutionModel otpExecution = new AuthenticationExecutionModel();
+        otpExecution.setRequirement(AuthenticationExecutionModel.Requirement.REQUIRED);
+        otpExecution.setPriority(prev.getPriority() + 1);
+        otpExecution.setAuthenticator("auth-otp-form");
+        otpExecution.setParentFlow(parent.getId());
+        otpExecution.setAuthenticatorFlow(false);
+
+        return realm.addAuthenticatorExecution(otpExecution);
     }
 }

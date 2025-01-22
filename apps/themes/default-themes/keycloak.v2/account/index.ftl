@@ -81,7 +81,6 @@
         </#if>
 
         <script src="${authUrl}/realms/external/js/keycloak.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/keycloak-js@latest/dist/keycloak.min.js"></script>
 
         <#if properties.developmentMode?has_content && properties.developmentMode == "true">
         <!-- Don't use this in production: -->

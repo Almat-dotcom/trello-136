@@ -26,15 +26,68 @@ type ChangeEmail = KcContextBase.Common & {
 
 type ChangePhone = KcContextBase.Common & {
 	pageId: "update-phone.ftl";
-	phoneNumber?: string
-}
+	phoneNumber?: string;
+};
 
-type ExtendedContextExtended = KcContextBase.Login | KcContextBase.RegisterUserProfile | KcContextBase.Info | KcContextBase.Error | KcContextBase.LoginResetPassword | KcContextBase.LoginVerifyEmail | KcContextBase.Terms | KcContextBase.LoginOtp | KcContextBase.LoginUsername | KcContextBase.WebauthnAuthenticate | KcContextBase.LoginPassword | KcContextBase.LoginUpdatePassword | KcContextBase.LoginUpdateProfile | KcContextBase.LoginIdpLinkConfirm | KcContextBase.LoginIdpLinkEmail | KcContextBase.LoginPageExpired | KcContextBase.LoginConfigTotp | KcContextBase.LogoutConfirm | KcContextBase.UpdateUserProfile | KcContextBase.IdpReviewUserProfile | ExtendedRegister | ChangeEmail | ChangePhone;
+type LoginConfigTotp = KcContextBase.Common & {
+	pageId: "login-config-totp.ftl";
+	mode: "qr" | "manual" | string; // Можете расширять при необходимости
+	totp: {
+	  totpSecretEncoded: string;
+	  qrUrl: string;
+	  policy: {
+		supportedApplications: string[];
+		algorithm: string;
+		digits: number;
+		lookAheadWindow: number;
+		type: string;
+		period: number;
+	  };
+	  totpSecretQrCode: string;
+	  manualUrl: string;
+	  totpSecret: string;
+	  otpCredentials: Array<{
+		id: string;
+		userLabel: string;
+	  }>;
+	};
+  };
+
+type OtpForm = KcContextBase.Common & {
+	pageId: "otp.ftl";
+};
+
+type ExtendedContextExtended =
+	KcContextBase.Login |
+	KcContextBase.RegisterUserProfile |
+	KcContextBase.Info |
+	KcContextBase.Error |
+	KcContextBase.LoginResetPassword |
+	KcContextBase.LoginVerifyEmail |
+	KcContextBase.Terms |
+	KcContextBase.LoginOtp |
+	KcContextBase.LoginUsername |
+	KcContextBase.WebauthnAuthenticate |
+	KcContextBase.LoginPassword |
+	KcContextBase.LoginUpdatePassword |
+	KcContextBase.LoginUpdateProfile |
+	KcContextBase.LoginIdpLinkConfirm |
+	KcContextBase.LoginIdpLinkEmail |
+	KcContextBase.LoginPageExpired |
+	KcContextBase.LoginConfigTotp |
+	KcContextBase.LogoutConfirm |
+	KcContextBase.UpdateUserProfile |
+	KcContextBase.IdpReviewUserProfile |
+	ExtendedRegister |
+	ChangeEmail |
+	ChangePhone |
+	LoginConfigTotp |
+	OtpForm;
 
 export const { kcContext } = getKcContext<ExtendedContextExtended>({
-
 	// "mockPageId": "login.ftl",
-	"mockPageId": "register.ftl",
+	// "mockPageId": "register.ftl",
+	"mockPageId":"login-config-totp.ftl",
 	// "mockPageId": "login-verify-email.ftl",
 	// "mockPageId": "login-update-password.ftl",
 	// "mockPageId": "logout-confirm.ftl",
@@ -181,7 +234,32 @@ export const { kcContext } = getKcContext<ExtendedContextExtended>({
 					"languageTag": "kz"
 				}]
 			}
-		}
+		},
+		{
+			"pageId": "login-config-totp.ftl",
+			"mode": "qr",
+			"totp": {
+				"totpSecretEncoded": "JBSWY3DPEHPK3PXP",
+				"qrUrl": "https://upload.wikimedia.org/wikipedia/commons/0/0b/QR_code_Wikimedia_Commons_%28URL%29.png",
+				"policy": {
+					"supportedApplications": ["Google Authenticator", "Authy"],
+					"algorithm": "HmacSHA1",
+					"digits": 6,
+					"lookAheadWindow": 1,
+					"type": "totp",
+					"period": 30
+				},
+				"totpSecretQrCode": "https://upload.wikimedia.org/wikipedia/commons/0/0b/QR_code_Wikimedia_Commons_%28URL%29.png",
+				"manualUrl": "otpauth://totp/example?secret=JBSWY3DPEHPK3PXP",
+				"totpSecret": "JBSWY3DPEHPK3PXP",
+				"otpCredentials": [
+					{
+						"id": "otp-1",
+						"userLabel": "Primary"
+					}
+				]
+			}
+		},
 	]
 });
 
