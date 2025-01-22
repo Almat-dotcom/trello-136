@@ -5,6 +5,7 @@ import kz.kacd.sso.external.flow.login.eds.EdsAuthenticator;
 import kz.kacd.sso.external.flow.login.ldap.NoLdapUserValidator;
 import kz.kacd.sso.external.flow.login.legal.LegalUserValidator;
 import kz.kacd.sso.external.sign.SignatureValidator;
+import org.jboss.logging.Logger;
 import org.keycloak.Config;
 import org.keycloak.authentication.Authenticator;
 import org.keycloak.authentication.AuthenticatorFactory;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @AutoService(AuthenticatorFactory.class)
 public class EdsOrUsernamePasswordFormFactory implements AuthenticatorFactory {
+    private static final Logger log = Logger.getLogger(EdsOrUsernamePasswordFormFactory.class);
     private static final String PROVIDER_ID = "eds-username-password-form";
     private static final AuthenticationExecutionModel.Requirement[] REQUIREMENT_CHOICES =
             new AuthenticationExecutionModel.Requirement[]{
@@ -63,6 +65,7 @@ public class EdsOrUsernamePasswordFormFactory implements AuthenticatorFactory {
 
     @Override
     public Authenticator create(KeycloakSession session) {
+        log.info("Vooot tut");
         return new ExtendedUsernamePasswordForm(
                 Collections.singletonList(new EdsAuthenticator(new SignatureValidator())),
                 Arrays.asList(new LegalUserValidator(), new NoLdapUserValidator())

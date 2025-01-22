@@ -39,6 +39,7 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
     private List<AlternativeAuthenticator> addDefaultAuthenticatorAtTheEndOfTheFlow(
             List<AlternativeAuthenticator> source
     ) {
+        log.info("Start eeeu");
         List<AlternativeAuthenticator> extendedAlternatives = new ArrayList<>(source);
         extendedAlternatives.add(new AlternativeAuthenticator() {
             @Override
