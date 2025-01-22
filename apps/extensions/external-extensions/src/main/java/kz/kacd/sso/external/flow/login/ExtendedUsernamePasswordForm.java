@@ -91,7 +91,7 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
 
     @Override
     public void action(AuthenticationFlowContext context) {
-        log.debug("Executing user form processing ...");
+        log.info("Executing user form processing ...");
 
         processAuthenticators(context);
 
@@ -127,7 +127,7 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
     }
 
     private void processValidation(AuthenticationFlowContext context) {
-        log.debug("Authentication succeeded. Validating authentication ...");
+        log.info("Authentication succeeded. Validating authentication ...");
         UserModel user = context.getUser();
         if (user == null) {
             throw new IllegalStateException("Authenticators does not add user to authentication context!");
@@ -151,7 +151,7 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
     }
 
     private void failAuthentication(AuthenticationFlowContext context, AuthenticatorValidator.Error error, boolean clearUser) {
-        log.debugf("Validation failed with %s in field %s ...", error.getMessage(), error.getField());
+        log.infof("Validation failed with %s in field %s ...", error.getMessage(), error.getField());
         if (clearUser) {
             context.clearUser();
         }
