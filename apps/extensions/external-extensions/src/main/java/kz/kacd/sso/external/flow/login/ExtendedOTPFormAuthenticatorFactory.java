@@ -11,6 +11,7 @@ import org.keycloak.models.AuthenticationExecutionModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
 import org.keycloak.provider.ProviderConfigProperty;
+import org.keycloak.provider.ProviderFactory;
 
 import java.util.Collections;
 import java.util.List;
@@ -64,7 +65,8 @@ public class ExtendedOTPFormAuthenticatorFactory extends OTPFormAuthenticatorFac
     @Override
     public Authenticator create(KeycloakSession session) {
         log.info("Created  OTPFormAuthenticator");
-        return session.getProvider(Authenticator.class, OTPFormAuthenticatorFactory.PROVIDER_ID);
+        ProviderFactory<Authenticator> provider = session.getKeycloakSessionFactory().getProviderFactory(Authenticator.class, OTPFormAuthenticatorFactory.PROVIDER_ID);
+        return (OTPFormAuthenticator)provider;
     }
 
     @Override
