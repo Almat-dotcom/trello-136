@@ -18,8 +18,9 @@ import Info from "components/Info";
 import Error from "components/Error";
 import ChangeEmail from "components/ChangeEmail";
 import ChangePhoneNumber from "components/ChangePhoneNumber/ChangePhoneNumber";
-import Otp from "components/Otp";
 import LoginConfigTotp from "components/LoginConfigTotp";
+import LoginOtp from "components/LoginOtp/LoginOtp";
+
 
 export type Props = {
     kcContext: KcContext;
@@ -46,6 +47,8 @@ export default function KcApp({ kcContext }: Props) {
             {(() => {
                 switch (kcContext.pageId) {
                     case "login.ftl": return <Login {...{ kcContext, ...props }} />;
+                    case "login-config-totp.ftl": return <LoginConfigTotp {...{kcContext, ...props}} />;
+                    case "login-otp.ftl": return <LoginOtp {...{kcContext, ...props}} />;
                     case "register.ftl": return <Register {...{ kcContext, ...props }} />;
                     case "login-verify-email.ftl": return <VerifyEmail {...{ kcContext, ...props }} />;
                     case "login-update-password.ftl": return <UpdatePassword {...{ kcContext, ...props }} />;
@@ -55,9 +58,7 @@ export default function KcApp({ kcContext }: Props) {
                     case "info.ftl": return <Info {...{ kcContext, ...props }} />;
                     case "error.ftl": return <Error {...{ kcContext, ...props }} />;
                     case "update-email.ftl": return <ChangeEmail {...{ kcContext, ...props }}/>;
-                    case "update-phone.ftl": return <ChangePhoneNumber {...{ kcContext, ...props }}/>;
-                    case "login-config-totp.ftl": return <LoginConfigTotp {...{ kcContext, ...props }} />;
-                    case "otp.ftl": return <Otp {...{ kcContext, ...props }} />;
+                     case "update-phone.ftl": return <ChangePhoneNumber {...{ kcContext, ...props }}/>;
                     default: return <KcAppBase doFetchDefaultThemeResources={true} {...{ kcContext: defaultContext, ...props }} />;
                 }
             })()}

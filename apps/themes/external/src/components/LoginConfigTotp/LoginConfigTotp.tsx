@@ -1,79 +1,87 @@
-import { Layout } from "components/Layout";
-import Button from "components/parts/Button";
-import { InputField } from "components/parts/Input";
-import { KcProps } from "keycloakify";
-import { I18n } from "lib/i18n";
+import React, { memo, useRef } from "react";
+import type { KcProps } from "keycloakify";
+import type { I18n } from "../../lib/i18n";
 import { KcContext } from "lib/kc";
-import React, { memo } from "react";
 
-type KcContext_LoginConfigTotp = Extract<KcContext, { pageId: "login-config-totp.ftl" }>;
 
-const LoginConfigTotp = memo((
-  {
-    kcContext,
-    i18n,
-    ...props
-  }: {
-    kcContext: KcContext_LoginConfigTotp;
-    i18n: I18n;
-  } & KcProps
-) => {
+type KcContextLoginConfigTotp = Extract<KcContext, { pageId: "login-config-totp.ftl" }>;
 
-  const { url, totp, mode } = kcContext;
+const LoginConfigTotp = memo(({ kcContext, i18n, ...props }: { kcContext: KcContextLoginConfigTotp; i18n: I18n; } & KcProps) => {
+     const { url, totp, mode, messagesPerField } = kcContext;
+     const { msgStr } = i18n;
+    const formRef = useRef<HTMLFormElement>(null);
 
-  // Допустим, у нас есть объект fields, где мы можем хранить состояние поля OTP:
-  const fields = {
-    otp: {
-      value: "",                      // Текущее значение
-      error: "",                      // Ошибка, если есть
-      onChange: (value: string) => {  // Обновление значения
-        fields.otp.value = value;
-      },
-    },
-  };
-
-  // Для перевода, допустим, у нас есть функция msgStr:
-  const { msgStr } = i18n;
-
-  return (
-    <Layout kcContext={kcContext} i18n={i18n}>
-      <h1>{msgStr("setupTotp") /* "Настройка TOTP" */}</h1>
-
-      {mode === "qr" && (
-        <>
-          <p>{msgStr("scanQrCode") /* "Отсканируйте QR-код..." */}</p>
-          <img
-            src={totp.qrUrl}
-            alt="TOTP QR Code"
-            width="150"
-            height="150"
-            style={{ border: "1px solid #ccc" }}
-          />
-        </>
-      )}
-
-      <p>{msgStr("enterKeyManually") /* "Или введите ключ вручную" */}</p>
-      <pre>{totp.totpSecret}</pre>
-
-      <form action={url.loginAction} method="POST" style={{ marginTop: "1rem" }}>
-        <InputField
-          fieldName="otp"
-          label={msgStr("enterOtp")} // Например, "Введите одноразовый код"
-          type="text"
-          value={fields.otp.value}
-          required
-          // error — это сообщение об ошибке, если нужно.
-          // Если поле валидно, можно передавать пустую строку или undefined.
-          error={fields.otp.error}
-          onChange={(event) => fields.otp.onChange(event.target.value)}
-        />
-
-        <Button severity="primary" type="submit">
-          {msgStr("confirm")}
-        </Button>
-      </form>
-    </Layout>
-  );
+    return (
+       <div>
+           <h1>{msgStr("loginTotpTitle")}</h1>
+           <ol id="kc-totp-settings">
+                  {mode === "manual" ? (
+                            <>
+                                <li>
+                                    <p>{msgStr("loginTotpManualStep2")}</p>
+                                    <p><span id="kc-totp-secret-key">{totp.totpSecretEncoded}</span></p>
+                                     <p><a href={totp.qrUrl} id="mode-barcode">{msgStr("loginTotpScanBarcode")}</a></p>
+                                </li>
+                                <li>
+                                    <p>{msgStr("loginTotpManualStep3")}</p>
+                                    <p>
+                                        <ul>
+                                            <li id="kc-totp-type">{msgStr("loginTotpType")}: {msgStr(`loginTotp.${totp.policy.type}`)}</li>
+                                            <li id="kc-totp-algorithm">{msgStr("loginTotpAlgorithm")}: {totp.policy.algorithm}</li>
+                                            <li id="kc-totp-digits">{msgStr("loginTotpDigits")}: {totp.policy.digits}</li>
+                                             {totp.policy.type === "totp" ? (
+                                               <li id="kc-totp-period">{msgStr("loginTotpInterval")}: {totp.policy.period}</li>
+                                              ) : (
+                                                <li id="kc-totp-counter">{msgStr("loginTotpCounter")}: {totp.policy.initialCounter}</li>
+                                             )}
+                                        </ul>
+                                    </p>
+                                </li>
+                            </>
+                         ) : (
+                             <li>
+                                <p>{msgStr("loginTotpStep2")}</p>
+                                  <img id="kc-totp-secret-qr-code" src={`data:image/png;base64, ${totp.totpSecretQrCode}`} alt="Figure: Barcode" /><br/>
+                                <p><a href={totp.manualUrl} id="mode-manual">{msgStr("loginTotpUnableToScan")}</a></p>
+                             </li>
+                         )}
+                        <li>
+                            <p>{msgStr("loginTotpStep3")}</p>
+                            <p>{msgStr("loginTotpStep3DeviceName")}</p>
+                         </li>
+            </ol>
+             <form action={url.loginAction} id="kc-totp-settings-form" method="post"  ref={formRef}>
+                 <div>
+                    <label htmlFor="totp">{msgStr("authenticatorCode")}</label>
+                    <input type="text" id="totp" name="totp" />
+                         {messagesPerField.get('totp') && (
+                             <span aria-live="polite">
+                                {messagesPerField.get('totp')}
+                             </span>
+                         )}
+                    <input type="hidden" id="totpSecret" name="totpSecret" value={totp.totpSecret} />
+                    {mode &&  <input type="hidden" id="mode" name="mode" value={mode} />}
+                </div>
+                <div>
+                    <label htmlFor="userLabel">{msgStr("loginTotpDeviceName")}</label>
+                    <input type="text" id="userLabel" name="userLabel" />
+                        {messagesPerField.get('userLabel') && (
+                             <span aria-live="polite">
+                                {messagesPerField.get('userLabel')}
+                             </span>
+                         )}
+                </div>
+                {kcContext?.isAppInitiatedAction ? (
+                  <>
+                     <button type="button" onClick={() => formRef.current?.submit()} >{msgStr("doSubmit")}</button>
+                    <button type="button" name="cancel-aia" value="true" onClick={() => formRef.current?.submit()} >{msgStr("doCancel")}</button>
+                   </>
+                  ) : (
+                    <button type="button" onClick={() => formRef.current?.submit()}>{msgStr("doSubmit")}</button>
+                  )}
+             </form>
+        </div>
+    );
 });
 
 export default LoginConfigTotp;

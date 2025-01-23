@@ -29,33 +29,41 @@ type ChangePhone = KcContextBase.Common & {
 	phoneNumber?: string;
 };
 
-type LoginConfigTotp = KcContextBase.Common & {
-	pageId: "login-config-totp.ftl";
-	mode: "qr" | "manual" | string; // Можете расширять при необходимости
-	totp: {
-	  totpSecretEncoded: string;
-	  qrUrl: string;
-	  policy: {
-		supportedApplications: string[];
-		algorithm: string;
-		digits: number;
-		lookAheadWindow: number;
-		type: string;
-		period: number;
-	  };
-	  totpSecretQrCode: string;
-	  manualUrl: string;
-	  totpSecret: string;
-	  otpCredentials: Array<{
-		id: string;
-		userLabel: string;
-	  }>;
-	};
-  };
-
-type OtpForm = KcContextBase.Common & {
-	pageId: "otp.ftl";
+type KcContextLoginOtp = KcContextBase.LoginOtp & {
+    pageId: "login-otp.ftl";
+      otpLogin? : {
+        userOtpCredentials?: {
+            id: string;
+            userLabel: string;
+        }[];
+        selectedCredentialId?: string;
+    }
 };
+
+type KcContextLoginConfigTotp = KcContextBase.LoginConfigTotp & {
+    pageId: "login-config-totp.ftl";
+    totp?:{
+        supportedApplications: string[];
+        totpSecret: string;
+        totpSecretEncoded: string;
+        totpSecretQrCode: string;
+        qrUrl:string;
+        manualUrl:string;
+         policy:{
+            type: "totp" | "hotp";
+            algorithm:  "HmacSHA1" | "HmacSHA256" | "HmacSHA512";
+            digits: number;
+            period?: number;
+            initialCounter?: number;
+         };
+    }
+    isAppInitiatedAction?: boolean;
+};
+
+type KcContextLogoutConfirm = KcContextBase.LogoutConfirm & {
+    pageId: "logout-confirm.ftl"
+};
+
 
 type ExtendedContextExtended =
 	KcContextBase.Login |
@@ -75,14 +83,15 @@ type ExtendedContextExtended =
 	KcContextBase.LoginIdpLinkEmail |
 	KcContextBase.LoginPageExpired |
 	KcContextBase.LoginConfigTotp |
-	KcContextBase.LogoutConfirm |
+    KcContextBase.LogoutConfirm |
 	KcContextBase.UpdateUserProfile |
 	KcContextBase.IdpReviewUserProfile |
 	ExtendedRegister |
 	ChangeEmail |
 	ChangePhone |
-	LoginConfigTotp |
-	OtpForm;
+    KcContextLoginOtp |
+    KcContextLoginConfigTotp |
+    KcContextLogoutConfirm;
 
 export const { kcContext } = getKcContext<ExtendedContextExtended>({
 	// "mockPageId": "login.ftl",
@@ -97,6 +106,7 @@ export const { kcContext } = getKcContext<ExtendedContextExtended>({
 	// "mockPageId": "error.ftl",
 	// "mockPageId": "update-email.ftl",
 	// "mockPageId": "update-phone.ftl",
+    //  "mockPageId": "login-otp.ftl",
 
 	"mockData": [
 		{
@@ -235,31 +245,85 @@ export const { kcContext } = getKcContext<ExtendedContextExtended>({
 				}]
 			}
 		},
-		{
+        {
 			"pageId": "login-config-totp.ftl",
-			"mode": "qr",
-			"totp": {
-				"totpSecretEncoded": "JBSWY3DPEHPK3PXP",
-				"qrUrl": "https://upload.wikimedia.org/wikipedia/commons/0/0b/QR_code_Wikimedia_Commons_%28URL%29.png",
-				"policy": {
-					"supportedApplications": ["Google Authenticator", "Authy"],
-					"algorithm": "HmacSHA1",
-					"digits": 6,
-					"lookAheadWindow": 1,
-					"type": "totp",
-					"period": 30
-				},
-				"totpSecretQrCode": "https://upload.wikimedia.org/wikipedia/commons/0/0b/QR_code_Wikimedia_Commons_%28URL%29.png",
-				"manualUrl": "otpauth://totp/example?secret=JBSWY3DPEHPK3PXP",
-				"totpSecret": "JBSWY3DPEHPK3PXP",
-				"otpCredentials": [
-					{
-						"id": "otp-1",
-						"userLabel": "Primary"
-					}
-				]
+            "locale": {
+                "currentLanguageTag": "ru",
+                "supported": [{
+                    "url": "mockurl-kz",
+                    "label": "locale_kz",
+                    "languageTag": "kz"
+                }]
+            },
+            "totp": {
+                "supportedApplications": ["Authenticator App", "Google Authenticator"],
+                "totpSecret": "123456",
+                "totpSecretEncoded": "123456",
+                "totpSecretQrCode": "qrCode",
+                "qrUrl":"#",
+                "manualUrl":"#",
+                "policy": {
+                    "type":"totp",
+                   "algorithm":  "HmacSHA1" ,
+                    "digits": 6,
+                    "period": 30,
+                     "initialCounter": 0
+                }
+            },
+             "isAppInitiatedAction": true
+		},
+		{
+			"pageId": "update-email.ftl",
+			"realm": {
+				"internationalizationEnabled": true
+			},
+			"locale": {
+				"currentLanguageTag": "ru",
+				"supported": [{
+					"url": "mockurl-kz",
+					"label": "locale_kz",
+					"languageTag": "kz"
+				}]
 			}
 		},
+        {
+			"pageId": "update-phone.ftl",
+			"realm": {
+				"internationalizationEnabled": true
+			},
+			"locale": {
+				"currentLanguageTag": "ru",
+				"supported": [{
+					"url": "mockurl-kz",
+					"label": "locale_kz",
+					"languageTag": "kz"
+				}]
+			}
+		},
+        {
+            "pageId":"login-otp.ftl",
+            "locale": {
+                "currentLanguageTag": "ru",
+                "supported": [{
+                    "url": "mockurl-kz",
+                    "label": "locale_kz",
+                    "languageTag": "kz"
+                }]
+            },
+             "otpLogin": {
+                 "userOtpCredentials":[
+                     {
+                         "id": "otp_id",
+                         "userLabel": "userLabel"
+                     },
+                     {
+                         "id":"otp_id_2",
+                         "userLabel": "userLabel_2"
+                     }
+                 ],
+                 "selectedCredentialId": "otp_id"
+            }
+        }
 	]
 });
 

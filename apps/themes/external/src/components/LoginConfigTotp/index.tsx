@@ -1,3 +1,3 @@
-import GoogleAuthenticator from "./LoginConfigTotp";
+import LoginConfigTotp from "./LoginConfigTotp";
 
-export default GoogleAuthenticator;
+export default LoginConfigTotp;
