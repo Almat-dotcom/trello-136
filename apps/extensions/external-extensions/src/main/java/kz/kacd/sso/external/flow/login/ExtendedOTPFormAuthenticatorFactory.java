@@ -5,31 +5,39 @@ import org.jboss.logging.Logger;
 import org.keycloak.Config;
 import org.keycloak.authentication.Authenticator;
 import org.keycloak.authentication.AuthenticatorFactory;
-import org.keycloak.authentication.authenticators.browser.OTPFormAuthenticator;
-import org.keycloak.authentication.authenticators.browser.OTPFormAuthenticatorFactory;
 import org.keycloak.models.AuthenticationExecutionModel;
+import org.keycloak.authentication.authenticators.browser.OTPFormAuthenticator;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
 import org.keycloak.provider.ProviderConfigProperty;
-import org.keycloak.provider.ProviderFactory;
 
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Фабрика, которая выдает нашу кастомную реализацию, расширяющую логику OTPFormAuthenticator.
+ */
 @AutoService(AuthenticatorFactory.class)
-public class ExtendedOTPFormAuthenticatorFactory extends OTPFormAuthenticatorFactory {
-    private static final Logger log = Logger.getLogger(ExtendedOTPFormAuthenticatorFactory.class);
+public class ExtendedOTPFormAuthenticatorFactory implements AuthenticatorFactory {
+    private static final Logger LOG = Logger.getLogger(ExtendedOTPFormAuthenticatorFactory.class);
 
-    private static final String PROVIDER_ID = "auth-otp-form";
-    private static final AuthenticationExecutionModel.Requirement[] REQUIREMENT_CHOICES =
-            new AuthenticationExecutionModel.Requirement[]{
-                    AuthenticationExecutionModel.Requirement.REQUIRED
-            };
+    // Укажем свой ID, чтобы не конфликтовать с встроенным "auth-otp-form"
+    public static final String PROVIDER_ID = "extended-otp-form";
+
+    private static final AuthenticationExecutionModel.Requirement[] REQUIREMENT_CHOICES = {
+            AuthenticationExecutionModel.Requirement.REQUIRED,
+            AuthenticationExecutionModel.Requirement.ALTERNATIVE,
+            AuthenticationExecutionModel.Requirement.DISABLED
+    };
+
+    @Override
+    public String getId() {
+        return PROVIDER_ID;
+    }
 
     @Override
     public String getDisplayType() {
-        log.info("Extended OTP Form");
-        return "Extended OTP Form";
+        return "Extended OTP Form (custom)";
     }
 
     @Override
@@ -54,7 +62,7 @@ public class ExtendedOTPFormAuthenticatorFactory extends OTPFormAuthenticatorFac
 
     @Override
     public String getHelpText() {
-        return "Extended OTP Form";
+        return "Extended version of the default OTP form authenticator";
     }
 
     @Override
@@ -64,28 +72,22 @@ public class ExtendedOTPFormAuthenticatorFactory extends OTPFormAuthenticatorFac
 
     @Override
     public Authenticator create(KeycloakSession session) {
-        log.info("Created  OTPFormAuthenticator");
-        ProviderFactory<Authenticator> provider = session.getKeycloakSessionFactory().getProviderFactory(Authenticator.class, OTPFormAuthenticatorFactory.PROVIDER_ID);
-        return (OTPFormAuthenticator)provider;
+        // Возвращаем нашу реализацию, которая "декорирует" (или наследует) логику OTPFormAuthenticator
+        return new ExtendedOTPFormAuthenticator();
     }
 
     @Override
     public void init(Config.Scope config) {
-        // No
+        // Пусто
     }
 
     @Override
     public void postInit(KeycloakSessionFactory factory) {
-        // No
+        // Пусто
     }
 
     @Override
     public void close() {
-        // No
-    }
-
-    @Override
-    public String getId() {
-        return PROVIDER_ID;
+        // Пусто
     }
 }
