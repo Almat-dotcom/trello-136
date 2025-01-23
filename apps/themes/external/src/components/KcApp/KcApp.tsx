@@ -19,7 +19,6 @@ import Error from "components/Error";
 import ChangeEmail from "components/ChangeEmail";
 import ChangePhoneNumber from "components/ChangePhoneNumber/ChangePhoneNumber";
 import Otp from "components/Otp";
-import LoginConfigTotp from "components/LoginConfigTotp";
 
 export type Props = {
     kcContext: KcContext;
