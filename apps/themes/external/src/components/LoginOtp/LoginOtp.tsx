@@ -34,7 +34,7 @@ const LoginOtp = memo(({ kcContext, i18n, ...props }: { kcContext: KcContextLogi
                 )}
                 <div>
                     <label htmlFor="otp">{msgStr("loginOtpOneTime")}</label>
-                    <input type="text" id="otp" name="otp" />
+                    <input type="text" id="totp" name="totp" />
                      {messagesPerField.get('totp') && (
                             <span  aria-live="polite">
                                  {messagesPerField.get('totp')}
