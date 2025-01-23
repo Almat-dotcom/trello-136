@@ -22,9 +22,7 @@ public class ExtendedOTPFormAuthenticatorFactory extends OTPFormAuthenticatorFac
     private static final String PROVIDER_ID = "auth-otp-form";
     private static final AuthenticationExecutionModel.Requirement[] REQUIREMENT_CHOICES =
             new AuthenticationExecutionModel.Requirement[]{
-                    AuthenticationExecutionModel.Requirement.REQUIRED,
-                    AuthenticationExecutionModel.Requirement.ALTERNATIVE,
-                    AuthenticationExecutionModel.Requirement.DISABLED
+                    AuthenticationExecutionModel.Requirement.REQUIRED
             };
 
     @Override
