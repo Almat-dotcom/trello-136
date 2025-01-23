@@ -56,7 +56,7 @@ export default function KcApp({ kcContext }: Props) {
                     case "error.ftl": return <Error {...{ kcContext, ...props }} />;
                     case "update-email.ftl": return <ChangeEmail {...{ kcContext, ...props }}/>;
                     case "update-phone.ftl": return <ChangePhoneNumber {...{ kcContext, ...props }}/>;
-                    case "login-config-totp.ftl": return <LoginConfigTotp {...{ kcContext, ...props }} />;
+                    // case "login-config-totp.ftl": return <LoginConfigTotp {...{ kcContext, ...props }} />;
                     case "otp.ftl": return <Otp {...{ kcContext, ...props }} />;
                     default: return <KcAppBase doFetchDefaultThemeResources={true} {...{ kcContext: defaultContext, ...props }} />;
                 }
