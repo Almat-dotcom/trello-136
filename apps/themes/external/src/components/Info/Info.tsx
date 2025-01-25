@@ -10,8 +10,7 @@ const Info = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext_Info, i
     const { requiredActions, messageHeader, message, pageRedirectUri, actionUri, client } = kcContext;
     const { msg, advancedMsgStr } = i18n;
 
-    const requiredActionsItems = requiredActions?.map((it, i) => <p key={i} className="text-gray-700">{advancedMsgStr(it)}</p>) ?? [];
-
+    const requiredActionsItems ="kskmd"
     return (
         <LayoutWithCarousel kcContext={kcContext} i18n={i18n}>
             <div>

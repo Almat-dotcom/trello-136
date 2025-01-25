@@ -26,77 +26,15 @@ type ChangeEmail = KcContextBase.Common & {
 
 type ChangePhone = KcContextBase.Common & {
 	pageId: "update-phone.ftl";
-	phoneNumber?: string;
-};
+	phoneNumber?: string
+}
 
-type KcContextLoginOtp = KcContextBase.LoginOtp & {
-    pageId: "login-otp.ftl";
-      otpLogin? : {
-        userOtpCredentials?: {
-            id: string;
-            userLabel: string;
-        }[];
-        selectedCredentialId?: string;
-    }
-};
-
-type KcContextLoginConfigTotp = KcContextBase.LoginConfigTotp & {
-    pageId: "login-config-totp.ftl";
-    totp?:{
-        supportedApplications: string[];
-        totpSecret: string;
-        totpSecretEncoded: string;
-        totpSecretQrCode: string;
-        qrUrl:string;
-        manualUrl:string;
-         policy:{
-            type: "totp" | "hotp";
-            algorithm:  "HmacSHA1" | "HmacSHA256" | "HmacSHA512";
-            digits: number;
-            period?: number;
-            initialCounter?: number;
-         };
-    }
-    isAppInitiatedAction?: boolean;
-};
-
-type KcContextLogoutConfirm = KcContextBase.LogoutConfirm & {
-    pageId: "logout-confirm.ftl"
-};
-
-
-type ExtendedContextExtended =
-	KcContextBase.Login |
-	KcContextBase.RegisterUserProfile |
-	KcContextBase.Info |
-	KcContextBase.Error |
-	KcContextBase.LoginResetPassword |
-	KcContextBase.LoginVerifyEmail |
-	KcContextBase.Terms |
-	KcContextBase.LoginOtp |
-	KcContextBase.LoginUsername |
-	KcContextBase.WebauthnAuthenticate |
-	KcContextBase.LoginPassword |
-	KcContextBase.LoginUpdatePassword |
-	KcContextBase.LoginUpdateProfile |
-	KcContextBase.LoginIdpLinkConfirm |
-	KcContextBase.LoginIdpLinkEmail |
-	KcContextBase.LoginPageExpired |
-	KcContextBase.LoginConfigTotp |
-    KcContextBase.LogoutConfirm |
-	KcContextBase.UpdateUserProfile |
-	KcContextBase.IdpReviewUserProfile |
-	ExtendedRegister |
-	ChangeEmail |
-	ChangePhone |
-    KcContextLoginOtp |
-    KcContextLoginConfigTotp |
-    KcContextLogoutConfirm;
+type ExtendedContextExtended = KcContextBase.Login | KcContextBase.RegisterUserProfile | KcContextBase.Info | KcContextBase.Error | KcContextBase.LoginResetPassword | KcContextBase.LoginVerifyEmail | KcContextBase.Terms  | KcContextBase.LoginUsername | KcContextBase.WebauthnAuthenticate | KcContextBase.LoginPassword | KcContextBase.LoginUpdatePassword | KcContextBase.LoginUpdateProfile | KcContextBase.LoginIdpLinkConfirm | KcContextBase.LoginIdpLinkEmail | KcContextBase.LoginPageExpired  | KcContextBase.LogoutConfirm | KcContextBase.UpdateUserProfile | KcContextBase.IdpReviewUserProfile | ExtendedRegister | ChangeEmail | ChangePhone;
 
 export const { kcContext } = getKcContext<ExtendedContextExtended>({
+
 	// "mockPageId": "login.ftl",
 	// "mockPageId": "register.ftl",
-	"mockPageId":"login-config-totp.ftl",
 	// "mockPageId": "login-verify-email.ftl",
 	// "mockPageId": "login-update-password.ftl",
 	// "mockPageId": "logout-confirm.ftl",
@@ -106,7 +44,8 @@ export const { kcContext } = getKcContext<ExtendedContextExtended>({
 	// "mockPageId": "error.ftl",
 	// "mockPageId": "update-email.ftl",
 	// "mockPageId": "update-phone.ftl",
-    //  "mockPageId": "login-otp.ftl",
+	// "mockPageId": "login-otp.ftl",
+	"mockPageId": "login-config-totp.ftl",
 
 	"mockData": [
 		{
@@ -244,86 +183,7 @@ export const { kcContext } = getKcContext<ExtendedContextExtended>({
 					"languageTag": "kz"
 				}]
 			}
-		},
-        {
-			"pageId": "login-config-totp.ftl",
-            "locale": {
-                "currentLanguageTag": "ru",
-                "supported": [{
-                    "url": "mockurl-kz",
-                    "label": "locale_kz",
-                    "languageTag": "kz"
-                }]
-            },
-            "totp": {
-                "supportedApplications": ["Authenticator App", "Google Authenticator"],
-                "totpSecret": "123456",
-                "totpSecretEncoded": "123456",
-                "totpSecretQrCode": "qrCode",
-                "qrUrl":"#",
-                "manualUrl":"#",
-                "policy": {
-                    "type":"totp",
-                   "algorithm":  "HmacSHA1" ,
-                    "digits": 6,
-                    "period": 30,
-                     "initialCounter": 0
-                }
-            },
-             "isAppInitiatedAction": true
-		},
-		{
-			"pageId": "update-email.ftl",
-			"realm": {
-				"internationalizationEnabled": true
-			},
-			"locale": {
-				"currentLanguageTag": "ru",
-				"supported": [{
-					"url": "mockurl-kz",
-					"label": "locale_kz",
-					"languageTag": "kz"
-				}]
-			}
-		},
-        {
-			"pageId": "update-phone.ftl",
-			"realm": {
-				"internationalizationEnabled": true
-			},
-			"locale": {
-				"currentLanguageTag": "ru",
-				"supported": [{
-					"url": "mockurl-kz",
-					"label": "locale_kz",
-					"languageTag": "kz"
-				}]
-			}
-		},
-        {
-            "pageId":"login-otp.ftl",
-            "locale": {
-                "currentLanguageTag": "ru",
-                "supported": [{
-                    "url": "mockurl-kz",
-                    "label": "locale_kz",
-                    "languageTag": "kz"
-                }]
-            },
-             "otpLogin": {
-                 "userOtpCredentials":[
-                     {
-                         "id": "otp_id",
-                         "userLabel": "userLabel"
-                     },
-                     {
-                         "id":"otp_id_2",
-                         "userLabel": "userLabel_2"
-                     }
-                 ],
-                 "selectedCredentialId": "otp_id"
-            }
-        }
+		}
 	]
 });
 
