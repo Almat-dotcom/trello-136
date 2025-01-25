@@ -99,11 +99,6 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
         processAuthenticators(context);
 
         if (context.getStatus().equals(FlowStatus.SUCCESS)) {
-            UserModel user = context.getUser();
-            if(UserAttributeUtils.isOtpEnabled(user)){
-                context.attempted();
-                return;
-            }
             processValidation(context);
         }
         if (!context.getStatus().equals(FlowStatus.SUCCESS)) {
