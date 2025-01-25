@@ -41,7 +41,7 @@ const TotpSetup = memo(({ kcContext, i18n }: { kcContext: KcContextExtendedLogin
                             className="border rounded-lg shadow-md max-w-sm mx-auto"
                         />
                         <p className="mt-4">{msgStr("loginTotpManualStep2")}</p>
-                        <div className="bg-gray-100 p-2 rounded-md text-gray-800 font-mono">{totp.totpSecret}</div>
+                        <div className="bg-gray-100 p-2 rounded-md text-gray-800 font-mono">{totp.totpSecretEncoded}</div>
                     </div>
 
                     <div>
