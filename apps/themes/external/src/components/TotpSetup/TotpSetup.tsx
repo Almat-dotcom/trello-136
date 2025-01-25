@@ -1,25 +1,20 @@
-import React, { useState } from "react";
+import React, {memo, useState } from "react";
 import Button from "components/parts/Button";
 import { InputField } from "components/parts/Input";
+import { KcProps } from "keycloakify";
 import { I18n } from "lib/i18n";
 import { KcContext } from "lib/kc";
+import { Layout, LayoutWithCarousel } from "components/Layout";
+import Alert from "components/parts/Alert";
 
 type KcContextExtendedLoginConfigTotp = Extract<KcContext, { pageId: "login-config-totp.ftl" }>;
 
-const TotpSetup = ({ kcContext, i18n }: { kcContext: KcContextExtendedLoginConfigTotp; i18n: I18n }) => {
-    const { totp } = kcContext;
+const TotpSetup = memo(({ kcContext, i18n }: { kcContext: KcContextExtendedLoginConfigTotp; i18n: I18n; } & KcProps) => {
+    const { totp, url, message } = kcContext;
     const { msgStr } = i18n;
 
-    const [otpCode, setOtpCode] = useState(""); // Код OTP, введённый пользователем
-    const [deviceName, setDeviceName] = useState(""); // Имя устройства
-
-    if (!totp) {
-        return (
-            <div className="flex items-center justify-center h-screen text-center">
-                <h1 className="text-2xl font-bold text-red-500">{msgStr("enterKeyManually")}</h1>
-            </div>
-        );
-    }
+    const [otp, setOtp] = useState("");
+    const [deviceName, setDeviceName] = useState("");
 
     const onSubmit = () => {
         const form = document.getElementById("kc-totp-setup-form") as HTMLFormElement;
@@ -27,63 +22,73 @@ const TotpSetup = ({ kcContext, i18n }: { kcContext: KcContextExtendedLoginConfi
     };
 
     return (
-        <div className="px-4 lg:px-8 py-6 bg-white shadow-md rounded-lg max-w-lg mx-auto mt-10">
-            <h1 className="text-3xl font-bold mb-6">{msgStr("enterKeyManually")}</h1>
-
-            <ol className="list-decimal list-inside mb-6">
-                <li className="mb-4">
-                    {msgStr("enterKeyManually")}
-                    <img
-                        src={`data:image/png;base64,${totp.totpSecretQrCode}`}
-                        alt="TOTP QR Code"
-                        className="border-2 rounded-md w-48 h-48 mx-auto my-4"
-                    />
-                </li>
-                <li className="mb-4">
-                    {msgStr("enterKeyManually")}
-                    <code className="block bg-gray-100 p-2 rounded text-sm font-mono mt-2">
-                        {totp.totpSecret}
-                    </code>
-                </li>
-                <li className="mb-4">
-                    {msgStr("enterKeyManually")}
-                </li>
-            </ol>
-
-            <form id="kc-totp-setup-form" method="post" action={kcContext.url.loginAction} className="space-y-4">
-                <InputField
-                    fieldName="totp"
-                    label={msgStr("authenticatorCode")}
-                    type="text"
-                    value={otpCode}
-                    onChange={(e) => setOtpCode(e.target.value)}
-                    required
-                />
-                <InputField
-                    fieldName="userLabel"
-                    label={msgStr("enterKeyManually")}
-                    type="text"
-                    value={deviceName}
-                    onChange={(e) => setDeviceName(e.target.value)}
-                    required
-                />
-                <input type="hidden" name="totpSecret" value={totp.totpSecret} />
-
-                <div className="flex justify-between">
-                    <Button
-                        type="button"
-                        severity="link-primary"
-                        onClick={() => (window.location.href = kcContext.url.cancelUrl || "#")}
-                    >
-                        {msgStr("doCancel")}
-                    </Button>
-                    <Button severity="primary" type="submit" onClick={onSubmit}>
-                        {msgStr("doSubmit")}
-                    </Button>
+        <Layout kcContext={kcContext} i18n={i18n}>
+            <div className="px-4 lg:px-8">
+                <div>
+                    {message && (
+                        <Alert i18n={i18n} type={message.type} message={message.summary} />
+                    )}
+                    <h1 className="text-3xl font-bold text-gray-900 mt-4">{msgStr("loginTotpTitle")}</h1>
                 </div>
-            </form>
-        </div>
+
+                <form id="totp-setup-form" action={url.loginAction} method="post" className="mt-6 space-y-6">
+                    <div>
+                        <p>{msgStr("loginTotpStep1")}</p>
+                        <img
+                            src={`data:image/png;base64,${totp.totpSecretQrCode}`}
+                            alt="TOTP QR Code"
+                            className="border rounded-lg shadow-md max-w-sm mx-auto"
+                        />
+                        <p className="mt-4">{msgStr("loginTotpManualStep2")}</p>
+                        <div className="bg-gray-100 p-2 rounded-md text-gray-800 font-mono">{totp.totpSecret}</div>
+                    </div>
+
+                    <div>
+                        <InputField
+                            fieldName="totp"
+                            type="text"
+                            label={msgStr("authenticatorCode")}
+                            placeholder="123456"
+                            value={otp}
+                            onChange={(e) => setOtp(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <InputField
+                            fieldName="userLabel"
+                            type="text"
+                            label={msgStr("loginTotpDeviceName")}
+                            placeholder={msgStr("loginTotpDeviceName")}
+                            value={deviceName}
+                            onChange={(e) => setDeviceName(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    <div className="flex justify-between items-center">
+                        <Button
+                            severity="primary"
+                            type="button"
+                            onClick={onSubmit}
+                        >
+                            {msgStr("doSubmit")}
+                        </Button>
+                        {url.loginRestartFlowUrl && (
+                            <Button
+                                severity="secondary"
+                                type="link"
+                                href={url.loginRestartFlowUrl}
+                            >
+                                {msgStr("doCancel")}
+                            </Button>
+                        )}
+                    </div>
+                </form>
+            </div>
+        </Layout>
     );
-};
+});
 
 export default TotpSetup;
