@@ -70,7 +70,7 @@ const TotpSetup = memo(({ kcContext, i18n }: { kcContext: KcContextExtendedLogin
                     <div className="flex justify-between items-center">
                         <Button
                             severity="primary"
-                            type="button"
+                            type="submit"
                             onClick={onSubmit}
                         >
                             {msgStr("doSubmit")}
