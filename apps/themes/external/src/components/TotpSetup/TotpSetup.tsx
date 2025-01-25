@@ -32,6 +32,7 @@ const TotpSetup = memo(({ kcContext, i18n }: { kcContext: KcContextExtendedLogin
                 </div>
 
                 <form id="totp-setup-form" action={url.loginAction} method="post" className="mt-6 space-y-6">
+                <input type="hidden" name="totpSecret" value={totp.totpSecret} />
                     <div>
                         <p>{msgStr("loginTotpStep1")}</p>
                         <img
