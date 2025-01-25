@@ -61,7 +61,7 @@ const TotpSetup = ({ kcContext, i18n }: { kcContext: KcContextExtendedLoginConfi
                 />
                 <InputField
                     fieldName="userLabel"
-                    label={msgStr("deviceName")}
+                    label={msgStr("enterKeyManually")}
                     type="text"
                     value={deviceName}
                     onChange={(e) => setDeviceName(e.target.value)}
