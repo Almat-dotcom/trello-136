@@ -6,7 +6,7 @@ import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 
 public class UserAttributeUtils {
-    private static final Logger LOG = Logger.getLogger(ConditionalOTPAuthenticator.class);
+    private static final Logger LOG = Logger.getLogger(UserAttributeUtils.class);
 
 
     private static final String OTP_ENABLED_ATTRIBUTE = "otp_enabled";
