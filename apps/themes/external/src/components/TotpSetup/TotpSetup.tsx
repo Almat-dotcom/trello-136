@@ -1,10 +1,10 @@
-import React, {memo, useState } from "react";
+import {memo, useState } from "react";
 import Button from "components/parts/Button";
 import { InputField } from "components/parts/Input";
 import { KcProps } from "keycloakify";
 import { I18n } from "lib/i18n";
 import { KcContext } from "lib/kc";
-import { Layout, LayoutWithCarousel } from "components/Layout";
+import { Layout } from "components/Layout";
 import Alert from "components/parts/Alert";
 
 type KcContextExtendedLoginConfigTotp = Extract<KcContext, { pageId: "login-config-totp.ftl" }>;
