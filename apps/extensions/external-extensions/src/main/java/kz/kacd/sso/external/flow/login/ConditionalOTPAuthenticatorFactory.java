@@ -22,7 +22,7 @@ public class ConditionalOTPAuthenticatorFactory implements AuthenticatorFactory 
 
     @Override
     public Authenticator create(KeycloakSession session) {
-        return SINGLETON;
+        return new ConditionalOTPAuthenticator();
     }
 
     @Override
