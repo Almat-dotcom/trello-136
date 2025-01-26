@@ -44,7 +44,8 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
         extendedAlternatives.add(new AlternativeAuthenticator() {
             @Override
             public boolean isConfiguredFor(AuthenticationFlowContext context) {
-                return true;
+                UserModel user = context.getUser();
+                return user != null && user.credentialManager().isConfiguredFor("otp");
             }
 
             @Override
