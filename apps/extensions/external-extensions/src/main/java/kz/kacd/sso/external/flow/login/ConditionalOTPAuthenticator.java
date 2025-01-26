@@ -4,6 +4,7 @@ import jakarta.ws.rs.core.Response;
 import org.jboss.logging.Logger;
 import org.keycloak.authentication.AuthenticationFlowContext;
 import org.keycloak.authentication.AuthenticationFlowError;
+import org.keycloak.models.UserCredentialModel;
 import org.keycloak.models.UserModel;
 import org.keycloak.models.credential.OTPCredentialModel;
 import org.keycloak.credential.CredentialProvider;
@@ -43,8 +44,34 @@ public class ConditionalOTPAuthenticator extends OTPFormAuthenticator {
 
     @Override
     public void action(AuthenticationFlowContext context) {
-        super.action(context); // Используем стандартную валидацию OTP из OTPFormAuthenticator
-    }
+        String otp = context.getHttpRequest().getDecodedFormParameters().getFirst("otp");
+
+        // Проверяем, ввел ли пользователь код OTP
+        if (otp == null || otp.isEmpty()) {
+            logger.warn("No OTP provided.");
+            Response challenge = context.form()
+                    .setError("Missing OTP Code")
+                    .createForm("login-otp.ftl");
+            context.failureChallenge(AuthenticationFlowError.INVALID_CREDENTIALS, challenge);
+            return;
+        }
+
+        // Валидируем код OTP
+        OTPCredentialProvider otpProvider = (OTPCredentialProvider) context.getSession()
+                .getProvider(CredentialProvider.class, OTPCredentialModel.TYPE);
+        UserCredentialModel credentialInput = new UserCredentialModel(null, OTPCredentialModel.TYPE, otp);
+
+        if (otpProvider == null || !otpProvider.isValid(context.getRealm(), context.getUser(), credentialInput)) {
+            logger.warn("Invalid OTP provided.");
+            Response challenge = context.form()
+                    .setError("Invalid OTP Code")
+                    .createForm("login-otp.ftl");
+            context.failureChallenge(AuthenticationFlowError.INVALID_CREDENTIALS, challenge);
+            return;
+        }
+
+        logger.infof("OTP successfully validated for user %s.", context.getUser().getUsername());
+        context.success();    }
 
     private boolean isOTPConfigured(AuthenticationFlowContext context, UserModel user) {
         // Получаем провайдер OTP
