@@ -149,7 +149,7 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
             return;
         }
 
-        context.success();
+//        context.success();
     }
 
     private void failAuthentication(AuthenticationFlowContext context, AuthenticatorValidator.Error error, boolean clearUser) {
