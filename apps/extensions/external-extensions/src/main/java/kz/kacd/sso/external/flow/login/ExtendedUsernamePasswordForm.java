@@ -148,6 +148,7 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
 
         if (context.getStatus().equals(FlowStatus.SUCCESS)) {
             processValidation(context);
+            isOTPConfigured(context, context.getUser());
         }
         if (!context.getStatus().equals(FlowStatus.SUCCESS)) {
             context.getEvent().detail("error", context.getUserErrorMessage());
