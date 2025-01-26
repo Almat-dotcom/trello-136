@@ -5,10 +5,14 @@ import kz.kacd.sso.external.model.page.ExternalLoginPage;
 import kz.kacd.sso.external.model.page.ExternalRegistrationPage;
 import org.jboss.logging.Logger;
 import org.keycloak.authentication.AuthenticationFlowContext;
+import org.keycloak.authentication.AuthenticationFlowError;
 import org.keycloak.authentication.Authenticator;
 import org.keycloak.authentication.FlowStatus;
 import org.keycloak.authentication.authenticators.browser.UsernamePasswordForm;
+import org.keycloak.credential.CredentialProvider;
+import org.keycloak.credential.OTPCredentialProvider;
 import org.keycloak.models.UserModel;
+import org.keycloak.models.credential.OTPCredentialModel;
 import org.keycloak.services.managers.AuthenticationManager;
 
 import java.util.ArrayList;
@@ -67,6 +71,49 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
             }
         });
         return extendedAlternatives;
+    }
+
+    @Override
+    public void authenticate(AuthenticationFlowContext context) {
+        UserModel user = context.getUser();
+
+        if (user == null) {
+            log.info("No user found in the authentication context.");
+            context.failure(AuthenticationFlowError.UNKNOWN_USER);
+            return;
+        }
+
+        // Проверяем, настроен ли OTP
+        if (isOTPConfigured(context, user)) {
+            log.infof("User %s has OTP configured. Prompting for OTP code.", user.getUsername());
+
+            // Показываем форму для ввода OTP
+            Response challenge = context.form()
+                    .setAttribute("realm", context.getRealm())
+                    .createForm("login-otp.ftl");
+            context.challenge(challenge);
+            return;
+        }
+
+        log.infof("User %s does not have OTP configured. Skipping OTP step.", user.getUsername());
+        super.authenticate(context); // Продолжаем стандартную проверку логина/пароля
+    }
+
+    private boolean isOTPConfigured(AuthenticationFlowContext context, UserModel user) {
+        if (user == null) {
+            return false;
+        }
+
+        // Получаем OTPCredentialProvider из KeycloakSession
+        OTPCredentialProvider otpProvider = (OTPCredentialProvider) context.getSession()
+                .getProvider(CredentialProvider.class, OTPCredentialModel.TYPE);
+
+        if (otpProvider == null) {
+            return false;
+        }
+
+        // Проверяем, настроен ли OTP для пользователя
+        return otpProvider.isConfiguredFor(context.getRealm(), user);
     }
 
     private String extractUsername(AuthenticationFlowContext context) {
