@@ -78,8 +78,9 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
         UserModel user = context.getUser();
 
         if (user == null) {
-            log.info("No user found in the authentication context.");
-            context.failure(AuthenticationFlowError.UNKNOWN_USER);
+            log.info("User not identified yet. Delegating to UsernamePasswordForm.");
+            // Переходим к стандартной проверке имени пользователя и пароля
+            super.authenticate(context);
             return;
         }
 
@@ -96,7 +97,7 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
         }
 
         log.infof("User %s does not have OTP configured. Skipping OTP step.", user.getUsername());
-        super.authenticate(context); // Продолжаем стандартную проверку логина/пароля
+        context.success();
     }
 
     private boolean isOTPConfigured(AuthenticationFlowContext context, UserModel user) {
