@@ -180,5 +180,15 @@ export const en = {
     "scanQrCode":"Scan the QR code...",
     "enterKeyManually":"Or enter the key manually",
     "enterOtp":"Enter a one-time code",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "loginTotpTitle":"Two-Factor Authentication",
+    "verifyTitle": "Verify via Google Authenticator",
+    "verifyDescription": "Complete 2FA using an authenticator app like Google Authenticator.",
+    "downloadInstructions": "1. Download Google Authenticator from Apple Store or Google Play.",
+    "scanCodeInstructions": "2. Scan the QR code or use this key:",
+    "verificationCodeLabel": "Enter verification code",
+    "verificationCodePlaceholder": "6-digit code",
+    "verifyButton": "Verify",
+    "cancelButton": "Cancel"
+
 }

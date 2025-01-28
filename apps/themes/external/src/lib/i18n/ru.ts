@@ -180,5 +180,14 @@ export const ru = {
     "scanQrCode":"Отсканируйте QR-код...",
     "enterKeyManually":"Или введите ключ вручную",
     "enterOtp":"Введите одноразовый код",
-    "confirm": "Подтвердить"
+    "confirm": "Подтвердить",
+    "loginTotpTitle":"Двухфакторная аутентификация",
+    "verifyTitle": "Подтвердите через Google Authenticator",
+    "verifyDescription": "Завершите двухфакторную аутентификацию, используя приложение Google Authenticator.",
+    "downloadInstructions": "1. Загрузите Google Authenticator из Apple Store или Google Play.",
+    "scanCodeInstructions": "2. Отсканируйте QR-код или используйте этот ключ:",
+    "verificationCodeLabel": "Введите код подтверждения",
+    "verificationCodePlaceholder": "6-значный код",
+    "verifyButton": "Подтвердить",
+    "cancelButton": "Отмена"
 }
