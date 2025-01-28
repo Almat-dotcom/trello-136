@@ -4,13 +4,17 @@ import { I18n } from "lib/i18n";
 import { KcContext } from "lib/kc";
 import { memo } from "react";
 
-type KcContext_Info = Extract<KcContext, { pageId: "info.ftl" }>;
+type KcContext_Info = Extract<KcContext, { pageId: "info.ftl" }> & {
+    requiredActions?: string[];
+};
 
-const Info = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext_Info, i18n: I18n } & KcProps) => {
+const Info = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext_Info; i18n: I18n } & KcProps) => {
     const { requiredActions, messageHeader, message, pageRedirectUri, actionUri, client } = kcContext;
     const { msg, advancedMsgStr } = i18n;
 
-    const requiredActionsItems = requiredActions?.map((it, i) => <p key={i} className="text-gray-700">{advancedMsgStr(it)}</p>) ?? [];
+    const requiredActionsItems = requiredActions?.map((it: string, i: number) => (
+        <p key={i} className="text-gray-700">{advancedMsgStr(it) ?? it}</p>
+    )) ?? [];
 
     return (
         <LayoutWithCarousel kcContext={kcContext} i18n={i18n}>
@@ -48,6 +52,6 @@ const Info = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext_Info, i
             </div>
         </LayoutWithCarousel>
     );
-})
+});
 
 export default Info;
