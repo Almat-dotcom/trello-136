@@ -29,7 +29,14 @@ type ChangePhone = KcContextBase.Common & {
 	phoneNumber?: string
 }
 
-type ExtendedContextExtended = KcContextBase.Login | KcContextBase.RegisterUserProfile | KcContextBase.Info | KcContextBase.Error | KcContextBase.LoginResetPassword | KcContextBase.LoginVerifyEmail | KcContextBase.Terms  | KcContextBase.LoginUsername | KcContextBase.WebauthnAuthenticate | KcContextBase.LoginPassword | KcContextBase.LoginUpdatePassword | KcContextBase.LoginUpdateProfile | KcContextBase.LoginIdpLinkConfirm | KcContextBase.LoginIdpLinkEmail | KcContextBase.LoginPageExpired  | KcContextBase.LogoutConfirm | KcContextBase.UpdateUserProfile | KcContextBase.IdpReviewUserProfile | ExtendedRegister | ChangeEmail | ChangePhone;
+type ExtendedContextExtended = KcContextBase.Login | KcContextBase.RegisterUserProfile |
+ KcContextBase.Info | KcContextBase.Error | KcContextBase.LoginResetPassword | 
+ KcContextBase.LoginVerifyEmail | KcContextBase.Terms  | KcContextBase.LoginUsername | 
+ KcContextBase.WebauthnAuthenticate | KcContextBase.LoginPassword | KcContextBase.LoginUpdatePassword |
+  KcContextBase.LoginUpdateProfile | KcContextBase.LoginIdpLinkConfirm | KcContextBase.LoginIdpLinkEmail |
+   KcContextBase.LoginPageExpired  | KcContextBase.LogoutConfirm | KcContextBase.UpdateUserProfile |
+    KcContextBase.IdpReviewUserProfile | ExtendedRegister | ChangeEmail | ChangePhone | 
+	KcContextBase.KcContextExtendedLoginConfigTotp;
 
 export const { kcContext } = getKcContext<ExtendedContextExtended>({
 
@@ -183,7 +190,35 @@ export const { kcContext } = getKcContext<ExtendedContextExtended>({
 					"languageTag": "kz"
 				}]
 			}
-		}
+		},
+		{
+			"pageId": "login-config-totp.ftl",
+			"locale": {
+			  "currentLanguageTag": "kz",
+			  "supported": [
+				{
+				  "url": "mockurl-kz",
+				  "label": "locale_kz",	
+				  "languageTag": "kz"
+				}
+			  ]
+			},
+			"totp": {
+			  "supportedApplications": ["App1", "App2"],
+			  "totpSecret": "123456",
+			  "totpSecretEncoded": "MTIzNDU2",
+			  "totpSecretQrCode": "base64ImageString",
+			  "qrUrl": "https://example.com/qr",
+			  "manualUrl": "otpauth://totp/AccountName?secret=123456",
+			  "policy": {
+				"type": "totp",
+				"algorithm": "HmacSHA256",
+				"digits": 6,
+				"period": 30
+			  }
+			},
+			"isAppInitiatedAction": false
+		  }  
 	]
 });
 
