@@ -5,8 +5,10 @@ import { KcProps } from "keycloakify";
 import { I18n } from "lib/i18n";
 import { KcContext } from "lib/kc";
 import { Layout } from "components/Layout";
+type KcContext_LoginConfigTotp = Extract<KcContext, { pageId: "login-config-totp.ftl" }>;
 
-const LoginConfigTotp = memo(({ kcContext, i18n }: { kcContext: KcContext; i18n: I18n; } & KcProps) => {
+
+const LoginConfigTotp = memo(({ kcContext, i18n }: { kcContext: KcContext_LoginConfigTotp; i18n: I18n; } & KcProps) => {
     const { totp, url, message } = kcContext;
     const { msgStr } = i18n;
 
