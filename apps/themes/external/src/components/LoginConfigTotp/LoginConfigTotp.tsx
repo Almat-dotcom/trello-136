@@ -34,7 +34,7 @@ const LoginConfigTotp = memo(({ kcContext, i18n }: { kcContext: KcContext_LoginC
 
                     {message && (
                         <div className="bg-red-100 text-red-700 p-2 rounded-md">
-                            {msgStr(message.summary)}
+                            {msgStr("verifyDescription")}
                         </div>
                     )}
 
