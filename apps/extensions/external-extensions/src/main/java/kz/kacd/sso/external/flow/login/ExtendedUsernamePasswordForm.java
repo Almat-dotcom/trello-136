@@ -39,7 +39,6 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
     private List<AlternativeAuthenticator> addDefaultAuthenticatorAtTheEndOfTheFlow(
             List<AlternativeAuthenticator> source
     ) {
-        log.info("Start eeeu");
         List<AlternativeAuthenticator> extendedAlternatives = new ArrayList<>(source);
         extendedAlternatives.add(new AlternativeAuthenticator() {
             @Override
@@ -70,12 +69,10 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
     }
 
     private String extractUsername(AuthenticationFlowContext context) {
-        log.info("KACD");
         return context.getHttpRequest().getDecodedFormParameters().getFirst(AuthenticationManager.FORM_USERNAME);
     }
 
     private boolean isIin(String username) {
-        log.info("is IIN");
         return username.length() == 12 && username.matches("\\d+");
     }
 
@@ -94,13 +91,14 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
 
     @Override
     public void action(AuthenticationFlowContext context) {
-        log.info("Executing user form processing ...");
+        log.debug("Executing user form processing ...");
 
         processAuthenticators(context);
 
         if (context.getStatus().equals(FlowStatus.SUCCESS)) {
             processValidation(context);
         }
+
         if (!context.getStatus().equals(FlowStatus.SUCCESS)) {
             context.getEvent().detail("error", context.getUserErrorMessage());
         }
@@ -129,7 +127,7 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
     }
 
     private void processValidation(AuthenticationFlowContext context) {
-        log.info("Authentication succeeded. Validating authentication ...");
+        log.debug("Authentication succeeded. Validating authentication ...");
         UserModel user = context.getUser();
         if (user == null) {
             throw new IllegalStateException("Authenticators does not add user to authentication context!");
@@ -153,7 +151,7 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
     }
 
     private void failAuthentication(AuthenticationFlowContext context, AuthenticatorValidator.Error error, boolean clearUser) {
-        log.infof("Validation failed with %s in field %s ...", error.getMessage(), error.getField());
+        log.debugf("Validation failed with %s in field %s ...", error.getMessage(), error.getField());
         if (clearUser) {
             context.clearUser();
         }

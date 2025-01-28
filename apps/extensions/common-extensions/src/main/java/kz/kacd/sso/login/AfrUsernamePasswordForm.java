@@ -24,7 +24,6 @@ public class AfrUsernamePasswordForm extends UsernamePasswordForm implements Aut
 
     @Override
     public void action(AuthenticationFlowContext context) {
-        log.info("Afr user page");
         MultivaluedMap<String, String> formData = context.getHttpRequest().getDecodedFormParameters();
         if (formData.getFirst(AfrPage.EDS) == null || formData.getFirst(AfrPage.EDS).isEmpty()) {
             failAuth(context, ExtensionMessages.MISSING_EDS);
