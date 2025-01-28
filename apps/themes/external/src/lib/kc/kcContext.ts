@@ -36,7 +36,7 @@ type ExtendedContextExtended = KcContextBase.Login | KcContextBase.RegisterUserP
   KcContextBase.LoginUpdateProfile | KcContextBase.LoginIdpLinkConfirm | KcContextBase.LoginIdpLinkEmail |
    KcContextBase.LoginPageExpired  | KcContextBase.LogoutConfirm | KcContextBase.UpdateUserProfile |
     KcContextBase.IdpReviewUserProfile | ExtendedRegister | ChangeEmail | ChangePhone | 
-	KcContextBase.KcContextExtendedLoginConfigTotp;
+	KcContextBase.LoginConfigTotp;
 
 export const { kcContext } = getKcContext<ExtendedContextExtended>({
 
