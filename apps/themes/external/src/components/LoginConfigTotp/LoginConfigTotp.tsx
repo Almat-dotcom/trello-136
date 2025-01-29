@@ -30,8 +30,7 @@ const LoginConfigTotp = memo(({ kcContext, i18n }: { kcContext: KcContext_LoginC
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
+    const onSubmit = () => {
         const otpCode = otp.join("");
         console.log("Submitted OTP:", otpCode);
         // Отправляем форму
@@ -51,7 +50,6 @@ const LoginConfigTotp = memo(({ kcContext, i18n }: { kcContext: KcContext_LoginC
                     id="totp-setup-form"
                     action={url.loginAction}
                     method="post"
-                    onSubmit={handleSubmit}
                     className="space-y-6"
                 >
                     <input type="hidden" name="totpSecret" value={totp.totpSecret} />
@@ -96,7 +94,7 @@ const LoginConfigTotp = memo(({ kcContext, i18n }: { kcContext: KcContext_LoginC
                         <Button
                             severity="primary"
                             type="submit"
-                        >
+                            onClick={onSubmit}>
                             {msgStr("verifyButton")}
                         </Button>
                         {url.loginRestartFlowUrl && (
