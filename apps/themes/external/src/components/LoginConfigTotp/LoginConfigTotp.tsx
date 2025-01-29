@@ -5,24 +5,13 @@ import { KcContext } from "lib/kc";
 import { Layout } from "components/Layout";
 import Button from "components/parts/Button";
 
-/**
- * Тип, соответствующий сценарию "login-config-totp.ftl" из KcContext
- */
 type KcContext_LoginConfigTotp = Extract<KcContext, { pageId: "login-config-totp.ftl" }>;
 
 const LoginConfigTotp = memo(
-    ({
-        kcContext,
-        i18n
-    }: {
-        kcContext: KcContext_LoginConfigTotp;
-        i18n: I18n;
-    } & KcProps) => {
-
+    ({ kcContext, i18n }: { kcContext: KcContext_LoginConfigTotp; i18n: I18n } & KcProps) => {
         const { url, totp, message, mode } = kcContext;
         const { msgStr } = i18n;
 
-        // Снова заводим 6 полей для кода (хоть Keycloak может позволять и не строго 6)
         const [otp, setOtp] = useState<string[]>(new Array(6).fill(""));
         const inputsRef = useRef<HTMLInputElement[]>([]);
 
@@ -44,10 +33,6 @@ const LoginConfigTotp = memo(
         };
 
         const handleSubmit = () => {
-            const code = otp.join("");
-            console.log("Submitted TOTP code:", code);
-
-            // Выполняем сабмит формы
             const form = document.getElementById("totp-setup-form") as HTMLFormElement;
             form.submit();
         };
@@ -56,47 +41,15 @@ const LoginConfigTotp = memo(
             <Layout kcContext={kcContext} i18n={i18n}>
                 <div className="max-w-lg mx-auto bg-white shadow-lg rounded-lg p-6 border border-gray-200 mt-10">
                     <div className="text-center">
-                        <h1 className="text-2xl font-bold text-gray-800 mb-4">
-                            {msgStr("verifyTitle") /* Например: "Подтверждение TOTP" */}
-                        </h1>
-                        <p className="text-sm text-gray-600 mb-6">
-                            {msgStr("verifyDescription") /* Любой перевод */}
-                        </p>
+                        <h1 className="text-2xl font-bold text-gray-800 mb-4">{msgStr("verifyTitle")}</h1>
+                        <p className="text-sm text-gray-600 mb-6">{msgStr("verifyDescription")}</p>
                     </div>
 
-                    <form
-                        id="totp-setup-form"
-                        action={url.loginAction}
-                        method="post"
-                        className="space-y-6"
-                    >
-                        {/*
-                            Поле с секретом TOTP (обязательное, чтобы Keycloak понимал, какой секрет используется).
-                        */}
+                    <form id="totp-setup-form" action={url.loginAction} method="post" className="space-y-6">
                         <input type="hidden" name="totpSecret" value={totp.totpSecret} />
-
-                        {/*
-                            Если Keycloak в дефолтном шаблоне требует name="mode", вы можете добавить:
-                            { mode && <input type="hidden" name="mode" value={mode} /> }
-                            Только если вы используете поддержку переключения между "qr" и "manual".
-                        */}
-                        {mode && (
-                            <input type="hidden" name="mode" value={mode} />
-                        )}
-
-                        {/*
-                            ВАЖНО: именно name="totp" (см. оригинальный шаблон "login-config-totp.ftl")
-                            Пересылаем тот же код, что пользователь ввёл.
-                        */}
+                        {mode && <input type="hidden" name="mode" value={mode} />}
                         <input type="hidden" name="totp" value={otp.join("")} />
 
-                        {message && (
-                            <div className="bg-red-50 text-red-700 p-4 rounded-lg border border-red-300 text-sm">
-                                {message.summary}
-                            </div>
-                        )}
-
-                        {/* Блок с информацией и QR-кодом */}
                         <div className="text-center">
                             <p className="text-gray-700">{msgStr("downloadInstructions")}</p>
                             <img
@@ -104,15 +57,12 @@ const LoginConfigTotp = memo(
                                 alt="TOTP QR Code"
                                 className="mx-auto mt-4 w-40 h-40 border border-gray-300 rounded-md"
                             />
-                            <p className="text-gray-700 mt-4">
-                                {msgStr("scanCodeInstructions")}
-                            </p>
+                            <p className="text-gray-700 mt-4">{msgStr("scanCodeInstructions")}</p>
                             <div className="mt-2 bg-gray-100 text-gray-900 p-3 rounded-md font-mono text-sm">
                                 {totp.totpSecretEncoded}
                             </div>
                         </div>
 
-                        {/* Поля для ввода 6-значного кода (UI). Склеиваем при сабмите. */}
                         <div className="flex justify-center space-x-2">
                             {otp.map((digit, index) => (
                                 <input
@@ -123,36 +73,24 @@ const LoginConfigTotp = memo(
                                     value={digit}
                                     onChange={(e) => handleChange(e.target.value, index)}
                                     onKeyDown={(e) => handleKeyDown(e, index)}
-                                    className="w-12 h-12 text-center text-lg font-semibold
-                                               border border-gray-300 rounded-md
-                                               focus:outline-none focus:ring-2 focus:ring-blue-500
-                                               transition-all shadow-sm"
+                                    className="w-12 h-12 text-center text-lg font-semibold border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all shadow-sm"
                                 />
                             ))}
                         </div>
 
-                        {/* Кнопки подтверждения и отмены */}
                         <div className="flex justify-between items-center mt-6">
-                            <Button
-                                severity="primary"
-                                type="submit"
-                                onClick={handleSubmit}
-                            >
+                            <Button severity="primary" type="submit" onClick={handleSubmit}>
                                 {msgStr("verifyButton")}
                             </Button>
 
                             {url.loginRestartFlowUrl && (
-                                <Button
-                                    severity="secondary"
-                                    type="link"
-                                    href={url.loginRestartFlowUrl}
-                                >
+                                <Button severity="secondary" type="link" href={url.loginRestartFlowUrl}>
                                     {msgStr("cancelButton")}
                                 </Button>
                             )}
                         </div>
                     </form>
-                </div>
+                </div>  
             </Layout>
         );
     }

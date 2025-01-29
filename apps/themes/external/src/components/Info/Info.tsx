@@ -48,6 +48,6 @@ const Info = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext_Info, i
             </div>
         </LayoutWithCarousel>
     );
-});
+})
 
 export default Info;

@@ -44,8 +44,8 @@ export const { kcContext } = getKcContext<ExtendedContextExtended>({
 	// "mockPageId": "error.ftl",
 	// "mockPageId": "update-email.ftl",
 	// "mockPageId": "update-phone.ftl",
-	"mockPageId": "login-otp.ftl",
-	// "mockPageId": "login-config-totp.ftl",
+	// "mockPageId": "login-otp.ftl",
+	"mockPageId": "login-config-totp.ftl",
 
 	"mockData": [
 		{
