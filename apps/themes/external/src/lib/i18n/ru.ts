@@ -177,8 +177,6 @@ export const ru = {
     "attemptToRegisterLegalByEmployee": "Согласно процедуре регистрации юридического лица в первую очередь необходимо зарегистрировать первого руководителя. После успешной регистрации первого руководителя, необходимо приступить к регистрации сотрудника юридического лица. Мы рекомендуем вам придерживаться указанной последовательности для более эффективного и быстрого завершения процесса регистрации.",
     "securityRecommendation": "Кибербезопасность",
     "setupTotp":"Настройка TOTP",
-    "scanQrCode":"Отсканируйте QR-код...",
-    "enterKeyManually":"Или введите ключ вручную",
     "enterOtp":"Введите одноразовый код",
     "confirm": "Подтвердить",
     "loginTotpTitle":"Двухфакторная аутентификация",
@@ -186,8 +184,6 @@ export const ru = {
     "verifyDescription": "Завершите двухфакторную аутентификацию, используя приложение Google Authenticator.",
     "downloadInstructions": "1. Загрузите Google Authenticator из Apple Store или Google Play.",
     "scanCodeInstructions": "2. Отсканируйте QR-код или используйте этот ключ:",
-    "verificationCodeLabel": "Введите код подтверждения",
-    "verificationCodePlaceholder": "6-значный код",
     "verifyButton": "Подтвердить",
     "cancelButton": "Отмена"
 }

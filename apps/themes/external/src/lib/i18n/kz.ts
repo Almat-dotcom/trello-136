@@ -177,8 +177,6 @@ export const kz = {
     "attemptToRegisterLegalByEmployee": "Согласно процедуре регистрации юридического лица в первую очередь необходимо зарегистрировать первого руководителя. После успешной регистрации первого руководителя, необходимо приступить к регистрации сотрудника юридического лица. Мы рекомендуем вам придерживаться указанной последовательности для более эффективного и быстрого завершения процесса регистрации.",
     "securityRecommendation": "Киберқауіпсіздік",
     "setupTotp":"TOTP орнату",
-    "scanQrCode":"QR кодын сканерлеңіз...",
-    "enterKeyManually":"Немесе кілтті қолмен енгізіңіз",
     "enterOtp":"Бір реттік кодты енгізіңіз",
     "confirm": "Растау",
     "loginTotpTitle":"Екі факторлы аутентификация",
@@ -186,8 +184,6 @@ export const kz = {
     "verifyDescription": "Google Authenticator сияқты қосымшаны пайдаланып, екі факторлы аутентификацияны аяқтаңыз.",
     "downloadInstructions": "1. Google Authenticator-ды Apple Store немесе Google Play-ден жүктеп алыңыз.",
     "scanCodeInstructions": "2. QR-кодты сканерлеңіз немесе осы кілтті қолданыңыз:",
-    "verificationCodeLabel": "Растау кодын енгізіңіз",
-    "verificationCodePlaceholder": "6-таңбалы код",
     "verifyButton": "Растау",
     "cancelButton": "Болдырмау"
 }
