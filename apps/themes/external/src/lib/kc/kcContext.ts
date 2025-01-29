@@ -39,7 +39,7 @@ type ExtendedContextExtended = KcContextBase.Login | KcContextBase.RegisterUserP
 
 export const { kcContext } = getKcContext<ExtendedContextExtended>({
 
-	// "mockPageId": "login.ftl",
+	"mockPageId": "login.ftl",
 	// "mockPageId": "register.ftl",
 	// "mockPageId": "login-verify-email.ftl",
 	// "mockPageId": "login-update-password.ftl",
@@ -51,7 +51,146 @@ export const { kcContext } = getKcContext<ExtendedContextExtended>({
 	// "mockPageId": "update-email.ftl",
 	// "mockPageId": "update-phone.ftl",
 	// "mockPageId": "login-otp.ftl",
-	"mockPageId": "login-config-totp.ftl",
+	// "mockPageId": "login-config-totp.ftl",
+
+	"mockData": [
+		{
+			"pageId": "login.ftl",
+			"locale": {
+				"currentLanguageTag": "kz",
+				"supported": [{
+					"url": "mockurl-kz",
+					"label": "locale_kz",
+					"languageTag": "kz"
+				}]
+			},
+			"auth": {
+				"showResetCredentials": true,
+			},
+			"realm": {
+				"registrationAllowed": true,
+				"rememberMe": true,
+				"internationalizationEnabled": true
+			},
+			"message": {
+				"type": "error",
+				// eslint-disable-next-line no-template-curly-in-string
+				"summary": "invalidUserMessage"
+			}
+		},
+		{
+			"pageId": "register.ftl",
+			"realm": {
+				"internationalizationEnabled": true
+			},
+			"locale": {
+				"currentLanguageTag": "ru",
+				"supported": [{
+					"url": "mockurl-kz",
+					"label": "locale_kz",
+					"languageTag": "kz"
+				}]
+			}
+		},
+		{
+			"pageId": "login-verify-email.ftl",
+			"realm": {
+				"internationalizationEnabled": true
+			},
+			"locale": {
+				"currentLanguageTag": "ru",
+				"supported": [{
+					"url": "mockurl-kz",
+					"label": "locale_kz",
+					"languageTag": "kz"
+				}]
+			}
+		},
+		{
+			"pageId": "login-update-password.ftl",
+			"realm": {
+				"internationalizationEnabled": true
+			},
+			"locale": {
+				"currentLanguageTag": "ru",
+				"supported": [{
+					"url": "mockurl-kz",
+					"label": "locale_kz",
+					"languageTag": "kz"
+				}]
+			}
+		},
+		{
+			"pageId": "logout-confirm.ftl",
+			"realm": {
+				"internationalizationEnabled": true
+			},
+			"locale": {
+				"currentLanguageTag": "ru",
+				"supported": [{
+					"url": "mockurl-kz",
+					"label": "locale_kz",
+					"languageTag": "kz"
+				}]
+			}
+		},
+		{
+			"pageId": "login-reset-password.ftl",
+			"realm": {
+				"internationalizationEnabled": true
+			},
+			"locale": {
+				"currentLanguageTag": "ru",
+				"supported": [{
+					"url": "mockurl-kz",
+					"label": "locale_kz",
+					"languageTag": "kz"
+				}]
+			}
+		},
+		{
+			"pageId": "login-page-expired.ftl",
+			"realm": {
+				"internationalizationEnabled": true
+			},
+			"locale": {
+				"currentLanguageTag": "ru",
+				"supported": [{
+					"url": "mockurl-kz",
+					"label": "locale_kz",
+					"languageTag": "kz"
+				}]
+			}
+		},
+		{
+			"pageId": "info.ftl",
+			"realm": {
+				"internationalizationEnabled": true
+			},
+			"locale": {
+				"currentLanguageTag": "ru",
+				"supported": [{
+					"url": "mockurl-kz",
+					"label": "locale_kz",
+					"languageTag": "kz"
+				}]
+			}
+		},
+		{
+			"pageId": "error.ftl",
+			"realm": {
+				"internationalizationEnabled": true
+			},
+			"locale": {
+				"currentLanguageTag": "ru",
+				"supported": [{
+					"url": "mockurl-kz",
+					"label": "locale_kz",
+					"languageTag": "kz"
+				}]
+			}
+		}
+	]
 });
 
 export type KcContext = NonNullable<typeof kcContext>;
