@@ -29,18 +29,12 @@ type ChangePhone = KcContextBase.Common & {
 	phoneNumber?: string
 }
 
-type ExtendedContextExtended = KcContextBase.Login | KcContextBase.RegisterUserProfile |
- KcContextBase.Info | KcContextBase.Error | KcContextBase.LoginResetPassword | 
- KcContextBase.LoginVerifyEmail | KcContextBase.Terms  | KcContextBase.LoginUsername | 
- KcContextBase.WebauthnAuthenticate | KcContextBase.LoginPassword | KcContextBase.LoginUpdatePassword |
-  KcContextBase.LoginUpdateProfile | KcContextBase.LoginIdpLinkConfirm | KcContextBase.LoginIdpLinkEmail |
-   KcContextBase.LoginPageExpired  | KcContextBase.LogoutConfirm | KcContextBase.UpdateUserProfile |
-    KcContextBase.IdpReviewUserProfile | ExtendedRegister | ChangeEmail | ChangePhone | KcContextBase.LoginConfigTotp;
+type ExtendedContextExtended = KcContextBase.Login | KcContextBase.RegisterUserProfile | KcContextBase.Info | KcContextBase.Error | KcContextBase.LoginResetPassword | KcContextBase.LoginVerifyEmail | KcContextBase.Terms | KcContextBase.LoginOtp | KcContextBase.LoginUsername | KcContextBase.WebauthnAuthenticate | KcContextBase.LoginPassword | KcContextBase.LoginUpdatePassword | KcContextBase.LoginUpdateProfile | KcContextBase.LoginIdpLinkConfirm | KcContextBase.LoginIdpLinkEmail | KcContextBase.LoginPageExpired | KcContextBase.LoginConfigTotp | KcContextBase.LogoutConfirm | KcContextBase.UpdateUserProfile | KcContextBase.IdpReviewUserProfile | ExtendedRegister | ChangeEmail | ChangePhone;
 
 export const { kcContext } = getKcContext<ExtendedContextExtended>({
 
-	"mockPageId": "login.ftl",
-	// "mockPageId": "register.ftl",
+	// "mockPageId": "login.ftl",
+	"mockPageId": "register.ftl",
 	// "mockPageId": "login-verify-email.ftl",
 	// "mockPageId": "login-update-password.ftl",
 	// "mockPageId": "logout-confirm.ftl",
