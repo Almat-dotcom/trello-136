@@ -35,7 +35,7 @@ type ExtendedContextExtended = KcContextBase.Login | KcContextBase.RegisterUserP
  KcContextBase.WebauthnAuthenticate | KcContextBase.LoginPassword | KcContextBase.LoginUpdatePassword |
   KcContextBase.LoginUpdateProfile | KcContextBase.LoginIdpLinkConfirm | KcContextBase.LoginIdpLinkEmail |
    KcContextBase.LoginPageExpired  | KcContextBase.LogoutConfirm | KcContextBase.UpdateUserProfile |
-    KcContextBase.IdpReviewUserProfile | ExtendedRegister | ChangeEmail | ChangePhone;
+    KcContextBase.IdpReviewUserProfile | ExtendedRegister | ChangeEmail | ChangePhone | KcContextBase.LoginConfigTotp;
 
 export const { kcContext } = getKcContext<ExtendedContextExtended>({
 
@@ -50,8 +50,8 @@ export const { kcContext } = getKcContext<ExtendedContextExtended>({
 	// "mockPageId": "error.ftl",
 	// "mockPageId": "update-email.ftl",
 	// "mockPageId": "update-phone.ftl",
-	"mockPageId": "login-otp.ftl",
-	// "mockPageId": "login-config-totp.ftl",
+	// "mockPageId": "login-otp.ftl",
+	"mockPageId": "login-config-totp.ftl",
 });
 
 export type KcContext = NonNullable<typeof kcContext>;
