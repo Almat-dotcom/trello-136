@@ -9,7 +9,7 @@ type KcContext_LoginConfigTotp = Extract<KcContext, { pageId: "login-config-totp
 
 const LoginConfigTotp = memo(
     ({ kcContext, i18n }: { kcContext: KcContext_LoginConfigTotp; i18n: I18n } & KcProps) => {
-        const { url, totp, message, mode } = kcContext;
+        const { url, totp, mode } = kcContext;
         const { msgStr } = i18n;
 
         const [otp, setOtp] = useState<string[]>(new Array(6).fill(""));
