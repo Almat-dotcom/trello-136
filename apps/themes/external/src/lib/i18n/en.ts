@@ -175,5 +175,16 @@ export const en = {
     "forcedToChangePhoneNumber": "You need to change your phone number",
     "invalid_user_credentials": "Invalid username or password.",
     "attemptToRegisterLegalByEmployee": "Согласно процедуре регистрации юридического лица в первую очередь необходимо зарегистрировать первого руководителя. После успешной регистрации первого руководителя, необходимо приступить к регистрации сотрудника юридического лица. Мы рекомендуем вам придерживаться указанной последовательности для более эффективного и быстрого завершения процесса регистрации.",
-    "securityRecommendation": "Cybersecurity"
+    "securityRecommendation": "Cybersecurity",
+    "setupTotp":"Setup Totp",
+    "enterOtp":"Enter a one-time code",
+    "confirm": "Confirm",
+    "loginTotpTitle":"Two-Factor Authentication",
+    "verifyTitle": "Verify via Google Authenticator",
+    "verifyDescription": "Complete 2FA using an authenticator app like Google Authenticator.",
+    "downloadInstructions": "1. Download Google Authenticator from Apple Store or Google Play.",
+    "scanCodeInstructions": "2. Scan the QR code or use this key:",
+    "verifyButton": "Verify",
+    "cancelButton": "Cancel"
+
 }

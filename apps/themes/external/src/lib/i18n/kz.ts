@@ -175,5 +175,15 @@ export const kz = {
     "forcedToChangePhoneNumber": "Вам необходимо указать номер телефона",
     "invalid_user_credentials": "Логин немесе құпиясөз дұрыс емес.",
     "attemptToRegisterLegalByEmployee": "Согласно процедуре регистрации юридического лица в первую очередь необходимо зарегистрировать первого руководителя. После успешной регистрации первого руководителя, необходимо приступить к регистрации сотрудника юридического лица. Мы рекомендуем вам придерживаться указанной последовательности для более эффективного и быстрого завершения процесса регистрации.",
-    "securityRecommendation": "Киберқауіпсіздік"
+    "securityRecommendation": "Киберқауіпсіздік",
+    "setupTotp":"TOTP орнату",
+    "enterOtp":"Бір реттік кодты енгізіңіз",
+    "confirm": "Растау",
+    "loginTotpTitle":"Екі факторлы аутентификация",
+    "verifyTitle": "Google Authenticator арқылы растау",
+    "verifyDescription": "Google Authenticator сияқты қосымшаны пайдаланып, екі факторлы аутентификацияны аяқтаңыз.",
+    "downloadInstructions": "1. Google Authenticator-ды Apple Store немесе Google Play-ден жүктеп алыңыз.",
+    "scanCodeInstructions": "2. QR-кодты сканерлеңіз немесе осы кілтті қолданыңыз:",
+    "verifyButton": "Растау",
+    "cancelButton": "Болдырмау"
 }
