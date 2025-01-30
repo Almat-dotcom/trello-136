@@ -25,8 +25,8 @@ const LoginOtp = memo(
 
         return (
             <Layout kcContext={kcContext} i18n={i18n} size="large">
-                <main className="flex justify-center items-center min-h-screen и">
-                <div className="bg-white shadow-2xl rounded-lg p-6 md:p-12 lg:p-20 border border-gray-500 ">
+                <main className="flex justify-center items-center mt-20">
+                <div className="bg-white shadow-2xl rounded-lg p-6 md:p-12 lg:p-15 border border-gray-500 ">
                 <div className="text-center mb-6 md:mb-10">
                             <h1 className="text-2xl md:text-4xl font-extrabold text-gray-800 mb-4 md:mb-6">
                                 {msgStr("enterOtp")}
