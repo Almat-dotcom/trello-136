@@ -41,18 +41,18 @@ const LoginOtp = memo(
         return (
             <Layout kcContext={kcContext} i18n={i18n}>
                 <main className="flex justify-center items-center min-h-screen">
-                    <div className="bg-white shadow-2xl rounded-lg p-20 border border-gray-500">
-                        <div className="text-center mb-10">
-                            <h1 className="text-4xl font-extrabold text-gray-800 mb-6">
+                    <div className="bg-white shadow-2xl rounded-lg p-6 md:p-12 lg:p-20 border border-gray-500 max-w-md md:max-w-lg lg:max-w-xl">
+                        <div className="text-center mb-6 md:mb-10">
+                            <h1 className="text-2xl md:text-4xl font-extrabold text-gray-800 mb-4 md:mb-6">
                                 {msgStr("enterOtp")}
                             </h1>
-                            <p className="text-lg text-gray-600">{msgStr("setupTotp")}</p>
+                            <p className="text-md md:text-lg text-gray-600">{msgStr("setupTotp")}</p>
                         </div>
 
-                        <form id="otp-form" method="post" action={url.loginAction} onSubmit={handleSubmit} className="space-y-8">
+                        <form id="otp-form" method="post" action={url.loginAction} onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
                             <input type="hidden" name="otp" value={otp.join("")} />
 
-                            <div className="flex justify-center space-x-4">
+                             <div className="flex justify-center gap-2 md:gap-4 max-w-fit">
                                 {otp.map((digit, index) => (
                                     <input
                                         key={index}
@@ -62,12 +62,13 @@ const LoginOtp = memo(
                                         value={digit}
                                         onChange={(e) => handleChange(e.target.value, index)}
                                         onKeyDown={(e) => handleKeyDown(e, index)}
-                                        className="w-16 h-16 text-center text-2xl font-bold border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition-all shadow-sm"
+                                        className="w-10 md:w-12 lg:w-16 aspect-square text-center text-xl md:text-2xl lg:text-3xl font-bold border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition-all shadow-sm"
                                     />
                                 ))}
                             </div>
 
-                            <div className="text-center mt-8">
+
+                            <div className="text-center mt-4 md:mt-8">
                                 <Button severity="primary" type="submit">
                                     {msgStr("confirm")}
                                 </Button>

@@ -63,20 +63,32 @@ const LoginConfigTotp = memo(
                             </div>
                         </div>
 
-                        <div className="flex justify-center space-x-2">
-                            {otp.map((digit, index) => (
-                                <input
-                                    key={index}
-                                    ref={(el) => (inputsRef.current[index] = el!)}
-                                    type="text"
-                                    maxLength={1}
-                                    value={digit}
-                                    onChange={(e) => handleChange(e.target.value, index)}
-                                    onKeyDown={(e) => handleKeyDown(e, index)}
-                                    className="w-12 h-12 text-center text-lg font-semibold border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all shadow-sm"
-                                />
-                            ))}
-                        </div>
+                        <div className="grid grid-cols-6 gap-2 w-full max-w-sm mx-auto">
+  {otp.map((digit, index) => (
+    <input
+      key={index}
+      ref={(el) => (inputsRef.current[index] = el!)}
+      type="tel"
+      inputMode="numeric"
+      pattern="[0-9]*"
+      maxLength={1}
+      value={digit}
+      onChange={(e) => handleChange(e.target.value, index)}
+      onKeyDown={(e) => handleKeyDown(e, index)}
+      className="
+        w-full 
+        aspect-square 
+        text-center text-xl font-semibold
+        border border-gray-300 
+        rounded-md 
+        focus:outline-none focus:ring-2 focus:ring-blue-500 
+        transition-all
+        shadow-sm
+      "
+    />
+  ))}
+</div>
+
 
                         <div className="flex justify-between items-center mt-6">
                             <Button severity="primary" type="submit" onClick={handleSubmit}>
