@@ -15,7 +15,7 @@ const LoginOtp = memo(
         const { url } = kcContext;
         const { msgStr } = i18n;
 
-        const {otp, setOtp, inputsRef, handleChange, handleKeyDown} =useTotpInput();
+        const {otp, inputsRef, handleChange, handleKeyDown} =useTotpInput();
 
         const handleSubmit = (e: React.FormEvent) => {
             e.preventDefault();

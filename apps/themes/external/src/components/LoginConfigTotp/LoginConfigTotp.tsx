@@ -11,10 +11,10 @@ type KcContext_LoginConfigTotp = Extract<KcContext, { pageId: "login-config-totp
 
 const LoginConfigTotp = memo(
     ({ kcContext, i18n }: { kcContext: KcContext_LoginConfigTotp; i18n: I18n } & KcProps) => {
-        const { url, totp, mode } = kcContext;
+        const { url, totp } = kcContext;
         const { msgStr } = i18n;
 
-        const { otp, setOtp, inputsRef, handleChange, handleKeyDown } = useTotpInput();
+        const { otp, inputsRef, handleChange, handleKeyDown } = useTotpInput();
 
         const handleSubmit = () => {
             const form = document.getElementById("totp-setup-form") as HTMLFormElement;
