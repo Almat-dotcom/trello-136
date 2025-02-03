@@ -185,5 +185,6 @@ export const kz = {
     "downloadInstructions": "1. Google Authenticator-ды Apple Store немесе Google Play-ден жүктеп алыңыз.",
     "scanCodeInstructions": "2. QR-кодты сканерлеңіз немесе осы кілтті қолданыңыз:",
     "verifyButton": "Растау",
-    "cancelButton": "Болдырмау"
+    "cancelButton": "Болдырмау",
+    "oldPortal": "Ескі портал"
 }
