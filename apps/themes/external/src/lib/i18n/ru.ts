@@ -185,5 +185,6 @@ export const ru = {
     "downloadInstructions": "1. Загрузите Google Authenticator из Apple Store или Google Play.",
     "scanCodeInstructions": "2. Отсканируйте QR-код или используйте этот ключ:",
     "verifyButton": "Подтвердить",
-    "cancelButton": "Отмена"
+    "cancelButton": "Отмена",
+    "oldPortal": "Старый портал"
 }

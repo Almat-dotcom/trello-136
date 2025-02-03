@@ -185,6 +185,6 @@ export const en = {
     "downloadInstructions": "1. Download Google Authenticator from Apple Store or Google Play.",
     "scanCodeInstructions": "2. Scan the QR code or use this key:",
     "verifyButton": "Verify",
-    "cancelButton": "Cancel"
-
+    "cancelButton": "Cancel",
+    "oldPortal": "Old portal"
 }
