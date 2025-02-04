@@ -186,5 +186,5 @@ export const kz = {
     "scanCodeInstructions": "2. QR-кодты сканерлеңіз немесе осы кілтті қолданыңыз:",
     "verifyButton": "Растау",
     "cancelButton": "Болдырмау",
-    "oldPortal": "Ескі портал"
+    "oldPortal": "portal.kacd.kz"
 }
