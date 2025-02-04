@@ -8,7 +8,7 @@ type KcContext_UpdatePassword = Extract<KcContext, { pageId: "login-update-passw
 
 const UpdatePassword = memo((props: PageProps<KcContext_UpdatePassword, I18n>) => {
     const { kcContext, i18n, Template, ...kcProps } = props;
-    const { url, message } = kcContext;
+    const { url, message,username } = kcContext;
     const {  msgStr, advancedMsgStr } = i18n;
 
     const [password, setPassword] = useState("");
@@ -63,15 +63,15 @@ const UpdatePassword = memo((props: PageProps<KcContext_UpdatePassword, I18n>) =
                 </header>
                 <div className="afr-content mt-4">
                     <form id="kc-update-password" ref={formRef} action={url.loginAction} method="post">
-                        {/* <input
+                        <input
                             className="hidden"
                             id="username"
                              name="username"
-                            type="text"
+                            type="hidden"
                             readOnly
                             value={username}
                             onChange={() => { }}
-                        /> */}
+                        />
                         <div className={clsx(kcProps.kcFormGroupClass)}>
                             <label htmlFor="password" className={clsx(kcProps.kcLabelClass)}>
                                 {msgStr("passwordNew")}
