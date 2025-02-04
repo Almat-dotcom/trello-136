@@ -78,7 +78,7 @@ const UpdatePassword = memo((props: PageProps<KcContext_UpdatePassword, I18n>) =
                             </label>
                             <input
                                 id="password"
-                                name="passwordNew"
+                                name="password-new"
                                 type="password"
                                 className={clsx(kcProps.kcInputClass)}
                                 value={password}
@@ -99,7 +99,7 @@ const UpdatePassword = memo((props: PageProps<KcContext_UpdatePassword, I18n>) =
                             </label>
                             <input
                                 id="password-confirm"
-                                name="passwordNewConfirm"
+                                name="password-confirm"
                                 type="password"
                                 className={clsx(kcProps.kcInputClass)}
                                 value={passwordConfirm}
