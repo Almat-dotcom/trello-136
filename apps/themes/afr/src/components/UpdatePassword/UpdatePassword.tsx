@@ -83,7 +83,12 @@ const UpdatePassword = memo((props: PageProps<KcContext_UpdatePassword, I18n>) =
                                 className={clsx(kcProps.kcInputClass)}
                                 value={password}
                                 required
-                                onChange={(e) => setPassword(e.target.value)}
+                                onChange={(e) => {
+                                    setPassword(e.target.value);
+                                    if (e.target.value.length > 0) {
+                                        setPasswordError(undefined); // Очищаем ошибку, если поле не пустое
+                                    }
+                                }}
                             />
                             {passwordError && <p className="text-red-500 text-sm">{advancedMsgStr(passwordError)}</p>}
                         </div>
@@ -99,7 +104,12 @@ const UpdatePassword = memo((props: PageProps<KcContext_UpdatePassword, I18n>) =
                                 className={clsx(kcProps.kcInputClass)}
                                 value={passwordConfirm}
                                 required
-                                onChange={(e) => setPasswordConfirm(e.target.value)}
+                                onChange={(e) => {
+                                    setPasswordConfirm(e.target.value);
+                                    if (e.target.value.length > 0) {
+                                        setPasswordConfirmError(undefined); // Очищаем ошибку, если поле не пустое
+                                    }
+                                }}
                             />
                             {passwordConfirmError && <p className="text-red-500 text-sm">{advancedMsgStr(passwordConfirmError)}</p>}
                         </div>
