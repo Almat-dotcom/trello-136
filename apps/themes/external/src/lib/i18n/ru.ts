@@ -186,5 +186,5 @@ export const ru = {
     "scanCodeInstructions": "2. Отсканируйте QR-код или используйте этот ключ:",
     "verifyButton": "Подтвердить",
     "cancelButton": "Отмена",
-    "oldPortal": "Старый портал"
+    "oldPortal": "portal.kacd.kz"
 }
