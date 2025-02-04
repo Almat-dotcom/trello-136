@@ -5,6 +5,8 @@ import { useI18n } from "../../lib/i18n";
 import Fallback, { defaultKcProps, type KcProps, type PageProps } from "keycloakify";
 import DefaultTemplate from "keycloakify/lib/Template";
 import Login from "../Login";
+import ResetPassword from "../ResetPassword";
+import UpdatePassword from "../UpdatePassword";
 
 const kcProps: KcProps = {
     ...defaultKcProps,
@@ -45,6 +47,8 @@ export default function App(props: { kcContext: KcContext; }) {
 
                 switch (kcContext.pageId) {
                     case 'login.ftl': return <Login {...{ kcContext, ...pageProps }} />;
+                    case 'login-reset-password.ftl': return <ResetPassword {...{ kcContext, ...pageProps }} />;
+                    case 'login-update-password.ftl': return <UpdatePassword {...{ kcContext, ...pageProps }} />;
                     default: return <Fallback {...{ kcContext, ...pageProps }} />;
                 }
             })()}

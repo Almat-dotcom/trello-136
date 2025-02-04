@@ -163,7 +163,7 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
                                     </div>
                                 </div>
                                 <div className={clsx(kcProps.kcFormGroupClass, kcProps.kcFormSettingClass)}>
-                                    <div id="kc-form-options">
+                                    <div className="flex items-center justify-between">
                                         {realm.rememberMe && !usernameEditDisabled && (
                                             <div className="checkbox">
                                                 <label>
@@ -182,6 +182,12 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
                                                     {msg("rememberMe")}
                                                 </label>
                                             </div>
+                                        )}
+                                        {realm.resetPasswordAllowed && (
+                                            <a
+                                                href={url.loginResetCredentialsUrl}
+                                                className="text-sm text-secondary-dark font-semibold underline"
+                                            >{msgStr("doForgotPassword")}</a>
                                         )}
                                     </div>
                                 </div>

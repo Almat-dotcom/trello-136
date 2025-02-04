@@ -2,7 +2,9 @@ import { getKcContext } from "keycloakify/lib/getKcContext";
 
 export const { kcContext } = getKcContext({
 	// Uncomment to test the login page for development.
-	mockPageId: "login.ftl",
+	// mockPageId: "login.ftl",
+	mockPageId: "login-reset-password.ftl",
+	// mockPageId: "login-update-password.ftl",
 	mockData: [
 		{
 			pageId: "login.ftl",
