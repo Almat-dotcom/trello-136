@@ -47,7 +47,7 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
 
     const { social, locale, realm, url, usernameEditDisabled, login, client, message } = kcContext;
 
-    const { msg, msgStr, advancedMsg, advancedMsgStr } = i18n;
+    const { msg, msgStr, advancedMsg } = i18n;
 
     const [ncaMessage, setNcaMessage] = useState('');
     const edsRef = useRef<HTMLInputElement>(null);
