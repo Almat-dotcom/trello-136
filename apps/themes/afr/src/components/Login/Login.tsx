@@ -119,7 +119,7 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
                     <h1 id="kc-page-title"><span>{msg("doLogIn")}</span></h1>
                     <div className={message ? `afr-message-container afr-message-container-${message.type}` : "afr-message-container-hidden"}>
                         <div className={message ? `afr-message afr-message-${message.type}` : "afr-message-hidden"}>
-                            {message ? advancedMsgStr(message.summary) : ""}
+                            {message ? advancedMsg(message.summary) : ""}
                         </div>
                     </div>
                 </header>
@@ -167,7 +167,7 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
                                     </div>
                                 </div>
                                 <div className={clsx(kcProps.kcFormGroupClass, kcProps.kcFormSettingClass)}>
-                                    <div className="flex items-center justify-between">
+                                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
                                         {realm.rememberMe && !usernameEditDisabled && (
                                             <div className="checkbox">
                                                 <label>
@@ -190,7 +190,7 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
                                         {realm.resetPasswordAllowed && (
                                             <a
                                                 href={url.loginResetCredentialsUrl}
-                                                className="text-sm text-secondary-dark font-semibold underline"
+                                                className="text-sm text-secondary-dark font-semibold"
                                             >{msgStr("doForgotPassword")}</a>
                                         )}
                                     </div>
