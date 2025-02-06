@@ -5,6 +5,7 @@ import { KcContext } from "lib/kcContext";
 import { signAuthXml } from "lib/ncalayer";
 import { CancelledByUser, ConnectionLost } from "lib/ncalayer/NCALayer";
 import { useRef, useState } from "react";
+import emblem from "../KcApp/emblem.png";
 
 const NCAMessage = ({ message, i18n }: { message: string, i18n: I18n }) => {
     const dark = (message: string) => {
@@ -98,7 +99,10 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
     return (
         <div className="afr-login">
             <div id="kc-header" className="afr-header">
-                <div id="kc-header-wrapper" className="afr-header-wrapper"><span>AFR</span></div>
+                <div className="afr-header-content">
+                    <img src={emblem} alt="Lock Icon" height="100px" />
+                    <p className="header-text">{msgStr("afrHeader")}</p>
+                </div>
             </div>
             <div className="afr-card">
                 <header className="login-pf-header">
