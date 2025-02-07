@@ -6,49 +6,19 @@ import { signAuthXml } from "lib/ncalayer";
 import { CancelledByUser, ConnectionLost } from "lib/ncalayer/NCALayer";
 import { useRef, useState } from "react";
 
-const NCAMessage = ({ message, i18n }: { message: string, i18n: I18n }) => {
-    const dark = (message: string) => {
-        switch (message) {
-            case 'ncaSignProgress': return '#8b8d8f';
-            case 'ncaSignFinished': return '#3f9c35';
-            case 'ncaCancelled': return '#ec7a08';
-            default: return '#cc0000';
-        }
-    }
-    const light = (message: string) => {
-        switch (message) {
-            case 'ncaSignInProgress': return '#f5f5f5';
-            case 'ncaSignFinished': return '#e9f4e9';
-            case 'ncaCancelled': return '#fdf2e5';
-            default: return '#ffffff';
-        }
-    }
+import { AfrHeader } from "../parts/AfrHeader";
+import { LocaleSelector } from "../parts/LocaleSelector";
+import { MessageAlert } from "../parts/MessageAlert";
+import { NCAMessage } from "../parts/NCAMessage";
 
-    return (
-        <div style={{
-            color: dark(message),
-            backgroundColor: light(message),
-            border: `2px solid ${dark(message)}`,
-            borderRadius: '5px',
-            paddingTop: '1rem',
-            paddingBottom: '1rem',
-            paddingLeft: '1rem',
-            paddingRight: '1rem',
-            fontSize: '1rem'
-        }}>
-            {i18n.advancedMsgStr(message)}
-        </div>
-    );
-}
+type KcContext_Login = Extract<KcContext, { pageId: "login.ftl" }>;
 
-const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I18n>) => {
-    const { kcContext, i18n, Template, ...kcProps } = props;
+const Login = (props: PageProps<KcContext_Login, I18n>) => {
+    const { kcContext, i18n, ...kcProps } = props;
+    const { social, realm, url, usernameEditDisabled, login, client, message, locale } = kcContext;
+    const { msg, msgStr } = i18n;
 
-    const { social, locale, realm, url, usernameEditDisabled, login, client, message } = kcContext;
-
-    const { msg, msgStr, advancedMsg, advancedMsgStr } = i18n;
-
-    const [ncaMessage, setNcaMessage] = useState('');
+    const [ncaMessage, setNcaMessage] = useState("");
     const edsRef = useRef<HTMLInputElement>(null);
     const formRef = useRef<HTMLFormElement>(null);
     const usernameRef = useRef<HTMLInputElement>(null);
@@ -56,114 +26,131 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
     const rememberMeRef = useRef<HTMLInputElement>(null);
     const loginRef = useRef<HTMLInputElement>(null);
 
-    const setDisabled = (disabled: boolean) => {
-        usernameRef.current!.disabled = disabled;
-        passwordRef.current!.disabled = disabled;
-        rememberMeRef.current!.disabled = disabled;
-    }
+    const setFieldsDisabled = (disabled: boolean) => {
+        if (usernameRef.current) usernameRef.current.disabled = disabled;
+        if (passwordRef.current) passwordRef.current.disabled = disabled;
+        if (rememberMeRef.current) rememberMeRef.current.disabled = disabled;
+        if (loginRef.current) loginRef.current.disabled = disabled;
+    };
 
     const onSubmit = async () => {
-        setDisabled(true);
-        loginRef.current!.disabled = true;
-        setNcaMessage('ncaSignProgress');
-        const xml = `<Authentication><signature>${client.clientId}${realm.name}</signature></Authentication>`;
         try {
-            const signature = await signAuthXml(xml);
-            edsRef.current!.value = signature;
-            setNcaMessage('ncaSignFinished');
-            setDisabled(false);
+            setFieldsDisabled(true);
+            setNcaMessage("ncaSignProgress");
 
-            formRef.current!.submit();
+            const xml = `<Authentication><signature>${client.clientId}${realm.name}</signature></Authentication>`;
+            const signature = await signAuthXml(xml);
+
+            if (edsRef.current) {
+                edsRef.current.value = signature;
+            }
+            setNcaMessage("ncaSignFinished");
+
+            setFieldsDisabled(false);
+
+            formRef.current?.submit();
         } catch (error) {
-            setDisabled(false);
-            loginRef.current!.disabled = false;
+            setFieldsDisabled(false);
+
             if (error === ConnectionLost) {
-                setNcaMessage('ncaConnectionLost');
+                setNcaMessage("ncaConnectionLost");
             } else if (error === CancelledByUser) {
-                setNcaMessage('ncaCancelled');
+                setNcaMessage("ncaCancelled");
             } else {
-                setNcaMessage('ncaError');
+                setNcaMessage("ncaError");
             }
         }
-    }
-
-    const { currentLanguageTag, supported } = locale!;
-    const languages = supported
-        .map(it =>
-            <li key={it.languageTag} className="kc-dropdown-item"><a href={it.url}>{advancedMsg(it.languageTag)}</a></li>
-        );
-
-    const currentLang = supported.find(it => it.languageTag === currentLanguageTag);
+    };
 
     return (
         <div className="afr-login">
-            <div id="kc-header" className="afr-header">
-                <div id="kc-header-wrapper" className="afr-header-wrapper"><span>AFR</span></div>
-            </div>
+            <AfrHeader i18n={i18n} />
+
             <div className="afr-card">
                 <header className="login-pf-header">
-                    <div id="kc-locale">
-                        <div id="kc-locale-wrapper" className="">
-                            <div className="kc-dropdown" id="kc-locale-dropdown">
-                                <a href={currentLang!.url} id="kc-current-locale-link">{advancedMsg(currentLang!.label)}</a>
-                                <ul>
-                                    {languages}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <h1 id="kc-page-title"><span>{msg("doLogIn")}</span></h1>
-                    <div className={message ? `afr-message-container afr-message-container-${message.type}` : "afr-message-container-hidden"}>
-                        <div className={message ? `afr-message afr-message-${message.type}` : "afr-message-hidden"}>
-                            {message ? advancedMsgStr(message.summary) : ""}
-                        </div>
-                    </div>
+                    {locale && <LocaleSelector locale={locale} i18n={i18n} />}
+
+                    <h1 id="kc-page-title">
+                        <span>{msg("doLogIn")}</span>
+                    </h1>
+
+                    <MessageAlert message={message} i18n={i18n} />
                 </header>
-                <div id="kc-form" className={clsx(realm.password && social.providers !== undefined && kcProps.kcContentWrapperClass)}>
+
+                <div
+                    id="kc-form"
+                    className={clsx(
+                        realm.password && social.providers !== undefined && kcProps.kcContentWrapperClass
+                    )}
+                >
                     <div
                         id="kc-form-wrapper"
                         className={clsx(
-                            realm.password && social.providers && [kcProps.kcFormSocialAccountContentClass, kcProps.kcFormSocialAccountClass]
+                            realm.password && social.providers && [
+                                kcProps.kcFormSocialAccountContentClass,
+                                kcProps.kcFormSocialAccountClass
+                            ]
                         )}
                     >
-                        {ncaMessage && (
-                            <NCAMessage message={ncaMessage} i18n={i18n} />
-                        )}
+                        <NCAMessage message={ncaMessage} i18n={i18n} />
+
                         {realm.password && (
-                            <form id="kc-form-login" ref={formRef} action={url.loginAction} method="post">
+                            <form
+                                id="kc-form-login"
+                                ref={formRef}
+                                action={url.loginAction}
+                                method="post"
+                            >
                                 <div className={clsx(kcProps.kcFormGroupClass)}>
-                                    <label htmlFor="username" className={clsx(kcProps.kcLabelClass)}>
+                                    <label
+                                        htmlFor="username"
+                                        className={clsx(kcProps.kcLabelClass)}
+                                    >
                                         {msg("email")}
                                     </label>
                                     <div className="afr-input-wrapper">
                                         <input
                                             id="username"
                                             className={clsx(kcProps.kcInputClass)}
-                                            //NOTE: This is used by Google Chrome auto fill so we use it to tell
-                                            //the browser how to pre fill the form but before submit we put it back
-                                            //to username because it is what keycloak expects.
                                             name="username"
                                             type="text"
                                             ref={usernameRef}
                                         />
                                     </div>
-                                    <div className={clsx(kcProps.kcFormGroupClass)}>
-                                        <label htmlFor="password" className={clsx(kcProps.kcLabelClass)}>
-                                            {msg("password")}
-                                        </label>
-                                        <div className="afr-input-wrapper">
-                                            <input
-                                                id="password"
-                                                className={clsx(kcProps.kcInputClass)}
-                                                name="password"
-                                                type="password"
-                                                ref={passwordRef}
-                                            />
-                                        </div>
+                                </div>
+
+                                <div className={clsx(kcProps.kcFormGroupClass)}>
+                                    <label
+                                        htmlFor="password"
+                                        className={clsx(kcProps.kcLabelClass)}
+                                    >
+                                        {msg("password")}
+                                    </label>
+                                    <div className="afr-input-wrapper">
+                                        <input
+                                            id="password"
+                                            className={clsx(kcProps.kcInputClass)}
+                                            name="password"
+                                            type="password"
+                                            ref={passwordRef}
+                                        />
                                     </div>
                                 </div>
-                                <div className={clsx(kcProps.kcFormGroupClass, kcProps.kcFormSettingClass)}>
-                                    <div id="kc-form-options">
+
+                                <div
+                                    className={clsx(
+                                        kcProps.kcFormGroupClass,
+                                        kcProps.kcFormSettingClass
+                                    )}
+                                >
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "space-between",
+                                            width: "100%"
+                                        }}
+                                    >
                                         {realm.rememberMe && !usernameEditDisabled && (
                                             <div className="checkbox">
                                                 <label>
@@ -173,19 +160,27 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
                                                         name="rememberMe"
                                                         type="checkbox"
                                                         ref={rememberMeRef}
-                                                        {...(login.rememberMe
-                                                            ? {
-                                                                "checked": true
-                                                            }
-                                                            : {})}
+                                                        defaultChecked={!!login.rememberMe}
                                                     />
                                                     {msg("rememberMe")}
                                                 </label>
                                             </div>
                                         )}
+                                        {realm.resetPasswordAllowed && (
+                                            <a
+                                                href={url.loginResetCredentialsUrl}
+                                                className="text-sm text-secondary-dark font-semibold"
+                                            >
+                                                {msgStr("doForgotPassword")}
+                                            </a>
+                                        )}
                                     </div>
                                 </div>
-                                <div id="kc-form-buttons" className={clsx(kcProps.kcFormGroupClass)}>
+
+                                <div
+                                    id="kc-form-buttons"
+                                    className={clsx(kcProps.kcFormGroupClass)}
+                                >
                                     <input
                                         type="hidden"
                                         id="id-hidden-input"
@@ -211,23 +206,41 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
                                         type="submit"
                                         value={msgStr("doLogIn")}
                                         ref={loginRef}
-                                        onClick={e => onSubmit()}
+                                        onClick={e => {
+                                            e.preventDefault();
+                                            onSubmit();
+                                        }}
                                     />
                                 </div>
                             </form>
                         )}
                     </div>
+
                     {realm.password && social.providers !== undefined && (
-                        <div id="kc-social-providers" className={clsx(kcProps.kcFormSocialAccountContentClass, kcProps.kcFormSocialAccountClass)}>
+                        <div
+                            id="kc-social-providers"
+                            className={clsx(
+                                kcProps.kcFormSocialAccountContentClass,
+                                kcProps.kcFormSocialAccountClass
+                            )}
+                        >
                             <ul
                                 className={clsx(
                                     kcProps.kcFormSocialAccountListClass,
-                                    social.providers.length > 4 && kcProps.kcFormSocialAccountDoubleListClass
+                                    social.providers.length > 4 &&
+                                        kcProps.kcFormSocialAccountDoubleListClass
                                 )}
                             >
                                 {social.providers.map(p => (
-                                    <li key={p.providerId} className={clsx(kcProps.kcFormSocialAccountListLinkClass)}>
-                                        <a href={p.loginUrl} id={`zocial-${p.alias}`} className={clsx("zocial", p.providerId)}>
+                                    <li
+                                        key={p.providerId}
+                                        className={clsx(kcProps.kcFormSocialAccountListLinkClass)}
+                                    >
+                                        <a
+                                            href={p.loginUrl}
+                                            id={`zocial-${p.alias}`}
+                                            className={clsx("zocial", p.providerId)}
+                                        >
                                             <span>{p.displayName}</span>
                                         </a>
                                     </li>
@@ -239,6 +252,6 @@ const Login = (props: PageProps<Extract<KcContext, { pageId: 'login.ftl'; }>, I1
             </div>
         </div>
     );
-}
+};
 
 export default Login;

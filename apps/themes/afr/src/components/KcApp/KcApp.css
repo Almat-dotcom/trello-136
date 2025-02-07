@@ -1183,10 +1183,9 @@ a.zocial {
   }
 
   #kc-header {
-    padding-left: 15px;
-    padding-right: 15px;
-    float: none;
-    text-align: left;
+    padding: 0;
+    text-align: center;
+    margin: 0;
   }
 
   #kc-header-wrapper {
@@ -1407,17 +1406,16 @@ body {
 
 .afr-login {
   flex-direction: column;
-  padding: 14px;
-
   margin-top: 8px;
 
   box-shadow: 0px 0px 6px 0px rgba(179, 179, 179, 1);
   border-radius: 4px;
+  padding-bottom: 40px;
 }
 
 .afr-header {
+  background-color: #0d4ebe;
   display: flex;
-  align-items: center;
   justify-content: center;
   text-align: center;
 }
@@ -1579,3 +1577,28 @@ body {
 .afr-message-hidden {
   display: none;
 }
+
+.afr-header-content {
+  display: flex;
+  align-items: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 80%;
+
+}
+
+.header-text {
+  font-weight: bold;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  text-align: center;
+}
+
+.afr-form-buttons{
+  text-align: center;
+  margin-top: 11%;
+}
+
+
