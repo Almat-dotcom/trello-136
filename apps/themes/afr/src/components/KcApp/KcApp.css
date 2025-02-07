@@ -1183,9 +1183,9 @@ a.zocial {
   }
 
   #kc-header {
-    padding: 0; /* Убираем внутренние отступы */
-    text-align: center; /* Центрируем содержимое внутри заголовка */
-    margin: 0; /* Убираем внешние отступы */
+    padding: 0;
+    text-align: center;
+    margin: 0;
   }
 
   #kc-header-wrapper {
@@ -1414,7 +1414,7 @@ body {
 }
 
 .afr-header {
-  background-color: #0d4ebe; /* Тёмный фон */
+  background-color: #0d4ebe;
   display: flex;
   justify-content: center;
   text-align: center;
@@ -1583,17 +1583,17 @@ body {
   align-items: center;
   padding-top: 10px;
   padding-bottom: 10px;
-  width: 80%; /* Подстраивает ширину под содержимое */
+  width: 80%;
 
 }
 
 .header-text {
-  font-weight: bold; /* Жирный текст */
-  word-wrap: break-word; /* Перенос слов */
-  word-break: break-word; /* Дополнительное свойство для переносов */
-  overflow-wrap: break-word; /* Поддержка разных браузеров */
-  white-space: normal; /* Разрешить перенос текста на следующую строку */
-  text-align: center; /* Центрировать текст */
+  font-weight: bold;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  text-align: center;
 }
 
 .afr-form-buttons{
