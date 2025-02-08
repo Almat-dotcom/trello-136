@@ -27,15 +27,11 @@ public class OTPService {
         if (user == null) {
             throw new IllegalArgumentException("User not found with id: " + userId);
         }
-        OTPCredentialModel newOtp = OTPCredentialModel.createFromPolicy(
-                realm,                   // Получаем настройки из realm (число цифр, период, алгоритм)
-                "MyTOTP"                // метка (label), как будет называться метод TOTP
-                // null => Keycloak сам сгенерирует секрет
-                // или HOTP, но чаще TOTP
-                // число цифр (digits)
-                // период (timeStepSec)
-        );
+        user.credentialManager().getStoredCredentialsStream()
+                .filter(cm -> "otp".equals(cm.getType()))
+                .forEach(cm -> user.credentialManager().removeStoredCredentialById(cm.getId()));
 
+        OTPCredentialModel newOtp = OTPCredentialModel.createTOTP("totp",6,30,"SHA-1");
         user.credentialManager().createStoredCredential(newOtp);
         //TODO: Сгенерировать секрет OTP и сохранить его (например, в атрибутах пользователя)
         //TODO:  (Опционально) Отправить секрет пользователю (например, по email)
