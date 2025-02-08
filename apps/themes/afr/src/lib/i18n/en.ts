@@ -178,5 +178,6 @@ export const en = {
     "attemptToRegisterLegalByEmployee": "Согласно процедуре регистрации юридического лица в первую очередь необходимо зарегистрировать первого руководителя. После успешной регистрации первого руководителя, необходимо приступить к регистрации сотрудника юридического лица. Мы рекомендуем вам придерживаться указанной последовательности для более эффективного и быстрого завершения процесса регистрации.",
     "securityRecommendation": "Cybersecurity",
     "afrHeader":"The Agency of the Republic of Kazakhstan for Regulation and Development of Financial Market",
-    "You should receive an email shortly with further instructions.":"You should receive an email shortly with further instructions."
+    "You should receive an email shortly with further instructions.":"You should receive an email shortly with further instructions.",
+    "You need to change your password.":"You need to change your password."
 }
