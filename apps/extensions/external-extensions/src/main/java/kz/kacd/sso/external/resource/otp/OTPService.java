@@ -40,7 +40,9 @@ public class OTPService {
         if (user == null) {
             return false;
         }
+        log.info("Attributes: "+user.getAttributes().toString());
         String enabled = user.getFirstAttribute("otp_enabled");
+        log.info("Otp Status is "+enabled);
         return "true".equals(enabled);
     }
 
