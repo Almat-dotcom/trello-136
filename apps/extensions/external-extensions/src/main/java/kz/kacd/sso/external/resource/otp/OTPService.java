@@ -55,7 +55,7 @@ public class OTPService {
 
         Stream<CredentialModel> storedCredentialsStream = user.credentialManager().getStoredCredentialsStream();
         storedCredentialsStream.forEach(e->{
-            log.info("Credentiaaaal: "+e.toString());
+            log.info("Credentiaaaal: "+e.getType());
         });
 
 //        log.infof("isTotpEnabled for userId=%s => %s (found %d OTP creds)", userId, enabled, list.size());
