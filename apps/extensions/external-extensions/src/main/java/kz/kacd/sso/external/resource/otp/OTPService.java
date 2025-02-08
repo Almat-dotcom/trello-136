@@ -1,9 +1,16 @@
 package kz.kacd.sso.external.resource.otp;
 
 import org.jboss.logging.Logger;
+import org.keycloak.credential.CredentialModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
+import org.keycloak.models.UserCredentialManager;
 import org.keycloak.models.UserModel;
+import org.keycloak.models.credential.OTPCredentialModel;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class OTPService {
 
@@ -34,16 +41,24 @@ public class OTPService {
     }
 
     public boolean isOTPEnabled(String userId) {
-        log.info("Realm: "+session.getContext().getRealm());
-        UserModel user = session.users().getUserById(session.getContext().getRealm(), userId);
-        log.info("User: "+user);
+        RealmModel realm = session.getContext().getRealm();
+        UserModel user = session.users().getUserById(realm, userId);
         if (user == null) {
             return false;
         }
-        log.info("Attributes: "+user.getAttributes().toString());
-        String enabled = user.getFirstAttribute("otp_enabled");
-        log.info("Otp Status is "+enabled);
-        return "true".equals(enabled);
+        UserCredentialManager userCredentialManager = session.getProvider(UserCredentialManager.class);
+        // или session.userCredentialManager() в зависимости от версии
+
+        Stream<CredentialModel> credsStream =
+                userCredentialManager.getStoredCredentialsByTypeStream(realm, user, OTPCredentialModel.TYPE);
+        List<CredentialModel> otpCreds = credsStream.collect(Collectors.toList());
+        // Смотрим, есть ли у пользователя хоть один cred с type="otp"
+        log.info(otpCreds.toString());
+
+        boolean enabled = !otpCreds.isEmpty();
+        log.infof("User %s -> isOTPEnabled=%s, count of OTP creds=%d", userId, enabled, otpCreds.size());
+
+        return enabled;
     }
 
     //TODO:  Метод для проверки OTP (например, checkOTP(String userId, String otp))
