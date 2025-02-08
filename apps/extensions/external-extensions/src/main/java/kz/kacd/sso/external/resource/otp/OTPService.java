@@ -1,18 +1,26 @@
 package kz.kacd.sso.external.resource.otp;
 
 import org.jboss.logging.Logger;
+import org.keycloak.credential.CredentialInput;
 import org.keycloak.credential.CredentialModel;
+import org.keycloak.credential.OTPCredentialProvider;
 import org.keycloak.credential.UserCredentialStore;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
+import org.keycloak.models.UserCredentialManager;
 import org.keycloak.models.UserModel;
+import org.keycloak.models.credential.OTPCredentialModel;
+import org.keycloak.services.resources.admin.UserResource;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class OTPService {
 
     private static final Logger log = Logger.getLogger(OTPResource.class);
     private final KeycloakSession session;
+
 
     public OTPService(KeycloakSession session) {
         this.session = session;
@@ -38,23 +46,20 @@ public class OTPService {
     }
 
     public boolean isOTPEnabled(String userId) {
-        log.info("Realm: "+session.getContext().getRealm());
         RealmModel realm = session.getContext().getRealm();
-        UserModel user = session.users().getUserById(session.getContext().getRealm(), userId);
-        log.info("User: "+user);
+        UserModel user = session.users().getUserById(realm, userId);
         if (user == null) {
+            log.warnf("User not found: %s", userId);
             return false;
         }
-        Stream<CredentialModel> credsStream = session.getProvider(UserCredentialStore.class)
-                .getStoredCredentialsStream(realm, user);
-        credsStream.forEach(credential -> {
-            log.infof("Credential Type: %s, ID: %s, UserLabel: %s",
-                    credential.getType(), credential.getId(), credential.getUserLabel());
-        });
-        log.info("Attributes: "+user.getAttributes().toString());
-        String enabled = user.getFirstAttribute("otp_enabled");
-        log.info("Otp Status is "+enabled);
-        return "true".equals(enabled);
+
+        UserCredentialManager ucm = session.getProvider(UserCredentialManager.class);
+        Stream<CredentialModel> stream = ucm.getStoredCredentialsByTypeStream(realm, user, OTPCredentialModel.TYPE);
+        List<CredentialModel> list = stream.collect(Collectors.toList());
+        boolean enabled = !list.isEmpty();
+
+        log.infof("isTotpEnabled for userId=%s => %s (found %d OTP creds)", userId, enabled, list.size());
+        return enabled;
     }
 
     //TODO:  Метод для проверки OTP (например, checkOTP(String userId, String otp))
