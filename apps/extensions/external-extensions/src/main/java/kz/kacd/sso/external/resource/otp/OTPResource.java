@@ -62,6 +62,7 @@ public class OTPResource extends BaseAdminResource {
     @Path("status/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getOTPStatus(@PathParam("userId") String userId) {
+        log.info("OTP status bastaldi");
         boolean isEnabled = otpService.isOTPEnabled(userId);
         return Response.ok(isEnabled).build();
     }

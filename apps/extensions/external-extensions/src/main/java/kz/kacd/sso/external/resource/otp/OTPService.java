@@ -1,11 +1,13 @@
 package kz.kacd.sso.external.resource.otp;
 
+import org.jboss.logging.Logger;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 
 public class OTPService {
 
+    private static final Logger log = Logger.getLogger(OTPResource.class);
     private final KeycloakSession session;
 
     public OTPService(KeycloakSession session) {
@@ -32,7 +34,9 @@ public class OTPService {
     }
 
     public boolean isOTPEnabled(String userId) {
+        log.info("Realm: "+session.getContext().getRealm());
         UserModel user = session.users().getUserById(session.getContext().getRealm(), userId);
+        log.info("User: "+user);
         if (user == null) {
             return false;
         }
