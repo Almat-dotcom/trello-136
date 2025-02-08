@@ -53,13 +53,13 @@ public class OTPService {
             return false;
         }
 
-        UserCredentialManager ucm = session.getProvider(UserCredentialManager.class);
-        Stream<CredentialModel> stream = ucm.getStoredCredentialsByTypeStream(realm, user, OTPCredentialModel.TYPE);
-        List<CredentialModel> list = stream.collect(Collectors.toList());
-        boolean enabled = !list.isEmpty();
+        Stream<CredentialModel> storedCredentialsStream = user.credentialManager().getStoredCredentialsStream();
+        storedCredentialsStream.forEach(e->{
+            log.info("Credentiaaaal: "+e.toString());
+        });
 
-        log.infof("isTotpEnabled for userId=%s => %s (found %d OTP creds)", userId, enabled, list.size());
-        return enabled;
+//        log.infof("isTotpEnabled for userId=%s => %s (found %d OTP creds)", userId, enabled, list.size());
+        return true;
     }
 
     //TODO:  Метод для проверки OTP (например, checkOTP(String userId, String otp))
