@@ -5,73 +5,57 @@ import org.keycloak.credential.CredentialModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
-import org.keycloak.models.credential.OTPCredentialModel;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Stream;
+import static kz.kacd.sso.external.resource.otp.OtpConstants.CONFIGURE_TOTP;
+import static kz.kacd.sso.external.resource.otp.OtpConstants.OTP_TYPE;
 
 public class OTPService {
 
-    private static final Logger log = Logger.getLogger(OTPResource.class);
+    private static final Logger log = Logger.getLogger(OTPService.class);
     private final KeycloakSession session;
-
 
     public OTPService(KeycloakSession session) {
         this.session = session;
     }
 
     public void enableOTP(String userId) {
-        RealmModel realm = session.getContext().getRealm();
-        UserModel user = session.users().getUserById(realm, userId);
-        if (user == null) {
-            throw new IllegalArgumentException("User not found with id: " + userId);
-        }
-        user.credentialManager().getStoredCredentialsStream()
-                .filter(cm -> "otp".equals(cm.getType()))
-                .forEach(cm -> user.credentialManager().removeStoredCredentialById(cm.getId()));
+        UserModel user = getValidUser(userId);
 
-//        OTPCredentialModel newOtp = OTPCredentialModel.createTOTP("totp",6,30,"SHA-1");
-        user.addRequiredAction("CONFIGURE_TOTP");
-        //TODO: Сгенерировать секрет OTP и сохранить его (например, в атрибутах пользователя)
-        //TODO:  (Опционально) Отправить секрет пользователю (например, по email)
+        user.credentialManager().getStoredCredentialsStream()
+                .filter(cm -> OTP_TYPE.equals(cm.getType()))
+                .map(CredentialModel::getId)
+                .forEach(user.credentialManager()::removeStoredCredentialById);
+
+        user.addRequiredAction(CONFIGURE_TOTP);
     }
 
     public void disableOTP(String userId) {
-        RealmModel realm = session.getContext().getRealm();
-        UserModel user = session.users().getUserById(realm, userId);
-        if (user == null) {
-            throw new IllegalArgumentException("User not found with id: " + userId);
-        }
-        AtomicReference<String> id= new AtomicReference<>();
-        Stream<CredentialModel> storedCredentialsStream = user.credentialManager().getStoredCredentialsStream();
-        storedCredentialsStream.forEach(e->{
-            if(e.getType().equals("otp")){
-                id.set(e.getId());
-            }
-        });
-        if(id.get() != null) {
-            user.credentialManager().removeStoredCredentialById(id.get());
-        }
-        //TODO: Удалить секрет OTP
+        UserModel user = getValidUser(userId);
+
+        user.credentialManager().getStoredCredentialsStream()
+                .filter(cm -> OTP_TYPE.equals(cm.getType()))
+                .map(CredentialModel::getId)
+                .findFirst()
+                .ifPresent(user.credentialManager()::removeStoredCredentialById);
     }
 
     public boolean isOTPEnabled(String userId) {
-        RealmModel realm = session.getContext().getRealm();
-        UserModel user = session.users().getUserById(realm, userId);
-        if (user == null) {
-            log.warnf("User not found: %s", userId);
-            return false;
-        }
-        AtomicBoolean otp_enabled= new AtomicBoolean(false);
-        Stream<CredentialModel> storedCredentialsStream = user.credentialManager().getStoredCredentialsStream();
-        storedCredentialsStream.forEach(e->{
-            if(e.getType().equals("otp")){
-                otp_enabled.set(true);
-            }
-        });
-        return otp_enabled.get();
+        UserModel user = getValidUser(userId);
+        return user.credentialManager().getStoredCredentialsStream()
+                .anyMatch(cm -> OTP_TYPE.equals(cm.getType()));
     }
 
-    //TODO:  Метод для проверки OTP (например, checkOTP(String userId, String otp))
+    private UserModel getValidUser(String userId) {
+        UserModel user = getUserById(userId);
+        if (user == null) {
+            log.errorf("User not found: %s", userId);
+            throw new IllegalArgumentException("User not found with id: " + userId);
+        }
+        return user;
+    }
+
+    private UserModel getUserById(String userId) {
+        RealmModel realm = session.getContext().getRealm();
+        return session.users().getUserById(realm, userId);
+    }
 }

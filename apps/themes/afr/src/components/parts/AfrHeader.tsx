@@ -8,7 +8,7 @@ export const AfrHeader = memo(({ i18n }: { i18n: I18n }) => {
     return (
         <div id="kc-header" className="afr-header">
             <div className="afr-header-content">
-                <img src={emblem} alt="Lock Icon" height="100px" />
+                <img src={emblem} alt="Lock Icon" height="80px" />
                 <p className="header-text">{msgStr("afrHeader")}</p>
             </div>
         </div>

@@ -179,5 +179,7 @@ export const ru = {
     "securityRecommendation": "Кибербезопасность",
     "afrHeader":"Агентство Республики Казахстан по регулированию и развитию финансового рынка",
     "You should receive an email shortly with further instructions.":"В ближайшее время вы получите электронное письмо с дальнейшими инструкциями.",
-    "You need to change your password.":"Вам нужно сменить свой пароль."
+    "You need to change your password.":"Вам нужно сменить свой пароль.",
+    "Invalid password: must not be equal to any of last 7 passwords.":"Неверный пароль: не должен совпадать ни с одним из последних паролей {0}.",
+    "Your password has been updated.":"Ваш пароль был обновлен."
 }

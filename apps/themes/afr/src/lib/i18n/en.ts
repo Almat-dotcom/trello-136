@@ -179,5 +179,7 @@ export const en = {
     "securityRecommendation": "Cybersecurity",
     "afrHeader":"The Agency of the Republic of Kazakhstan for Regulation and Development of Financial Market",
     "You should receive an email shortly with further instructions.":"You should receive an email shortly with further instructions.",
-    "You need to change your password.":"You need to change your password."
+    "You need to change your password.":"You need to change your password.",
+    "Invalid password: must not be equal to any of last 7 passwords.":"Invalid password: must not be equal to any of last {0} passwords.",
+    "Your password has been updated.":"Your password has been updated."
 }
