@@ -31,8 +31,8 @@ public class OTPService {
                 .filter(cm -> "otp".equals(cm.getType()))
                 .forEach(cm -> user.credentialManager().removeStoredCredentialById(cm.getId()));
 
-        OTPCredentialModel newOtp = OTPCredentialModel.createTOTP("totp",6,30,"SHA-1");
-        user.credentialManager().createStoredCredential(newOtp);
+//        OTPCredentialModel newOtp = OTPCredentialModel.createTOTP("totp",6,30,"SHA-1");
+        user.addRequiredAction("CONFIGURE_TOTP");
         //TODO: Сгенерировать секрет OTP и сохранить его (например, в атрибутах пользователя)
         //TODO:  (Опционально) Отправить секрет пользователю (например, по email)
     }
