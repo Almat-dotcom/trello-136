@@ -29,11 +29,11 @@ public class OTPResource extends BaseAdminResource {
     }
 
     @DELETE
+    @Path("{userId}")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response disableOTP(OTPRequest request) {
+    public Response disableOTP(@PathParam("userId") String userId) {
         auth.requireManageUsers();
-        otpService.disableOTP(request.userId);
+        otpService.disableOTP(userId);
         return Response.noContent().build();
     }
 
