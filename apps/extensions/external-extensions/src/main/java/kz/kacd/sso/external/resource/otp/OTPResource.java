@@ -38,7 +38,7 @@ public class OTPResource extends BaseAdminResource {
     }
 
     @GET
-    @Path("status/{userId}")
+    @Path("{userId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getOTPStatus(@PathParam("userId") String userId) {
         auth.requireManageUsers();

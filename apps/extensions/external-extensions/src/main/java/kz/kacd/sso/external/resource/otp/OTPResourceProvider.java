@@ -14,7 +14,7 @@ public class OTPResourceProvider extends BaseRealmResourceProvider {
     @Override
     protected Object getRealmResource() {
         RealmModel realm = session.getContext().getRealm();
-        OTPResource otpResource = new OTPResource(session, realm); // Передаём сессию Keycloak
+        OTPResource otpResource = new OTPResource(session, realm);
         ResteasyProviderFactory.getInstance().injectProperties(otpResource);
         otpResource.setup();
         return otpResource;

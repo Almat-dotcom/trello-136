@@ -18,17 +18,14 @@ public class OTPResourceProviderFactory implements RealmResourceProviderFactory 
 
     @Override
     public void init(Config.Scope config) {
-        // Можно использовать для чтения конфигурации из keycloak.conf
     }
 
     @Override
     public void postInit(KeycloakSessionFactory factory) {
-        // Здесь можно зарегистрировать слушателей событий Keycloak, если нужно
     }
 
     @Override
     public void close() {
-        // Освобождение ресурсов, если необходимо
     }
 
     @Override
