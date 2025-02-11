@@ -8,7 +8,6 @@ services:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
       - KC_CACHE=ispn
-      - JAVA_OPTS=-Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8
     volumes:
       - ./conf/cache-ispn.xml:/opt/keycloak/conf/cache-ispn.xml
     ports:
