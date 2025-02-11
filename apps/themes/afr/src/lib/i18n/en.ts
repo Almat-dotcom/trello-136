@@ -181,5 +181,9 @@ export const en = {
     "You should receive an email shortly with further instructions.":"You should receive an email shortly with further instructions.",
     "You need to change your password.":"You need to change your password.",
     "Invalid password: must not be equal to any of last 7 passwords.":"Invalid password: must not be equal to any of last {0} passwords.",
-    "Your password has been updated.":"Your password has been updated."
+    "Invalid password: minimum length 16.":"Invalid password: minimum length {0}.",
+    "Your password has been updated.":"Your password has been updated.",
+    "Invalid password: must contain at least 1 special characters.":"Жарамсыз пароль: кемінде {0} арнайы таңбадан тұруы керек.",
+    "Invalid password: must contain at least 1 upper case characters.":"Жарамсыз пароль: кемінде {0} бас әріптен тұруы керек.",
+    "Invalid password: must contain at least 1 numerical digits.":"Жарамсыз пароль: кемінде {0} сандық саннан тұруы керек."
 }
