@@ -180,6 +180,10 @@ export const kz = {
     "afrHeader":"Қазақстан Республикасының Қаржы нарығын реттеу және дамыту агенттігі",
     "You should receive an email shortly with further instructions.":"Жақында сізге қосымша нұсқаулары бар электрондық хат келуі керек.",
     "You need to change your password.":"Құпия сөзді өзгерту керек.",
-    "Invalid password: must not be equal to any of last 7 passwords.":"Жарамсыз пароль: соңғы {0} парольдердің ешқайсысына тең болмауы керек.",
-    "Your password has been updated.":"Сіздің пароліңіз жаңартылды."
+    "Invalid password: must not be equal to any of last 7 passwords.":"Жарамсыз пароль: соңғы 7 парольдердің ешқайсысына тең болмауы керек.",
+    "Invalid password: minimum length 16.":"Жарамсыз пароль: соңғы 16 парольдердің ешқайсысына тең болмауы керек.",
+    "Your password has been updated.":"Сіздің пароліңіз жаңартылды.",
+    "Invalid password: must contain at least 1 special characters.":"Жарамсыз пароль: кемінде 1 арнайы таңбадан тұруы керек.",
+    "Invalid password: must contain at least 1 upper case characters.":"Жарамсыз пароль: кемінде 1 бас әріптен тұруы керек.",
+    "Invalid password: must contain at least 1 numerical digits.":"Жарамсыз пароль: кемінде 1 сандық саннан тұруы керек."
 }
