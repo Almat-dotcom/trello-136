@@ -71,7 +71,7 @@ const Login = (props: PageProps<KcContext_Login, I18n>) => {
                     {locale && <LocaleSelector locale={locale} i18n={i18n} />}
 
                     <h1 id="kc-page-title">
-                        <span>{msg("doLogIn")}</span>
+                        <span>{msg("loginHeader")}</span>
                     </h1>
 
                     <MessageAlert message={message} i18n={i18n} />
