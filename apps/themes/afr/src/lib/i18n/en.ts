@@ -71,7 +71,7 @@ export const en = {
     "updatePasswordMessage": "You need to change your password to activate your account.",
     "resetPasswordMessage": "You need to change your password.",
     "verifyEmailMessage": "You need to verify your email address to activate your account.",
-    "emailSentMessage": "You should receive an email shortly with further instructions.",
+    "emailSentMessage": "Link has been sent to your email. You need to update your password to activate your account",
     "emailSendErrorMessage": "Failed to send email, please try again later.",
     "accountUpdatedMessage": "Your account has been updated.",
     "accountPasswordUpdatedMessage": "Your password has been updated.",
