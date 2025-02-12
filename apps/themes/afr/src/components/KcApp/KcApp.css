@@ -1421,10 +1421,9 @@ body {
 }
 
 .afr-header-wrapper {
-  background: url(./emblem.png);
   background-repeat: no-repeat;
 
-  width: 100px;
+  width: 420px;
 
   text-indent: -9999px;
 }
