@@ -29,7 +29,7 @@ export const ru = {
     "firstName": "Имя",
     "lastName": "Фамилия",
     "phoneNumber": "Номер телефона",
-    "email": "Email",
+    "email": "E-mail",
     "password": "Пароль",
     "passwordConfirm": "Повторите пароль",
     "passwordNew": "Новый пароль",
@@ -181,9 +181,10 @@ export const ru = {
     "You should receive an email shortly with further instructions.":"В ближайшее время вы получите электронное письмо с дальнейшими инструкциями.",
     "You need to change your password.":"Вам нужно сменить свой пароль.",
     "Invalid password: must not be equal to any of last 7 passwords.":"Неверный пароль: не должен совпадать ни с одним из последних паролей 7.",
-    "Invalid password: minimum length 16.":"Неверный пароль: минимальная длина 16.",
+    "Invalid password: minimum length 16.":"Пароль должен быть длиной не менее 16 символов.",
     "Your password has been updated.":"Ваш пароль был обновлен.",
-    "Invalid password: must contain at least 1 special characters.":"Жарамсыз пароль: кемінде 1 арнайы таңбадан тұруы керек.",
-    "Invalid password: must contain at least 1 upper case characters.":"Жарамсыз пароль: кемінде 1 бас әріптен тұруы керек.",
-    "Invalid password: must contain at least 1 numerical digits.":"Жарамсыз пароль: кемінде 1 сандық саннан тұруы керек."
+    "Invalid password: must contain at least 1 special characters.":"Неверный пароль: должен содержать как минимум 1 специальный символ.",
+    "Invalid password: must contain at least 1 upper case characters.":"Неверный пароль: должен содержать как минимум 1 символ верхнего регистра.",
+    "Invalid password: must contain at least 1 numerical digits.":"Неверный пароль: должен содержать как минимум 1 цифровую цифру.",
+    "updatePassword":"Обновить"
 }
