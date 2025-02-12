@@ -180,6 +180,7 @@ export const ru = {
     "securityRecommendation": "Кибербезопасность",
     "afrHeader":"Агентство Республики Казахстан по регулированию и развитию финансового рынка",
     "Link has been sent to your email. You need to update your password to activate your account":"На Вашу почту выслана ссылка. Вам необходимо пройти по ссылке и обновить пароль, чтобы активировать учетную запись",
+    "You should receive an email shortly with further instructions.":"На Вашу почту выслана ссылка. Вам необходимо пройти по ссылке и обновить пароль, чтобы активировать учетную запись",
     "You need to change your password.":"Вам нужно сменить свой пароль.",
     "Invalid password: must not be equal to any of last 7 passwords.":"Неверный пароль: не должен совпадать ни с одним из последних паролей 7.",
     "Invalid password: minimum length 16.":"Пароль должен быть длиной не менее 16 символов.",

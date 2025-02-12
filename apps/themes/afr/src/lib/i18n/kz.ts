@@ -180,6 +180,7 @@ export const kz = {
     "securityRecommendation": "Киберқауіпсіздік",
     "afrHeader":"Қазақстан Республикасының Қаржы нарығын реттеу және дамыту агенттігі",
     "Link has been sent to your email. You need to update your password to activate your account":"Электрондық поштаңызға сілтеме жіберілді. Тіркелгіні белсендіру үшін сілтеме бойынша өтіп, құпия сөзді жаңарту қажет.",
+    "You should receive an email shortly with further instructions.":"Электрондық поштаңызға сілтеме жіберілді. Тіркелгіні белсендіру үшін сілтеме бойынша өтіп, құпия сөзді жаңарту қажет.",
     "You need to change your password.":"Құпия сөзді өзгерту керек.",
     "Invalid password: must not be equal to any of last 7 passwords.":"Жарамсыз құпиясөз: соңғы 7 құпиясөздердің ешқайсысына тең болмауы керек.",
     "Invalid password: minimum length 16.":"Құпия сөздің ұзындығы кемінде 16 таңба болуы керек",

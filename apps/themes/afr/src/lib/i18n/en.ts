@@ -180,6 +180,7 @@ export const en = {
     "securityRecommendation": "Cybersecurity",
     "afrHeader":"The Agency of the Republic of Kazakhstan for Regulation and Development of Financial Market",
     "You should receive an email shortly with further instructions.":"Link has been sent to your email. You need to update your password to activate your account",
+    "Link has been sent to your email. You need to update your password to activate your account":"Link has been sent to your email. You need to update your password to activate your account",
     "You need to change your password.":"You need to change your password.",
     "Invalid password: must not be equal to any of last 7 passwords.":"Invalid password: must not be equal to any of last 7 passwords.",
     "Invalid password: minimum length 16.":"Password must be at least 16 characters",
