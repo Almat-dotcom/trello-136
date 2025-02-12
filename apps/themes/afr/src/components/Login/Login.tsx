@@ -100,6 +100,7 @@ const Login = (props: PageProps<KcContext_Login, I18n>) => {
                                 ref={formRef}
                                 action={url.loginAction}
                                 method="post"
+                                autoComplete="on"
                             >
                                 <div className={clsx(kcProps.kcFormGroupClass)}>
                                     <label
@@ -115,6 +116,7 @@ const Login = (props: PageProps<KcContext_Login, I18n>) => {
                                             name="username"
                                             type="text"
                                             ref={usernameRef}
+                                            autoComplete="username"
                                         />
                                     </div>
                                 </div>
@@ -133,6 +135,7 @@ const Login = (props: PageProps<KcContext_Login, I18n>) => {
                                             name="password"
                                             type="password"
                                             ref={passwordRef}
+                                            autoComplete="current-password"
                                         />
                                     </div>
                                 </div>
