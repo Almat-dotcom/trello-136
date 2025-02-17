@@ -143,7 +143,7 @@ const UpdatePassword = memo((props: PageProps<KcContext_UpdatePassword, I18n>) =
                                 className={clsx(kcProps.kcButtonClass, kcProps.kcButtonPrimaryClass)}
                                 onClick={onSubmit}
                             >
-                                {msgStr("doSubmit")}
+                                {msgStr("updatePassword")}
                             </button>
                         </div>
                     </form>
