@@ -1,11 +1,13 @@
 package kz.kacd.sso.external.resource.logininfo;
 
+import com.google.auto.service.AutoService;
 import org.keycloak.Config;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
 import org.keycloak.services.resource.RealmResourceProvider;
 import org.keycloak.services.resource.RealmResourceProviderFactory;
 
+@AutoService(RealmResourceProviderFactory.class)
 public class LastLoginResourceFactory implements RealmResourceProviderFactory {
 
     public static final String ID = "last-login";
