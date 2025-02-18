@@ -12,7 +12,7 @@ public class LastLoginResourceFactory implements RealmResourceProviderFactory {
 
     @Override
     public RealmResourceProvider create(KeycloakSession session) {
-        return new LastLoginResource(session);
+        return new LastLoginResourceProvider(session);
     }
 
     @Override
