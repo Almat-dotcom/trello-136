@@ -1,7 +1,5 @@
 package kz.kacd.sso.external.resource.logininfo;
 
-import kz.kacd.sso.external.resource.otp.OTPService;
-import org.jboss.logging.Logger;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
@@ -11,7 +9,6 @@ import java.util.Map;
 
 public class LastLoginService {
 
-    private static final Logger log = Logger.getLogger(OTPService.class);
     private final KeycloakSession session;
 
     public LastLoginService(KeycloakSession session) {

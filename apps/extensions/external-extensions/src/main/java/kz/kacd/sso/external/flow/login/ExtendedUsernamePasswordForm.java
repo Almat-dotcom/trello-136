@@ -151,14 +151,6 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
         user.setSingleAttribute("lastLoginIP", remoteAddr);
     }
 
-
-//    private void storeLastLogin(AuthenticationFlowContext context, UserModel user) {
-//        // Устанавливаем атрибуты для последнего входа
-//        user.setSingleAttribute("lastLoginTime", Instant.now().toString());
-//        user.setSingleAttribute("lastLoginIP", context.getSession().getContext().getConnection().getRemoteAddr());
-//        log.infof("Stored last login info for user '%s': time=%s, IP=%s", user.getUsername(), Instant.now().toString(), context.getSession().getContext().getConnection().getRemoteAddr());
-//    }
-
     private void processValidation(AuthenticationFlowContext context) {
         log.debug("Authentication succeeded. Validating authentication ...");
         UserModel user = context.getUser();
