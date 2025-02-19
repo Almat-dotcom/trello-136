@@ -132,24 +132,11 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
     }
 
     private void storeLastLogin(AuthenticationFlowContext context, UserModel user) {
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-
-        LocalDateTime now = LocalDateTime.now();
-        String formattedDate = dateFormatter.format(now);
-        String formattedTime = timeFormatter.format(now);
-
-        String ip = context.getSession().getContext().getConnection().getRemoteAddr();
-
-        log.infof("Calculated login info: date=%s, time=%s, IP=%s", formattedDate, formattedTime, ip);
-
-        user.setSingleAttribute("date", formattedDate);
-        user.setSingleAttribute("time", formattedTime);
-        user.setSingleAttribute("IP", ip);
-
-        log.infof("Stored login info for user '%s'", user.getUsername());
+        // Устанавливаем атрибуты для последнего входа
+        user.setSingleAttribute("lastLoginTime", Instant.now().toString());
+        user.setSingleAttribute("lastLoginIP", context.getSession().getContext().getConnection().getRemoteAddr());
+        log.infof("Stored last login info for user '%s': time=%s, IP=%s", user.getUsername(), Instant.now().toString(), context.getSession().getContext().getConnection().getRemoteAddr());
     }
-
 
     private void processValidation(AuthenticationFlowContext context) {
         log.debug("Authentication succeeded. Validating authentication ...");

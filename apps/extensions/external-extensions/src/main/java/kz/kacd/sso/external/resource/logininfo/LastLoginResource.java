@@ -38,15 +38,15 @@ public class LastLoginResource extends BaseAdminResource {
                     .build();
         }
 
-        String lastLoginDate = user.getFirstAttribute("date");
-        String lastLoginTime = user.getFirstAttribute("time");
-        String lastLoginIP = user.getFirstAttribute("IP");
+        String lastLoginDate = user.getFirstAttribute("lastLoginTime");
+//        String lastLoginTime = user.getFirstAttribute("lastTime");
+        String lastLoginIP = user.getFirstAttribute("lastLoginIP");
 
         Map<String, String> result = new HashMap<>();
         result.put("userId", userId);
         result.put("date", lastLoginDate != null ? lastLoginDate : "N/A");
-        result.put("time", lastLoginTime != null ? lastLoginTime : "N/A");
-        result.put("IP", lastLoginIP != null ? lastLoginIP : "N/A");
+//        result.put("lastTime", lastLoginTime != null ? lastLoginTime : "N/A");
+        result.put("ip", lastLoginIP != null ? lastLoginIP : "N/A");
 
         return Response.ok(result).build();
     }
