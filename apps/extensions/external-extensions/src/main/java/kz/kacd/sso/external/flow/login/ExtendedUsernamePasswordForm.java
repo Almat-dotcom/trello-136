@@ -1,5 +1,7 @@
 package kz.kacd.sso.external.flow.login;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.core.Response;
 import kz.kacd.sso.external.model.page.ExternalLoginPage;
 import kz.kacd.sso.external.model.page.ExternalRegistrationPage;
@@ -11,6 +13,8 @@ import org.keycloak.authentication.authenticators.browser.UsernamePasswordForm;
 import org.keycloak.models.UserModel;
 import org.keycloak.services.managers.AuthenticationManager;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -129,6 +133,23 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
     }
 
     private void storeLastLogin(AuthenticationFlowContext context, UserModel user) {
+        copyPreviousLoginAttributes(user);
+
+        String formattedTime = getCurrentFormattedTime();
+        String ip = getRemoteAddress(context);
+        String simplifiedDevice = getSimplifiedDevice(context);
+        String city = getCityFromIP(ip);
+
+        user.setSingleAttribute("lastLoginTime", formattedTime);
+        user.setSingleAttribute("lastLoginIP", ip);
+        user.setSingleAttribute("lastLoginDevice", simplifiedDevice);
+        user.setSingleAttribute("lastLoginCity", city);
+
+        log.infof("Stored login info for user '%s': time=%s, IP=%s, device=%s, city=%s",
+                user.getUsername(), formattedTime, ip, simplifiedDevice, city);
+    }
+
+    private void copyPreviousLoginAttributes(UserModel user) {
         String previousLoginTime = user.getFirstAttribute("lastLoginTime");
         if (previousLoginTime != null) {
             user.setSingleAttribute("previousLoginTime", previousLoginTime);
@@ -144,14 +165,25 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
             user.setSingleAttribute("previousLoginDevice", previousDevice);
         }
 
+        String previousCity = user.getFirstAttribute("lastLoginCity");
+        if (previousCity != null) {
+            user.setSingleAttribute("previousLoginCity", previousCity);
+        }
+    }
+
+    private String getCurrentFormattedTime() {
         Instant now = Instant.now();
         ZoneOffset offset = ZoneOffset.ofHours(5);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
                 .withZone(offset);
-        String formattedTime = formatter.format(now);
+        return formatter.format(now);
+    }
 
-        String ip = context.getSession().getContext().getConnection().getRemoteAddr();
+    private String getRemoteAddress(AuthenticationFlowContext context) {
+        return context.getSession().getContext().getConnection().getRemoteAddr();
+    }
 
+    private String getSimplifiedDevice(AuthenticationFlowContext context) {
         String userAgent = context.getHttpRequest().getHttpHeaders().getHeaderString("User-Agent");
         String simplifiedDevice = "Unknown";
 
@@ -166,10 +198,26 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
                 simplifiedDevice = "Edge";
             }
         }
+        return simplifiedDevice;
+    }
 
-        user.setSingleAttribute("lastLoginTime", formattedTime);
-        user.setSingleAttribute("lastLoginIP", ip);
-        user.setSingleAttribute("lastLoginDevice", simplifiedDevice);
+    private String getCityFromIP(String ip) {
+        try {
+            URL url = new URL("http://ipinfo.io/" + ip + "/json");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(5000);
+
+            if (connection.getResponseCode() == 200) {
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode root = mapper.readTree(connection.getInputStream());
+                return root.path("city").asText("Unknown");
+            }
+        } catch (Exception e) {
+            log.error("Error retrieving city from IP " + ip, e);
+        }
+        return "Unknown";
     }
 
     private void processValidation(AuthenticationFlowContext context) {
