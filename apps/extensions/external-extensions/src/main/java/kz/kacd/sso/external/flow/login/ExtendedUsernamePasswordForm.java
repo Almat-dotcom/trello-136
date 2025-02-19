@@ -139,6 +139,11 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
             user.setSingleAttribute("previousLoginIP", previousLoginIP);
         }
 
+        String previousDevice = user.getFirstAttribute("lastLoginDevice");
+        if (previousDevice != null) {
+            user.setSingleAttribute("previousLoginDevice", previousDevice);
+        }
+
         Instant now = Instant.now();
         ZoneOffset offset = ZoneOffset.ofHours(5);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
@@ -147,20 +152,25 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
 
         String ip = context.getSession().getContext().getConnection().getRemoteAddr();
 
-        String previousDevice = user.getFirstAttribute("lastDevice");
-        if (previousDevice != null) {
-            user.setSingleAttribute("previousLoginDevice", previousDevice);
-        }
-
         String userAgent = context.getHttpRequest().getHttpHeaders().getHeaderString("User-Agent");
+        String simplifiedDevice = "Unknown";
+
+        if (userAgent != null) {
+            if (userAgent.contains("Chrome") && userAgent.contains("Safari") && userAgent.contains("Mozilla")) {
+                simplifiedDevice = "Chrome";
+            } else if (userAgent.contains("Firefox")) {
+                simplifiedDevice = "Firefox";
+            } else if (userAgent.contains("Safari") && !userAgent.contains("Chrome")) {
+                simplifiedDevice = "Safari";
+            } else if (userAgent.contains("Edge")) {
+                simplifiedDevice = "Edge";
+            }
+        }
 
         user.setSingleAttribute("lastLoginTime", formattedTime);
         user.setSingleAttribute("lastLoginIP", ip);
-        user.setSingleAttribute("lastDevice", userAgent);
-
-        log.infof("Stored login info for user '%s': time=%s, IP=%s", user.getUsername(), formattedTime, ip);
+        user.setSingleAttribute("lastLoginDevice", simplifiedDevice);
     }
-
 
     private void processValidation(AuthenticationFlowContext context) {
         log.debug("Authentication succeeded. Validating authentication ...");
