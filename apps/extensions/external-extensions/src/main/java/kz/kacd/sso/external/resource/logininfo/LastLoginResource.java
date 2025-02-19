@@ -35,12 +35,14 @@ public class LastLoginResource extends BaseAdminResource {
         String date = user.getFirstAttribute("previousLoginTime");
         String ip = user.getFirstAttribute("previousLoginIP");
         String device = user.getFirstAttribute("previousLoginDevice");
+        String city = user.getFirstAttribute("previousLoginCity");
 
         Map<String, String> result = new HashMap<>();
         result.put("userId", userId);
         result.put("date", date != null ? date : "N/A");
         result.put("ip", ip != null ? ip : "N/A");
         result.put("device", device != null ? device : "N/A");
+        result.put("city", city != null ? city : "N/A");
 
         return Response.ok(result).build();
     }
