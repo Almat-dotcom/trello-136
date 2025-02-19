@@ -12,6 +12,7 @@ import org.keycloak.models.UserModel;
 import org.keycloak.services.managers.AuthenticationManager;
 
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -130,17 +131,23 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
     }
 
     private void storeLastLogin(AuthenticationFlowContext context, UserModel user) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        ZoneId almatyZone = ZoneId.of("Asia/Almaty");
 
-        String formattedNow = ZonedDateTime.now().format(formatter);
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(almatyZone);
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm").withZone(almatyZone);
 
-        user.setSingleAttribute("lastLoginTime", formattedNow);
-        user.setSingleAttribute("lastLoginIP", context.getSession().getContext().getConnection().getRemoteAddr());
+        Instant now = Instant.now();
+        String formattedDate = dateFormatter.format(now);
+        String formattedTime = timeFormatter.format(now);
 
-        log.infof("Stored last login info for user '%s': time=%s, IP=%s",
-                user.getUsername(),
-                formattedNow,
-                context.getSession().getContext().getConnection().getRemoteAddr());
+        String ip = context.getSession().getContext().getConnection().getRemoteAddr();
+
+        user.setSingleAttribute("date", formattedDate);
+        user.setSingleAttribute("time", formattedTime);
+        user.setSingleAttribute("ip", ip);
+
+        log.infof("Stored login info for user '%s': date=%s, time=%s, IP=%s",
+                user.getUsername(), formattedDate, formattedTime, ip);
     }
 
 

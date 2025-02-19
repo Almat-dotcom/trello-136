@@ -23,37 +23,31 @@ public class LastLoginResource extends BaseAdminResource {
         this.session = session;
     }
 
-    /**
-     * Пример запроса:
-     * GET /realms/<realm>/last-login/{userId}
-     */
+
     @GET
     @Path("{userId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getLastLogin(@PathParam("userId") String userId) {
-        LOG.infof("Received request for last login info for userId: %s", userId);
 
         RealmModel realm = session.getContext().getRealm();
         UserModel user = session.users().getUserById(realm, userId);
+
         if (user == null) {
-            LOG.errorf("User not found for userId: %s", userId);
             return Response.status(Response.Status.NOT_FOUND)
                     .entity("User not found")
                     .build();
         }
 
-        String lastLoginTime = user.getFirstAttribute("lastLoginTime");
-        String lastLoginIP = user.getFirstAttribute("lastLoginIP");
-
-        LOG.debugf("Fetched lastLoginTime: %s and lastLoginIP: %s for userId: %s",
-                lastLoginTime, lastLoginIP, userId);
+        String lastLoginDate = user.getFirstAttribute("date");
+        String lastLoginTime = user.getFirstAttribute("time");
+        String lastLoginIP = user.getFirstAttribute("ip");
 
         Map<String, String> result = new HashMap<>();
         result.put("userId", userId);
-        result.put("lastLoginTime", lastLoginTime != null ? lastLoginTime : "N/A");
-        result.put("lastLoginIP", lastLoginIP != null ? lastLoginIP : "N/A");
+        result.put("date", lastLoginDate != null ? lastLoginDate : "N/A");
+        result.put("time", lastLoginTime != null ? lastLoginTime : "N/A");
+        result.put("ip", lastLoginIP != null ? lastLoginIP : "N/A");
 
-        LOG.infof("Returning last login info for userId: %s", userId);
         return Response.ok(result).build();
     }
 }
