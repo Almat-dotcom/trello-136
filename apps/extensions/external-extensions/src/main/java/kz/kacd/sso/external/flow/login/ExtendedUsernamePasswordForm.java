@@ -12,6 +12,8 @@ import org.keycloak.models.UserModel;
 import org.keycloak.services.managers.AuthenticationManager;
 
 import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -128,10 +130,17 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
     }
 
     private void storeLastLogin(AuthenticationFlowContext context, UserModel user) {
-        // Устанавливаем атрибуты для последнего входа
-        user.setSingleAttribute("lastLoginTime", Instant.now().toString());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        String formattedNow = ZonedDateTime.now().format(formatter);
+
+        user.setSingleAttribute("lastLoginTime", formattedNow);
         user.setSingleAttribute("lastLoginIP", context.getSession().getContext().getConnection().getRemoteAddr());
-        log.infof("Stored last login info for user '%s': time=%s, IP=%s", user.getUsername(), Instant.now().toString(), context.getSession().getContext().getConnection().getRemoteAddr());
+
+        log.infof("Stored last login info for user '%s': time=%s, IP=%s",
+                user.getUsername(),
+                formattedNow,
+                context.getSession().getContext().getConnection().getRemoteAddr());
     }
 
 
