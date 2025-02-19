@@ -142,14 +142,14 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
 
         String ip = context.getSession().getContext().getConnection().getRemoteAddr();
 
+        log.infof("Calculated login info: date=%s, time=%s, IP=%s", formattedDate, formattedTime, ip);
+
         user.setSingleAttribute("date", formattedDate);
         user.setSingleAttribute("time", formattedTime);
-        user.setSingleAttribute("ip", ip);
+        user.setSingleAttribute("IP", ip);
 
-        log.infof("Stored login info for user '%s': date=%s, time=%s, IP=%s",
-                user.getUsername(), formattedDate, formattedTime, ip);
+        log.infof("Stored login info for user '%s'", user.getUsername());
     }
-
 
     private void processValidation(AuthenticationFlowContext context) {
         log.debug("Authentication succeeded. Validating authentication ...");

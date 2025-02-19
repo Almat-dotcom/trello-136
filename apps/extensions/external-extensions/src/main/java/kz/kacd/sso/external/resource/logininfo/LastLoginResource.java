@@ -46,7 +46,7 @@ public class LastLoginResource extends BaseAdminResource {
         result.put("userId", userId);
         result.put("date", lastLoginDate != null ? lastLoginDate : "N/A");
         result.put("time", lastLoginTime != null ? lastLoginTime : "N/A");
-        result.put("ip", lastLoginIP != null ? lastLoginIP : "N/A");
+        result.put("IP", lastLoginIP != null ? lastLoginIP : "N/A");
 
         return Response.ok(result).build();
     }
