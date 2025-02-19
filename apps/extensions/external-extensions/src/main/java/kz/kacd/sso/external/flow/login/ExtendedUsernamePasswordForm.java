@@ -12,6 +12,7 @@ import org.keycloak.models.UserModel;
 import org.keycloak.services.managers.AuthenticationManager;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -131,12 +132,10 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
     }
 
     private void storeLastLogin(AuthenticationFlowContext context, UserModel user) {
-        ZoneId almatyZone = ZoneId.of("Asia/Almaty");
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(almatyZone);
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm").withZone(almatyZone);
-
-        Instant now = Instant.now();
+        LocalDateTime now = LocalDateTime.now();
         String formattedDate = dateFormatter.format(now);
         String formattedTime = timeFormatter.format(now);
 
@@ -150,6 +149,7 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
 
         log.infof("Stored login info for user '%s'", user.getUsername());
     }
+
 
     private void processValidation(AuthenticationFlowContext context) {
         log.debug("Authentication succeeded. Validating authentication ...");

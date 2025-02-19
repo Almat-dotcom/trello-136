@@ -40,7 +40,7 @@ public class LastLoginResource extends BaseAdminResource {
 
         String lastLoginDate = user.getFirstAttribute("date");
         String lastLoginTime = user.getFirstAttribute("time");
-        String lastLoginIP = user.getFirstAttribute("ip");
+        String lastLoginIP = user.getFirstAttribute("IP");
 
         Map<String, String> result = new HashMap<>();
         result.put("userId", userId);
