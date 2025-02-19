@@ -11,10 +11,7 @@ import org.keycloak.authentication.authenticators.browser.UsernamePasswordForm;
 import org.keycloak.models.UserModel;
 import org.keycloak.services.managers.AuthenticationManager;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -133,23 +130,29 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
 
     private void storeLastLogin(AuthenticationFlowContext context, UserModel user) {
         String previousLoginTime = user.getFirstAttribute("lastLoginTime");
-
         if (previousLoginTime != null) {
             user.setSingleAttribute("previousLoginTime", previousLoginTime);
         }
 
         String previousLoginIP = user.getFirstAttribute("lastLoginIP");
-
         if (previousLoginIP != null) {
             user.setSingleAttribute("previousLoginIP", previousLoginIP);
         }
 
         Instant now = Instant.now();
-        String remoteAddr = context.getSession().getContext().getConnection().getRemoteAddr();
+        ZoneOffset offset = ZoneOffset.ofHours(5);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+                .withZone(offset);
+        String formattedTime = formatter.format(now);
 
-        user.setSingleAttribute("lastLoginTime", now.toString());
-        user.setSingleAttribute("lastLoginIP", remoteAddr);
+        String ip = context.getSession().getContext().getConnection().getRemoteAddr();
+
+        user.setSingleAttribute("lastLoginTime", formattedTime);
+        user.setSingleAttribute("lastLoginIP", ip);
+
+        log.infof("Stored login info for user '%s': time=%s, IP=%s", user.getUsername(), formattedTime, ip);
     }
+
 
     private void processValidation(AuthenticationFlowContext context) {
         log.debug("Authentication succeeded. Validating authentication ...");
