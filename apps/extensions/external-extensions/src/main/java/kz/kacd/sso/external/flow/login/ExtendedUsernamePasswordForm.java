@@ -132,12 +132,10 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
     }
 
     private void storeLastLogin(AuthenticationFlowContext context, UserModel user) {
-        String previousLoginTime = user.getFirstAttribute("lastLoginTime");
+        String lastLoginTime = user.getFirstAttribute("lastLoginTime");
 
-        if (previousLoginTime != null) {
-            log.infof("Previous login time for user '%s': %s", user.getUsername(), previousLoginTime);
-        } else {
-            log.infof("No previous login time found for user '%s'", user.getUsername());
+        if (lastLoginTime != null) {
+            user.setSingleAttribute("previousLoginTime", lastLoginTime);
         }
 
         Instant now = Instant.now();
@@ -149,7 +147,6 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
         log.infof("Stored NEW login info for user '%s': time=%s, IP=%s",
                 user.getUsername(), now.toString(), remoteAddr);
     }
-
 
 //    private void storeLastLogin(AuthenticationFlowContext context, UserModel user) {
 //        // Устанавливаем атрибуты для последнего входа
