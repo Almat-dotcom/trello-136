@@ -11,6 +11,7 @@ import org.keycloak.authentication.authenticators.browser.UsernamePasswordForm;
 import org.keycloak.models.UserModel;
 import org.keycloak.services.managers.AuthenticationManager;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,6 +127,14 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
         return false;
     }
 
+    private void storeLastLogin(AuthenticationFlowContext context, UserModel user) {
+        // Устанавливаем атрибуты для последнего входа
+        user.setSingleAttribute("lastLoginTime", Instant.now().toString());
+        user.setSingleAttribute("lastLoginIP", context.getSession().getContext().getConnection().getRemoteAddr());
+        log.infof("Stored last login info for user '%s': time=%s, IP=%s", user.getUsername(), Instant.now().toString(), context.getSession().getContext().getConnection().getRemoteAddr());
+    }
+
+
     private void processValidation(AuthenticationFlowContext context) {
         log.debug("Authentication succeeded. Validating authentication ...");
         UserModel user = context.getUser();
@@ -146,6 +155,8 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
             failAuthentication(context, error, clearUser);
             return;
         }
+
+        storeLastLogin(context, user);
 
         context.success();
     }
