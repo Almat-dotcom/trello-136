@@ -132,11 +132,31 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
     }
 
     private void storeLastLogin(AuthenticationFlowContext context, UserModel user) {
-        // Устанавливаем атрибуты для последнего входа
-        user.setSingleAttribute("lastLoginTime", Instant.now().toString());
-        user.setSingleAttribute("lastLoginIP", context.getSession().getContext().getConnection().getRemoteAddr());
-        log.infof("Stored last login info for user '%s': time=%s, IP=%s", user.getUsername(), Instant.now().toString(), context.getSession().getContext().getConnection().getRemoteAddr());
+        String previousLoginTime = user.getFirstAttribute("lastLoginTime");
+
+        if (previousLoginTime != null) {
+            log.infof("Previous login time for user '%s': %s", user.getUsername(), previousLoginTime);
+        } else {
+            log.infof("No previous login time found for user '%s'", user.getUsername());
+        }
+
+        Instant now = Instant.now();
+        String remoteAddr = context.getSession().getContext().getConnection().getRemoteAddr();
+
+        user.setSingleAttribute("lastLoginTime", now.toString());
+        user.setSingleAttribute("lastLoginIP", remoteAddr);
+
+        log.infof("Stored NEW login info for user '%s': time=%s, IP=%s",
+                user.getUsername(), now.toString(), remoteAddr);
     }
+
+
+//    private void storeLastLogin(AuthenticationFlowContext context, UserModel user) {
+//        // Устанавливаем атрибуты для последнего входа
+//        user.setSingleAttribute("lastLoginTime", Instant.now().toString());
+//        user.setSingleAttribute("lastLoginIP", context.getSession().getContext().getConnection().getRemoteAddr());
+//        log.infof("Stored last login info for user '%s': time=%s, IP=%s", user.getUsername(), Instant.now().toString(), context.getSession().getContext().getConnection().getRemoteAddr());
+//    }
 
     private void processValidation(AuthenticationFlowContext context) {
         log.debug("Authentication succeeded. Validating authentication ...");
