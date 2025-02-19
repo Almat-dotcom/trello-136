@@ -147,8 +147,12 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
 
         String ip = context.getSession().getContext().getConnection().getRemoteAddr();
 
+        String userAgent = context.getHttpRequest().getHttpHeaders().getHeaderString("User-Agent");
+        user.setSingleAttribute("device", userAgent);
+
         user.setSingleAttribute("lastLoginTime", formattedTime);
         user.setSingleAttribute("lastLoginIP", ip);
+        user.setSingleAttribute("device", userAgent);
 
         log.infof("Stored login info for user '%s': time=%s, IP=%s", user.getUsername(), formattedTime, ip);
     }
