@@ -6,26 +6,42 @@ import jakarta.ws.rs.core.Response;
 import kz.kacd.sso.external.resource.BaseAdminResource;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
+import org.keycloak.models.UserModel;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class LastLoginResource extends BaseAdminResource {
 
-    private final LastLoginService service;
-
     protected LastLoginResource(KeycloakSession session, RealmModel realm) {
         super(realm);
         this.session = session;
-        this.service = new LastLoginService(session);
     }
 
     @GET
     @Path("{userId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getLastLogin(@PathParam("userId") String userId) {
-        auth.requireManageUsers();
-        Map<String, String> result = service.getLastLogin(userId);
+
+        RealmModel realm = session.getContext().getRealm();
+        UserModel user = session.users().getUserById(realm, userId);
+
+        if (user == null) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("User not found")
+                    .build();
+        }
+
+        String date = user.getFirstAttribute("previousLoginTime");
+        String ip = user.getFirstAttribute("previousLoginIP");
+
+        Map<String, String> result = new HashMap<>();
+        result.put("userId", userId);
+        result.put("date", date != null ? date : "N/A");
+        result.put("ip", ip != null ? ip : "N/A");
+
         return Response.ok(result).build();
     }
+
 
 }
