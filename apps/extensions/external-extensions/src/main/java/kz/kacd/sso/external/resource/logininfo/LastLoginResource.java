@@ -4,7 +4,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import kz.kacd.sso.external.resource.BaseAdminResource;
-import kz.kacd.sso.external.resource.otp.OTPService;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
@@ -35,11 +34,13 @@ public class LastLoginResource extends BaseAdminResource {
 
         String date = user.getFirstAttribute("previousLoginTime");
         String ip = user.getFirstAttribute("previousLoginIP");
+        String device = user.getFirstAttribute("previousLoginDevice");
 
         Map<String, String> result = new HashMap<>();
         result.put("userId", userId);
         result.put("date", date != null ? date : "N/A");
         result.put("ip", ip != null ? ip : "N/A");
+        result.put("device", device != null ? device : "N/A");
 
         return Response.ok(result).build();
     }
