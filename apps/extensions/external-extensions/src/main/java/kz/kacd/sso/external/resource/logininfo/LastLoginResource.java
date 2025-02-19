@@ -4,6 +4,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import kz.kacd.sso.external.resource.BaseAdminResource;
+import kz.kacd.sso.external.resource.otp.OTPService;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
@@ -13,7 +14,7 @@ import java.util.Map;
 
 public class LastLoginResource extends BaseAdminResource {
 
-    protected LastLoginResource(KeycloakSession session, RealmModel realm) {
+    protected LastLoginResource(RealmModel realm, KeycloakSession session) {
         super(realm);
         this.session = session;
     }
@@ -42,6 +43,5 @@ public class LastLoginResource extends BaseAdminResource {
 
         return Response.ok(result).build();
     }
-
 
 }
