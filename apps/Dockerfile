@@ -38,4 +38,4 @@ FROM nexus.kacd.kz:5000/devops-tools/keycloak/keycloak:22.0.5
 
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
 
-ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start"]
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start", "--optimized"]
