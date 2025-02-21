@@ -138,15 +138,13 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
         String formattedTime = getCurrentFormattedTime();
         String ip = getRemoteAddress(context);
         String simplifiedDevice = getSimplifiedDevice(context);
-        String city = getCityFromIP(ip);
 
         user.setSingleAttribute("lastLoginTime", formattedTime);
         user.setSingleAttribute("lastLoginIP", ip);
         user.setSingleAttribute("lastLoginDevice", simplifiedDevice);
-        user.setSingleAttribute("lastLoginCity", city);
 
-        log.infof("Stored login info for user '%s': time=%s, IP=%s, device=%s, city=%s",
-                user.getUsername(), formattedTime, ip, simplifiedDevice, city);
+        log.infof("Stored login info for user '%s': time=%s, IP=%s, device=%s",
+                user.getUsername(), formattedTime, ip, simplifiedDevice);
     }
 
     private void copyPreviousLoginAttributes(UserModel user) {
@@ -163,11 +161,6 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
         String previousDevice = user.getFirstAttribute("lastLoginDevice");
         if (previousDevice != null) {
             user.setSingleAttribute("previousLoginDevice", previousDevice);
-        }
-
-        String previousCity = user.getFirstAttribute("lastLoginCity");
-        if (previousCity != null) {
-            user.setSingleAttribute("previousLoginCity", previousCity);
         }
     }
 
@@ -199,25 +192,6 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
             }
         }
         return simplifiedDevice;
-    }
-
-    private String getCityFromIP(String ip) {
-        try {
-            URL url = new URL("http://ipinfo.io/" + ip + "/json");
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setConnectTimeout(5000);
-            connection.setReadTimeout(5000);
-
-            if (connection.getResponseCode() == 200) {
-                ObjectMapper mapper = new ObjectMapper();
-                JsonNode root = mapper.readTree(connection.getInputStream());
-                return root.path("city").asText("Unknown");
-            }
-        } catch (Exception e) {
-            log.error("Error retrieving city from IP " + ip, e);
-        }
-        return "Unknown";
     }
 
     private void processValidation(AuthenticationFlowContext context) {
