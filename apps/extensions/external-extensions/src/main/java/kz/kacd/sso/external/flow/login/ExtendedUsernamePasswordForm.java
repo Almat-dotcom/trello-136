@@ -178,13 +178,13 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
     }
 
     private String detectBrowser(String userAgent) {
-        if (userAgent.contains("Edg")) return "Edge";  // Специфичный для Edge, проверяем на "Edg"
-        if (userAgent.contains("Chrome") && userAgent.contains("Safari") && !userAgent.contains("Edg")) return "Chrome";  // Chrome содержит "Chrome" и "Safari", исключаем Edge
-        if (userAgent.contains("Firefox") && !userAgent.contains("Chrome")) return "Firefox";  // Проверка для Firefox, исключаем Chrome
-        if (userAgent.contains("Safari") && !userAgent.contains("Chrome") && !userAgent.contains("Edg")) return "Safari";  // Safari не должен содержать Chrome или Edge
-        if (userAgent.contains("OPR") || userAgent.contains("Opera")) return "Opera";  // Проверка для Opera
-        if (userAgent.contains("Brave")) return "Brave";  // Проверка для Brave
-        if (userAgent.contains("Trident")) return "Internet Explorer";  // Проверка для старого IE
+        if (userAgent.contains("Edg")) return "Edge";
+        if (userAgent.contains("Chrome") && userAgent.contains("Safari") && !userAgent.contains("Edg")) return "Chrome";
+        if (userAgent.contains("Firefox") && !userAgent.contains("Chrome")) return "Firefox";
+        if (userAgent.contains("Safari") && !userAgent.contains("Chrome") && !userAgent.contains("Edg")) return "Safari";
+        if (userAgent.contains("OPR") || userAgent.contains("Opera")) return "Opera";
+        if (userAgent.contains("Brave")) return "Brave";
+        if (userAgent.contains("Trident")) return "Internet Explorer";
         return UNKNOWN_BROWSER;
     }
 
