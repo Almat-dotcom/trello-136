@@ -1,7 +1,5 @@
 package kz.kacd.sso.external.flow.login;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.core.Response;
 import kz.kacd.sso.external.model.page.ExternalLoginPage;
 import kz.kacd.sso.external.model.page.ExternalRegistrationPage;
@@ -13,12 +11,13 @@ import org.keycloak.authentication.authenticators.browser.UsernamePasswordForm;
 import org.keycloak.models.UserModel;
 import org.keycloak.services.managers.AuthenticationManager;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import static kz.kacd.sso.external.flow.login.utils.LoginInfoUtils.*;
 
 /**
  * Extends standard username password form.
@@ -136,62 +135,71 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
         copyPreviousLoginAttributes(user);
 
         String formattedTime = getCurrentFormattedTime();
-        String ip = getRemoteAddress(context);
-        String simplifiedDevice = getSimplifiedDevice(context);
+        String ip = getClientIP(context);
+        String deviceInfo = parseUserAgent(context);
 
-        user.setSingleAttribute("lastLoginTime", formattedTime);
-        user.setSingleAttribute("lastLoginIP", ip);
-        user.setSingleAttribute("lastLoginDevice", simplifiedDevice);
+        user.setSingleAttribute(LAST_LOGIN_TIME, formattedTime);
+        user.setSingleAttribute(LAST_LOGIN_IP, ip);
+        user.setSingleAttribute(LAST_LOGIN_DEVICE, deviceInfo);
 
         log.infof("Stored login info for user '%s': time=%s, IP=%s, device=%s",
-                user.getUsername(), formattedTime, ip, simplifiedDevice);
+                user.getUsername(), formattedTime, ip, deviceInfo);
     }
 
     private void copyPreviousLoginAttributes(UserModel user) {
-        String previousLoginTime = user.getFirstAttribute("lastLoginTime");
-        if (previousLoginTime != null) {
-            user.setSingleAttribute("previousLoginTime", previousLoginTime);
-        }
+        copyAttribute(user, LAST_LOGIN_TIME, PREVIOUS_LOGIN_TIME);
+        copyAttribute(user, LAST_LOGIN_IP, PREVIOUS_LOGIN_IP);
+        copyAttribute(user, LAST_LOGIN_DEVICE, PREVIOUS_LOGIN_DEVICE);
+    }
 
-        String previousLoginIP = user.getFirstAttribute("lastLoginIP");
-        if (previousLoginIP != null) {
-            user.setSingleAttribute("previousLoginIP", previousLoginIP);
-        }
-
-        String previousDevice = user.getFirstAttribute("lastLoginDevice");
-        if (previousDevice != null) {
-            user.setSingleAttribute("previousLoginDevice", previousDevice);
+    private void copyAttribute(UserModel user, String oldAttr, String newAttr) {
+        String value = user.getFirstAttribute(oldAttr);
+        if (Objects.nonNull(value)) {
+            user.setSingleAttribute(newAttr, value);
         }
     }
 
     private String getCurrentFormattedTime() {
-        Instant now = Instant.now();
-        ZoneOffset offset = ZoneOffset.ofHours(5);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
-                .withZone(offset);
-        return formatter.format(now);
+        return DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)
+                .withZone(TIME_ZONE_OFFSET)
+                .format(Instant.now());
     }
 
-    private String getRemoteAddress(AuthenticationFlowContext context) {
-        return context.getSession().getContext().getConnection().getRemoteAddr();
+    private String getClientIP(AuthenticationFlowContext context) {
+        String forwarded = context.getHttpRequest().getHttpHeaders().getHeaderString(HEADER_X_FORWARDED_FOR);
+        return (forwarded != null && !forwarded.isEmpty())
+                ? forwarded.split(",")[0].trim()
+                : context.getSession().getContext().getConnection().getRemoteAddr();
     }
 
-    private String getSimplifiedDevice(AuthenticationFlowContext context) {
-        String userAgent = context.getHttpRequest().getHttpHeaders().getHeaderString("User-Agent");
-        String simplifiedDevice = "Unknown";
+    private String parseUserAgent(AuthenticationFlowContext context) {
+        String userAgent = context.getHttpRequest().getHttpHeaders().getHeaderString(HEADER_USER_AGENT);
 
-        if (userAgent != null) {
-            if (userAgent.contains("Chrome") && userAgent.contains("Safari") && userAgent.contains("Mozilla")) {
-                simplifiedDevice = "Chrome";
-            } else if (userAgent.contains("Firefox")) {
-                simplifiedDevice = "Firefox";
-            } else if (userAgent.contains("Safari") && !userAgent.contains("Chrome")) {
-                simplifiedDevice = "Safari";
-            } else if (userAgent.contains("Edge")) {
-                simplifiedDevice = "Edge";
-            }
+        if (Objects.isNull(userAgent) || userAgent.isEmpty()) {
+            return UNKNOWN_BROWSER + " on " + UNKNOWN_OS;
         }
-        return simplifiedDevice;
+
+        return detectBrowser(userAgent) + " on " + detectOS(userAgent);
+    }
+
+    private String detectBrowser(String userAgent) {
+        if (userAgent.contains("Chrome") && userAgent.contains("Safari") && userAgent.contains("Mozilla")) return "Chrome";
+        if (userAgent.contains("Firefox")) return "Firefox";
+        if (userAgent.contains("Safari") && !userAgent.contains("Chrome")) return "Safari";
+        if (userAgent.contains("Edge")) return "Edge";
+        return UNKNOWN_BROWSER;
+    }
+
+    private String detectOS(String userAgent) {
+        if (userAgent.contains("Windows NT 10.0")) return "Windows 10";
+        if (userAgent.contains("Windows NT 6.3")) return "Windows 8.1";
+        if (userAgent.contains("Windows NT 6.2")) return "Windows 8";
+        if (userAgent.contains("Windows NT 6.1")) return "Windows 7";
+        if (userAgent.contains("iPhone") || userAgent.contains("iPad") || userAgent.contains("iPod")) return "iOS";
+        if (userAgent.contains("Mac OS X")) return "Mac OS X";
+        if (userAgent.contains("Android")) return "Android";
+        if (userAgent.contains("Linux")) return "Linux";
+        return UNKNOWN_OS;
     }
 
     private void processValidation(AuthenticationFlowContext context) {
