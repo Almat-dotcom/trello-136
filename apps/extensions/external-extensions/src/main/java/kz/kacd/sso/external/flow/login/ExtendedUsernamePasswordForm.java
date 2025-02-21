@@ -178,12 +178,17 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
     }
 
     private String detectBrowser(String userAgent) {
-        if (userAgent.contains("Chrome") && userAgent.contains("Safari") && userAgent.contains("Mozilla")) return "Chrome";
-        if (userAgent.contains("Firefox")) return "Firefox";
-        if (userAgent.contains("Safari") && !userAgent.contains("Chrome")) return "Safari";
-        if (userAgent.contains("Edge")) return "Edge";
+        if (userAgent.contains("Edg")) return "Edge";  // Специфичный для Edge, проверяем на "Edg"
+        if (userAgent.contains("Chrome") && userAgent.contains("Safari") && !userAgent.contains("Edg")) return "Chrome";  // Chrome содержит "Chrome" и "Safari", исключаем Edge
+        if (userAgent.contains("Firefox") && !userAgent.contains("Chrome")) return "Firefox";  // Проверка для Firefox, исключаем Chrome
+        if (userAgent.contains("Safari") && !userAgent.contains("Chrome") && !userAgent.contains("Edg")) return "Safari";  // Safari не должен содержать Chrome или Edge
+        if (userAgent.contains("OPR") || userAgent.contains("Opera")) return "Opera";  // Проверка для Opera
+        if (userAgent.contains("Brave")) return "Brave";  // Проверка для Brave
+        if (userAgent.contains("Trident")) return "Internet Explorer";  // Проверка для старого IE
         return UNKNOWN_BROWSER;
     }
+
+
 
     private String detectOS(String userAgent) {
         if (userAgent.contains("Windows NT 10.0")) return "Windows 10";
