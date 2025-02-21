@@ -5,11 +5,13 @@ import java.time.ZoneOffset;
 public class LoginInfoUtils {
     public static final String LAST_LOGIN_TIME = "lastLoginTime";
     public static final String LAST_LOGIN_IP = "lastLoginIP";
-    public static final String LAST_LOGIN_DEVICE = "lastLoginDevice";
+    public static final String LAST_LOGIN_OS = "lastLoginOS";
+    public static final String LAST_LOGIN_BROWSER = "lastLoginBrowser";
 
     public static final String PREVIOUS_LOGIN_TIME = "previousLoginTime";
     public static final String PREVIOUS_LOGIN_IP = "previousLoginIP";
-    public static final String PREVIOUS_LOGIN_DEVICE = "previousLoginDevice";
+    public static final String PREVIOUS_LOGIN_OS = "previousLoginOS";
+    public static final String PREVIOUS_LOGIN_BROWSER = "previousLoginBrowser";
 
     public static final String UNKNOWN_BROWSER = "Unknown Browser";
     public static final String UNKNOWN_OS = "Unknown OS";

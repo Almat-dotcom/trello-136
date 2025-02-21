@@ -9,12 +9,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static kz.kacd.sso.external.flow.login.utils.LoginInfoUtils.*;
+
 public class LastLoginService {
     private static final Logger log = Logger.getLogger(LastLoginService.class);
-
-    private static final String PREVIOUS_LOGIN_TIME = "previousLoginTime";
-    private static final String PREVIOUS_LOGIN_IP = "previousLoginIP";
-    private static final String PREVIOUS_LOGIN_DEVICE = "previousLoginDevice";
 
     private final KeycloakSession session;
 
@@ -35,13 +33,14 @@ public class LastLoginService {
         result.put("userId", userId);
         result.put("date", getAttributeOrDefault(user, PREVIOUS_LOGIN_TIME));
         result.put("ip", getAttributeOrDefault(user, PREVIOUS_LOGIN_IP));
-        result.put("device", getAttributeOrDefault(user, PREVIOUS_LOGIN_DEVICE));
+        result.put("os", getAttributeOrDefault(user, PREVIOUS_LOGIN_OS));
+        result.put("browser", getAttributeOrDefault(user, PREVIOUS_LOGIN_BROWSER));
 
         return result;
     }
 
     private String getAttributeOrDefault(UserModel user, String attributeName) {
         String value = user.getFirstAttribute(attributeName);
-        return value != null ? value : "N/A";
+        return Objects.nonNull(value) ? value : "N/A";
     }
 }

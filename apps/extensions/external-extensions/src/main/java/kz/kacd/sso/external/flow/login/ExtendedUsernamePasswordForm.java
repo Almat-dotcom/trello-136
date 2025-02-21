@@ -134,22 +134,27 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
     private void storeLastLogin(AuthenticationFlowContext context, UserModel user) {
         copyPreviousLoginAttributes(user);
 
-        String formattedTime = getCurrentFormattedTime();
+        String time = getCurrentFormattedTime();
         String ip = getClientIP(context);
-        String deviceInfo = parseUserAgent(context);
+        String userAgent = context.getHttpRequest().getHttpHeaders().getHeaderString(HEADER_USER_AGENT);
 
-        user.setSingleAttribute(LAST_LOGIN_TIME, formattedTime);
+        String browser = detectBrowser(userAgent);
+        String os = detectOS(userAgent);
+
+        user.setSingleAttribute(LAST_LOGIN_TIME, time);
         user.setSingleAttribute(LAST_LOGIN_IP, ip);
-        user.setSingleAttribute(LAST_LOGIN_DEVICE, deviceInfo);
+        user.setSingleAttribute(LAST_LOGIN_OS, os);
+        user.setSingleAttribute(LAST_LOGIN_BROWSER, browser);
 
-        log.infof("Stored login info for user '%s': time=%s, IP=%s, device=%s",
-                user.getUsername(), formattedTime, ip, deviceInfo);
+        log.infof("Stored login info for user '%s': time=%s, IP=%s, os=%s, browser=%s",
+                user.getUsername(), time, ip, os, browser);
     }
 
     private void copyPreviousLoginAttributes(UserModel user) {
         copyAttribute(user, LAST_LOGIN_TIME, PREVIOUS_LOGIN_TIME);
         copyAttribute(user, LAST_LOGIN_IP, PREVIOUS_LOGIN_IP);
-        copyAttribute(user, LAST_LOGIN_DEVICE, PREVIOUS_LOGIN_DEVICE);
+        copyAttribute(user, LAST_LOGIN_OS, PREVIOUS_LOGIN_OS);
+        copyAttribute(user, LAST_LOGIN_BROWSER, PREVIOUS_LOGIN_BROWSER);
     }
 
     private void copyAttribute(UserModel user, String oldAttr, String newAttr) {
@@ -170,16 +175,6 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
         return (forwarded != null && !forwarded.isEmpty())
                 ? forwarded.split(",")[0].trim()
                 : context.getSession().getContext().getConnection().getRemoteAddr();
-    }
-
-    private String parseUserAgent(AuthenticationFlowContext context) {
-        String userAgent = context.getHttpRequest().getHttpHeaders().getHeaderString(HEADER_USER_AGENT);
-
-        if (Objects.isNull(userAgent) || userAgent.isEmpty()) {
-            return UNKNOWN_BROWSER + " on " + UNKNOWN_OS;
-        }
-
-        return detectBrowser(userAgent) + " on " + detectOS(userAgent);
     }
 
     private String detectBrowser(String userAgent) {
