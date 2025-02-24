@@ -11,8 +11,13 @@ import org.keycloak.authentication.authenticators.browser.UsernamePasswordForm;
 import org.keycloak.models.UserModel;
 import org.keycloak.services.managers.AuthenticationManager;
 
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import static kz.kacd.sso.external.flow.login.utils.LoginInfoUtils.*;
 
 /**
  * Extends standard username password form.
@@ -126,6 +131,77 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
         return false;
     }
 
+    private void storeLastLogin(AuthenticationFlowContext context, UserModel user) {
+        copyPreviousLoginAttributes(user);
+
+        String time = getCurrentFormattedTime();
+        String ip = getClientIP(context);
+        String userAgent = context.getHttpRequest().getHttpHeaders().getHeaderString(HEADER_USER_AGENT);
+
+        String browser = detectBrowser(userAgent);
+        String os = detectOS(userAgent);
+
+        user.setSingleAttribute(LAST_LOGIN_TIME, time);
+        user.setSingleAttribute(LAST_LOGIN_IP, ip);
+        user.setSingleAttribute(LAST_LOGIN_OS, os);
+        user.setSingleAttribute(LAST_LOGIN_BROWSER, browser);
+
+        log.infof("Stored login info for user '%s': time=%s, IP=%s, os=%s, browser=%s",
+                user.getUsername(), time, ip, os, browser);
+    }
+
+    private void copyPreviousLoginAttributes(UserModel user) {
+        copyAttribute(user, LAST_LOGIN_TIME, PREVIOUS_LOGIN_TIME);
+        copyAttribute(user, LAST_LOGIN_IP, PREVIOUS_LOGIN_IP);
+        copyAttribute(user, LAST_LOGIN_OS, PREVIOUS_LOGIN_OS);
+        copyAttribute(user, LAST_LOGIN_BROWSER, PREVIOUS_LOGIN_BROWSER);
+    }
+
+    private void copyAttribute(UserModel user, String oldAttr, String newAttr) {
+        String value = user.getFirstAttribute(oldAttr);
+        if (Objects.nonNull(value)) {
+            user.setSingleAttribute(newAttr, value);
+        }
+    }
+
+    private String getCurrentFormattedTime() {
+        return DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)
+                .withZone(TIME_ZONE_OFFSET)
+                .format(Instant.now());
+    }
+
+    private String getClientIP(AuthenticationFlowContext context) {
+        String forwarded = context.getHttpRequest().getHttpHeaders().getHeaderString(HEADER_X_FORWARDED_FOR);
+        return (forwarded != null && !forwarded.isEmpty())
+                ? forwarded.split(",")[0].trim()
+                : context.getSession().getContext().getConnection().getRemoteAddr();
+    }
+
+    private String detectBrowser(String userAgent) {
+        if (userAgent.contains("Edg")) return "Edge";
+        if (userAgent.contains("Chrome") && userAgent.contains("Safari") && !userAgent.contains("Edg")) return "Chrome";
+        if (userAgent.contains("Firefox") && !userAgent.contains("Chrome")) return "Firefox";
+        if (userAgent.contains("Safari") && !userAgent.contains("Chrome") && !userAgent.contains("Edg")) return "Safari";
+        if (userAgent.contains("OPR") || userAgent.contains("Opera")) return "Opera";
+        if (userAgent.contains("Brave")) return "Brave";
+        if (userAgent.contains("Trident")) return "Internet Explorer";
+        return UNKNOWN_BROWSER;
+    }
+
+
+
+    private String detectOS(String userAgent) {
+        if (userAgent.contains("Windows NT 10.0")) return "Windows 10";
+        if (userAgent.contains("Windows NT 6.3")) return "Windows 8.1";
+        if (userAgent.contains("Windows NT 6.2")) return "Windows 8";
+        if (userAgent.contains("Windows NT 6.1")) return "Windows 7";
+        if (userAgent.contains("iPhone") || userAgent.contains("iPad") || userAgent.contains("iPod")) return "iOS";
+        if (userAgent.contains("Mac OS X")) return "Mac OS X";
+        if (userAgent.contains("Android")) return "Android";
+        if (userAgent.contains("Linux")) return "Linux";
+        return UNKNOWN_OS;
+    }
+
     private void processValidation(AuthenticationFlowContext context) {
         log.debug("Authentication succeeded. Validating authentication ...");
         UserModel user = context.getUser();
@@ -146,6 +222,8 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
             failAuthentication(context, error, clearUser);
             return;
         }
+
+        storeLastLogin(context, user);
 
         context.success();
     }
