@@ -3,7 +3,7 @@ package kz.kacd.sso.realm.flow;
 public class AuthFlowConstants {
 
     public static final String RESTRICTED_BROWSER = "RestrictedBrowser";
-    public static final String EXTERNAL_LOGIN = "ExternalLogin";
+    public static final String EXTERNAL_LOGIN = "ExternalLogin2FA";
     public static final String EXTERNAL_REGISTRATION = "ExternalRegistration";
     public static final String STANDARD_BROWSER = "browser";
     public static final String STANDARD_REGISTRATION = "registration";
