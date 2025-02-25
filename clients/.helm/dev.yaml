@@ -69,11 +69,9 @@ clients:
     - https://tophr-preprod.kacd.kz
   helpdeskFreescoutInternal:
     redirectUris:
-    - https://helpdesk.dev.kacd.kz/*
-    - https://helpdesk.preprod.kacd.kz/*
+    - https://helpdesk-test.kacd.kz/*
     webOrigins:
-    - https://helpdesk.dev.kacd.kz
-    - https://helpdesk.preprod.kacd.kz
+    - https://helpdesk-test.kacd.kz
   currencyRateKuber:
     redirectUris:
     - https://currency-rate-kuber.dev.kacd.kz/*
