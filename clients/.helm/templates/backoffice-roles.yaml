@@ -22,16 +22,22 @@ spec:
     - "+"
   capability:
     type: PUBLIC
-  roles:
-  - name: -	backoffice-business-relations-control
+  roles: [{
+  - name: backoffice-business-relations-control
     roleDescription: Управление (согласование, отклонение) заявлений на УДО
-  - name: -	backoffice-business-relations-read
+  }, {
+  - name: backoffice-business-relations-read
     roleDescription: Просмотр заявлений на УДО
-  - name: -	backoffice-account-operations-read
+  }, {
+  - name: backoffice-account-operations-read
     roleDescription: Просмотр приказов по лицевым счетам физических и юридических лиц раздела "Операции со счетами"
+  }, {
   - name: backoffice-account-operations-control
     roleDescription: Управление (согласование, отклонение) приказов по лицевым счетам физических и юридических лиц раздела "Операции со счетами"
+  }, {
   - name: backoffice-account-operations-generated-documents-download
     roleDescription: Скачивание сгенерированных файлов (документов) по приказом по лицевым счетам физических и юридических лиц раздела "Операции со счетами"
+  }, {
   - name: backoffice-account-operations-client-attachment-download
     roleDescription: Скачивание  файлов, прикрепленных к приказам по лицевым счетам физических и юридических лиц раздела "Операции со счетами"
+  }]
