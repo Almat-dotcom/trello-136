@@ -1,0 +1,43 @@
+apiVersion: sso.kacd.kz/v1
+kind: Client
+metadata:
+  name: backoffice-roles
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: internal-realm
+    kz-kacd-realm-name: internal
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  displayedName: backoffice-roles
+  displayedDescription: Клиент для добавления ролей для АИС Backoffice
+  access:
+    validRedirectUris:
+    - http://localhost:8080/*
+    webOrigins:
+    - "+"
+  capability:
+    type: PUBLIC
+  roles: [{
+    name: backoffice-business-relations-control,
+    roleDescription: Управление (согласование, отклонение) заявлений на УДО
+  }, {
+    name: backoffice-business-relations-read,
+    roleDescription: Просмотр заявлений на УДО
+  }, {
+    name: backoffice-account-operations-read,
+    roleDescription: Просмотр приказов по лицевым счетам физических и юридических лиц раздела "Операции со счетами"
+  }, {
+    name: backoffice-account-operations-control,
+    roleDescription: Управление (согласование, отклонение) приказов по лицевым счетам физических и юридических лиц раздела "Операции со счетами"
+  }, {
+    name: backoffice-account-operations-generated-documents-download,
+    roleDescription: Скачивание сгенерированных файлов (документов) по приказом по лицевым счетам физических и юридических лиц раздела "Операции со счетами"
+  }, {
+    name: backoffice-account-operations-client-attachment-download,
+    roleDescription: Скачивание  файлов, прикрепленных к приказам по лицевым счетам физических и юридических лиц раздела "Операции со счетами"
+  }]
