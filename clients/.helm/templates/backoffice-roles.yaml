@@ -22,7 +22,6 @@ spec:
     - "+"
   capability:
     type: PUBLIC
-  attributes: []
   roles:
   - name: -	backoffice-business-relations-control
     roleDescription: Управление (согласование, отклонение) заявлений на УДО
