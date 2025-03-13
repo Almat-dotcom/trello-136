@@ -25,10 +25,8 @@ spec:
     clientExistingSecret: management-company-service-secret
     clientSecretKey: client_secret
   roles: []
-  scope: [{
-    name: management_company_bulk_upload_orders,
-    scopeDescription: 'Предоставляет возможность пакетной загрузки данных приказов на регистрацию размещения, выкупа или списания паев..'
-  }, {
-    name: test-scope,
-    scopeDescription: 'тестовое описание scope'
-  }]
+  scope:
+    management_company_bulk_upload_orders:
+      scopeDescription: "Предоставляет возможность пакетной загрузки данных приказов..."
+    test-scope:
+      scopeDescription: "тестовое описание scope"
