@@ -1,0 +1,34 @@
+apiVersion: sso.kacd.kz/v1
+kind: Client
+metadata:
+  name: management-company-service
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: external-realm
+    kz-kacd-realm-name: external
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  displayedName: management-company-service
+  displayedDescription: Client для подключения приложения management-company-service (ОРД)
+  access:
+    validRedirectUris:
+    - http://localhost:8080/*
+    webOrigins:
+    - "+"
+    capability:
+    type: CONFIDENTIAL
+    clientExistingSecret: management-company-service-secret
+    clientSecretKey: client_secret
+  roles: []
+  scope: [{
+    name: management_company_bulk_upload_orders
+    scopeDescription: 'Предоставляет возможность пакетной загрузки данных приказов на регистрацию размещения, выкупа или списания паев..'
+  }, {
+    name: test-scope
+    scopeDescription: 'тестовое описание scope'
+  }]
