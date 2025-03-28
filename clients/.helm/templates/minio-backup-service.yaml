@@ -1,0 +1,27 @@
+apiVersion: sso.kacd.kz/v1
+kind: Client
+metadata:
+  name: minio-backup-service
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: internal-realm
+    kz-kacd-realm-name: internal
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  displayedName: minio-backup-service
+  displayedDescription: Клиент для подключения сервиса резервного копирования объектов из MinIO. Необходима роль: account\view-profile
+  access:
+    validRedirectUris:
+    - http://localhost:8899
+    webOrigins:
+    - http://localhost:8899
+  capability:
+    type: CONFIDENTIAL
+    clientExistingSecret: minio-backup-service-secret
+    clientSecretKey: client_secret
+  roles: []
