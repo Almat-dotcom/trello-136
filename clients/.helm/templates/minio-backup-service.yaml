@@ -14,7 +14,7 @@ metadata:
   {{- end }}
 spec:
   displayedName: minio-backup-service
-  displayedDescription: Клиент для подключения сервиса резервного копирования объектов из MinIO. Необходима роль: account\view-profile
+  displayedDescription: 'Клиент для подключения сервиса резервного копирования объектов из MinIO. Необходима роль: account\view-profile'
   access:
     validRedirectUris:
     - http://localhost:8899
