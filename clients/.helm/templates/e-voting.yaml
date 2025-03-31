@@ -21,7 +21,9 @@ spec:
     webOrigins:
     - "+"
   capability:
-    type: PUBLIC
+    type: CONFIDENTIAL
+    clientExistingSecret: e-voting-secret
+    clientSecretKey: client_secret
   attributes:
   - FIRST_NAME
   - LAST_NAME
