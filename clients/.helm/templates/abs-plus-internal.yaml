@@ -25,3 +25,7 @@ spec:
   roles:
   - name: backoffice-bsdh-admin-panel-read
     roleDescription: Просмотр информации о состояниях обработчиков
+  - name: backoffice-bsdh-admin-panel-create
+    roleDescription: Создание процессов и данных в справочниках
+  - name: backoffice-bsdh-admin-panel-update
+    roleDescription: Изменение состояний процессов и данных в обработчиках
