@@ -1,0 +1,46 @@
+apiVersion: sso.kacd.kz/v1
+kind: Client
+metadata:
+  name: dispatcher-service
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: internal-realm
+    kz-kacd-realm-name: internal
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  displayedName: dispatcher-service
+  displayedDescription: Сервис для работы с dispatcher команды РЕЕСТР
+  access:
+    validRedirectUris:
+    - http://localhsot:4200
+    webOrigins:
+    - "+"
+  capability:
+    type: CONFIDENTIAL
+    clientExistingSecret: dispatcher-service-secret
+    clientSecretKey: client_secret
+  attributes:
+    - FIRST_NAME
+    - LAST_NAME
+    - MIDDLE_NAME
+    - GROUPS
+    - LOCALE
+  roles: [{
+    name: backoffice-dispatcher-edit-order-executor,
+    roleDescription: 'Разрешает изменить исполнителя приказа в сервисе автораспределения'
+  }, {
+    name: backoffice-dispatcher-edit-user-status,
+    roleDescription: 'Разрешает изменить статус активности пользователя в сервисе автораспределения'
+  }, {
+    name: backoffice-dispatcher-read-orders,
+    roleDescription: 'Разрешает смотреть список приказов в сервисе автораспределения'
+  }, {
+    name: backoffice-dispatcher-read-users,
+    roleDescription: 'Разрешает смотреть список пользователей в сервисе автораспределения'
+  }]
+
