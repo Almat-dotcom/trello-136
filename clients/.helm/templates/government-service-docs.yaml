@@ -1,0 +1,37 @@
+apiVersion: sso.kacd.kz/v1
+kind: Client
+metadata:
+  name: government-service-docs
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: internal-realm
+    kz-kacd-realm-name: internal
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  displayedName: government-service-docs
+  displayedDescription: Сервис для просмотра/скачивания документов по гос.услугам ПК FinOnBoard
+  access:
+    validRedirectUris:
+    - http://localhsot:4200
+    webOrigins:
+    - "+"
+  capability:
+    type: CONFIDENTIAL
+    clientExistingSecret: government-service-docs-secret
+    clientSecretKey: client_secret
+  attributes:
+  - FIRST_NAME
+  - LAST_NAME
+  - MIDDLE_NAME
+  - GROUPS
+  - LOCALE
+  roles: [{
+    name: backoffice-govservices-doc-read,
+    roleDescription: '1.Разрешает смотреть список эмитентов и услуг, осуществлять сортировку и поиск по имеющимся фильтрам. 2.Разрешает скачивать pdf документов (свидетельство, проспект, отчет, частный меморандум, правила, сведения, письмо)
+в сервисе кастодиана.'
+  }]
