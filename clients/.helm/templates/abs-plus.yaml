@@ -14,7 +14,7 @@ metadata:
   {{- end }}
 spec:
   displayedName: ABS-PLUS
-  displayedDescription: Клиент для присвоения ролей сотрудникам бэкофис 
+  displayedDescription: Клиент для присвоения ролей сотрудникам бэкофис команды АБС плюс
   access:
     validRedirectUris:
     - http://localhost
