@@ -1,0 +1,96 @@
+apiVersion: sso.kacd.kz/v1
+kind: Client
+metadata:
+  name: abs-plus
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: internal-realm
+    kz-kacd-realm-name: internal
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  displayedName: ABS-PLUS
+  displayedDescription: Клиент для присвоения ролей сотрудникам бэкофис 
+  access:
+    validRedirectUris:
+    - http://localhost
+    webOrigins:
+    - "+"
+  capability:
+    type: CONFIDENTIAL
+    clientExistingSecret: abs-plus-secret
+    clientSecretKey: client_secret
+  attributes:
+  - FIRST_NAME
+  - LAST_NAME
+  - MIDDLE_NAME
+  - GROUPS
+  - LOCALE
+  roles: [{
+    name: backoffice-bsdh-admin-panel-read,
+    roleDescription: 'Просмотр информации о состояниях обработчиков'
+  }, {
+    name: backoffice-bsdh-admin-panel-create,
+    roleDescription: 'Создание процессов и данных в справочниках'
+  }, {
+    name: backoffice-bsdh-admin-panel-update,
+    roleDescription: 'Изменение состояний процессов и данных в обработчиках'
+  }, {
+    name: backoffice-bsdh-accounts-read,
+    roleDescription: 'Просмотр информации о банковских счетах'
+  }, {
+    name: backoffice-bsdh-accounts-create,
+    roleDescription: 'Создание банковского счёта'
+  }, {
+    name: backoffice-bsdh-accounts-update,
+    roleDescription: 'Редактирование банковского счёта'
+  }, {
+    name: backoffice-bsdh-accounts-download,
+    roleDescription: 'Скачивание файла со списком банковских счетов'
+  }, {
+    name: backoffice-bsdh-io-docs-read,
+    roleDescription: 'Просмотр списка входящих и исходящих документов'
+  }, {
+    name: backoffice-bsdh-transactions-read,
+    roleDescription: 'Просмотр информации по транзакциям'
+  }, {
+    name: backoffice-bsdh-transactions-download,
+    roleDescription: 'Скачивание файла со списком транзакций'
+  }, {
+    name: backoffice-bsdh-limits-read,
+    roleDescription: 'Просмотр информации по ограничениям по банковскому счёту'
+  }, {
+    name: backoffice-bsdh-limits-create,
+    roleDescription: 'Создание ограничения по банковскому счёту'
+  }, {
+    name: backoffice-bsdh-limits-update,
+    roleDescription: 'Редактирование ограничения по банковскому счёту'
+  }, {
+    name: backoffice-bsdh-limits-download,
+    roleDescription: 'Скачивание файла со списком ограничений по банковскому счёту'
+  }, {
+    name: backoffice-bsdh-reports-create,
+    roleDescription: 'Создание информации по отчётности'
+  }, {
+    name: backoffice-bsdh-reports-read,
+    roleDescription: 'Просмотр информации по отчётности'
+  }, {
+    name: backoffice-bsdh-reports-download,
+    roleDescription: 'Скачивание файла с отчётностью'
+  }, {
+    name: backoffice-bsdh-payments-read,
+    roleDescription: 'Просмотр информации о платёжных документах'
+  }, {
+    name: backoffice-bsdh-payments-create,
+    roleDescription: 'Создание платёжных документов'
+  }, {
+    name: backoffice-bsdh-payments-update,
+    roleDescription: 'Редактирование платёжных документов'
+  }, {
+    name: backoffice-bsdh-payments-accept,
+    roleDescription: 'Подтверждение платёжного документа'
+  }]
