@@ -14,7 +14,7 @@ metadata:
   {{- end }}
 spec:
   displayedName: billing service
-  displayedDescription: Сервис для работы с детализацией в БД
+  displayedDescription: Сервис для централизованного доступа к информации об услугах, расчетам, клиентским балансам и формированию первичной документации команды Биллинг.
   access:
     validRedirectUris:
     - http://localhost
@@ -24,4 +24,79 @@ spec:
     type: CONFIDENTIAL
     clientExistingSecret: billing-service-secret
     clientSecretKey: client_secret
-  roles: []
+  roles: [{
+    name: backoffice_billing_buh_edit,
+    roleDescription: 'Платежные операции, выписки и переводы'
+  }, {
+    name: backoffice_billing_buh_read,
+    roleDescription: 'Просмотр поступивших платежей, банковских выписок и переводов'
+  }, {
+    name: backoffice_billing_buh_sign,
+    roleDescription: 'Подписание актов сверки и иных платежных документов'
+  }, {
+    name: backoffice_billing_odd_edit,
+    roleDescription: 'Генерация, редактирование и отправка детализаций ОДД'
+  }, {
+    name: backoffice_billing_odd_read,
+    roleDescription: 'Просмотр первичных документов по услугам ОДД, формирование операционных отчетов по услугам ОДД'
+  }, {
+    name: backoffice_billing_odd_sign,
+    roleDescription: 'Подписание первичных документов по услугам ОДД'
+  }, {
+    name: backoffice_billing_ord_edit,
+    roleDescription: 'Генерация, редактирование и отправка детализаций ОРД'
+  },{
+    name: backoffice_billing_ord_read,
+    roleDescription: 'Просмотр первичных документов по услугам ОРД, формирование операционных отчетов по услугам ОРД'
+  }, {
+    name: backoffice_billing_ord_sign,
+    roleDescription: 'Подписание первичных документов по услугам ОРД'
+  }, {
+    name: backoffice_billing_okd_edit,
+    roleDescription: 'Генерация, редактирование и отправка детализаций ОКД'
+  },{
+    name: backoffice_billing_okd_read,
+    roleDescription: 'Просмотр первичных документов по услугам ОКД, формирование операционных отчетов по услугам ОКД'
+  }, {
+    name: backoffice_billing_okd_sign,
+    roleDescription: 'Подписание первичных документов по услугам ОКД'
+  }, {
+    name: backoffice_billing_sin_edit,
+    roleDescription: 'Генерация, редактирование и отправка детализаций САИН'
+  },{
+    name: backoffice_billing_sin_read,
+    roleDescription: 'Просмотр первичных документов по услугам САИН, формирование операционных отчетов по услугам САИН'
+  }, {
+    name: backoffice_billing_sin_sign,
+    roleDescription: 'Подписание первичных документов по услугам САИН'
+  }, {
+    name: backoffice_billing_pay_edit,
+    roleDescription: 'Генерация, редактирование и отправка детализаций ОПБО'
+  },{
+    name: backoffice_billing_pay_read,
+    roleDescription: 'Просмотр первичных документов по услугам ОПБО, формирование операционных отчетов по услугам ОПБО'
+  }, {
+    name: backoffice_billing_pay_sign,
+    roleDescription: 'Подписание первичных документов по услугам ОПБО'
+  }, {
+    name: backoffice_billing_spb_edit,
+    roleDescription: 'Формирование финансовых отчетов'
+  },{
+    name: backoffice_billing_spb_read,
+    roleDescription: 'Просмотр финансовых отчетов'
+  }, {
+    name: backoffice_billing_spb_sign,
+    roleDescription: 'Подписание финансовых отчетов и иных документов'
+  }, {
+    name: backoffice_billing_ofo_edit,
+    roleDescription: 'Генерация счетов по предоплатным услугам, cоздание клиента в бэкофисе'
+  },{
+    name: backoffice_billing_ofo_read,
+    roleDescription: 'Просмотр первичных  документов по всем услугам, формирование отчетов, формирование и отправка в ЛК  АВР по предоплате'
+  }, {
+    name: backoffice_billing_ofo_sign,
+    roleDescription: 'Обработка полного цикла первичных документов (генерация, подписание и доставка) по предоплате и постоплате'
+  }, {
+    name: backoffice_billing_bill_admin,
+    roleDescription: 'Управление доступами и ролями, технический мониторинг, запуск иобслуживание процессов'
+  }]
