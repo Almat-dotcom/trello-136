@@ -1,0 +1,66 @@
+apiVersion: sso.kacd.kz/v1
+kind: Client
+metadata:
+  name: transact-backoffice
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: internal-realm
+    kz-kacd-realm-name: internal
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  displayedName: transact-backoffice
+  displayedDescription: Клиент с набором ролей пользователей для доступа к бизнес-процессам команды "Сделки". Не путать с client=transact, который предназначен для подключения сервисов (не пользователей)
+  access:
+    validRedirectUris:
+    - http://localhsot:4200
+    webOrigins:
+    - "+"
+  capability:
+    type: CONFIDENTIAL
+    clientExistingSecret: transact-backoffice-secret
+    clientSecretKey: client_secret
+  attributes:
+  - FIRST_NAME
+  - LAST_NAME
+  - MIDDLE_NAME
+  - GROUPS
+  - LOCALE
+  roles: [{
+    name: handler_manager,
+    roleDescription: 'Доступ к добавлению документов в очередь обработчика depo.trans_inp. Роль предоставляется пользователям ОДД.'
+  }, {
+    name: backoffice-depo-orders-create-first,
+    roleDescription: 'Создание депозитарных приказов первым вводом. Для бридж-переводов и переводов по активным счетам'
+  }, {
+    name: backoffice-depo-orders-create-second,
+    roleDescription: 'Создание депозитарных приказов вторым вводом. Для бридж-переводов и переводов по активным счетам'
+  }, {
+    name: backoffice-depo-reports-download,
+    roleDescription: 'Скачивание отчетов в раздела Модуль отчетности'
+  },  {
+    name: backoffice-depo-reports-view,
+    roleDescription: 'Просмотр отчетов в раздела Модуль отчетности'
+  },  {
+    name: backoffice-depo-trns-queue-add,
+    roleDescription: 'Добавление документа в очередь обработки'
+  },  {
+    name: backoffice-depo-trns-queue-view,
+    roleDescription: 'Просмотр документов в очереди обработчиков'
+  },  {
+    name: backoffice-depo-trns-queue-delete,
+    roleDescription: 'Удаление документов из очереди обработчиков'
+  },  {
+    name: backoffice-depo-confirm-panel-view,
+    roleDescription: 'Просмотр панели автоподтверждения приказов ввода/вывода в/з номинального держания'
+  },  {
+    name: backoffice-depo-confirm-panel-update,
+    roleDescription: 'Изменение настроек на панели автоподтверждения приказов'
+  },  {
+    name: backoffice-depo-io-docs-read,
+    roleDescription: 'Просмотр журнала входящих и исходящих документов'
+  }]
