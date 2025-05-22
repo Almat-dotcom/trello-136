@@ -1,0 +1,88 @@
+clients:
+  afrAuthorityServicesFront:
+    redirectUris:
+    - http://localhost:4200/*
+    - https://ardfm.dev.kacd.kz/*
+    webOrigins:
+    - http://localhost:4200
+    - https://ardfm.dev.kacd.kz
+  deponentReport:
+    redirectUris:
+    - http://localhost:8080/*
+    webOrigins:
+    - "+"
+  lkShellBack:
+    redirectUris:
+    - http://localhost:8080/*
+    webOrigins:
+    - "+"
+  lkShellFront:
+    redirectUris:
+    - https://kacd-lk-shell.dev.kacd.kz/*
+    - https://cabinet.dev.kacd.kz/*
+    - https://cabinet-test.dev.kacd.kz/*
+    - http://localhost:4200/*
+    - http://kacd-lk-shell.dev.kacd.kz/*
+    webOrigins:
+    - https://kacd-lk-shell.dev.kacd.kz
+    - https://cabinet.dev.kacd.kz
+    - https://cabinet-test.dev.kacd.kz
+    - http://localhost:4200
+    - http://kacd-lk-shell.dev.kacd.kz
+  lkShellFrontInternal:
+    redirectUris:
+    - https://kacd-lk-shell.dev.kacd.kz/admin/*
+    - https://cabinet.dev.kacd.kz/admin/*
+    - http://localhost:4200/admin/*
+    - http://kacd-lk-shell.dev.kacd.kz/admin/*
+    webOrigins:
+    - https://kacd-lk-shell.dev.kacd.kz
+    - https://cabinet.dev.kacd.kz
+    - http://localhost:4200
+    - http://kacd-lk-shell.dev.kacd.kz
+  mt535:
+    redirectUris:
+    - http://localhost:8184/*
+    - http://10.10.125.4:8085/*
+    webOrigins:
+    - "+"
+  armFrontOffice:
+    redirectUris:
+    - http://localhost:8080/*
+    - https://arm-front.dev.kacd.kz/*
+    webOrigins:
+    - http://localhost:8080
+    - https://arm-front.dev.kacd.kz
+  billing:
+    redirectUris:
+    - http://localhost:4200/*
+    - https://billing-dev.dev.kacd.kz/*
+    - https://billing-preprod.preprod.kacd.kz/*
+    webOrigins:
+    - http://localhost:4200
+    - https://billing-dev.dev.kacd.kz
+    - https://billing-preprod.preprod.kacd.kz
+  tophrInternal:
+    redirectUris:
+    - https://tophr-preprod.kacd.kz/*
+    webOrigins:
+    - https://tophr-preprod.kacd.kz
+  helpdeskFreescoutInternal:
+    redirectUris:
+    - https://helpdesk-test.kacd.kz/*
+    webOrigins:
+    - https://helpdesk-test.kacd.kz
+  currencyRateKuber:
+    redirectUris:
+    - https://currency-rate-kuber.dev.kacd.kz/*
+    - http://localhost:8082/*
+    webOrigins:
+    - "+"
+  matrix:
+    redirectUris:
+    - https://matrix.dev.kacd.kz/*
+    - https://matrix.preprod.kacd.kz/*
+    webOrigins:
+    - https://matrix.dev.kacd.kz
+    - https://matrix.preprod.kacd.kz
+

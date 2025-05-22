@@ -2,6 +2,7 @@ stages:
 - mirror
 - scan
 - mr
+- test # временно, после обновления удалить
 - dev
 - preprod
 - prod
@@ -22,6 +23,40 @@ check_apps:
   - master
   - dev
 
+# TEST deploy
+# После обновления удалить!
+build-apps:
+  stage: test
+  trigger:
+    include: apps/.gitlab-ci-test.yml
+    strategy: depend
+  rules:
+  - if: $CI_COMMIT_BRANCH == "test"
+    changes:
+    - apps/**/*
+
+realms:
+  stage: test
+  trigger:
+    include: realms/.gitlab-ci-test.yml
+    strategy: depend
+  rules:
+  - if: $CI_COMMIT_BRANCH == "test"
+    changes:
+    - realms/**/*
+
+clients:
+  stage: test
+  trigger:
+    include: clients/.gitlab-ci-test.yml
+    strategy: depend
+  rules:
+  - if: $CI_COMMIT_BRANCH == "test"
+    changes:
+    - clients/**/*
+
+
+# DEV deploy
 build-apps:
   stage: dev
   trigger:

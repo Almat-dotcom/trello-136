@@ -1,0 +1,233 @@
+stages:
+# Build all extensions
+- prebuild
+# Cache extensions inside local directory
+- cache
+# Build all docker images
+- build-docker
+# deploy to test env
+- test-deploy
+
+# Building basic extension for keycloak
+build-common-extension:
+  stage: prebuild
+  image: nexus.kacd.kz:5000/devops-tools/maven:3.8-eclipse-temurin-17-alpine
+  variables:
+    GIT_DEPTH: "0"
+  only:
+  - test
+  before_script:
+  - apk add curl
+  - export PROJECT_DIR="apps/extensions/common-extensions"
+  - cd ${PROJECT_DIR}
+  - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/common-extensions.jar"
+  - export MAVEN_OPTS="-Dmaven.repo.local=${CI_PROJECT_DIR}/${PROJECT_DIR}/.m2"
+  # - export SONAR_USER_HOME="${CI_PROJECT_DIR}/${PROJECT_DIR}/.sonar"
+  # - export SONAR_TOKEN="${SONAR_TOKEN_COMMON_EXTENSIONS}"
+  # - mkdir -p ${HOME}/.m2
+  - echo -n "${PUBLIC_NEXUS_MIRROR}" > ${HOME}/.m2/settings.xml
+  script:
+  - mvn clean package
+  # - mvn verify sonar:sonar -Dsonar.projectKey=sso-common-extension
+  - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./target/common-extensions-jar-with-dependencies.jar ${NEXUS_REPO}
+
+# Building external extension for keycloak
+build-external-extension:
+  stage: prebuild
+  image: nexus.kacd.kz:5000/devops-tools/maven:3.8-eclipse-temurin-17-alpine
+  only:
+  - test
+  before_script:
+  - apk add curl
+  - export PROJECT_DIR="apps/extensions/external-extensions"
+  - cd ${PROJECT_DIR}
+  - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/external-extensions.jar"
+  - export MAVEN_OPTS="-Dmaven.repo.local=${CI_PROJECT_DIR}/${PROJECT_DIR}/.m2"
+  # - export SONAR_USER_HOME="${CI_PROJECT_DIR}/${PROJECT_DIR}/.sonar"
+  # - export SONAR_TOKEN="${SONAR_TOKEN_EXTERNAL_EXTENSIONS}"
+  - chmod +x ./lib/install.sh && ./lib/install.sh
+  - mkdir -p ${HOME}/.m2
+  - echo -n "${PUBLIC_NEXUS_MIRROR}" > ${HOME}/.m2/settings.xml
+  script:
+  - mvn clean package
+  # - mvn verify sonar:sonar -Dsonar.projectKey=sso-external-extensions
+  - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./target/external-extensions-jar-with-dependencies.jar ${NEXUS_REPO}
+
+# Building external theme for keycloak
+build-external-theme:
+  stage: prebuild
+  image:
+    name: nexus.kacd.kz:5000/devops-utils/keycloakify-build-image:latest
+    entrypoint: [""]
+  before_script:
+  - export PROJECT_DIR="apps/themes/external"
+  # - export SONAR_TOKEN="${SONAR_TOKEN_EXTERNAL_THEME}"
+  - cd ${PROJECT_DIR}
+  - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/external-keycloak-theme.jar"
+  - mkdir -p ${HOME}/.m2
+  - echo -n "${PUBLIC_NEXUS_MIRROR}" > ${HOME}/.m2/settings.xml
+  script:
+  - yarn install --frozen-lockfile
+  - yarn keycloak
+  - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./build_keycloak/target/external-keycloak-theme-1.0.6.jar ${NEXUS_REPO}
+
+# Building internal theme for keycloak
+# build-internal-theme:
+#   stage: prebuild
+#   image:
+#     name: nexus.kacd.kz:5000/devops-utils/keycloakify-build-image:latest
+#     entrypoint: [""]
+#   before_script:
+#   - export PROJECT_DIR="apps/themes/internal"
+#   - cd ${PROJECT_DIR}
+#   - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/internal-keycloak-theme.jar"
+#   - mkdir -p ${HOME}/.m2
+#   - echo -n "${PUBLIC_NEXUS_MIRROR}" > ${HOME}/.m2/settings.xml
+#   script:
+#   - yarn install --frozen-lockfile
+#   - yarn keycloak
+#   - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./build_keycloak/target/internal-keycloak-theme-1.0.6.jar ${NEXUS_REPO}
+#   cache:
+#   - key: node_modules_internal
+#     paths:
+#     - apps/themes/internal/node_modules
+
+# Building afr theme for keycloak
+build-afr-theme:
+  stage: prebuild
+  image:
+    name: nexus.kacd.kz:5000/devops-utils/keycloakify-build-image:latest
+    entrypoint: [""]
+  before_script:
+  - export PROJECT_DIR="apps/themes/afr"
+  - cd ${PROJECT_DIR}
+  - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}/afr-keycloak-theme.jar"
+  - mkdir -p ${HOME}/.m2
+  - echo -n "${PUBLIC_NEXUS_MIRROR}" > ${HOME}/.m2/settings.xml
+  script:
+  - yarn install --frozen-lockfile
+  - yarn keycloak
+  - curl -v --user "${NEXUS_RAW_REPO}" --upload-file ./build_keycloak/target/afr-keycloak-theme-2.0.1.jar ${NEXUS_REPO}
+  cache:
+  - key: node_modules_afr
+    paths:
+    - apps/themes/afr/node_modules
+
+# Persisting all extensions artifacts inside local cache directory
+cache-artifacts:
+  stage: cache
+  image: alpine:latest
+  only:
+  - test
+  before_script:
+  - apk add curl
+  - export NEXUS_REPO="https://nexus.kacd.kz/repository/kacd-raw-hosted/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/${CI_COMMIT_SHA}"
+  - mkdir apps/build-extensions
+  script:
+  - curl -sL --user "${NEXUS_RAW_REPO}" "${NEXUS_REPO}/common-extensions.jar" -o apps/build-extensions/common-extensions.jar
+  - curl -sL --user "${NEXUS_RAW_REPO}" "${NEXUS_REPO}/external-extensions.jar" -o apps/build-extensions/external-extensions.jar
+  - curl -sL --user "${NEXUS_RAW_REPO}" "${NEXUS_REPO}/internal-keycloak-theme.jar" -o apps/build-extensions/internal-keycloak-theme.jar
+  - curl -sL --user "${NEXUS_RAW_REPO}" "${NEXUS_REPO}/external-keycloak-theme.jar" -o apps/build-extensions/external-keycloak-theme.jar
+  - curl -sL --user "${NEXUS_RAW_REPO}" "${NEXUS_REPO}/afr-keycloak-theme.jar" -o apps/build-extensions/afr-keycloak-theme.jar
+  cache:
+  - key: extensions
+    policy: push
+    paths:
+    - apps/build-extensions
+  tags:
+  - global_runner_3
+
+# Building keycloak image
+build-docker-keycloak:
+  stage: build-docker
+  image:
+    name: gcr.io/kaniko-project/executor:v1.9.1-debug
+    entrypoint: [""]
+  only:
+  - test
+  before_script:
+  - echo $KANIKO_DOCKER_CONFIG | base64 -d > /kaniko/.docker/config.json
+  ###################### поменять образ для сборки
+  - |-
+    /kaniko/warmer \
+      --cache-dir=${CI_PROJECT_DIR}/.cache \
+      --image=nexus.kacd.kz:5000/devops-tools/keycloak/keycloak:21.0.0
+  script:
+  - |-
+    /kaniko/executor \
+      --cache=true \
+      --cache-dir=${CI_PROJECT_DIR}/.cache \
+      --cache-ttl=4320h \
+      --dockerfile=./apps/Dockerfile \
+      --log-timestamp=true \
+      --reproducible=true \
+      --snapshot-mode=time \
+      --use-new-run=true \
+      --context=${CI_PROJECT_DIR}/apps \
+      --destination=nexus-rc.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/keycloak:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA} \
+  cache:
+  - key: kaniko-cache-keycloak
+    paths:
+    - .cache/
+  - key: extensions
+    policy: pull
+    paths:
+    - apps/build-extensions
+  tags:
+  - global_runner_3
+
+# Building realm controller image
+build-docker-realm-controller:
+  stage: build-docker
+  image:
+    name: gcr.io/kaniko-project/executor:v1.9.1-debug
+    entrypoint: [""]
+  only:
+  - test
+  before_script:
+  - echo $KANIKO_DOCKER_CONFIG | base64 -d > /kaniko/.docker/config.json
+  - |-
+    /kaniko/warmer \
+      --cache-dir=${CI_PROJECT_DIR}/.cache \
+      --image=quay.io/quarkus/quarkus-micro-image:1.0 \
+      --image=nexus.kacd.kz:5000/devops-tools/quarkus/ubi-quarkus-mandrel-builder-image:22.3-java17
+  script:
+  - |-
+    /kaniko/executor \
+      --cache=true \
+      --cache-dir=${CI_PROJECT_DIR}/.cache \
+      --cache-ttl=4320h \
+      --dockerfile=./apps/controllers/realm-controller/Dockerfile \
+      --log-timestamp=true \
+      --reproducible=true \
+      --snapshot-mode=time \
+      --use-new-run=true \
+      --context=${CI_PROJECT_DIR}/apps/controllers/realm-controller \
+      --destination=nexus-rc.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/realm-controller:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA}
+  cache:
+  - key: kaniko-cache-realm-controller
+    paths:
+    - .cache/
+  tags:
+  - global_runner_3
+
+# Deploying helm chart to dev invironment
+k8s-test-deploy:
+  stage: test-deploy
+  image: 'nexus.kacd.kz:5000/devops-utils/alpine-helm-docker:3.15al-3.11he-20.10d'
+  only:
+  - test
+  environment:
+    name: test
+  before_script:
+  - cd apps
+  - export RELEASE_NAME="${CI_PROJECT_NAME}"
+  - mkdir -p /etc/deploy && export KUBECONFIG=/etc/deploy/config
+  - echo ${KUBE_K8S_DEV_CONFIG} | base64 -d > /etc/deploy/config
+  script:
+  - |-
+    helm upgrade --install ${RELEASE_NAME} ./.helm \
+      --create-namespace --namespace="${CI_PROJECT_NAME}-test" \
+      -f ./.helm/test.yaml \
+      --set image=nexus-rc.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/keycloak:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA} \
+      --set realmController.image=nexus-rc.kacd.kz:5000/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/realm-controller:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA}

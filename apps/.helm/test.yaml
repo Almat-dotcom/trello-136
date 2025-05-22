@@ -11,7 +11,7 @@ replicaCount: 1
 
 clusterDomain: dev-cluster.local
 
-hostname: sso-dev.dev.kacd.kz
+hostname: sso-test.dev.kacd.kz
 
 enabledMasterRealm: "true"
 
@@ -40,9 +40,9 @@ auth:
 
 database:
   host: psql-dev.kacd.kz
-  name: keycloak
+  name: keycloak-test
   schema: auth
-  username: keycloak
+  username: keycloak-test
   existingSecret: sso-keycloak-database-password
   existingSecretPasswordKey: password
 
@@ -60,7 +60,7 @@ service:
 
 ingress:
   enabled: true
-  hostname: sso-dev.dev.kacd.kz
+  hostname: sso-test.dev.kacd.kz
   tls: true
   secretName: kacd-tls
 
