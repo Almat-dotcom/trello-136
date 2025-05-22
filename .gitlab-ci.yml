@@ -22,6 +22,7 @@ check_apps:
   except:
   - master
   - dev
+  - test
 
 # TEST deploy
 # После обновления удалить!
@@ -32,8 +33,8 @@ build-apps:
     strategy: depend
   rules:
   - if: $CI_COMMIT_BRANCH == "test"
-    changes:
-    - apps/**/*
+    # changes:
+    # - apps/**/*
 
 realms:
   stage: test
@@ -42,8 +43,8 @@ realms:
     strategy: depend
   rules:
   - if: $CI_COMMIT_BRANCH == "test"
-    changes:
-    - realms/**/*
+    # changes:
+    # - realms/**/*
 
 clients:
   stage: test
@@ -52,8 +53,8 @@ clients:
     strategy: depend
   rules:
   - if: $CI_COMMIT_BRANCH == "test"
-    changes:
-    - clients/**/*
+    # changes:
+    # - clients/**/*
 
 
 # DEV deploy
