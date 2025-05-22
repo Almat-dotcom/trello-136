@@ -26,7 +26,7 @@ check_apps:
 
 # TEST deploy
 # После обновления удалить!
-build-apps:
+build-apps-test:
   stage: test
   trigger:
     include: apps/.gitlab-ci-test.yml
@@ -36,7 +36,7 @@ build-apps:
     # changes:
     # - apps/**/*
 
-realms:
+realms-test:
   stage: test
   trigger:
     include: realms/.gitlab-ci-test.yml
@@ -46,7 +46,7 @@ realms:
     # changes:
     # - realms/**/*
 
-clients:
+clients-test:
   stage: test
   trigger:
     include: clients/.gitlab-ci-test.yml
