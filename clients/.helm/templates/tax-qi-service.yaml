@@ -31,12 +31,12 @@ spec:
   - GROUPS
   - LOCALE
   roles: [{
-    name: cabinet-tax-qi-reader,
+    name: reader,
     roleDescription: 'Просмотр сведений раздела Налоги сотрудником депонента'
   }, {
-    name: cabinet-tax-qi-sender,
+    name: sender,
     roleDescription: 'Управление (изменение, удаление) налоговых форм сотрудником депонента'
   }, {
-    name: cabinet-tax-qi-signer,
+    name: signer,
     roleDescription: 'Подписание анкеты сотрудником депонента'
   }]
