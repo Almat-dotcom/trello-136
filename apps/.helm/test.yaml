@@ -15,6 +15,8 @@ hostname: sso-test.dev.kacd.kz
 
 enabledMasterRealm: "true"
 
+debugAuth: true
+
 resources:
   limits:
     memory: "640Mi"
@@ -42,15 +44,16 @@ database:
   host: psql-dev.kacd.kz
   # name: keycloak-test
   name: sso
-  schema: auth
+  # schema: auth
+  schema: public # схема для Препрода
   username: keycloak-test
   existingSecret: sso-keycloak-database-password
   existingSecretPasswordKey: password
 
-kafka:
-  enabled: true
-  bootstrapServers: "kafka-dev.kacd.kz:9092"
-  groupId: keycloak-dev
+# kafka:
+#   enabled: true
+#   bootstrapServers: "kafka-dev.kacd.kz:9092"
+#   groupId: keycloak-dev
 
 service:
   type: ClusterIP
