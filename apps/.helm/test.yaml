@@ -40,7 +40,8 @@ auth:
 
 database:
   host: psql-dev.kacd.kz
-  name: keycloak-test
+  # name: keycloak-test
+  name: sso
   schema: auth
   username: keycloak-test
   existingSecret: sso-keycloak-database-password
