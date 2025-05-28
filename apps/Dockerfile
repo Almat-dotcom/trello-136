@@ -9,7 +9,7 @@ RUN apk add --no-cache curl
 RUN curl -sL https://github.com/sventorben/keycloak-restrict-client-auth/releases/download/v23.0.0/keycloak-restrict-client-auth.jar -o /opt/keycloak/providers/keycloak-restrict-client-auth.jar
 
 # FROM nexus.kacd.kz:5000/devops-tools/keycloak/keycloak:22.0.5 as builder
-FROM nexus.kacd.kz:5000/devops-tools/keycloak/keycloak:23.0.0 as builder
+FROM nexus.kacd.kz:5000/devops-tools/keycloak/keycloak:23.0.5 as builder
 
 # Enable health and metrics support
 ENV KC_HEALTH_ENABLED=true
@@ -36,7 +36,7 @@ RUN /opt/keycloak/bin/kc.sh build && mkdir -p /opt/keycloak/.kacd/import
 
 # Running keycloak
 # FROM nexus.kacd.kz:5000/devops-tools/keycloak/keycloak:22.0.5
-FROM nexus.kacd.kz:5000/devops-tools/keycloak/keycloak:23.0.0
+FROM nexus.kacd.kz:5000/devops-tools/keycloak/keycloak:23.0.5
 # ENV TZ="Asia/Almaty"
 
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
