@@ -1,7 +1,7 @@
 global:
   imageRegistry: nexus.kacd.kz:5000
-  imagePullSecrets:
-  - kacd-docker-creds
+  # imagePullSecrets:
+  # - kacd-docker-creds
 
 image: nexus.kacd.kz:5000/valyayev/test/keycloak:0.3
 
