@@ -134,8 +134,8 @@ spec:
             httpGet:
               path: {{ .Values.httpRelativePath }}health
               port: http
-            initialDelaySeconds: 15
-            failureThreshold: 30
+            initialDelaySeconds: 30
+            failureThreshold: 120
             periodSeconds: 5
           livenessProbe:
             httpGet:
