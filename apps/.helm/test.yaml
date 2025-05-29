@@ -50,10 +50,10 @@ database:
   existingSecret: sso-keycloak-database-password
   existingSecretPasswordKey: password
 
-# kafka:
-#   enabled: true
-#   bootstrapServers: "kafka-dev.kacd.kz:9092"
-#   groupId: keycloak-dev
+kafka:
+  enabled: true
+  bootstrapServers: "kafka-dev.kacd.kz:9092"
+  groupId: keycloak-dev
 
 service:
   type: ClusterIP
