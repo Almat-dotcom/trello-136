@@ -25,3 +25,4 @@ spec:
     clientExistingSecret: ca-seeker-secret
     clientSecretKey: client_secret
   roles: []
+
