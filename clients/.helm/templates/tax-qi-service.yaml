@@ -1,7 +1,7 @@
 apiVersion: sso.kacd.kz/v1
 kind: Client
 metadata:
-  name: tax-qi-service
+  name: depositor-tax-qi-service
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: external-realm
@@ -34,7 +34,7 @@ spec:
     name: reader,
     roleDescription: 'Просмотр сведений раздела Налоги сотрудником депонента'
   }, {
-    name: sender,
+    name: editor,
     roleDescription: 'Управление (изменение, удаление) налоговых форм сотрудником депонента'
   }, {
     name: signer,
