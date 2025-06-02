@@ -43,7 +43,7 @@ auth:
 database:
   host: psql-dev.kacd.kz
   # name: keycloak-test
-  name: sso-1
+  name: sso-test-1
   # schema: auth
   schema: public # схема для Препрода
   username: keycloak-test
