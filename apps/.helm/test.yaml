@@ -51,6 +51,8 @@ database:
   existingSecret: sso-keycloak-database-password
   existingSecretPasswordKey: password
 
+loglevel: "DEBUG"
+
 # kafka:
 #   enabled: true
 #   bootstrapServers: "kafka-dev.kacd.kz:9092"
