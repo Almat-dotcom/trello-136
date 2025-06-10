@@ -43,7 +43,7 @@ auth:
 database:
   host: psql-dev.kacd.kz
   # name: keycloak-test
-  name: sso-test-1
+  name: sso-test-5
   # name: sso
   # schema: auth
   schema: public # схема для Препрода
@@ -52,7 +52,7 @@ database:
   existingSecretPasswordKey: password
 
 # уровень логирования
-loglevel: "INFO"
+loglevel: "DEBUG"
 
 # kafka:
 #   enabled: true
