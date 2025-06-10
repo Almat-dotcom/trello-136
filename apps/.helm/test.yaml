@@ -51,7 +51,8 @@ database:
   existingSecret: sso-keycloak-database-password
   existingSecretPasswordKey: password
 
-loglevel: "DEBUG"
+# уровень логирования
+loglevel: "INFO"
 
 # kafka:
 #   enabled: true
