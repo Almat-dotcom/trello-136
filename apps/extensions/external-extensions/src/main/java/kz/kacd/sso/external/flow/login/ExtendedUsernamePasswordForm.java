@@ -54,7 +54,9 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
             @Override
             public void action(AuthenticationFlowContext context) {
                 String username = extractUsername(context);
+                log.debug("Aza username is " + username);
                 boolean isIin = isIin(username);
+                log.debug("Aza isIin is " + isIin);
                 if (isIin) {
                     rewriteContextUsername(context, username);
                 }
@@ -82,6 +84,7 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
     }
 
     private void rewriteContextUsername(AuthenticationFlowContext context, String iin) {
+        log.debug("Aza Rewrite context username: " + iin);
         String username = iin + "-" + ExternalRegistrationPage.CLIENT_PHYSICAL;
         setUsername(context, username);
     }
