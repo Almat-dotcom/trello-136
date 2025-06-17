@@ -97,6 +97,8 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
                     challenge);
             return;
         }
+        log.info("Almat user is "+user.getUsername());
+        log.info("Almat user is "+user.getId());
 
         ctx.setUser(user);                        // ← главное
         ctx.getAuthenticationSession()
