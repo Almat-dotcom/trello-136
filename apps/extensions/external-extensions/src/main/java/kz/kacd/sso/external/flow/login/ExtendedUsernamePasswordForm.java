@@ -81,6 +81,7 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
     }
 
     private boolean isIin(String username) {
+        username = username.trim();
         return username.length() == 12 && username.matches("\\d+");
     }
 
