@@ -2,8 +2,8 @@ package kz.kacd.sso.resource;
 
 import kz.kacd.sso.resource.cors.CorsResource;
 import org.jboss.logging.Logger;
-import org.jboss.resteasy.spi.HttpRequest;
 import org.keycloak.models.KeycloakSession;
+import org.keycloak.http.HttpRequest;
 import org.keycloak.services.resource.RealmResourceProvider;
 
 public abstract class BaseRealmResourceProvider implements RealmResourceProvider {
@@ -26,10 +26,10 @@ public abstract class BaseRealmResourceProvider implements RealmResourceProvider
     public Object getResource() {
         HttpRequest request = session.getContext().getContextObject(HttpRequest.class);
         log.debugf("request method %s", request.getHttpMethod());
-        if ("OPTIONS".equals(request.getHttpMethod())) {
-            return new CorsResource(request);
-        } else {
+//        if ("OPTIONS".equals(request.getHttpMethod())) {
+//            return new CorsResource(request);
+//        } else {
             return getRealmResource();
-        }
+//        }
     }
 }
