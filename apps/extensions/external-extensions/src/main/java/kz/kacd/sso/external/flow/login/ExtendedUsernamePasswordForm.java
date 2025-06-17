@@ -66,10 +66,6 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
                 if (context.getStatus().equals(FlowStatus.SUCCESS)) {
                     context.getEvent().detail(ExternalLoginPage.AUTHENTICATION_TYPE, "password");
                 }
-
-                if (isIin) {
-                    rewriteContextIin(context, username);
-                }
             }
         });
         return extendedAlternatives;
