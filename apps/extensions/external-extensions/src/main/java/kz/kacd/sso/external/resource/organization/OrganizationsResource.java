@@ -10,32 +10,31 @@ import kz.kacd.sso.external.resource.BaseAdminResource;
 import kz.kacd.sso.external.resource.common.OrganizationResourceType;
 import org.jboss.logging.Logger;
 import org.keycloak.events.admin.OperationType;
-import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 
 import java.util.stream.Stream;
 
 public class OrganizationsResource extends BaseAdminResource {
     private static final Logger log = Logger.getLogger(OrganizationsResource.class);
+
     private static final int MAX_RESULT = 200;
 
-    public OrganizationsResource(KeycloakSession session, RealmModel realm) {
-        super(session, realm);
+    protected OrganizationsResource(RealmModel realm) {
+        super(realm);
     }
 
     @GET
+    @Path("")
     @Produces(MediaType.APPLICATION_JSON)
     public Stream<OrganizationRepresentation> listOrgs(
             @QueryParam("first") Integer firstResult,
-            @QueryParam("max") Integer maxResults) {
-
+            @QueryParam("max") Integer maxResults
+    ) {
         checkViewPermissions();
 
-        int first = firstResult != null ? firstResult : 0;
-        int max = maxResults != null ? maxResults : MAX_RESULT;
-
-        log.debugf("Getting all organizations from %d, limit %d …", first, max);
-
+        int first = firstResult == null ? 0 : firstResult;
+        int max = maxResults == null ? MAX_RESULT : maxResults;
+        log.debugf("Getting all organizations starts from %d with limit %d.", first, max);
         return orgs.getOrganizations(realm, first, max)
                 .map(OrganizationRepresentation::from);
     }
@@ -50,12 +49,13 @@ public class OrganizationsResource extends BaseAdminResource {
         }
 
         if (org != null && org.getRealm().getId().equals(realm.getId())) {
-            return setupResource(new OrganizationResource(session, realm, org));
+            return setupResource(new OrganizationResource(realm, org));
         }
         throw organizationNotFound(id);
     }
 
     @POST
+    @Path("")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createOrg(@Valid OrganizationRepresentation body) {
@@ -75,10 +75,7 @@ public class OrganizationsResource extends BaseAdminResource {
                 .success();
 
         return Response.created(
-                session.getContext().getUri()
-                        .getAbsolutePathBuilder()
-                        .path(rep.getId())
-                        .build()
+                session.getContext().getUri().getAbsolutePathBuilder().path(rep.getId()).build()
         ).build();
     }
 }

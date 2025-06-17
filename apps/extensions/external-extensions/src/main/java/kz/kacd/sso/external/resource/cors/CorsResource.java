@@ -4,7 +4,7 @@ import jakarta.ws.rs.OPTIONS;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
 import org.jboss.logging.Logger;
-import org.keycloak.http.HttpRequest;
+import org.jboss.resteasy.spi.HttpRequest;
 
 public class CorsResource {
     public static final String[] METHODS = {
@@ -20,11 +20,7 @@ public class CorsResource {
     @OPTIONS
     @Path("{any:.*}")
     public Response preflight() {
-        log.debug("CORS OPTIONS pre-flight request");
-        return Cors.add(request, Response.ok())
-                .auth()
-                .allowedMethods(METHODS)
-                .preflight()
-                .build();
+        log.debug("CORS OPTIONS preflight request");
+        return Cors.add(request, Response.ok()).auth().allowedMethods(METHODS).preflight().build();
     }
 }

@@ -10,55 +10,47 @@ import kz.kacd.sso.external.model.OrganizationModel;
 import kz.kacd.sso.external.model.page.ExternalRegistrationPage;
 import kz.kacd.sso.external.resource.BaseAdminResource;
 import org.jboss.logging.Logger;
-import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 
 /**
- * Resource to exchange universal id with Keycloak UUID.
+ * Resource to exchange universal id with keycloak UUID.
  */
 public class IdResource extends BaseAdminResource {
     private static final Logger log = Logger.getLogger(IdResource.class);
 
-    public IdResource(KeycloakSession session, RealmModel realm) {
-        super(session, realm);
+    protected IdResource(RealmModel realm) {
+        super(realm);
     }
 
     @GET
-    @Path("physical/{idn}")
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("physical/{idn}")
     public Response getPhysicalId(@PathParam("idn") String idn) {
-
-        log.debugf("Getting physical id by idn %s ...", idn);
-
+        log.debugf("Getting physical id by idn %s", idn);
         return users.searchForUserByUserAttributeStream(
                         realm,
                         ExternalRegistrationPage.FIELD_IIN,
-                        idn)
-                .filter(u -> ExternalRegistrationPage.CLIENT_PHYSICAL
-                        .equals(u.getFirstAttribute(ExternalRegistrationPage.FIELD_CLIENT_TYPE)))
+                        idn
+                ).filter(it ->
+                        ExternalRegistrationPage.CLIENT_PHYSICAL.equals(
+                                it.getFirstAttribute(ExternalRegistrationPage.FIELD_CLIENT_TYPE)
+                        )
+                )
                 .findFirst()
-                .map(u -> Response.ok(new IdResponse(u.getId()))
-                        .type(MediaType.APPLICATION_JSON_TYPE)
-                        .build())
-                .orElse(Response.status(Response.Status.NOT_FOUND)
-                        .entity("{}")
-                        .build());
+                .map(it -> Response.ok(new IdResponse(it.getId()), MediaType.APPLICATION_JSON_TYPE).build())
+                .orElse(Response.status(Response.Status.NOT_FOUND).entity("{}").build());
     }
 
     @GET
-    @Path("legal/{idn}")
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("legal/{idn}")
     public Response getLegalId(@PathParam("idn") String idn) {
-
-        log.debugf("Getting legal id by bin %s ...", idn);
-
+        log.debugf("Getting legal id by idn %s ...", idn);
         OrganizationModel org = orgs.getOrganizationByBin(realm, idn);
         if (org == null) {
             return Response.status(Response.Status.NOT_FOUND).entity("{}").build();
         }
-        return Response.ok(new IdResponse(org.getId()))
-                .type(MediaType.APPLICATION_JSON_TYPE)
-                .build();
+        return Response.ok(new IdResponse(org.getId()), MediaType.APPLICATION_JSON_TYPE).build();
     }
 
     public static final class IdResponse {

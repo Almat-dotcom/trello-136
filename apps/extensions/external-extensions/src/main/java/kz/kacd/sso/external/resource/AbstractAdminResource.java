@@ -2,14 +2,16 @@ package kz.kacd.sso.external.resource;
 
 import jakarta.ws.rs.NotAuthorizedException;
 import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.UriInfo;
 import kz.kacd.sso.external.resource.common.ExternalAdminAuth;
 import kz.kacd.sso.external.resource.cors.Cors;
 import kz.kacd.sso.external.resource.cors.CorsResource;
 import org.jboss.logging.Logger;
-import org.keycloak.http.HttpRequest;
-import org.keycloak.http.HttpResponse;
+import org.jboss.resteasy.spi.HttpRequest;
+import org.jboss.resteasy.spi.HttpResponse;
 import org.keycloak.Config;
 import org.keycloak.common.ClientConnection;
 import org.keycloak.jose.jws.JWSInput;
@@ -26,18 +28,27 @@ import org.keycloak.services.resources.admin.AdminEventBuilder;
 import org.keycloak.services.resources.admin.permissions.AdminPermissionEvaluator;
 import org.keycloak.services.resources.admin.permissions.AdminPermissions;
 
+/**
+ * Base class for admin resources.
+ * </>
+ * Initializes request context and authentication.
+ */
 public abstract class AbstractAdminResource {
-    private static final Logger LOG = Logger.getLogger(AbstractAdminResource.class);
+    private static final Logger log = Logger.getLogger(AbstractAdminResource.class);
     protected final RealmModel realm;
-    protected final KeycloakSession session;
+    @Context
+    protected ClientConnection clientConnection;
+    @Context
+    protected HttpHeaders headers;
+    @Context
+    protected KeycloakSession session;
     protected ExternalAdminAuth auth;
     protected AdminPermissionEvaluator permissions;
     protected AdminEventBuilder adminEvent;
     protected UserModel user;
     protected RealmModel adminRealm;
 
-    protected AbstractAdminResource(KeycloakSession session, RealmModel realm) {
-        this.session = session;
+    protected AbstractAdminResource(RealmModel realm) {
         this.realm = realm;
     }
 
@@ -52,9 +63,11 @@ public abstract class AbstractAdminResource {
     }
 
     private void setupCors() {
-        HttpRequest request = session.getContext().getHttpRequest();
-        HttpResponse response = session.getContext().getHttpResponse();
-
+        HttpRequest request = session.getContext().getContextObject(HttpRequest.class);
+        HttpResponse response = session.getContext().getContextObject(HttpResponse.class);
+        if (hasCors(response)) {
+            return;
+        }
         Cors.add(request)
                 .allowedOrigins(auth.getToken())
                 .allowedMethods(CorsResource.METHODS)
@@ -63,9 +76,15 @@ public abstract class AbstractAdminResource {
                 .build(response);
     }
 
+    private boolean hasCors(HttpResponse response) {
+        MultivaluedMap<String, Object> responseHeaders = response.getOutputHeaders();
+        if (responseHeaders == null) return false;
+        return (responseHeaders.get("Access-Control-Allow-Credentials") != null
+                || responseHeaders.get("Access-Control-Allow-Origin") != null
+                || responseHeaders.get("Access-Control-Expose-Headers") != null);
+    }
+
     private void setupAuth() {
-        HttpRequest req = session.getContext().getHttpRequest();
-        HttpHeaders headers = req.getHttpHeaders();
         String tokenString = AppAuthManager.extractAuthorizationHeaderToken(headers);
 
         if (tokenString == null) {
@@ -73,8 +92,10 @@ public abstract class AbstractAdminResource {
         }
 
         AccessToken token;
+
         try {
-            token = new JWSInput(tokenString).readJsonContent(AccessToken.class);
+            JWSInput input = new JWSInput(tokenString);
+            token = input.readJsonContent(AccessToken.class);
         } catch (JWSInputException e) {
             throw new NotAuthorizedException("Bearer token format error");
         }
@@ -82,31 +103,35 @@ public abstract class AbstractAdminResource {
         String realmName = token.getIssuer().substring(token.getIssuer().lastIndexOf('/') + 1);
         RealmManager realmManager = new RealmManager(session);
         adminRealm = realmManager.getRealmByName(realmName);
+
         if (adminRealm == null) {
             throw new NotAuthorizedException("Unknown realm in token");
         }
 
-        LOG.debugf("Realm from resource provider: %s | Realm from token: %s",
-                realm.getName(), adminRealm.getName());
 
+        log.debugf(
+                "Realm from resource provider is %s. Realm from token is %s",
+                this.realm.getName(),
+                adminRealm.getName()
+        );
         session.getContext().setRealm(adminRealm);
         AuthenticationManager.AuthResult authResult = authenticateBearerToken(
                 tokenString,
                 session,
                 adminRealm,
                 session.getContext().getUri(),
-                session.getContext().getConnection(),
+                clientConnection,
                 headers
         );
         if (authResult == null) {
             throw new NotAuthorizedException("Bearer");
         }
-        session.getContext().setRealm(realm);
+        session.getContext().setRealm(this.realm);
 
         ClientModel client =
                 adminRealm.getName().equals(Config.getAdminRealm())
-                        ? realm.getMasterAdminClient()
-                        : realm.getClientByClientId(realmManager.getRealmAdminClientId(realm));
+                        ? this.realm.getMasterAdminClient()
+                        : this.realm.getClientByClientId(realmManager.getRealmAdminClientId(this.realm));
 
         if (client == null) {
             throw new NotFoundException("Could not find client for authorization");
@@ -117,8 +142,9 @@ public abstract class AbstractAdminResource {
     }
 
     private void setupEvents() {
-        adminEvent = new AdminEventBuilder(realm, auth, session, session.getContext().getConnection())
-                .realm(realm);
+        adminEvent =
+                new AdminEventBuilder(this.realm, auth, session, session.getContext().getConnection())
+                        .realm(realm);
     }
 
     private void setupPermissions() {
@@ -132,7 +158,6 @@ public abstract class AbstractAdminResource {
             UriInfo uriInfo,
             ClientConnection connection,
             HttpHeaders headers) {
-
         return new AppAuthManager.BearerTokenAuthenticator(session)
                 .setRealm(realm)
                 .setUriInfo(uriInfo)

@@ -7,14 +7,14 @@
     <parent>
         <artifactId>keycloak-parent</artifactId>
         <groupId>org.keycloak</groupId>
-        <version>23.0.7</version>
+        <version>22.0.5</version>
     </parent>
 
     <groupId>kz.kacd.sso</groupId>
     <artifactId>external-extensions</artifactId>
 
     <properties>
-        <keycloak.version>23.0.7</keycloak.version>
+        <keycloak.version>22.0.5</keycloak.version>
 
         <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
 
