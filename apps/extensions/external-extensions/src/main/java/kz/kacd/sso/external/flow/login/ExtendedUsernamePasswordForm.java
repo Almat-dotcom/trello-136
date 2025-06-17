@@ -5,6 +5,7 @@ import kz.kacd.sso.external.model.page.ExternalLoginPage;
 import kz.kacd.sso.external.model.page.ExternalRegistrationPage;
 import org.jboss.logging.Logger;
 import org.keycloak.authentication.AuthenticationFlowContext;
+import org.keycloak.authentication.AuthenticationFlowError;
 import org.keycloak.authentication.Authenticator;
 import org.keycloak.authentication.FlowStatus;
 import org.keycloak.authentication.authenticators.browser.UsernamePasswordForm;
@@ -82,10 +83,26 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
         return username.length() == 12 && username.matches("\\d+");
     }
 
-    private void rewriteContextUsername(AuthenticationFlowContext context, String iin) {
-        String username = iin + "-" + ExternalRegistrationPage.CLIENT_PHYSICAL;
-        setUsername(context, username);
+    private void rewriteContextUsername(AuthenticationFlowContext ctx, String iin) {
+        String login = iin + "-" + ExternalRegistrationPage.CLIENT_PHYSICAL;
+
+        UserModel user = ctx.getSession()
+                .users()
+                .getUserByUsername(ctx.getRealm(), login);
+        if (user == null) {
+            Response challenge = ctx.form()
+                    .setError("invalid_user_credentials")
+                    .createLoginUsernamePassword();// нет такого – сразу ошибка
+            ctx.failureChallenge(AuthenticationFlowError.INVALID_USER,
+                    challenge);
+            return;
+        }
+
+        ctx.setUser(user);                        // ← главное
+        ctx.getAuthenticationSession()
+                .setAuthNote(AuthenticationManager.FORM_USERNAME, login);
     }
+
 
     private void rewriteContextIin(AuthenticationFlowContext context, String iin) {
         setUsername(context, iin);
