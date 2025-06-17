@@ -52,7 +52,7 @@ database:
   existingSecretPasswordKey: password
 
 # уровень логирования
-loglevel: "DEBUG"
+loglevel: "INFO"
 
 # kafka:
 #   enabled: true
