@@ -53,6 +53,7 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
 
             @Override
             public void action(AuthenticationFlowContext context) {
+                log.info("I am here");
                 String username = extractUsername(context);
                 boolean isIin = isIin(username);
                 if (isIin) {
@@ -90,8 +91,12 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
         setUsername(context, iin);
     }
 
-    private void setUsername(AuthenticationFlowContext context, String username) {
-        context.getHttpRequest().getDecodedFormParameters().putSingle(AuthenticationManager.FORM_USERNAME, username);
+    private void setUsername(AuthenticationFlowContext ctx, String login) {
+        log.infof("Almat setUsername(%s)", login);
+        ctx.getAuthenticationSession()
+                .setAuthNote(AuthenticationManager.FORM_USERNAME,  login);
+        ctx.getAuthenticationSession()
+                .setClientNote(AuthenticationManager.FORM_USERNAME, login);
     }
 
     @Override
@@ -121,7 +126,7 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
 
     private boolean processAuth(AlternativeAuthenticator authenticator, AuthenticationFlowContext context) {
         if (authenticator.isConfiguredFor(context)) {
-            log.debugf(
+            log.infof(
                     "Authenticator %s is configured to process current context. Executing it ...",
                     authenticator.getClass().getSimpleName()
             );
