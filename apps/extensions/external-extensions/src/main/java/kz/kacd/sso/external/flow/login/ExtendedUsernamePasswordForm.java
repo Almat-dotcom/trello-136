@@ -82,21 +82,26 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
     private void rewriteContextUsername(AuthenticationFlowContext ctx, String iin) {
         String login = iin + "-" + ExternalRegistrationPage.CLIENT_PHYSICAL;
 
+        // ➊ подменяем параметр формы -------------------------------
+        ctx.getHttpRequest()
+                .getDecodedFormParameters()
+                .putSingle(AuthenticationManager.FORM_USERNAME, login);
+
+        // остальной ваш код
         UserModel user = ctx.getSession()
                 .users()
                 .getUserByUsername(ctx.getRealm(), login);
         if (user == null) {
             Response challenge = ctx.form()
                     .setError("invalid_user_credentials")
-                    .createLoginUsernamePassword();// нет такого – сразу ошибка
-            ctx.failureChallenge(AuthenticationFlowError.INVALID_USER,
-                    challenge);
+                    .createLoginUsernamePassword();
+            ctx.failureChallenge(AuthenticationFlowError.INVALID_USER, challenge);
             return;
         }
-        log.info("Almat user is "+user.getUsername());
-        log.info("Almat user is "+user.getId());
+        log.info("Almat user is " + user.getUsername());
+        log.info("Almat user is " + user.getId());
 
-        ctx.setUser(user);                        // ← главное
+        ctx.setUser(user);
         ctx.getAuthenticationSession()
                 .setAuthNote(AuthenticationManager.FORM_USERNAME, login);
     }
