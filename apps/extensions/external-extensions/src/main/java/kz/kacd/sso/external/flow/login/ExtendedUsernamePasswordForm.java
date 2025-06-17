@@ -1,6 +1,5 @@
 package kz.kacd.sso.external.flow.login;
 
-import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.Response;
 import kz.kacd.sso.external.model.page.ExternalLoginPage;
 import kz.kacd.sso.external.model.page.ExternalRegistrationPage;
@@ -59,7 +58,7 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
                 boolean isIin = isIin(username);
                 log.debug("Aza isIin is " + isIin);
                 if (isIin) {
-                    rewriteContextUsername(context, username, true);
+                    rewriteContextUsername(context, username);
                 }
 
                 ExtendedUsernamePasswordForm.super.action(context);
@@ -84,20 +83,10 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
         return username.length() == 12 && username.matches("\\d+");
     }
 
-    private void rewriteContextUsername(AuthenticationFlowContext ctx,
-                                        String iin,
-                                        boolean toPhysical) {
-
-        String login = toPhysical
-                ? iin + "-" + ExternalRegistrationPage.CLIENT_PHYSICAL
-                : iin;
-
-        MultivaluedMap<String,String> form = ctx.getHttpRequest().getDecodedFormParameters();
-        form.putSingle(AuthenticationManager.FORM_USERNAME,  login);
-
-
-        ctx.getAuthenticationSession()
-                .setAuthNote(AuthenticationManager.FORM_USERNAME, login);
+    private void rewriteContextUsername(AuthenticationFlowContext context, String iin) {
+        log.debug("Aza Rewrite context username: " + iin);
+        String username = iin + "-" + ExternalRegistrationPage.CLIENT_PHYSICAL;
+        setUsername(context, username);
     }
 
     private void rewriteContextIin(AuthenticationFlowContext context, String iin) {
