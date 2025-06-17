@@ -1,5 +1,6 @@
 package kz.kacd.sso.external.resource.organization;
 
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import kz.kacd.sso.external.model.OrganizationModel;
@@ -13,9 +14,9 @@ import kz.kacd.sso.external.representation.OrganizationClientRepresentation;
 import kz.kacd.sso.external.resource.BaseAdminResource;
 import org.jboss.logging.Logger;
 import org.keycloak.models.ClientModel;
+import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 
-import javax.validation.Valid;
 import java.util.stream.Collectors;
 
 public class ClientsResource extends BaseAdminResource {
@@ -23,15 +24,17 @@ public class ClientsResource extends BaseAdminResource {
 
     private final OrganizationModel model;
 
-    ClientsResource(RealmModel realm, OrganizationModel model) {
-        super(realm);
+    public ClientsResource(KeycloakSession session, RealmModel realm,
+                           OrganizationModel model) {
+        super(session, realm);
         this.model = model;
     }
 
     @GET
-    @Path("")
     @Produces(MediaType.APPLICATION_JSON)
-    public Content<OrganizationClientRepresentation> findAll(@QueryParam("active") Boolean active) {
+    public Content<OrganizationClientRepresentation> findAll(
+            @QueryParam("active") Boolean active) {
+
         checkViewPermissions();
         try {
             return new Content<>(
@@ -47,17 +50,22 @@ public class ClientsResource extends BaseAdminResource {
     }
 
     @POST
-    @Path("")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ClientSecretRepresentation create(@Valid CreateClientCommand command) {
         checkEditPermissions();
         try {
-            String secret = model.createClient(command.getClientId(), command.getDescription(), command.getScopes());
-            log.infof("Created new client %s for org %s.", command.getClientId(), model.getBin());
+            String secret = model.createClient(
+                    command.getClientId(),
+                    command.getDescription(),
+                    command.getScopes());
+
+            log.infof("Created new client %s for org %s.",
+                    command.getClientId(), model.getBin());
             return new ClientSecretRepresentation(secret);
+
         } catch (ClientAlreadyExistsException | InvalidListOfScopesException e) {
-            log.warnf("Error on creating client: ", e.getMessage());
+            log.warnf("Error on creating client: %s", e.getMessage());
             throw new BadRequestException();
         }
     }
@@ -66,7 +74,7 @@ public class ClientsResource extends BaseAdminResource {
     public ClientResource client(@PathParam("clientId") String clientId) {
         try {
             ClientModel client = model.getClient(clientId);
-            return setupResource(new ClientResource(realm, model, client));
+            return setupResource(new ClientResource(session, realm, model, client));
         } catch (ClientNotFoundException e) {
             throw new NotFoundException();
         }

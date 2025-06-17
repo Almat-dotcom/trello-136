@@ -1,6 +1,9 @@
 package kz.kacd.sso.external.resource.logininfo;
 
-import jakarta.ws.rs.*;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import kz.kacd.sso.external.resource.BaseAdminResource;
@@ -13,9 +16,8 @@ public class LastLoginResource extends BaseAdminResource {
 
     private final LastLoginService service;
 
-    protected LastLoginResource(RealmModel realm, KeycloakSession session) {
-        super(realm);
-        this.session = session;
+    public LastLoginResource(KeycloakSession session, RealmModel realm) {
+        super(session, realm);
         this.service = new LastLoginService(session);
     }
 
@@ -28,7 +30,6 @@ public class LastLoginResource extends BaseAdminResource {
         if (result.isEmpty()) {
             return Response.status(Response.Status.NO_CONTENT).build();
         }
-
         return Response.ok(result).build();
     }
 }

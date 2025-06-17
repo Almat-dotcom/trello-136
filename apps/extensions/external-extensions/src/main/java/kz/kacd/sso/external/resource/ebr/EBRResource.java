@@ -10,17 +10,15 @@ import kz.kacd.sso.external.model.OrganizationModel;
 import kz.kacd.sso.external.model.page.ExternalRegistrationPage;
 import kz.kacd.sso.external.resource.BaseAdminResource;
 import org.jboss.logging.Logger;
+import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 
-/**
- * Establishing business relations resource
- */
 public class EBRResource extends BaseAdminResource {
     private static final Logger log = Logger.getLogger(EBRResource.class);
 
-    protected EBRResource(RealmModel realm) {
-        super(realm);
+    public EBRResource(KeycloakSession session, RealmModel realm) {
+        super(session, realm);
     }
 
     @POST
@@ -34,20 +32,18 @@ public class EBRResource extends BaseAdminResource {
         log.debugf("Adding EBR %b to org %s ...", request.sign, request.id);
         if (addEBRToOrg(request.id, request.sign)) {
             return Response.accepted("{}").build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
         }
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 
     private boolean addEBRToOrg(String orgId, boolean ebrStatus) {
         OrganizationModel org = orgs.getOrganizationById(realm, orgId);
-        if (org == null) {
-            return false;
-        }
+        if (org == null) return false;
 
-        org.getPositions().forEach(position ->
-                position.getUser().setSingleAttribute(ExternalRegistrationPage.FIELD_HAS_EBR, Boolean.toString(ebrStatus))
-        );
+        org.getPositions().forEach(pos ->
+                pos.getUser().setSingleAttribute(
+                        ExternalRegistrationPage.FIELD_HAS_EBR,
+                        Boolean.toString(ebrStatus)));
         return true;
     }
 
@@ -61,25 +57,24 @@ public class EBRResource extends BaseAdminResource {
         log.debugf("Adding EBR %b to user %s ...", request.sign, request.id);
         if (addEBRToUser(request.id, request.sign)) {
             return Response.accepted("{}").build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
         }
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 
     private boolean addEBRToUser(String userId, boolean ebrStatus) {
         UserModel user = users.getUserById(realm, userId);
-        if (user == null) {
-            return false;
-        }
+        if (user == null) return false;
 
-        user.setSingleAttribute(ExternalRegistrationPage.FIELD_HAS_EBR, Boolean.toString(ebrStatus));
+        user.setSingleAttribute(
+                ExternalRegistrationPage.FIELD_HAS_EBR,
+                Boolean.toString(ebrStatus));
         return true;
     }
 
 
     public static final class EBRRequest {
-        private String id;
-        private boolean sign;
+        public String id;
+        public boolean sign;
 
         public String getId() {
             return id;

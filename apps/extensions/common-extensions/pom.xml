@@ -7,14 +7,14 @@
     <parent>
         <artifactId>keycloak-parent</artifactId>
         <groupId>org.keycloak</groupId>
-        <version>22.0.5</version>
+        <version>23.0.7</version>
     </parent>
 
     <groupId>kz.kacd.sso</groupId>
     <artifactId>ldap-mappers</artifactId>
 
     <properties>
-        <keycloak.version>22.0.5</keycloak.version>
+        <keycloak.version>23.0.7</keycloak.version>
         <fabric8.k8s.version>6.9.1</fabric8.k8s.version>
         <lettuce.version>6.2.3.RELEASE</lettuce.version>
 

@@ -13,6 +13,7 @@ import kz.kacd.sso.external.resource.BaseAdminResource;
 import kz.kacd.sso.external.resource.common.OrganizationResourceType;
 import org.jboss.logging.Logger;
 import org.keycloak.events.admin.OperationType;
+import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 
@@ -21,33 +22,29 @@ public class MembersResource extends BaseAdminResource {
 
     private final OrganizationModel model;
 
-    protected MembersResource(RealmModel realm, OrganizationModel model) {
-        super(realm);
+    public MembersResource(KeycloakSession session, RealmModel realm,
+                           OrganizationModel model) {
+        super(session, realm);
         this.model = model;
     }
 
     @GET
-    @Path("")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public PageRepresentation<PositionRepresentation> findAll(
             @QueryParam("from") Integer fromArg,
             @QueryParam("limit") Integer limitArg,
             @QueryParam("userId") String userId,
-            @QueryParam("position") String position
-    ) {
+            @QueryParam("position") String position) {
+
         checkViewPermissions();
 
-        int from = 0;
-        if (fromArg != null) {
-            from = fromArg;
-        }
-        int limit = 100;
-        if (limitArg != null) {
-            limit = limitArg;
-        }
+        int from = fromArg != null ? fromArg : 0;
+        int limit = limitArg != null ? limitArg : 100;
 
         log.debugf("Finding members for organization %s ...", model.getId());
-        return model.getPositions(position, userId, from, limit).map(it -> PositionRepresentation.from(session, realm, it));
+
+        return model.getPositions(position, userId, from, limit)
+                .map(pos -> PositionRepresentation.from(session, realm, pos));
     }
 
     @Path("{id}")
@@ -60,16 +57,17 @@ public class MembersResource extends BaseAdminResource {
             throw positionNotFound(id);
         }
 
-        return setupResource(new MemberResource(realm, model, position));
+        return setupResource(new MemberResource(session, realm, model, position));
     }
 
     @POST
-    @Path("")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response request(@Valid RequestMember member) {
         checkEditPermissions();
 
-        log.debugf("Requesting new membership for organization %s with user %s ...", model.getId(), member.getUserId());
+        log.debugf("Requesting new membership for org %s with user %s ...",
+                model.getId(), member.getUserId());
+
         UserModel user = session.users().getUserById(realm, member.getUserId());
         if (user == null) {
             throw userNotFound(member.getUserId());
@@ -89,7 +87,10 @@ public class MembersResource extends BaseAdminResource {
                 .success();
 
         return Response.created(
-                session.getContext().getUri().getAbsolutePathBuilder().path(rep.getId()).build()
+                session.getContext().getUri()
+                        .getAbsolutePathBuilder()
+                        .path(rep.getId())
+                        .build()
         ).build();
     }
 }
