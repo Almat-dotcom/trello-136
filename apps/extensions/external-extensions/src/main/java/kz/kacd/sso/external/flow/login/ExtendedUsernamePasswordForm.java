@@ -66,6 +66,10 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
                 if (context.getStatus().equals(FlowStatus.SUCCESS)) {
                     context.getEvent().detail(ExternalLoginPage.AUTHENTICATION_TYPE, "password");
                 }
+
+                if (isIin) {
+                    rewriteContextIin(context, username);
+                }
             }
         });
         return extendedAlternatives;
@@ -79,17 +83,9 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
         return username.length() == 12 && username.matches("\\d+");
     }
 
-    private void rewriteContextUsername(AuthenticationFlowContext ctx, String iin) {
-        String login = iin + "-" + ExternalRegistrationPage.CLIENT_PHYSICAL;
-
-        // подменяем юзер-нейм в форме
-        ctx.getHttpRequest()
-                .getDecodedFormParameters()
-                .putSingle(AuthenticationManager.FORM_USERNAME, login);
-
-        // синхронизируем note, чтобы UsernamePasswordForm видел корректное значение
-        ctx.getAuthenticationSession()
-                .setAuthNote(AuthenticationManager.FORM_USERNAME, login);
+    private void rewriteContextUsername(AuthenticationFlowContext context, String iin) {
+        String username = iin + "-" + ExternalRegistrationPage.CLIENT_PHYSICAL;
+        setUsername(context, username);
     }
 
 
@@ -97,12 +93,9 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
         setUsername(context, iin);
     }
 
-    private void setUsername(AuthenticationFlowContext ctx, String login) {
-        log.infof("Almat setUsername(%s)", login);
-        ctx.getAuthenticationSession()
-                .setAuthNote(AuthenticationManager.FORM_USERNAME,  login);
-        ctx.getAuthenticationSession()
-                .setClientNote(AuthenticationManager.FORM_USERNAME, login);
+    private void setUsername(AuthenticationFlowContext context, String username) {
+        log.infof("Almat setUsername(%s)", username);
+        context.getHttpRequest().getDecodedFormParameters().putSingle(AuthenticationManager.FORM_USERNAME, username);
     }
 
     @Override
