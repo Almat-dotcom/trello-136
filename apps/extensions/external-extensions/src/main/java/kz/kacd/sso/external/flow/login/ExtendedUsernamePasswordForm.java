@@ -82,30 +82,14 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
     private void rewriteContextUsername(AuthenticationFlowContext ctx, String iin) {
         String login = iin + "-" + ExternalRegistrationPage.CLIENT_PHYSICAL;
 
-        // 1)  кладём в Auth note (две константы – для старых и новых реализаций)
+        // подменяем юзер-нейм в форме
+        ctx.getHttpRequest()
+                .getDecodedFormParameters()
+                .putSingle(AuthenticationManager.FORM_USERNAME, login);
+
+        // синхронизируем note, чтобы UsernamePasswordForm видел корректное значение
         ctx.getAuthenticationSession()
                 .setAuthNote(AuthenticationManager.FORM_USERNAME, login);
-        ctx.getAuthenticationSession()
-                .setAuthNote(AuthenticationManager.FORM_USERNAME,login);
-
-        // 2)  ищем пользователя
-        UserModel user = ctx.getSession()
-                .users()
-                .getUserByUsername(ctx.getRealm(), login);
-
-        if (user == null) {
-            Response challenge = ctx.form()
-                    .setError("invalid_user_credentials")
-                    .createLoginUsernamePassword();
-            ctx.failureChallenge(AuthenticationFlowError.INVALID_USER, challenge);
-            return;
-        }
-
-        log.infof("Almat user is %s (%s)", user.getUsername(), user.getId());
-
-        ctx.setUser(user);
-
-        // 3)  всё остальное пусть делает базовый класс
     }
 
 
