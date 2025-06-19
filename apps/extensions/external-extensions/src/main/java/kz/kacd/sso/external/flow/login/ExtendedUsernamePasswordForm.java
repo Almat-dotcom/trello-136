@@ -1,20 +1,19 @@
 package kz.kacd.sso.external.flow.login;
 
-import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.Response;
-
 import kz.kacd.sso.external.model.page.ExternalLoginPage;
 import kz.kacd.sso.external.model.page.ExternalRegistrationPage;
-
 import org.jboss.logging.Logger;
 import org.keycloak.authentication.AuthenticationFlowContext;
+import org.keycloak.authentication.AuthenticationFlowError;
+import org.keycloak.authentication.Authenticator;
 import org.keycloak.authentication.FlowStatus;
-import org.keycloak.authentication.authenticators.browser.AbstractUsernameFormAuthenticator;
 import org.keycloak.authentication.authenticators.browser.UsernamePasswordForm;
+import org.keycloak.authentication.authenticators.browser.AbstractUsernameFormAuthenticator;
 import org.keycloak.models.UserModel;
 import org.keycloak.services.managers.AuthenticationManager;
 
-import java.time.Instant;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,199 +22,153 @@ import java.util.Objects;
 import static kz.kacd.sso.external.flow.login.utils.LoginInfoUtils.*;
 
 /**
- * Расширенный Username-Password форм-аутентификатор под Keycloak 23.
- *
- * <ul>
- *   <li>Если пользователь вводит 12-значный ИИН, класс автоматически
- *       превращает его в «&lt;iin&gt;-physical» до того, как Keycloak
- *       начнёт искать пользователя в БД.</li>
- *   <li>После успешного логина суффикс убирается, чтобы в события и логи
- *       попал «чистый» ИИН.</li>
- *   <li>Поддерживает цепочку альтернативных аутентификаторов и валидаторов,
- *       как в оригинальной реализации.</li>
- * </ul>
+ * Extends standard username password form.
+ * </>
+ * Fill your alternatives list which will be used before standard username password validation.
+ * If your alternative returns true, all following alternatives will be ignored.
+ * </>
+ * Fill your validators list to provide additional validations after successful login.
  */
-public class ExtendedUsernamePasswordForm extends UsernamePasswordForm {
-
-    private static final Logger LOG = Logger.getLogger(ExtendedUsernamePasswordForm.class);
+public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implements Authenticator {
+    private static final Logger log = Logger.getLogger(ExtendedUsernamePasswordForm.class);
 
     private final List<AlternativeAuthenticator> alternatives;
-    private final List<AuthenticatorValidator>   validators;
+    private final List<AuthenticatorValidator> validators;
 
-    public ExtendedUsernamePasswordForm(List<AlternativeAuthenticator> alternatives,
-                                        List<AuthenticatorValidator>   validators) {
+    public ExtendedUsernamePasswordForm(
+            List<AlternativeAuthenticator> alternatives,
+            List<AuthenticatorValidator> validators
+    ) {
         this.alternatives = addDefaultAuthenticatorAtTheEndOfTheFlow(alternatives);
-        this.validators   = validators;
+        this.validators = validators;
     }
 
-    /* ────────────────────────────────────────────────────────────────────
-       1. Добавляем «дефолтный» Alternative, который:
-          ▸ подменяет имя на «iin-physical» перед super.action()
-          ▸ вызывает супер-логику UsernamePasswordForm
-          ▸ откатывает имя обратно после удачного логина
-       ────────────────────────────────────────────────────────────────── */
     private List<AlternativeAuthenticator> addDefaultAuthenticatorAtTheEndOfTheFlow(
-            List<AlternativeAuthenticator> source) {
-
-        List<AlternativeAuthenticator> list = new ArrayList<>(source);
-        list.add(new AlternativeAuthenticator() {
-
-            @Override public boolean isConfiguredFor(AuthenticationFlowContext ctx) {
+            List<AlternativeAuthenticator> source
+    ) {
+        List<AlternativeAuthenticator> extendedAlternatives = new ArrayList<>(source);
+        extendedAlternatives.add(new AlternativeAuthenticator() {
+            @Override
+            public boolean isConfiguredFor(AuthenticationFlowContext context) {
                 return true;
             }
 
-            @Override public void action(AuthenticationFlowContext ctx) {
-                String rawUsername = extractUsername(ctx);
-                boolean isIin      = isIin(rawUsername);
+            @Override
+            public void action(AuthenticationFlowContext context) {
+                log.info("I am here");
+                String username = extractUsername(context);
+                boolean isIin = isIin(username);
+                if (isIin) {
+                    rewriteContextUsername(context, username);
+                }
 
-                /* 1) До супер-обработки подменяем username  */
-                if (isIin) rewriteContextUsername(ctx, rawUsername);
+                ExtendedUsernamePasswordForm.super.action(context);
 
-                /* 2) Запускаем стандартный UsernamePasswordForm.action()    */
-                ExtendedUsernamePasswordForm.super.action(ctx);
+                if (context.getStatus().equals(FlowStatus.SUCCESS)) {
+                    context.getEvent().detail(ExternalLoginPage.AUTHENTICATION_TYPE, "password");
+                }
 
-                /* 3) Если логин прошёл OK, откатываем имя и пишем деталь    */
-                if (ctx.getStatus() == FlowStatus.SUCCESS) {
-                    ctx.getEvent().detail(ExternalLoginPage.AUTHENTICATION_TYPE, "password");
-                    if (isIin) rewriteContextIin(ctx, rawUsername);
+                if (isIin) {
+                    rewriteContextIin(context, username);
                 }
             }
         });
-
-        return list;
+        return extendedAlternatives;
     }
 
-    /* ────────────────────────────────────────────────────────────────────
-                                   ACTION (POST)
-       ────────────────────────────────────────────────────────────────── */
-    @Override
-    public void action(AuthenticationFlowContext ctx) {
-
-        LOG.debug("ExtendedUsernamePasswordForm.action() start");
-
-        /* 1. Прогоняем альтернативы; последняя — наша дефолтная. */
-        processAuthenticators(ctx);
-
-        /* 2. Если супер-логика поставила SUCCESS, валидируем и логируем. */
-        if (ctx.getStatus() == FlowStatus.SUCCESS) {
-            processValidation(ctx);
-        } else {
-            ctx.getEvent().detail("error", ctx.getUserErrorMessage());
-        }
-    }
-
-    /* ────────────────────────────────────────────────────────────────────
-                                   HELPERS
-       ────────────────────────────────────────────────────────────────── */
-    private String extractUsername(AuthenticationFlowContext ctx) {
-        return ctx.getHttpRequest()
-                .getDecodedFormParameters()
-                .getFirst(AuthenticationManager.FORM_USERNAME);
+    private String extractUsername(AuthenticationFlowContext context) {
+        return context.getHttpRequest().getDecodedFormParameters().getFirst(AuthenticationManager.FORM_USERNAME);
     }
 
     private boolean isIin(String username) {
-        return username != null && username.length() == 12 && username.matches("\\d+");
+        return username.length() == 12 && username.matches("\\d+");
     }
 
-    /** Подменяем имя на «iin-physical» и обновляем ATTEMPTED_USERNAME. */
-    private void rewriteContextUsername(AuthenticationFlowContext ctx, String iin) {
-        setUsername(ctx, iin + "-" + ExternalRegistrationPage.CLIENT_PHYSICAL);
+    private void rewriteContextUsername(AuthenticationFlowContext context, String iin) {
+        String username = iin + "-" + ExternalRegistrationPage.CLIENT_PHYSICAL;
+        setUsername(context, username);
     }
 
-    /** Возвращаем изначальный ИИН после успешного прохождения flow. */
-    private void rewriteContextIin(AuthenticationFlowContext ctx, String iin) {
-        setUsername(ctx, iin);
+
+    private void rewriteContextIin(AuthenticationFlowContext context, String iin) {
+        setUsername(context, iin);
     }
 
-    private void setUsername(AuthenticationFlowContext ctx, String username) {
-        MultivaluedMap<String,String> form =
-                ctx.getHttpRequest().getDecodedFormParameters();
-
-        form.putSingle(AuthenticationManager.FORM_USERNAME, username);
-
-        /* В KC 23 поиск пользователя идёт по ATTEMPTED_USERNAME */
-        ctx.getAuthenticationSession()
+    private void setUsername(AuthenticationFlowContext context, String username) {
+        log.infof("Almat setUsername(%s)", username);
+        context.getHttpRequest().getDecodedFormParameters().putSingle(AuthenticationManager.FORM_USERNAME, username);
+        context.getAuthenticationSession()
                 .setAuthNote(AbstractUsernameFormAuthenticator.ATTEMPTED_USERNAME, username);
-
-        LOG.infof("Patched username → %s", username);
     }
 
-    /* ────────────────────────────────────────────────────────────────────
-                           ALTERNATIVES / VALIDATORS
-       ────────────────────────────────────────────────────────────────── */
-    private void processAuthenticators(AuthenticationFlowContext ctx) {
-        for (AlternativeAuthenticator alt : alternatives) {
-            if (alt.isConfiguredFor(ctx)) {
-                alt.action(ctx);
+    @Override
+    public void action(AuthenticationFlowContext context) {
+        log.debug("Executing user form processing ...");
+
+        processAuthenticators(context);
+
+        if (context.getStatus().equals(FlowStatus.SUCCESS)) {
+            processValidation(context);
+        }
+
+        if (!context.getStatus().equals(FlowStatus.SUCCESS)) {
+            context.getEvent().detail("error", context.getUserErrorMessage());
+        }
+    }
+
+    private void processAuthenticators(AuthenticationFlowContext context) {
+        log.debug("Processing authenticators ...");
+        for (AlternativeAuthenticator auth : alternatives) {
+            boolean executed = processAuth(auth, context);
+            if (executed) {
                 break;
             }
         }
     }
 
-    private void processValidation(AuthenticationFlowContext ctx) {
-        LOG.debug("Authentication succeeded. Running validators ...");
-
-        UserModel user = ctx.getUser();
-        if (user == null) {
-            throw new IllegalStateException("Authenticator chain did not set user!");
+    private boolean processAuth(AlternativeAuthenticator authenticator, AuthenticationFlowContext context) {
+        if (authenticator.isConfiguredFor(context)) {
+            log.infof(
+                    "Authenticator %s is configured to process current context. Executing it ...",
+                    authenticator.getClass().getSimpleName()
+            );
+            authenticator.action(context);
+            return true;
         }
-
-        AuthenticatorValidator.Error error = null;
-        for (AuthenticatorValidator v : validators) {
-            error = v.validate(user, ctx.getSession(), ctx);
-            if (error != null) break;
-        }
-
-        if (error != null) {
-            boolean clearUser = !isUserAlreadySetBeforeUsernamePasswordAuth(ctx);
-            failAuthentication(ctx, error, clearUser);
-            return;
-        }
-
-        storeLastLogin(ctx, user);
-        ctx.success();
+        return false;
     }
 
-    private void failAuthentication(AuthenticationFlowContext ctx,
-                                    AuthenticatorValidator.Error error,
-                                    boolean clearUser) {
-        if (clearUser) ctx.clearUser();
-        Response challenge = challenge(ctx, error.getMessage(), error.getField());
-        ctx.challenge(challenge);
-    }
-
-    /* ────────────────────────────────────────────────────────────────────
-                         ЛОГИРОВАНИЕ ПОСЛЕДНЕГО ЛОГИНА
-       ────────────────────────────────────────────────────────────────── */
-    private void storeLastLogin(AuthenticationFlowContext ctx, UserModel user) {
+    private void storeLastLogin(AuthenticationFlowContext context, UserModel user) {
         copyPreviousLoginAttributes(user);
 
-        String time      = getCurrentFormattedTime();
-        String ip        = getClientIP(ctx);
-        String userAgent = ctx.getHttpRequest().getHttpHeaders().getHeaderString(HEADER_USER_AGENT);
+        String time = getCurrentFormattedTime();
+        String ip = getClientIP(context);
+        String userAgent = context.getHttpRequest().getHttpHeaders().getHeaderString(HEADER_USER_AGENT);
 
         String browser = detectBrowser(userAgent);
-        String os      = detectOS(userAgent);
+        String os = detectOS(userAgent);
 
         user.setSingleAttribute(LAST_LOGIN_TIME, time);
-        user.setSingleAttribute(LAST_LOGIN_IP,   ip);
-        user.setSingleAttribute(LAST_LOGIN_OS,   os);
+        user.setSingleAttribute(LAST_LOGIN_IP, ip);
+        user.setSingleAttribute(LAST_LOGIN_OS, os);
         user.setSingleAttribute(LAST_LOGIN_BROWSER, browser);
 
-        LOG.infof("Stored login info for '%s': time=%s, IP=%s, os=%s, browser=%s",
+        log.infof("Stored login info for user '%s': time=%s, IP=%s, os=%s, browser=%s",
                 user.getUsername(), time, ip, os, browser);
     }
 
     private void copyPreviousLoginAttributes(UserModel user) {
-        copyAttribute(user, LAST_LOGIN_TIME,    PREVIOUS_LOGIN_TIME);
-        copyAttribute(user, LAST_LOGIN_IP,      PREVIOUS_LOGIN_IP);
-        copyAttribute(user, LAST_LOGIN_OS,      PREVIOUS_LOGIN_OS);
+        copyAttribute(user, LAST_LOGIN_TIME, PREVIOUS_LOGIN_TIME);
+        copyAttribute(user, LAST_LOGIN_IP, PREVIOUS_LOGIN_IP);
+        copyAttribute(user, LAST_LOGIN_OS, PREVIOUS_LOGIN_OS);
         copyAttribute(user, LAST_LOGIN_BROWSER, PREVIOUS_LOGIN_BROWSER);
     }
 
     private void copyAttribute(UserModel user, String oldAttr, String newAttr) {
         String value = user.getFirstAttribute(oldAttr);
-        if (Objects.nonNull(value)) user.setSingleAttribute(newAttr, value);
+        if (Objects.nonNull(value)) {
+            user.setSingleAttribute(newAttr, value);
+        }
     }
 
     private String getCurrentFormattedTime() {
@@ -224,33 +177,70 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm {
                 .format(Instant.now());
     }
 
-    private String getClientIP(AuthenticationFlowContext ctx) {
-        String forwarded = ctx.getHttpRequest().getHttpHeaders().getHeaderString(HEADER_X_FORWARDED_FOR);
+    private String getClientIP(AuthenticationFlowContext context) {
+        String forwarded = context.getHttpRequest().getHttpHeaders().getHeaderString(HEADER_X_FORWARDED_FOR);
         return (forwarded != null && !forwarded.isEmpty())
                 ? forwarded.split(",")[0].trim()
-                : ctx.getSession().getContext().getConnection().getRemoteAddr();
+                : context.getSession().getContext().getConnection().getRemoteAddr();
     }
 
-    private String detectBrowser(String ua) {
-        if (ua.contains("Edg"))                                                      return "Edge";
-        if (ua.contains("Chrome")   && ua.contains("Safari")   && !ua.contains("Edg")) return "Chrome";
-        if (ua.contains("Firefox")  && !ua.contains("Chrome"))                        return "Firefox";
-        if (ua.contains("Safari")   && !ua.contains("Chrome")   && !ua.contains("Edg")) return "Safari";
-        if (ua.contains("OPR")      || ua.contains("Opera"))                          return "Opera";
-        if (ua.contains("Brave"))                                                    return "Brave";
-        if (ua.contains("Trident"))                                                  return "Internet Explorer";
+    private String detectBrowser(String userAgent) {
+        if (userAgent.contains("Edg")) return "Edge";
+        if (userAgent.contains("Chrome") && userAgent.contains("Safari") && !userAgent.contains("Edg")) return "Chrome";
+        if (userAgent.contains("Firefox") && !userAgent.contains("Chrome")) return "Firefox";
+        if (userAgent.contains("Safari") && !userAgent.contains("Chrome") && !userAgent.contains("Edg")) return "Safari";
+        if (userAgent.contains("OPR") || userAgent.contains("Opera")) return "Opera";
+        if (userAgent.contains("Brave")) return "Brave";
+        if (userAgent.contains("Trident")) return "Internet Explorer";
         return UNKNOWN_BROWSER;
     }
 
-    private String detectOS(String ua) {
-        if (ua.contains("Windows NT 10.0")) return "Windows 10";
-        if (ua.contains("Windows NT 6.3"))  return "Windows 8.1";
-        if (ua.contains("Windows NT 6.2"))  return "Windows 8";
-        if (ua.contains("Windows NT 6.1"))  return "Windows 7";
-        if (ua.contains("iPhone") || ua.contains("iPad") || ua.contains("iPod")) return "iOS";
-        if (ua.contains("Mac OS X"))        return "Mac OS X";
-        if (ua.contains("Android"))         return "Android";
-        if (ua.contains("Linux"))           return "Linux";
+
+
+    private String detectOS(String userAgent) {
+        if (userAgent.contains("Windows NT 10.0")) return "Windows 10";
+        if (userAgent.contains("Windows NT 6.3")) return "Windows 8.1";
+        if (userAgent.contains("Windows NT 6.2")) return "Windows 8";
+        if (userAgent.contains("Windows NT 6.1")) return "Windows 7";
+        if (userAgent.contains("iPhone") || userAgent.contains("iPad") || userAgent.contains("iPod")) return "iOS";
+        if (userAgent.contains("Mac OS X")) return "Mac OS X";
+        if (userAgent.contains("Android")) return "Android";
+        if (userAgent.contains("Linux")) return "Linux";
         return UNKNOWN_OS;
+    }
+
+    private void processValidation(AuthenticationFlowContext context) {
+        log.debug("Authentication succeeded. Validating authentication ...");
+        UserModel user = context.getUser();
+        if (user == null) {
+            throw new IllegalStateException("Authenticators does not add user to authentication context!");
+        }
+
+        AuthenticatorValidator.Error error = null;
+        for (AuthenticatorValidator validator : validators) {
+            error = validator.validate(user, context.getSession(), context);
+            if (error != null) {
+                break;
+            }
+        }
+
+        if (error != null) {
+            boolean clearUser = !isUserAlreadySetBeforeUsernamePasswordAuth(context);
+            failAuthentication(context, error, clearUser);
+            return;
+        }
+
+        storeLastLogin(context, user);
+
+        context.success();
+    }
+
+    private void failAuthentication(AuthenticationFlowContext context, AuthenticatorValidator.Error error, boolean clearUser) {
+        log.debugf("Validation failed with %s in field %s ...", error.getMessage(), error.getField());
+        if (clearUser) {
+            context.clearUser();
+        }
+        Response challenge = challenge(context, error.getMessage(), error.getField());
+        context.challenge(challenge);
     }
 }
