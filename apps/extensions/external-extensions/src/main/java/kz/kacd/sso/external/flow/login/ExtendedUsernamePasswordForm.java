@@ -99,6 +99,8 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
         context.getHttpRequest().getDecodedFormParameters().putSingle(AuthenticationManager.FORM_USERNAME, username);
         context.getAuthenticationSession()
                 .setAuthNote(AbstractUsernameFormAuthenticator.ATTEMPTED_USERNAME, username);
+        context.getAuthenticationSession()
+                .setAuthNote(AuthenticationManager.FORM_USERNAME, username);
     }
 
     @Override
