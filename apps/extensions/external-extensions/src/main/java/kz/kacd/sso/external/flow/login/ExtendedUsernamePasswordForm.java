@@ -65,12 +65,9 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
                 ExtendedUsernamePasswordForm.super.action(context);
 
                 if (context.getStatus().equals(FlowStatus.SUCCESS)) {
-                    context.getEvent().detail(ExternalLoginPage.AUTHENTICATION_TYPE, "password");
-                }
-
-                if (isIin) {
-                    rewriteContextIin(context, username);
-                }
+                                     context.getEvent().detail(ExternalLoginPage.AUTHENTICATION_TYPE, "password");
+                                        if (isIin) rewriteContextIin(context, username); // ← откатить ТОЛЬКО после успеха
+                                  }
             }
         });
         return extendedAlternatives;
@@ -90,8 +87,13 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
     }
 
 
-    private void rewriteContextIin(AuthenticationFlowContext context, String iin) {
-        setUsername(context, iin);
+    private void rewriteContextIin(AuthenticationFlowContext ctx, String iin) {
+        ctx.getHttpRequest()
+                      .getDecodedFormParameters()
+                       .putSingle(AuthenticationManager.FORM_USERNAME, iin);
+
+                    ctx.getAuthenticationSession()
+                       .setAuthNote(AbstractUsernameFormAuthenticator.ATTEMPTED_USERNAME, iin);
     }
 
     private void setUsername(AuthenticationFlowContext context, String username) {
