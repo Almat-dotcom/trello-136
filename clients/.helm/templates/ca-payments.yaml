@@ -14,7 +14,7 @@ metadata:
   {{- end }}
 spec:
   displayedName: ca-payments service
-  displayedDescription: Сервис автоматизированной обработки выплат по МЦБ команды КД
+  displayedDescription: Сервис автоматизированной обработки выплат по МЦБ команды КД.
   access:
     validRedirectUris:
     - http://localhost
@@ -25,4 +25,7 @@ spec:
     clientExistingSecret: ca-payments-secret
     clientSecretKey: client_secret
   roles: []
+
+
+
 
