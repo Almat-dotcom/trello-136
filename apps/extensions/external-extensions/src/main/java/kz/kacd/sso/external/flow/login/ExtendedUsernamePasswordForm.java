@@ -9,7 +9,6 @@ import org.keycloak.authentication.AuthenticationFlowError;
 import org.keycloak.authentication.Authenticator;
 import org.keycloak.authentication.FlowStatus;
 import org.keycloak.authentication.authenticators.browser.UsernamePasswordForm;
-import org.keycloak.authentication.authenticators.browser.AbstractUsernameFormAuthenticator;
 import org.keycloak.models.UserModel;
 import org.keycloak.services.managers.AuthenticationManager;
 
@@ -65,9 +64,12 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
                 ExtendedUsernamePasswordForm.super.action(context);
 
                 if (context.getStatus().equals(FlowStatus.SUCCESS)) {
-                                     context.getEvent().detail(ExternalLoginPage.AUTHENTICATION_TYPE, "password");
-                                        if (isIin) rewriteContextIin(context, username); // ← откатить ТОЛЬКО после успеха
-                                  }
+                    context.getEvent().detail(ExternalLoginPage.AUTHENTICATION_TYPE, "password");
+                }
+
+                if (isIin) {
+                    rewriteContextIin(context, username);
+                }
             }
         });
         return extendedAlternatives;
@@ -87,22 +89,13 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
     }
 
 
-    private void rewriteContextIin(AuthenticationFlowContext ctx, String iin) {
-        ctx.getHttpRequest()
-                      .getDecodedFormParameters()
-                       .putSingle(AuthenticationManager.FORM_USERNAME, iin);
-
-                    ctx.getAuthenticationSession()
-                       .setAuthNote(AbstractUsernameFormAuthenticator.ATTEMPTED_USERNAME, iin);
+    private void rewriteContextIin(AuthenticationFlowContext context, String iin) {
+        setUsername(context, iin);
     }
 
     private void setUsername(AuthenticationFlowContext context, String username) {
         log.infof("Almat setUsername(%s)", username);
         context.getHttpRequest().getDecodedFormParameters().putSingle(AuthenticationManager.FORM_USERNAME, username);
-        context.getAuthenticationSession()
-                .setAuthNote(AbstractUsernameFormAuthenticator.ATTEMPTED_USERNAME, username);
-        context.getAuthenticationSession()
-                .setAuthNote(AuthenticationManager.FORM_USERNAME, username);
     }
 
     @Override
