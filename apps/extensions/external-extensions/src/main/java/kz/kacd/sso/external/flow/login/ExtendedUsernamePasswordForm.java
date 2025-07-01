@@ -58,17 +58,31 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
                 String username = extractUsername(context);
                 boolean isIin = isIin(username);
                 if (isIin) {
-                    rewriteContextUsername(context, username);
-                }
+                    String login = username + "-" + ExternalRegistrationPage.CLIENT_PHYSICAL;
 
+                    log.infof("[IIN-FORM] normalized login = %s", login);
+                    UserModel user = context.getSession()
+                            .users()
+                            .getUserByUsername(context.getRealm(), login);
+
+                    if (user == null) {
+                        context.failure(AuthenticationFlowError.INVALID_USER);
+                        return;
+                    }
+
+                    /* назначаем пользователя и фиксируем notes */
+                    context.setUser(user);
+                    log.infof("[IIN-FORM] setUser → %s (id=%s)", user.getUsername(), user.getId());
+                    context.getAuthenticationSession()
+                            .setAuthNote("ATTEMPTED_USERNAME", login);
+                    context.getAuthenticationSession().setAuthNote("USER_SET_BEFORE_USERNAME_PASSWORD_AUTH", "true");
+                    context.getAuthenticationSession()
+                            .setAuthNote(AuthenticationManager.FORM_USERNAME,login);
+                }
                 ExtendedUsernamePasswordForm.super.action(context);
-
-                if (context.getStatus().equals(FlowStatus.SUCCESS)) {
+                if (FlowStatus.SUCCESS.equals(context.getStatus())) {
                     context.getEvent().detail(ExternalLoginPage.AUTHENTICATION_TYPE, "password");
-                }
-
-                if (isIin) {
-                    rewriteContextIin(context, username);
+                    log.info("[IIN-FORM] login SUCCESS");
                 }
             }
         });
