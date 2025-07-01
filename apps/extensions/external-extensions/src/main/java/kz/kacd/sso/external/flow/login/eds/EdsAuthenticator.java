@@ -15,6 +15,7 @@ import org.jboss.logging.Logger;
 import org.keycloak.authentication.AuthenticationFlowContext;
 import org.keycloak.authentication.authenticators.browser.UsernamePasswordForm;
 import org.keycloak.models.KeycloakSession;
+import org.keycloak.models.UserModel;
 import org.keycloak.services.managers.AuthenticationManager;
 
 import java.util.Collections;
@@ -63,22 +64,41 @@ public class EdsAuthenticator extends UsernamePasswordForm implements Alternativ
     }
 
     private boolean validateUser(AuthenticationFlowContext context, SignatureValidator.Result sign) {
-        MultivaluedMap<String, String> userData = context.getHttpRequest().getDecodedFormParameters();
         String username = getUsername(context.getSession(), sign);
-        if (sign.getType().equals(SignatureValidator.Type.LEGAL)) {
-            context.getEvent().detail(ExternalRegistrationPage.FIELD_BIN, Collections.singletonList(sign.getSubject().getBin()));
-            context.getAuthenticationSession().setAuthNote(ExternalRegistrationPage.FIELD_BIN, sign.getSubject().getBin());
+
+        // ищем пользователя вручную
+        UserModel user = context.getSession()
+                .users()
+                .getUserByUsername(context.getRealm(), username);
+        if (user == null) {
+            return false;
         }
-        userData.put(AuthenticationManager.FORM_USERNAME, Collections.singletonList(username));
-        boolean result = validateUser(context, userData);
-        if (
-                result
-                && ExternalRegistrationPage.CLIENT_LEGAL
-                        .equals(context.getUser().getFirstAttribute(ExternalRegistrationPage.FIELD_CLIENT_TYPE))
-        ) {
+
+        // назначаем пользователя и ставим флаги, чтобы базовый UsernamePasswordForm
+        // больше не пытался валидировать пароль/пользователя
+        context.setUser(user);
+        context.getAuthenticationSession()
+                .setAuthNote(AuthenticationManager.FORM_USERNAME, username);
+        context.getAuthenticationSession()
+                .setAuthNote("ATTEMPTED_USERNAME", username);
+        context.getAuthenticationSession()
+                .setAuthNote("USER_SET_BEFORE_USERNAME_PASSWORD_AUTH", "true");
+
+        if (sign.getType() == SignatureValidator.Type.LEGAL) {
+            context.getEvent().detail(
+                    ExternalRegistrationPage.FIELD_BIN,
+                    Collections.singletonList(sign.getSubject().getBin())
+            );
+            context.getAuthenticationSession().setAuthNote(ExternalRegistrationPage.FIELD_BIN, sign.getSubject().getBin()
+            );
+        }
+        // заполняем профиль при необходимости
+        if (ExternalRegistrationPage.CLIENT_LEGAL
+                .equals(user.getFirstAttribute(ExternalRegistrationPage.FIELD_CLIENT_TYPE))) {
             updateProfile(context, sign.getSubject());
         }
-        return result;
+
+        return true;
     }
 
     private String getUsername(KeycloakSession session, SignatureValidator.Result sign) {
