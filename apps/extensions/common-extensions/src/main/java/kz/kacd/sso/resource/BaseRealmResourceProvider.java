@@ -2,7 +2,7 @@ package kz.kacd.sso.resource;
 
 import kz.kacd.sso.resource.cors.CorsResource;
 import org.jboss.logging.Logger;
-import org.jboss.resteasy.spi.HttpRequest;
+import org.keycloak.http.HttpRequest;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.services.resource.RealmResourceProvider;
 

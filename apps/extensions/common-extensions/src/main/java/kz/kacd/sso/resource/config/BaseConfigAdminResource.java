@@ -3,8 +3,7 @@ package kz.kacd.sso.resource.config;
 import jakarta.ws.rs.NotAuthorizedException;
 import kz.kacd.sso.k8s.K8sConfig;
 import kz.kacd.sso.resource.AbstractAdminResource;
-import org.jboss.resteasy.spi.InternalServerErrorException;
-import org.jboss.resteasy.spi.ResteasyProviderFactory;
+import jakarta.ws.rs.InternalServerErrorException;
 import org.keycloak.models.RealmModel;
 
 public abstract class BaseConfigAdminResource extends AbstractAdminResource {
@@ -14,7 +13,6 @@ public abstract class BaseConfigAdminResource extends AbstractAdminResource {
     }
 
     protected <T extends BaseConfigAdminResource> T setupResource(T resource) {
-        ResteasyProviderFactory.getInstance().injectProperties(resource);
         resource.setup();
         return resource;
     }
