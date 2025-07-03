@@ -4,7 +4,7 @@ import jakarta.ws.rs.OPTIONS;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
 import org.jboss.logging.Logger;
-import org.jboss.resteasy.spi.HttpRequest;
+import org.keycloak.http.HttpRequest;
 
 public class CorsResource {
     public static final String[] METHODS = {

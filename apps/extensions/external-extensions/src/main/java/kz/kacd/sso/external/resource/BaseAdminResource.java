@@ -5,6 +5,7 @@ import jakarta.ws.rs.NotAuthorizedException;
 import jakarta.ws.rs.NotFoundException;
 import kz.kacd.sso.external.model.OrganizationProvider;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
+import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserProvider;
 
@@ -13,8 +14,8 @@ public abstract class BaseAdminResource extends AbstractAdminResource {
     protected OrganizationProvider orgs;
     protected UserProvider users;
 
-    protected BaseAdminResource(RealmModel realm) {
-        super(realm);
+    public BaseAdminResource(KeycloakSession session, RealmModel realm) {
+        super(session, realm);
     }
 
     protected <T extends BaseAdminResource> T setupResource(T resource) {

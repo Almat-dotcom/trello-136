@@ -13,6 +13,7 @@ import kz.kacd.sso.external.resource.BaseAdminResource;
 import kz.kacd.sso.external.resource.common.OrganizationResourceType;
 import org.jboss.logging.Logger;
 import org.keycloak.events.admin.OperationType;
+import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 
 public class MemberResource extends BaseAdminResource {
@@ -21,8 +22,9 @@ public class MemberResource extends BaseAdminResource {
     private final OrganizationModel org;
     private final PositionModel model;
 
-    protected MemberResource(RealmModel realm, OrganizationModel org, PositionModel model) {
-        super(realm);
+    public MemberResource(KeycloakSession session, RealmModel realm,
+                          OrganizationModel org, PositionModel model) {
+        super(session, realm);
         this.org = org;
         this.model = model;
     }

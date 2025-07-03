@@ -10,6 +10,7 @@ import kz.kacd.sso.external.model.OrganizationModel;
 import kz.kacd.sso.external.model.page.ExternalRegistrationPage;
 import kz.kacd.sso.external.resource.BaseAdminResource;
 import org.jboss.logging.Logger;
+import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 
@@ -19,8 +20,8 @@ import org.keycloak.models.UserModel;
 public class EBRResource extends BaseAdminResource {
     private static final Logger log = Logger.getLogger(EBRResource.class);
 
-    protected EBRResource(RealmModel realm) {
-        super(realm);
+    protected EBRResource(KeycloakSession session, RealmModel realm) {
+        super(session, realm);
     }
 
     @POST

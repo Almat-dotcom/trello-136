@@ -2,18 +2,15 @@ version: "3.9"
 
 services:
   keycloak:
-    image: quay.io/keycloak/keycloak:22.0.5
+    image: quay.io/keycloak/keycloak:23.0.0
     command: ["start-dev"]
     environment:
     - KEYCLOAK_ADMIN=admin
     - KEYCLOAK_ADMIN_PASSWORD=admin
     - KC_DB=postgres
     - KC_DB_PASSWORD=keycloak
-    - KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak
-    - KC_DB_USERNAME=postgres
-    - KC_LOG_LEVEL=debug
-    - KEYCLOAK_KAFKA_ENABLED=true
-    - KEYCLOAK_KAFKA_BOOTSTRAP_SERVERS=172.22.16.8:9092
+    - KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak?user=postgres
+    - KC_LOG_LEVEL=info
     volumes:
     - ./target/external-extensions-jar-with-dependencies.jar:/opt/keycloak/providers/external-extensions.jar:rw
     - ./realm.json:/opt/keycloak/data/import/realm.json:rw

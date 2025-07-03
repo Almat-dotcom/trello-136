@@ -1,7 +1,6 @@
 package kz.kacd.sso.external.resource.organization;
 
 import kz.kacd.sso.external.resource.BaseRealmResourceProvider;
-import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 
@@ -14,9 +13,8 @@ public class OrganizationsResourceProvider extends BaseRealmResourceProvider {
     @Override
     protected Object getRealmResource() {
         RealmModel realm = session.getContext().getRealm();
-        OrganizationsResource organization = new OrganizationsResource(realm);
-        ResteasyProviderFactory.getInstance().injectProperties(organization);
-        organization.setup();
-        return organization;
+        OrganizationsResource orgsRes = new OrganizationsResource(session, realm);
+        orgsRes.setup();
+        return orgsRes;
     }
 }

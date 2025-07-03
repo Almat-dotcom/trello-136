@@ -3,9 +3,9 @@ package kz.kacd.sso.external.resource.cors;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.ResponseBuilder;
 import org.jboss.logging.Logger;
-import org.jboss.resteasy.spi.HttpRequest;
-import org.jboss.resteasy.spi.HttpResponse;
 import org.keycloak.common.util.CollectionUtil;
+import org.keycloak.http.HttpRequest;
+import org.keycloak.http.HttpResponse;
 import org.keycloak.models.ClientModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.protocol.oidc.utils.WebOriginsUtils;
@@ -19,23 +19,28 @@ import java.util.concurrent.TimeUnit;
 
 public class Cors {
 
-    public static final long DEFAULT_MAX_AGE = TimeUnit.HOURS.toSeconds(1);
+    public static final long   DEFAULT_MAX_AGE      = TimeUnit.HOURS.toSeconds(1);
     public static final String DEFAULT_ALLOW_METHODS = "GET, HEAD, OPTIONS";
     public static final String DEFAULT_ALLOW_HEADERS =
-            "X-PINGOTHER, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers";
-    public static final String ORIGIN_HEADER = "Origin";
-    public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String ACCESS_CONTROL_ALLOW_ORIGIN = "Access-Control-Allow-Origin";
-    public static final String ACCESS_CONTROL_ALLOW_METHODS = "Access-Control-Allow-Methods";
-    public static final String ACCESS_CONTROL_ALLOW_HEADERS = "Access-Control-Allow-Headers";
-    public static final String ACCESS_CONTROL_EXPOSE_HEADERS = "Access-Control-Expose-Headers";
+            "X-PINGOTHER, Origin, Accept, X-Requested-With, Content-Type, " +
+                    "Access-Control-Request-Method, Access-Control-Request-Headers";
+
+    public static final String ORIGIN_HEADER                    = "Origin";
+    public static final String AUTHORIZATION_HEADER             = "Authorization";
+    public static final String ACCESS_CONTROL_ALLOW_ORIGIN      = "Access-Control-Allow-Origin";
+    public static final String ACCESS_CONTROL_ALLOW_METHODS     = "Access-Control-Allow-Methods";
+    public static final String ACCESS_CONTROL_ALLOW_HEADERS     = "Access-Control-Allow-Headers";
+    public static final String ACCESS_CONTROL_EXPOSE_HEADERS    = "Access-Control-Expose-Headers";
     public static final String ACCESS_CONTROL_ALLOW_CREDENTIALS = "Access-Control-Allow-Credentials";
-    public static final String ACCESS_CONTROL_MAX_AGE = "Access-Control-Max-Age";
+    public static final String ACCESS_CONTROL_MAX_AGE           = "Access-Control-Max-Age";
     public static final String ACCESS_CONTROL_ALLOW_ORIGIN_WILDCARD = "*";
     public static final String INCLUDE_REDIRECTS = "+";
+
     private static final Logger logger = Logger.getLogger(Cors.class);
+
     private final HttpRequest request;
-    private Response.ResponseBuilder builder;
+    private ResponseBuilder   builder;
+
     private Set<String> allowedOrigins;
     private Set<String> allowedMethods;
     private Set<String> exposedHeaders;
@@ -43,71 +48,50 @@ public class Cors {
     private boolean preflight;
     private boolean auth;
 
-    public Cors(HttpRequest request, ResponseBuilder response) {
+    public Cors(HttpRequest request, ResponseBuilder builder) {
         this.request = request;
-        this.builder = response;
+        this.builder = builder;
     }
 
     public Cors(HttpRequest request) {
-        this.request = request;
+        this(request, Response.ok());
     }
 
-    public static Cors add(HttpRequest request, ResponseBuilder response) {
-        return new Cors(request, response);
-    }
+    public static Cors add(HttpRequest req, ResponseBuilder b) { return new Cors(req, b); }
+    public static Cors add(HttpRequest req)                   { return new Cors(req);   }
 
-    public static Cors add(HttpRequest request) {
-        return new Cors(request);
-    }
+    public Cors builder(ResponseBuilder b) { this.builder = b; return this; }
+    public Cors preflight()  { this.preflight = true; return this; }
+    public Cors auth()       { this.auth      = true; return this; }
 
-    public Cors builder(ResponseBuilder builder) {
-        this.builder = builder;
-        return this;
-    }
-
-    public Cors preflight() {
-        preflight = true;
-        return this;
-    }
-
-    public Cors auth() {
-        auth = true;
-        return this;
-    }
 
     public Cors allowAllOrigins() {
-        allowedOrigins = Collections.singleton(ACCESS_CONTROL_ALLOW_ORIGIN_WILDCARD);
+        this.allowedOrigins = Collections.singleton(ACCESS_CONTROL_ALLOW_ORIGIN_WILDCARD);
         return this;
     }
 
-    public Cors allowedOrigins(KeycloakSession session, ClientModel client) {
-        if (client != null) {
-            allowedOrigins = WebOriginsUtils.resolveValidWebOrigins(session, client);
-        }
+    public Cors allowedOrigins(KeycloakSession s, ClientModel c) {
+        if (c != null) this.allowedOrigins = WebOriginsUtils.resolveValidWebOrigins(s, c);
         return this;
     }
 
-    public Cors allowedOrigins(AccessToken token) {
-        if (token != null) {
-            allowedOrigins = token.getAllowedOrigins();
-        }
+    public Cors allowedOrigins(AccessToken t) {
+        if (t != null) this.allowedOrigins = t.getAllowedOrigins();
         return this;
     }
 
-    public Cors allowedOrigins(String... allowedOrigins) {
-        if (allowedOrigins != null && allowedOrigins.length > 0) {
-            this.allowedOrigins = new HashSet<>(Arrays.asList(allowedOrigins));
-        }
+    public Cors allowedOrigins(String... o) {
+        if (o != null && o.length > 0) this.allowedOrigins = new HashSet<>(Arrays.asList(o));
         return this;
     }
 
-    public Cors allowedMethods(String... allowedMethods) {
-        this.allowedMethods = new HashSet<>(Arrays.asList(allowedMethods));
+    public Cors allowedMethods(String... m) {
+        this.allowedMethods = new HashSet<>(Arrays.asList(m));
         return this;
     }
 
-    public Cors exposedHeaders(String... exposedHeaders) {
-        this.exposedHeaders = new HashSet<>(Arrays.asList(exposedHeaders));
+    public Cors exposedHeaders(String... h) {
+        this.exposedHeaders = new HashSet<>(Arrays.asList(h));
         return this;
     }
 
@@ -124,28 +108,20 @@ public class Cors {
 
         builder.header(ACCESS_CONTROL_ALLOW_ORIGIN, origin);
 
-        if (preflight) {
-            addAccessControl();
-        }
-
-        if (!preflight && exposedHeaders != null) {
+        if (preflight) addAccessControl();               // Allow-Methods
+        if (!preflight && exposedHeaders != null)
             builder.header(ACCESS_CONTROL_EXPOSE_HEADERS, CollectionUtil.join(exposedHeaders));
-        }
 
         builder.header(ACCESS_CONTROL_ALLOW_CREDENTIALS, Boolean.toString(auth));
 
         if (preflight) {
-            addAuth();
-        }
-
-        if (preflight) {
+            addAuth();                                   // Allow-Headers
             builder.header(ACCESS_CONTROL_MAX_AGE, DEFAULT_MAX_AGE);
         }
-
         return builder.build();
     }
 
-    public void build(HttpResponse response) {
+    public void build(HttpResponse resp) {
         String origin = request.getHttpHeaders().getRequestHeaders().getFirst(ORIGIN_HEADER);
         if (origin == null) {
             return;
@@ -156,34 +132,26 @@ public class Cors {
             return;
         }
 
-        response.getOutputHeaders().add(ACCESS_CONTROL_ALLOW_ORIGIN, origin);
+        resp.setHeader(ACCESS_CONTROL_ALLOW_ORIGIN, origin);
+
+        if (preflight) addAccessControl(resp);
+        if (!preflight && exposedHeaders != null)
+            resp.setHeader(ACCESS_CONTROL_EXPOSE_HEADERS, CollectionUtil.join(exposedHeaders));
+
+        resp.setHeader(ACCESS_CONTROL_ALLOW_CREDENTIALS, Boolean.toString(auth));
 
         if (preflight) {
-            addAccessControl(response);
-        }
-
-        if (!preflight && exposedHeaders != null) {
-            response
-                    .getOutputHeaders()
-                    .add(ACCESS_CONTROL_EXPOSE_HEADERS, CollectionUtil.join(exposedHeaders));
-        }
-
-        response.getOutputHeaders().add(ACCESS_CONTROL_ALLOW_CREDENTIALS, Boolean.toString(auth));
-
-        if (preflight) {
-            addAuth(response);
-        }
-
-        if (preflight) {
-            response.getOutputHeaders().add(ACCESS_CONTROL_MAX_AGE, DEFAULT_MAX_AGE);
+            addAuth(resp);
+            resp.setHeader(ACCESS_CONTROL_MAX_AGE, String.valueOf(DEFAULT_MAX_AGE));
         }
     }
 
+
     private boolean invalidRequest(String origin) {
-        return !preflight
-               && (allowedOrigins == null
-                   || (!allowedOrigins.contains(origin)
-                       && !allowedOrigins.contains(ACCESS_CONTROL_ALLOW_ORIGIN_WILDCARD)));
+        return !preflight &&
+                (allowedOrigins == null ||
+                        (!allowedOrigins.contains(origin) &&
+                                !allowedOrigins.contains(ACCESS_CONTROL_ALLOW_ORIGIN_WILDCARD)));
     }
 
     private void logInfo(String message, Object... args) {
@@ -193,42 +161,28 @@ public class Cors {
     }
 
     private void addAccessControl() {
-        if (allowedMethods != null) {
+        if (allowedMethods != null)
             builder.header(ACCESS_CONTROL_ALLOW_METHODS, CollectionUtil.join(allowedMethods));
-        } else {
+        else
             builder.header(ACCESS_CONTROL_ALLOW_METHODS, DEFAULT_ALLOW_METHODS);
-        }
-    }
-
-    private void addAccessControl(HttpResponse response) {
-        if (allowedMethods != null) {
-            response
-                    .getOutputHeaders()
-                    .add(ACCESS_CONTROL_ALLOW_METHODS, CollectionUtil.join(allowedMethods));
-        } else {
-            response.getOutputHeaders().add(ACCESS_CONTROL_ALLOW_METHODS, DEFAULT_ALLOW_METHODS);
-        }
     }
 
     private void addAuth() {
-        if (auth) {
-            builder.header(
-                    ACCESS_CONTROL_ALLOW_HEADERS,
-                    String.format("%s, %s", DEFAULT_ALLOW_HEADERS, AUTHORIZATION_HEADER));
-        } else {
-            builder.header(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ALLOW_HEADERS);
-        }
+        String allow = auth ? DEFAULT_ALLOW_HEADERS + ", " + AUTHORIZATION_HEADER
+                : DEFAULT_ALLOW_HEADERS;
+        builder.header(ACCESS_CONTROL_ALLOW_HEADERS, allow);
     }
 
-    private void addAuth(HttpResponse response) {
-        if (auth) {
-            response
-                    .getOutputHeaders()
-                    .add(
-                            ACCESS_CONTROL_ALLOW_HEADERS,
-                            String.format("%s, %s", DEFAULT_ALLOW_HEADERS, AUTHORIZATION_HEADER));
-        } else {
-            response.getOutputHeaders().add(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ALLOW_HEADERS);
-        }
+    private void addAccessControl(HttpResponse resp) {
+        if (allowedMethods != null)
+            resp.setHeader(ACCESS_CONTROL_ALLOW_METHODS, CollectionUtil.join(allowedMethods));
+        else
+            resp.setHeader(ACCESS_CONTROL_ALLOW_METHODS, DEFAULT_ALLOW_METHODS);
+    }
+
+    private void addAuth(HttpResponse resp) {
+        String allow = auth ? DEFAULT_ALLOW_HEADERS + ", " + AUTHORIZATION_HEADER
+                : DEFAULT_ALLOW_HEADERS;
+        resp.setHeader(ACCESS_CONTROL_ALLOW_HEADERS, allow);
     }
 }
