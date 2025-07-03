@@ -22,7 +22,7 @@ public abstract class BaseRealmResourceProvider implements RealmResourceProvider
 
     @Override
     public Object getResource() {
-        HttpRequest request = session.getContext().getContextObject(HttpRequest.class);
+        HttpRequest request = session.getContext().getHttpRequest();
         log.debugf("request method %s", request.getHttpMethod());
         if ("OPTIONS".equals(request.getHttpMethod())) {
             return new CorsResource(request);
