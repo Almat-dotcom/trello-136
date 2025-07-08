@@ -13,7 +13,7 @@ public class ConfigurationResourceProvider extends BaseRealmResourceProvider {
     @Override
     protected Object getRealmResource() {
         RealmModel realm = session.getContext().getRealm();
-        ConfigurationResource res = new ConfigurationResource(realm);
+        ConfigurationResource res = new ConfigurationResource(session, realm);
         res.setup();
         return res;
     }

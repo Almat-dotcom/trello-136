@@ -13,7 +13,7 @@ public class RealmClientRolesResourceProvider extends BaseRealmResourceProvider 
     @Override
     protected Object getRealmResource() {
         RealmModel realm = session.getContext().getRealm();
-        RealmClientRolesResource resource = new RealmClientRolesResource(realm);
+        RealmClientRolesResource resource = new RealmClientRolesResource(session, realm);
         resource.setup();
         return resource;
     }

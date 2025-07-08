@@ -28,8 +28,7 @@ public abstract class AbstractAdminResource {
 
     protected final RealmModel realm;
 
-    @Context
-    protected KeycloakSession session;
+    protected final KeycloakSession session;
 
     protected AdminAuth               auth;
     protected AdminPermissionEvaluator permissions;
@@ -37,7 +36,8 @@ public abstract class AbstractAdminResource {
     protected UserModel               user;
     protected RealmModel              adminRealm;
 
-    protected AbstractAdminResource(RealmModel realm) {
+    protected AbstractAdminResource(KeycloakSession session, RealmModel realm) {
+        this.session = session;
         this.realm = realm;
     }
 

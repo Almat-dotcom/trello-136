@@ -2,12 +2,13 @@ package kz.kacd.sso.resource.client;
 
 import jakarta.ws.rs.ForbiddenException;
 import kz.kacd.sso.resource.AbstractAdminResource;
+import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 
 public class BaseClientRealmResource extends AbstractAdminResource {
 
-    protected BaseClientRealmResource(RealmModel realm) {
-        super(realm);
+    protected BaseClientRealmResource(KeycloakSession session, RealmModel realm) {
+        super(session, realm);
     }
 
     protected void hasReadPermissions() {

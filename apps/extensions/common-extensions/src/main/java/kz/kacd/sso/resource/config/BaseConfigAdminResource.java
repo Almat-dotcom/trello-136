@@ -4,12 +4,13 @@ import jakarta.ws.rs.NotAuthorizedException;
 import kz.kacd.sso.k8s.K8sConfig;
 import kz.kacd.sso.resource.AbstractAdminResource;
 import jakarta.ws.rs.InternalServerErrorException;
+import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 
 public abstract class BaseConfigAdminResource extends AbstractAdminResource {
 
-    protected BaseConfigAdminResource(RealmModel realm) {
-        super(realm);
+    protected BaseConfigAdminResource(KeycloakSession session, RealmModel realm) {
+        super(session, realm);
     }
 
     protected <T extends BaseConfigAdminResource> T setupResource(T resource) {
