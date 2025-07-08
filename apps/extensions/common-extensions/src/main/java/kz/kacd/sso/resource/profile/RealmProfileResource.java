@@ -62,7 +62,9 @@ public class RealmProfileResource extends BaseProfileRealmResource {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response get(@PathParam("id") String id) {
+        log.info("Start read profile TEST");
         hasReadPermission();
+        log.info("Start read profile TEST2");
 
         log.debugf("Getting profile by user id {} ...", id);
         UserModel user = session.users().getUserById(realm, id);
