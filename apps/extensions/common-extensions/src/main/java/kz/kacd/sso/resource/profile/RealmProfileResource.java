@@ -16,8 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Provider                               // ОБЯЗАТЕЛЬНО, чтобы Quarkus увидел ресурс
-@Path("/")                              // корень для провайдера /profile
+@Path("")
 @Produces(MediaType.APPLICATION_JSON)
 public class RealmProfileResource extends BaseProfileRealmResource {
     private static final Logger log = Logger.getLogger(RealmProfileResource.class);
