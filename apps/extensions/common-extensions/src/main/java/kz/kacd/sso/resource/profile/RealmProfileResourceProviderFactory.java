@@ -12,7 +12,7 @@ import org.keycloak.services.resource.RealmResourceProviderFactory;
 
 @AutoService(RealmResourceProviderFactory.class)
 public class RealmProfileResourceProviderFactory implements RealmResourceProviderFactory {
-    public static final String PROVIDER_ID = "profile";
+    public static final String PROVIDER_ID = "profileees";
     private static final Logger log = Logger.getLogger(RealmProfileResourceProviderFactory.class);
 
     @Override
