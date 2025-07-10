@@ -3,6 +3,7 @@ package kz.kacd.sso.resource.profile;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.ext.Provider;
 import kz.kacd.sso.resource.common.Page;
 import kz.kacd.sso.resource.common.ProfileResourceRepresentation;
 import org.jboss.logging.Logger;
@@ -15,6 +16,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Provider                               // ОБЯЗАТЕЛЬНО, чтобы Quarkus увидел ресурс
+@Path("/")                              // корень для провайдера /profile
+@Produces(MediaType.APPLICATION_JSON)
 public class RealmProfileResource extends BaseProfileRealmResource {
     private static final Logger log = Logger.getLogger(RealmProfileResource.class);
 
