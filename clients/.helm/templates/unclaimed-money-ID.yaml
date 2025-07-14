@@ -14,7 +14,7 @@ metadata:
   {{- end }}
 spec:
   displayedName: unclaimed-money-id
-  displayedDescription: Модуль "Невостребованные деньги", "Выплата ИД" в BackOffice System команды ЛКД
+  displayedDescription: Модуль "Невостребованные деньги", "Выплата ИД" в BackOffice System команды ЛКД.
   access:
     validRedirectUris:
     - http://localhsot:4200
