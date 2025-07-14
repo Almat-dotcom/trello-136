@@ -3,29 +3,29 @@ package kz.kacd.sso.resource.profile;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.ext.Provider;
 import kz.kacd.sso.resource.common.Page;
 import kz.kacd.sso.resource.common.ProfileResourceRepresentation;
 import org.jboss.logging.Logger;
 import org.keycloak.events.admin.OperationType;
 import org.keycloak.events.admin.ResourceType;
-import org.keycloak.models.ClientModel;
-import org.keycloak.models.RealmModel;
-import org.keycloak.models.RoleModel;
-import org.keycloak.models.UserModel;
+import org.keycloak.models.*;
 import org.keycloak.models.utils.ModelToRepresentation;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Path("")
+@Produces(MediaType.APPLICATION_JSON)
 public class RealmProfileResource extends BaseProfileRealmResource {
     private static final Logger log = Logger.getLogger(RealmProfileResource.class);
 
     private static final int MAX_LIMIT = 50;
     private static final String SUCCESS = "{\"status\": \"success\"}";
 
-    protected RealmProfileResource(RealmModel realm) {
-        super(realm);
+    protected RealmProfileResource(KeycloakSession session, RealmModel realm) {
+        super(session, realm);
     }
 
     @GET
@@ -65,7 +65,9 @@ public class RealmProfileResource extends BaseProfileRealmResource {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response get(@PathParam("id") String id) {
+        log.info("Start read profile TEST");
         hasReadPermission();
+        log.info("Start read profile TEST2");
 
         log.debugf("Getting profile by user id {} ...", id);
         UserModel user = session.users().getUserById(realm, id);
@@ -141,8 +143,8 @@ public class RealmProfileResource extends BaseProfileRealmResource {
         }
         if (
                 request.getFirstName() != null
-                || request.getLastName() != null
-                || request.getMiddleName() != null
+                        || request.getLastName() != null
+                        || request.getMiddleName() != null
         ) {
             log.infof("Updated full name of user %s ...", user.getUsername());
             adminEvent(user);

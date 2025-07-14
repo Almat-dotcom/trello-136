@@ -10,6 +10,7 @@ import kz.kacd.sso.external.resource.BaseAdminResource;
 import kz.kacd.sso.external.resource.common.OrganizationResourceType;
 import org.jboss.logging.Logger;
 import org.keycloak.events.admin.OperationType;
+import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 
 import java.util.stream.Stream;
@@ -19,8 +20,8 @@ public class OrganizationsResource extends BaseAdminResource {
 
     private static final int MAX_RESULT = 200;
 
-    protected OrganizationsResource(RealmModel realm) {
-        super(realm);
+    protected OrganizationsResource(KeycloakSession session, RealmModel realm) {
+        super(session, realm);
     }
 
     @GET
@@ -49,7 +50,7 @@ public class OrganizationsResource extends BaseAdminResource {
         }
 
         if (org != null && org.getRealm().getId().equals(realm.getId())) {
-            return setupResource(new OrganizationResource(realm, org));
+            return setupResource(new OrganizationResource(session, realm, org));
         }
         throw organizationNotFound(id);
     }

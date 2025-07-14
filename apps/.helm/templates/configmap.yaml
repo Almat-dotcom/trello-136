@@ -32,6 +32,7 @@ data:
   KC_SIGN_NCA_URL: {{ .Values.ncaUrl | quote }}
   MKB_URL: {{ .Values.mkbUrl | quote }}
   AUTH_DEBUG_MODE: {{ .Values.debugAuth | quote }}
+  KC_LOG_LEVEL: {{ .Values.loglevel | quote }}
 {{- if (include "keycloak.createConfigmap" .) }}
 ---
 apiVersion: v1

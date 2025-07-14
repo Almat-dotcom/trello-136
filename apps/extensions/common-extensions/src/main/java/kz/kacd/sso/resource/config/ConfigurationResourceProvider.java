@@ -1,7 +1,6 @@
 package kz.kacd.sso.resource.config;
 
 import kz.kacd.sso.resource.BaseRealmResourceProvider;
-import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 
@@ -14,9 +13,8 @@ public class ConfigurationResourceProvider extends BaseRealmResourceProvider {
     @Override
     protected Object getRealmResource() {
         RealmModel realm = session.getContext().getRealm();
-        ConfigurationResource resource = new ConfigurationResource(realm);
-        ResteasyProviderFactory.getInstance().injectProperties(resource);
-        resource.setup();
-        return resource;
+        ConfigurationResource res = new ConfigurationResource(session, realm);
+        res.setup();
+        return res;
     }
 }

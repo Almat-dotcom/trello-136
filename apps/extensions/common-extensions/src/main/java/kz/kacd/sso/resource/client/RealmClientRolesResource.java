@@ -5,6 +5,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.jboss.logging.Logger;
 import org.keycloak.models.ClientModel;
+import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 
 import java.util.List;
@@ -13,8 +14,8 @@ import java.util.stream.Collectors;
 public class RealmClientRolesResource extends BaseClientRealmResource {
     private static final Logger log = Logger.getLogger(RealmClientRolesResource.class);
 
-    protected RealmClientRolesResource(RealmModel realm) {
-        super(realm);
+    protected RealmClientRolesResource(KeycloakSession session, RealmModel realm) {
+        super(session, realm);
     }
 
     @GET

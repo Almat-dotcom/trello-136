@@ -5,7 +5,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import kz.kacd.sso.external.representation.OTPRequest;
 import kz.kacd.sso.external.resource.BaseAdminResource;
-import org.apache.http.HttpStatus;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 
@@ -14,8 +13,7 @@ public class OTPResource extends BaseAdminResource {
     private final OTPService otpService;
 
     protected OTPResource(KeycloakSession session, RealmModel realm) {
-        super(realm);
-        this.session = session;
+        super(session, realm);
         this.otpService = new OTPService(session);
     }
 
@@ -25,7 +23,7 @@ public class OTPResource extends BaseAdminResource {
     public Response enableOTP(OTPRequest request) {
         auth.requireManageUsers();
         otpService.enableOTP(request.userId);
-        return Response.ok(HttpStatus.SC_CREATED).build();
+        return Response.status(Response.Status.CREATED).build();
     }
 
     @DELETE

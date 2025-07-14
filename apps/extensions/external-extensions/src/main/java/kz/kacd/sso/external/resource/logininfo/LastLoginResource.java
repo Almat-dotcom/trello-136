@@ -13,9 +13,8 @@ public class LastLoginResource extends BaseAdminResource {
 
     private final LastLoginService service;
 
-    protected LastLoginResource(RealmModel realm, KeycloakSession session) {
-        super(realm);
-        this.session = session;
+    public LastLoginResource(KeycloakSession session, RealmModel realm) {
+        super(session, realm);
         this.service = new LastLoginService(session);
     }
 

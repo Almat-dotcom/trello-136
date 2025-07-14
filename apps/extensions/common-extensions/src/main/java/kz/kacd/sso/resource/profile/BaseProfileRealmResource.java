@@ -3,17 +3,16 @@ package kz.kacd.sso.resource.profile;
 import jakarta.ws.rs.ForbiddenException;
 import kz.kacd.sso.resource.AbstractAdminResource;
 import kz.kacd.sso.resource.config.BaseConfigAdminResource;
-import org.jboss.resteasy.spi.ResteasyProviderFactory;
+import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 
 public class BaseProfileRealmResource extends AbstractAdminResource {
 
-    protected BaseProfileRealmResource(RealmModel realm) {
-        super(realm);
+    protected BaseProfileRealmResource(KeycloakSession session, RealmModel realm) {
+        super(session, realm);
     }
 
     protected <T extends BaseConfigAdminResource> T setupResource(T resource) {
-        ResteasyProviderFactory.getInstance().injectProperties(resource);
         resource.setup();
         return resource;
     }

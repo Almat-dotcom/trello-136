@@ -13,6 +13,7 @@ import kz.kacd.sso.external.representation.OrganizationClientRepresentation;
 import kz.kacd.sso.external.resource.BaseAdminResource;
 import org.jboss.logging.Logger;
 import org.keycloak.models.ClientModel;
+import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 
 import javax.validation.Valid;
@@ -23,8 +24,9 @@ public class ClientsResource extends BaseAdminResource {
 
     private final OrganizationModel model;
 
-    ClientsResource(RealmModel realm, OrganizationModel model) {
-        super(realm);
+    public ClientsResource(KeycloakSession session, RealmModel realm,
+                           OrganizationModel model) {
+        super(session, realm);
         this.model = model;
     }
 
@@ -66,7 +68,7 @@ public class ClientsResource extends BaseAdminResource {
     public ClientResource client(@PathParam("clientId") String clientId) {
         try {
             ClientModel client = model.getClient(clientId);
-            return setupResource(new ClientResource(realm, model, client));
+            return setupResource(new ClientResource(session, realm, model, client));
         } catch (ClientNotFoundException e) {
             throw new NotFoundException();
         }

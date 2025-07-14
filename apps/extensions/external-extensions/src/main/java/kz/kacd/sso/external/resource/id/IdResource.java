@@ -10,6 +10,7 @@ import kz.kacd.sso.external.model.OrganizationModel;
 import kz.kacd.sso.external.model.page.ExternalRegistrationPage;
 import kz.kacd.sso.external.resource.BaseAdminResource;
 import org.jboss.logging.Logger;
+import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 
 /**
@@ -18,8 +19,8 @@ import org.keycloak.models.RealmModel;
 public class IdResource extends BaseAdminResource {
     private static final Logger log = Logger.getLogger(IdResource.class);
 
-    protected IdResource(RealmModel realm) {
-        super(realm);
+    public IdResource(KeycloakSession session, RealmModel realm) {
+        super(session, realm);
     }
 
     @GET

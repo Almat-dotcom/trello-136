@@ -1,7 +1,7 @@
 global:
   imageRegistry: nexus.kacd.kz:5000
-  imagePullSecrets:
-  - kacd-docker-creds
+  # imagePullSecrets:
+  # - kacd-docker-creds
 
 image: nexus.kacd.kz:5000/valyayev/test/keycloak:0.3
 
@@ -11,9 +11,11 @@ replicaCount: 1
 
 clusterDomain: dev-cluster.local
 
-hostname: sso-dev.dev.kacd.kz
+hostname: sso-test.dev.kacd.kz
 
 enabledMasterRealm: "true"
+
+debugAuth: true
 
 resources:
   limits:
@@ -40,16 +42,22 @@ auth:
 
 database:
   host: psql-dev.kacd.kz
-  name: keycloak
-  schema: auth
-  username: keycloak
+  # name: keycloak-test
+  name: sso-test-5
+  # name: sso
+  # schema: auth
+  schema: public # схема для Препрода
+  username: keycloak-test
   existingSecret: sso-keycloak-database-password
   existingSecretPasswordKey: password
 
-kafka:
-  enabled: true
-  bootstrapServers: "kafka-dev.kacd.kz:9092"
-  groupId: keycloak-dev
+# уровень логирования
+loglevel: "INFO"
+
+# kafka:
+#   enabled: true
+#   bootstrapServers: "kafka-dev.kacd.kz:9092"
+#   groupId: keycloak-dev
 
 service:
   type: ClusterIP
@@ -60,7 +68,7 @@ service:
 
 ingress:
   enabled: true
-  hostname: sso-dev.dev.kacd.kz
+  hostname: sso-test.dev.kacd.kz
   tls: true
   secretName: kacd-tls
 

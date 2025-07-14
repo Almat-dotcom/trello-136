@@ -5,6 +5,7 @@ import kz.kacd.sso.external.model.page.ExternalLoginPage;
 import kz.kacd.sso.external.model.page.ExternalRegistrationPage;
 import org.jboss.logging.Logger;
 import org.keycloak.authentication.AuthenticationFlowContext;
+import org.keycloak.authentication.AuthenticationFlowError;
 import org.keycloak.authentication.Authenticator;
 import org.keycloak.authentication.FlowStatus;
 import org.keycloak.authentication.authenticators.browser.UsernamePasswordForm;
@@ -53,20 +54,35 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
 
             @Override
             public void action(AuthenticationFlowContext context) {
+                log.info("I am here");
                 String username = extractUsername(context);
                 boolean isIin = isIin(username);
                 if (isIin) {
-                    rewriteContextUsername(context, username);
-                }
+                    String login = username + "-" + ExternalRegistrationPage.CLIENT_PHYSICAL;
 
+                    log.infof("[IIN-FORM] normalized login = %s", login);
+                    UserModel user = context.getSession()
+                            .users()
+                            .getUserByUsername(context.getRealm(), login);
+
+                    if (user == null) {
+                        context.failure(AuthenticationFlowError.INVALID_USER);
+                        return;
+                    }
+
+                    /* назначаем пользователя и фиксируем notes */
+                    context.setUser(user);
+                    log.infof("[IIN-FORM] setUser → %s (id=%s)", user.getUsername(), user.getId());
+                    context.getAuthenticationSession()
+                            .setAuthNote("ATTEMPTED_USERNAME", login);
+                    context.getAuthenticationSession().setAuthNote("USER_SET_BEFORE_USERNAME_PASSWORD_AUTH", "true");
+                    context.getAuthenticationSession()
+                            .setAuthNote(AuthenticationManager.FORM_USERNAME,login);
+                }
                 ExtendedUsernamePasswordForm.super.action(context);
-
-                if (context.getStatus().equals(FlowStatus.SUCCESS)) {
+                if (FlowStatus.SUCCESS.equals(context.getStatus())) {
                     context.getEvent().detail(ExternalLoginPage.AUTHENTICATION_TYPE, "password");
-                }
-
-                if (isIin) {
-                    rewriteContextIin(context, username);
+                    log.info("[IIN-FORM] login SUCCESS");
                 }
             }
         });
@@ -86,11 +102,13 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
         setUsername(context, username);
     }
 
+
     private void rewriteContextIin(AuthenticationFlowContext context, String iin) {
         setUsername(context, iin);
     }
 
     private void setUsername(AuthenticationFlowContext context, String username) {
+        log.infof("Almat setUsername(%s)", username);
         context.getHttpRequest().getDecodedFormParameters().putSingle(AuthenticationManager.FORM_USERNAME, username);
     }
 
@@ -121,7 +139,7 @@ public class ExtendedUsernamePasswordForm extends UsernamePasswordForm implement
 
     private boolean processAuth(AlternativeAuthenticator authenticator, AuthenticationFlowContext context) {
         if (authenticator.isConfiguredFor(context)) {
-            log.debugf(
+            log.infof(
                     "Authenticator %s is configured to process current context. Executing it ...",
                     authenticator.getClass().getSimpleName()
             );

@@ -9,6 +9,7 @@ import kz.kacd.sso.external.representation.ClientUpdateCommand;
 import kz.kacd.sso.external.resource.BaseAdminResource;
 import org.keycloak.models.ClientModel;
 import org.keycloak.models.ClientScopeModel;
+import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 
 import javax.validation.Valid;
@@ -18,8 +19,9 @@ public class ClientResource extends BaseAdminResource {
     private final OrganizationModel org;
     private final ClientModel client;
 
-    ClientResource(RealmModel realm, OrganizationModel org, ClientModel client) {
-        super(realm);
+    public ClientResource(KeycloakSession session, RealmModel realm,
+                          OrganizationModel org, ClientModel client) {
+        super(session, realm);
         this.org = org;
         this.client = client;
     }
