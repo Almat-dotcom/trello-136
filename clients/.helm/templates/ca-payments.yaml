@@ -1,7 +1,7 @@
 apiVersion: sso.kacd.kz/v1
 kind: Client
 metadata:
-  name: ca-seeker
+  name: ca-payments
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: internal-realm
@@ -13,8 +13,8 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  displayedName: ca-seeker service
-  displayedDescription: Сервис по уведомлению депонентов и держателей о КД
+  displayedName: ca-payments service
+  displayedDescription: Сервис автоматизированной обработки выплат по МЦБ команды КД.
   access:
     validRedirectUris:
     - http://localhost
@@ -22,7 +22,10 @@ spec:
     - http://localhost
   capability:
     type: CONFIDENTIAL
-    clientExistingSecret: ca-seeker-secret
+    clientExistingSecret: ca-payments-secret
     clientSecretKey: client_secret
   roles: []
+
+
+
 

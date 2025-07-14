@@ -1,0 +1,39 @@
+apiVersion: sso.kacd.kz/v1
+kind: Client
+metadata:
+  name: tax-service
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: internal-realm
+    kz-kacd-realm-name: internal
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  displayedName: tax-service
+  displayedDescription: Клиент для взаимодействия с налоговыми формами. Команды Налоги.
+  access:
+    validRedirectUris:
+    - http://localhsot:4200
+    webOrigins:
+    - "+"
+  capability:
+    type: CONFIDENTIAL
+    clientExistingSecret: tax-service-secret
+    clientSecretKey: client_secret
+  attributes:
+  - FIRST_NAME
+  - LAST_NAME
+  - MIDDLE_NAME
+  - GROUPS
+  - LOCALE
+  roles: [{
+    name: backoffice_tax_sain_edit,
+    roleDescription: 'Прием в работу, запрос разъяснений по налоговым формам, отправленных депонентом. Формирование отчетов. Редактирование данных по налоговым формам, статусам'
+  }, {
+    name: backoffice_tax_read,
+    roleDescription: 'Просмотр журнала налоговых форм, поданных депонентом. Детальный просмотр каждой формы. Просмотр вложений формы.'
+  }]

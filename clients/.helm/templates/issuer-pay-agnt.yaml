@@ -1,0 +1,45 @@
+apiVersion: sso.kacd.kz/v1
+kind: Client
+metadata:
+  name: issuer-pay-agnt
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: external-realm
+    kz-kacd-realm-name: external
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  displayedName: issuer-pay-agnt
+  displayedDescription: Клиент для доступа к сервису "Платежный агент" в ЛК Эмитента. Команды ЛКД.
+  access:
+    validRedirectUris:
+    - http://localhsot:4200
+    webOrigins:
+    - "+"
+  capability:
+    type: CONFIDENTIAL
+    clientExistingSecret: issuer-pay-agnt-secret
+    clientSecretKey: client_secret
+  attributes:
+  - POSITION
+  - FIRST_NAME
+  - LAST_NAME
+  - MIDDLE_NAME
+  - GROUPS
+  - LOCALE
+  - IIN
+  - PHONE_NUMBER
+  roles: [{
+    name: editor,
+    roleDescription: Пользователи с этой ролью могут создавать запросы на список держателей, просматривать журнал запросов, видеть детализацию запросов, скачивать отчеты.
+  },{
+    name: reader,
+    roleDescription: Просмотр журнала запросов в модуле Платежный агент и их детализации без возможности вносить изменения.
+  },{
+    name: signer,
+    roleDescription: Полный доступ к модулю Платежный агент
+  }]
