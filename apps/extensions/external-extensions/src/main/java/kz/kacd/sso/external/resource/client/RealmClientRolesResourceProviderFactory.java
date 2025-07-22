@@ -1,6 +1,7 @@
-package kz.kacd.sso.resource.profile;
+package kz.kacd.sso.external.resource.client;
 
 import com.google.auto.service.AutoService;
+import kz.kacd.sso.external.resource.common.ExternalAdminAuth;
 import org.jboss.logging.Logger;
 import org.keycloak.Config;
 import org.keycloak.models.*;
@@ -11,13 +12,14 @@ import org.keycloak.services.resource.RealmResourceProvider;
 import org.keycloak.services.resource.RealmResourceProviderFactory;
 
 @AutoService(RealmResourceProviderFactory.class)
-public class RealmProfileResourceProviderFactory implements RealmResourceProviderFactory {
-    public static final String PROVIDER_ID = "profileees";
-    private static final Logger log = Logger.getLogger(RealmProfileResourceProviderFactory.class);
+public class RealmClientRolesResourceProviderFactory implements RealmResourceProviderFactory {
+    public static final String PROVIDER_ID = "realm-client-roles";
+
+    private static final Logger log = Logger.getLogger(RealmClientRolesResourceProviderFactory.class);
 
     @Override
     public RealmResourceProvider create(KeycloakSession session) {
-        return new RealmProfileResourceProvider(session);
+        return new RealmClientRolesResourceProvider(session);
     }
 
     @Override
@@ -44,18 +46,12 @@ public class RealmProfileResourceProviderFactory implements RealmResourceProvide
                 .getRealmsStream()
                 .forEach(realm -> {
                     ClientModel client = realm.getMasterAdminClient();
-                    if (
-                            client.getRole(ProfileAdminAuth.QUERY_PROFILES_ROLE) == null
-                                    || client.getRole(ProfileAdminAuth.UPDATE_LOGIN_OPTIONS_ROLE) == null
-                    ) {
+                    if (client.getRole(ExternalAdminAuth.QUERY_CLIENT_ROLES) == null) {
                         addMasterAdminRoles(manager, realm);
                     }
                     if (!realm.getName().equals(Config.getAdminRealm())) {
                         client = realm.getClientByClientId(manager.getRealmAdminClientId(realm));
-                        if (
-                                client.getRole(ProfileAdminAuth.QUERY_PROFILES_ROLE) == null
-                                        || client.getRole(ProfileAdminAuth.UPDATE_LOGIN_OPTIONS_ROLE) == null
-                        ) {
+                        if (client.getRole(ExternalAdminAuth.QUERY_CLIENT_ROLES) == null) {
                             addRealmAdminRoles(manager, realm);
                         }
                     }
@@ -87,8 +83,7 @@ public class RealmProfileResourceProviderFactory implements RealmResourceProvide
     }
 
     private void addRoles(ClientModel client, RoleModel parent) {
-        addRole(ProfileAdminAuth.QUERY_PROFILES_ROLE, client, parent);
-        addRole(ProfileAdminAuth.UPDATE_LOGIN_OPTIONS_ROLE, client, parent);
+        addRole(ExternalAdminAuth.QUERY_CLIENT_ROLES, client, parent);
     }
 
     private void addRole(String name, ClientModel client, RoleModel parent) {

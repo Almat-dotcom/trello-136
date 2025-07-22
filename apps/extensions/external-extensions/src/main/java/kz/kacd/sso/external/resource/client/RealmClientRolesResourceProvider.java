@@ -1,6 +1,6 @@
-package kz.kacd.sso.resource.client;
+package kz.kacd.sso.external.resource.client;
 
-import kz.kacd.sso.resource.BaseRealmResourceProvider;
+import kz.kacd.sso.external.resource.BaseRealmResourceProvider;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 

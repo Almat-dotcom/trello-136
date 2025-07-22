@@ -1,4 +1,4 @@
-package kz.kacd.sso.resource.profile;
+package kz.kacd.sso.external.resource.profile;
 
 public class UpdateProfileRequest {
 
