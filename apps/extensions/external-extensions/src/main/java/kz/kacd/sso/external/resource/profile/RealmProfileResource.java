@@ -1,11 +1,11 @@
-package kz.kacd.sso.resource.profile;
+package kz.kacd.sso.external.resource.profile;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.ext.Provider;
-import kz.kacd.sso.resource.common.Page;
-import kz.kacd.sso.resource.common.ProfileResourceRepresentation;
+import kz.kacd.sso.external.representation.ProfileResourceRepresentation;
+import kz.kacd.sso.external.resource.BaseAdminResource;
+import kz.kacd.sso.external.resource.common.Page;
 import org.jboss.logging.Logger;
 import org.keycloak.events.admin.OperationType;
 import org.keycloak.events.admin.ResourceType;
@@ -16,9 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Path("")
-@Produces(MediaType.APPLICATION_JSON)
-public class RealmProfileResource extends BaseProfileRealmResource {
+public class RealmProfileResource extends BaseAdminResource {
     private static final Logger log = Logger.getLogger(RealmProfileResource.class);
 
     private static final int MAX_LIMIT = 50;

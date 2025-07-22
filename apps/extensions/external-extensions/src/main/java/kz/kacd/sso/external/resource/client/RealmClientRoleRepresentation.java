@@ -1,4 +1,4 @@
-package kz.kacd.sso.resource.client;
+package kz.kacd.sso.external.resource.client;
 
 public class RealmClientRoleRepresentation {
 

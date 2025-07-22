@@ -1,8 +1,9 @@
-package kz.kacd.sso.resource.client;
+package kz.kacd.sso.external.resource.client;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import kz.kacd.sso.external.resource.BaseAdminResource;
 import org.jboss.logging.Logger;
 import org.keycloak.models.ClientModel;
 import org.keycloak.models.KeycloakSession;
@@ -11,7 +12,7 @@ import org.keycloak.models.RealmModel;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class RealmClientRolesResource extends BaseClientRealmResource {
+public class RealmClientRolesResource extends BaseAdminResource {
     private static final Logger log = Logger.getLogger(RealmClientRolesResource.class);
 
     protected RealmClientRolesResource(KeycloakSession session, RealmModel realm) {

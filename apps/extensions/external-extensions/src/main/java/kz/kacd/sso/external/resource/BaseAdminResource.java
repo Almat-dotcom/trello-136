@@ -1,6 +1,7 @@
 package kz.kacd.sso.external.resource;
 
 import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.NotAuthorizedException;
 import jakarta.ws.rs.NotFoundException;
 import kz.kacd.sso.external.model.OrganizationProvider;
@@ -27,6 +28,24 @@ public abstract class BaseAdminResource extends AbstractAdminResource {
     protected void checkViewPermissions() {
         if (!auth.hasViewOrgs()) {
             throw new NotAuthorizedException("User has no permissions to view organizations!");
+        }
+    }
+
+    protected void hasReadPermissions() {
+        if (!auth.hasClientRolesReadPermission()) {
+            throw new ForbiddenException("You have no permissions");
+        }
+    }
+
+    protected void hasReadPermission() {
+        if (!auth.hasQueryProfiles()) {
+            throw new ForbiddenException("You have not right permissions!");
+        }
+    }
+
+    protected void hasUpdatePermission() {
+        if (!auth.hasUpdateProfile()) {
+            throw new ForbiddenException("You have not right permissions!");
         }
     }
 
