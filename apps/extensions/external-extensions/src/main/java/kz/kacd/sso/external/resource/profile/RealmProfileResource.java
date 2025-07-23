@@ -13,8 +13,14 @@ import org.keycloak.models.*;
 import org.keycloak.models.utils.ModelToRepresentation;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import kz.kacd.sso.external.representation.RolesByIinBinRequest;
+import kz.kacd.sso.external.representation.RolesByIinBinResponse;
+import kz.kacd.sso.external.model.OrganizationProvider;
+import java.util.Optional;
 
 public class RealmProfileResource extends BaseAdminResource {
     private static final Logger log = Logger.getLogger(RealmProfileResource.class);
@@ -189,6 +195,61 @@ public class RealmProfileResource extends BaseAdminResource {
         adminEvent(user);
 
         return Response.accepted(SUCCESS).build();
+    }
+
+    @GET
+    @Path("roles-by-iin-bin")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getRolesByIinAndBin(RolesByIinBinRequest request) {
+        hasReadPermission();
+        if (request == null || request.getIin() == null || request.getBin() == null) {
+            throw new BadRequestException("IIN and BIN are required");
+        }
+
+        OrganizationProvider orgProvider = session.getProvider(OrganizationProvider.class);
+        Optional<UserModel> userOpt = ((kz.kacd.sso.external.model.jpa.JpaOrganizationProvider) orgProvider)
+            .findUserByIinAndBin(realm, request.getIin(), request.getBin());
+        if (!userOpt.isPresent()) {
+            return Response.status(Response.Status.NOT_FOUND).entity("Пользователь не найден").build();
+        }
+        UserModel user = userOpt.get();
+
+        String email = user.getEmail();
+        String firstName = user.getFirstName();
+        String lastName = user.getLastName();
+
+        Map<String, List<String>> rolesByClient = new java.util.HashMap<>();
+
+        user.getRoleMappingsStream()
+                .filter(role -> role.getContainer() instanceof ClientModel)
+                .map(role -> (ClientModel) role.getContainer())
+                .map(ClientModel::getClientId)
+                .distinct()
+                .forEach(clientId -> {
+                    List<String> clientRoles = user.getRoleMappingsStream()
+                            .filter(role -> role.getContainer() instanceof ClientModel)
+                            .filter(role -> ((ClientModel) role.getContainer()).getClientId().equals(clientId))
+                            .map(RoleModel::getName)
+                            .collect(Collectors.toList());
+                    rolesByClient.put(clientId, clientRoles);
+                });
+
+        List<String> realmRoles = user.getRoleMappingsStream()
+                .filter(role -> role.getContainer() instanceof RealmModel)
+                .map(RoleModel::getName)
+                .collect(Collectors.toList());
+        if (!realmRoles.isEmpty()) {
+            rolesByClient.put("realm", realmRoles);
+        }
+
+        RolesByIinBinResponse resp = new RolesByIinBinResponse();
+        resp.setIin(request.getIin());
+        resp.setEmail(email);
+        resp.setFirstName(firstName);
+        resp.setLastName(lastName);
+        resp.setRoles(rolesByClient);
+        return Response.ok(resp).build();
     }
 
     private RoleModel findRole(String clientId, String roleName) {

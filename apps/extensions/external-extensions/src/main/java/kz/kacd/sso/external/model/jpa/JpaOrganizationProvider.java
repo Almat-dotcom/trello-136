@@ -147,6 +147,30 @@ public class JpaOrganizationProvider implements OrganizationProvider {
         return null;
     }
 
+    public Optional<UserModel> findUserByIinAndBin(RealmModel realm, String iin, String bin) {
+        TypedQuery<OrganizationEntity> orgQuery = em.createNamedQuery(
+            "OrganizationEntity.getOrgByBin",
+            OrganizationEntity.class
+        );
+        orgQuery.setParameter(REALM_ID, realm.getId());
+        orgQuery.setParameter(BIN, bin);
+        OrganizationEntity org = orgQuery.getResultStream().findFirst().orElse(null);
+        if (org == null) {
+            return Optional.empty();
+        }
+        for (OrganizationMemberEntity member : org.getMembers()) {
+            String userId = member.getUserId();
+            UserModel user = keycloakSession.users().getUserById(realm, userId);
+            if (user != null) {
+                String userIin = user.getFirstAttribute("iin");
+                if (userIin != null && userIin.equals(iin)) {
+                    return Optional.of(user);
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
     @Override
     public void close() {
         // Nothing to close
