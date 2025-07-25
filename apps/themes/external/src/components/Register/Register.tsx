@@ -164,7 +164,10 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                                 required
                                 error={error(fields.iin.error)}
                                 maxLength={12}
-                                onChange={(event) => fields.iin.onChange(event.target.value)}
+                                onChange={(event) => {
+                                    let val = event.target.value.replace(/[^0-9]/g, "").slice(0, 12);
+                                    fields.iin.onChange(val);
+                                }}
                             />
                         ) : null}
                         <InputField

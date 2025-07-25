@@ -22,7 +22,14 @@ const UsernamePassword = ({ kcContext, i18n, hidden, variant, onFormSubmit }: { 
                 value={username}
                 placeholder={variant === "iin" ? "- - - - - - - - - - - -" : " "}
                 required
-                onChange={(e) => { setUsername(e.target.value) }}
+                maxLength={variant === "iin" ? 12 : undefined}
+                onChange={(e) => {
+                    let val = e.target.value;
+                    if (variant === "iin") {
+                        val = val.replace(/[^0-9]/g, "").slice(0, 12);
+                    }
+                    setUsername(val);
+                }}
                 onEnter={onSubmit} />
             <InputField
                 fieldName="password"

@@ -1,7 +1,7 @@
 import { KcContext } from "lib/kc";
 import { signAuthXml } from "lib/ncalayer";
 import { CancelledByUser, ConnectionLost } from "lib/ncalayer/NCALayer";
-import { RefObject, useState } from "react";
+import { useState, RefObject } from "react";
 
 export type KcContext_Registration = Extract<KcContext, { pageId: "register.ftl" }>;
 
@@ -137,8 +137,8 @@ const useRegisterFields = (
         lastName: useField(isNotEmptyNorLegal(() => legal), () => { }, lastName, extractError(kcContext, "lastName")),
         firstName: useField(isNotEmptyNorLegal(() => legal), () => { }, firstName, extractError(kcContext, "firstName")),
         middleName: useField(allAllowed, () => { }, middleName, extractError(kcContext, "middleName")),
-        email: useField(isNotEmpty, () => { }, email, extractError(kcContext, "email")),
-        iin: useField(isBinIinOnResident(() => resident, () => legal), () => { }, iin, extractError(kcContext, "iin")),
+        email: useField(validateEmail, () => { }, email, extractError(kcContext, "email")),
+        iin: useField(validateIinOnResident(() => resident, () => legal), () => { }, iin, extractError(kcContext, "iin")),
         phoneNumber: useField(isNotEmpty, () => { }, phoneNumber, extractError(kcContext, "phoneNumber")),
         password: useField(isNotEmpty, () => { }, undefined, extractError(kcContext, "password")),
         passwordConfirm: useField(isNotEmpty, () => { }, undefined, extractError(kcContext, "password-confirm"))
@@ -190,3 +190,18 @@ const extractError = (kcContext: KcContext_Registration, fieldName: string): str
     }
     return undefined;
 }
+
+const validateEmail = (value: string): string | undefined => {
+    if (!value) return "error-empty";
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(value) ? undefined : "invalidEmail";
+};
+
+const validateIinOnResident = (resident: () => boolean, legal: () => boolean) =>
+    (value: string): string | undefined => {
+        if (resident() && !legal()) {
+            if (!value) return "error-empty";
+            return /^\d{12}$/.test(value) ? undefined : "invalidIin";
+        }
+        return undefined;
+    };
