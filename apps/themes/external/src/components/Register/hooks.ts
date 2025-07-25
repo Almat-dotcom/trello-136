@@ -170,8 +170,8 @@ const useField = (validator: (value: string) => string | undefined, changeCallBa
 const isNotEmptyNorLegal = (legal: () => boolean) =>
     (value: string): string | undefined => legal() ? undefined : isNotEmpty(value);
 
-const isBinIinOnResident = (resident: () => boolean, legal: () => boolean) =>
-    (value: string): string | undefined => resident() && !legal() ? isNotEmpty(value) || is12CharsAndNumeric(value) : undefined;
+// const isBinIinOnResident = (resident: () => boolean, legal: () => boolean) =>
+//     (value: string): string | undefined => resident() && !legal() ? isNotEmpty(value) || is12CharsAndNumeric(value) : undefined;
 
 const is12CharsAndNumeric = (value: string): string | undefined => value.length !== 12 || isNaN(+value) ? "only12Digits" : undefined;
 
