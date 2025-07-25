@@ -61,7 +61,6 @@ export const ru = {
     "missingPasswordMessage": "Укажите пароль.",
     "notMatchPasswordMessage": "Подтверждение пароля не совпадает.",
     "error-empty": "Укажите значение.",
-    "invalidEmail":"Invalid email address",
     "invalidPasswordExistingMessage": "Неверный существующий пароль.",
     "invalidPasswordBlacklistedMessage": "Неверный пароь: пароль в черном списке.",
     "invalidPasswordConfirmMessage": "Подтверждение пароля не совпадает.",
@@ -187,5 +186,6 @@ export const ru = {
     "scanCodeInstructions": "2. Отсканируйте QR-код или используйте этот ключ:",
     "verifyButton": "Подтвердить",
     "cancelButton": "Отмена",
-    "oldPortal": "portal.kacd.kz"
+    "oldPortal": "portal.kacd.kz",
+    "invalidEmail":"Неверный адрес электронной почты",
 }

@@ -11,7 +11,6 @@ export const kz = {
     "doIgnore": "Елемеу",
     "doAccept": "Қабылдау",
     "doDecline": "Қабылдамау",
-    "invalidEmail":"Invalid email address",
     "doForgotPassword": "Құпиясөзді ұмытып қалдыңыз ба?",
     "doClickHere": "Осы жерді басу",
     "registerTitle": "Тіркелу",
@@ -187,5 +186,6 @@ export const kz = {
     "scanCodeInstructions": "2. QR-кодты сканерлеңіз немесе осы кілтті қолданыңыз:",
     "verifyButton": "Растау",
     "cancelButton": "Болдырмау",
-    "oldPortal": "portal.kacd.kz"
+    "oldPortal": "portal.kacd.kz",
+    "invalidEmail":"Электрондық пошта мекенжайы дұрыс емес",
 }

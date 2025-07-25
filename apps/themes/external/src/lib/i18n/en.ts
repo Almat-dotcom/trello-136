@@ -176,7 +176,6 @@ export const en = {
     "invalid_user_credentials": "Invalid IIN or password.",
     "attemptToRegisterLegalByEmployee": "Согласно процедуре регистрации юридического лица в первую очередь необходимо зарегистрировать первого руководителя. После успешной регистрации первого руководителя, необходимо приступить к регистрации сотрудника юридического лица. Мы рекомендуем вам придерживаться указанной последовательности для более эффективного и быстрого завершения процесса регистрации.",
     "securityRecommendation": "Cybersecurity",
-    "invalidEmail":"Invalid email address",
     "setupTotp":"Setup Totp",
     "enterOtp":"Enter a one-time code",
     "confirm": "Confirm",
@@ -187,5 +186,6 @@ export const en = {
     "scanCodeInstructions": "2. Scan the QR code or use this key:",
     "verifyButton": "Verify",
     "cancelButton": "Cancel",
-    "oldPortal": "portal.kacd.kz"
+    "oldPortal": "portal.kacd.kz",
+    "invalidEmail":"Invalid email address",
 }
