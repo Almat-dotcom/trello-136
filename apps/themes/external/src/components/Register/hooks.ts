@@ -173,7 +173,7 @@ const isNotEmptyNorLegal = (legal: () => boolean) =>
 // const isBinIinOnResident = (resident: () => boolean, legal: () => boolean) =>
 //     (value: string): string | undefined => resident() && !legal() ? isNotEmpty(value) || is12CharsAndNumeric(value) : undefined;
 
-const is12CharsAndNumeric = (value: string): string | undefined => value.length !== 12 || isNaN(+value) ? "only12Digits" : undefined;
+// const is12CharsAndNumeric = (value: string): string | undefined => value.length !== 12 || isNaN(+value) ? "only12Digits" : undefined;
 
 const isNotEmpty = (value: string): string | undefined => !value ? "error-empty" : undefined;
 
