@@ -189,5 +189,6 @@ export const en = {
     "oldPortal": "portal.kacd.kz",
     "invalidEmail":"Invalid email address",
     "nonResidentialPremises": "Non-residential premises 163",
-    "Please specify username.": "Please specify username.",
+    "Please specify username.": "",
+    "Password confirmation doesn't match.":"Password confirmation doesn't match.",
 }
