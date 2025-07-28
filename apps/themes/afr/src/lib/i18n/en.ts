@@ -59,7 +59,7 @@ export const en = {
     "missingFirstNameMessage": "Please specify first name.",
     "missingLastNameMessage": "Please specify last name.",
     "missingEmailMessage": "Please specify email.",
-    "missingUsernameMessage": "Please specify username.",
+    "missingUsernameMessage": "Please specify username. LLL",
     "missingPasswordMessage": "Please specify password.",
     "notMatchPasswordMessage": "Passwords don't match.",
     "error-empty": "Please specify value.",
