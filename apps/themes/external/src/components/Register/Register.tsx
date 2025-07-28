@@ -78,7 +78,7 @@ const Registration = memo(({ kcContext, i18n, ...props }: { kcContext: KcContext
                 </LayoutWithCarousel>
             ) : (
                 <Layout kcContext={kcContext} i18n={i18n}>
-                    <form ref={formRef} id="kc-register-form" action={url.registrationAction} method="post">
+                    <form ref={formRef} id="kc-register-form" action={url.registrationAction + (url.registrationAction.includes('?') ? '&' : '?') + 'ui_locales=' + (locale?.currentLanguageTag || 'kz')} method="post">
                         <div className="text-center">
                             {message && (
                                 <Alert i18n={i18n} type={message.type} message={message.summary} />
