@@ -64,7 +64,6 @@ export const kz = {
     "invalidPasswordExistingMessage": "Қолданыстағы құпиясөз дұрыс емес.",
     "invalidPasswordBlacklistedMessage": "Құпиясөз дұрыс емес: құпиясөз қара тізімге енгізілген.",
     "invalidPasswordConfirmMessage": "Құпиясөзді растау сәйкес келмейді.",
-    "Please specify username.": "Please specify username. TTT",
     "usernameExistsMessage": "Пайдаланушының аты бұрын пайдаланылған.",
     "emailExistsMessage": "Электрондық почтаның адресі бұрыннан бар.",
     "updatePasswordMessage": "Есептік жазбаны белсендіру үшін құпиясөзді өзгерту керек.",
@@ -190,4 +189,5 @@ export const kz = {
     "oldPortal": "portal.kacd.kz",
     "invalidEmail":"Электрондық пошта мекенжайы дұрыс емес",
     "nonResidentialPremises": "Тұрғын емес ғимарат 163",
+    "Please specify username.": "Пайдаланушының атын көрсетіңіз.",
 }
