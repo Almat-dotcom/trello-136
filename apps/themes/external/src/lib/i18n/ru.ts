@@ -169,6 +169,7 @@ export const ru = {
     "passwordPolicyLength": "8 и более символов",
     "passwordPolicyLowerCase": "прописные латинские буквы",
     "passwordPolicyUpperCase": "строчные латинские буквы",
+    "Please specify username.": "Please specify username. TTT",
     "passwordPolicyDigits": "цифры",
     "passwordPolicySpecialSymbols": "знаки пунктуации (!\"$%&'()+,-./:;<=>?@[]^_{|}~)",
     "forcedToChangeEmail": "Вам необходимо указать и подтвердить адрес электронной почты",
