@@ -189,6 +189,6 @@ export const kz = {
     "oldPortal": "portal.kacd.kz",
     "invalidEmail":"Электрондық пошта мекенжайы дұрыс емес",
     "nonResidentialPremises": "Тұрғын емес ғимарат 163",
-    "Please specify username.": "",
+    "Please specify username.": " ",
     "Password confirmation doesn't match.":"Құпиясөзді растау сәйкес келмейді.",
 }
