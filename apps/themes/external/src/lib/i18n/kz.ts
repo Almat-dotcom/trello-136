@@ -29,7 +29,7 @@ export const kz = {
     "firstName": "Есімі",
     "lastName": "Тегі",
     "phoneNumber": "Ұялы телефон нөмірі",
-    "email": "Электрондық почта",
+    "email": "Электрондық пошта",
     "password": "Құпиясөз",
     "passwordConfirm": "Құпиясөзді қабылдау",
     "passwordNew": "Жаңа құпиясөз",
@@ -165,7 +165,7 @@ export const kz = {
     "ncaSignProgress": "NCALayer-мен жұмыс.",
     "ncaSignFinished": "Қол қою сәтті өтті.",
     "manuals": "Пайдаланушы нұсқаулығы",
-    "passwordPolicyTitle": "Деректерді қорғау үшін күшті пароль ойлап табу керек. Онда:",
+    "passwordPolicyTitle": "Деректерді қорғау үшін сенімді құпиясөз ойлап табу керек. Онда:",
     "passwordPolicyLength": "8 немесе одан да көп таңбалар",
     "passwordPolicyLowerCase": "бас латын әріптері",
     "passwordPolicyUpperCase": "кіші латын әріптері",
@@ -188,4 +188,5 @@ export const kz = {
     "cancelButton": "Болдырмау",
     "oldPortal": "portal.kacd.kz",
     "invalidEmail":"Электрондық пошта мекенжайы дұрыс емес",
+    "nonResidentialPremises": "Тұрғын емес ғимарат 163",
 }

@@ -48,7 +48,7 @@ const Footer = ({kcContext, i18n }: { kcContext: KcContext, i18n: I18n }) => {
                 <div className="text-dark-text">
                     <p>050040, Алматы, </p>
                     <p>ул. Сатпаева, 30/8, </p>
-                    <p>нежилое помещение 163</p>
+                    <p>{msgStr("nonResidentialPremises")}</p>
                 </div>
             </div>
         </div>

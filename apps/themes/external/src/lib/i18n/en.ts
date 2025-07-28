@@ -57,7 +57,7 @@ export const en = {
     "missingFirstNameMessage": "Please specify first name.",
     "missingLastNameMessage": "Please specify last name.",
     "missingEmailMessage": "Please specify email.",
-    "missingUsernameMessage": "Please specify username.",
+    "missingUsernameMessage": "Please specify username. TTT",
     "missingPasswordMessage": "Please specify password.",
     "notMatchPasswordMessage": "Passwords don't match.",
     "error-empty": "Please specify value.",
@@ -188,4 +188,5 @@ export const en = {
     "cancelButton": "Cancel",
     "oldPortal": "portal.kacd.kz",
     "invalidEmail":"Invalid email address",
+    "nonResidentialPremises": "Non-residential premises 163",
 }

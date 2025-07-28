@@ -165,7 +165,7 @@ export const ru = {
     "ncaSignProgress": "Работа с NCALayer.",
     "ncaSignFinished": "Подписание прошло успешно.",
     "manuals": "Инструкция",
-    "passwordPolicyTitle": "Для защиты ваших данных необходимо придумать безопасный пароль. Он должен содержать:",
+    "passwordPolicyTitle": "Для защиты ваших данных необходимо придумать надежный пароль. Он должен содержать:",
     "passwordPolicyLength": "8 и более символов",
     "passwordPolicyLowerCase": "прописные латинские буквы",
     "passwordPolicyUpperCase": "строчные латинские буквы",
@@ -188,4 +188,5 @@ export const ru = {
     "cancelButton": "Отмена",
     "oldPortal": "portal.kacd.kz",
     "invalidEmail":"Неверный адрес электронной почты",
+    "nonResidentialPremises": "Нежилое помещение 163",
 }
