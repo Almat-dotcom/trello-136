@@ -47,7 +47,7 @@ export const ru = {
     "invalidUserMessage": "Неверный ИИН или пароль.",
     "invalidUsernameMessage": "Неверный логин.",
     "invalidUsernameOrEmailMessage": "Неверный логин или email.",
-    "invalidPasswordMessage": "Нверный пароль.",
+    "invalidPasswordMessage": "Неверный пароль.",
     "invalidEmailMessage": "Неверный адрес электронной почты.",
     "accountDisabledMessage": "Аккаунт заблокирован, обратитесь к администратору.r.",
     "accountTemporarilyDisabledMessage": "Аккаунт временно заблокирован, обратитесь к администратору или повторите попытку позже.",
@@ -196,7 +196,7 @@ export const ru = {
     "Invalid password: must contain at least 1 upper case characters.": "Неверный пароль: Пароль должен содержать не менее 1 символов в верхнем регистре.",
     "Invalid password: must contain at least 1 special characters.": "Неверный пароль: Пароль должен содержать не менее 1 специальных символов.",
     "Invalid username or password.": "Неверный логин или пароль",
-    "Invalid password.": "Нверный пароль.",
+    "Invalid password.": "Неверный пароль.",
     "Email already exists.": "Email уже зарегистрирован.",
     "Your login attempt timed out. Login will start from the beginning.": "Срок вашей сессии истек. Войдите заново",
 }
