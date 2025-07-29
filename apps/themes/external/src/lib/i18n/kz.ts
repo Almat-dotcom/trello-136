@@ -191,4 +191,9 @@ export const kz = {
     "nonResidentialPremises": "Тұрғын емес ғимарат 163",
     "Please specify username.": " ",
     "Password confirmation doesn't match.":"Құпиясөзді растау сәйкес келмейді.",
+    "Invalid password: minimum length 8.": "Құпиясөз қате: минималды ұзындығы 8.",
+    "Invalid password: must contain at least 1 numerical digits.": "Құпиясөз қате: Құпиясөз кемінде 1 цифрдан тұруы керек.",
+    "Invalid password: must contain at least 1 lower case characters.": "Құпиясөз қате: Құпиясөз төменгі регистрде кем дегенде 1 таңбадан тұруы керек.",
+    "Invalid password: must contain at least 1 upper case characters.": "Құпиясөз қате: Құпиясөз жоғарғы регистрде кем дегенде 1 таңбадан тұруы керек.",
+    "Invalid password: must contain at least 1 special characters.": "Құпиясөз қате: Құпиясөз кемінде 1 арнайы таңбадан тұруы керек.",
 }

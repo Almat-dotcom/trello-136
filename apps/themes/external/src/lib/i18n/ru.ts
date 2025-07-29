@@ -191,4 +191,9 @@ export const ru = {
     "nonResidentialPremises": "Нежилое помещение 163",
     "Please specify username.": " ",
     "Password confirmation doesn't match.":"Подтверждение пароля не совпадает.",
+    "Invalid password: minimum length 8.": "Неверный пароль: минимальная длина 8.",
+    "Invalid password: must contain at least 1 numerical digits.": "Неверный пароль: Пароль должен содержать не менее 1 цифр.",
+    "Invalid password: must contain at least 1 lower case characters.": "Неверный пароль: Пароль должен содержать не менее 1 символов в  нижнем регистре.",
+    "Invalid password: must contain at least 1 upper case characters.": "Неверный пароль: Пароль должен содержать не менее 1 символов в верхнем регистре.",
+    "Invalid password: must contain at least 1 special characters.": "Неверный пароль: Пароль должен содержать не менее 1 специальных символов.",
 }
