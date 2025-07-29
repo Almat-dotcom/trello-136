@@ -16,7 +16,6 @@ export const en = {
     "registerTitle": "Registration",
     "loginAccountTitle": "Log in",
     "unknownUser": "Unknown user",
-    "Your login attempt timed out. Login will start from the beginning.": "Your login attempt timed out.  Login will start from the beginning.",
     "loginTimeout": "Your login attempt timed out.  Login will start from the beginning.",
     "reauthenticate": "Please re-authenticate to continue",
     "errorTitle": "We are sorry...",
@@ -196,4 +195,8 @@ export const en = {
     "Invalid password: must contain at least 1 lower case characters.": "Invalid password: must contain at least 1 lower case characters.",
     "Invalid password: must contain at least 1 upper case characters.": "Invalid password: must contain at least 1 upper case characters.",
     "Invalid password: must contain at least 1 special characters.": "Invalid password: must contain at least 1 special characters.",
+    "Invalid username or password.": "Неверный логин или пароль",
+    "Invalid password.": "Invalid password.",
+    "Email already exists.": "Email already exists.",
+    "Your login attempt timed out. Login will start from the beginning.": "Your login attempt timed out.  Login will start from the beginning.",
 }

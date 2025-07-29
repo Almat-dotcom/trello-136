@@ -16,7 +16,6 @@ export const ru = {
     "registerTitle": "Регистрация",
     "loginAccountTitle": "Вход в кабинет",
     "unknownUser": "Неизвестный пользователь",
-    "Your login attempt timed out. Login will start from the beginning.": "Срок вашей сессии истек. Войдите заново",
     "loginTimeout": "Срок вашей сессии истек. Войдите заново",
     "reauthenticate": "Пожалуйста, пройдите аутентификацию, чтобы продолжить",
     "errorTitle": "Извините ..",
@@ -196,4 +195,8 @@ export const ru = {
     "Invalid password: must contain at least 1 lower case characters.": "Неверный пароль: Пароль должен содержать не менее 1 символов в  нижнем регистре.",
     "Invalid password: must contain at least 1 upper case characters.": "Неверный пароль: Пароль должен содержать не менее 1 символов в верхнем регистре.",
     "Invalid password: must contain at least 1 special characters.": "Неверный пароль: Пароль должен содержать не менее 1 специальных символов.",
+    "Invalid username or password.": "Неверный логин или пароль",
+    "Invalid password.": "Нверный пароль.",
+    "Email already exists.": "Email уже зарегистрирован.",
+    "Your login attempt timed out. Login will start from the beginning.": "Срок вашей сессии истек. Войдите заново",
 }

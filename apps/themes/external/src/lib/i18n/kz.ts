@@ -16,7 +16,6 @@ export const kz = {
     "registerTitle": "Тіркелу",
     "loginAccountTitle": "Кабинетке кіру",
     "unknownUser": "Белгісіз пайдаланушы",
-    "Your login attempt timed out. Login will start from the beginning.": "Сессияның мерзімі аяқталды. Қайта кіріңіз",
     "loginTimeout": "Сессияның мерзімі аяқталды. Қайта кіріңіз",
     "reauthenticate": "Жалғастыру үшін сәйкестендіруден өтіңіз",
     "errorTitle": "Кешіріңіз...",
@@ -196,4 +195,8 @@ export const kz = {
     "Invalid password: must contain at least 1 lower case characters.": "Құпиясөз қате: Құпиясөз төменгі регистрде кем дегенде 1 таңбадан тұруы керек.",
     "Invalid password: must contain at least 1 upper case characters.": "Құпиясөз қате: Құпиясөз жоғарғы регистрде кем дегенде 1 таңбадан тұруы керек.",
     "Invalid password: must contain at least 1 special characters.": "Құпиясөз қате: Құпиясөз кемінде 1 арнайы таңбадан тұруы керек.",
+    "Invalid username or password.": "Логин немесе құпиясөз қате терілген",
+    "Invalid password.": "Құпиясөз дұрыс емес",
+    "Email already exists.": "Электрондық почтаның адресі бұрыннан бар.",
+    "Your login attempt timed out. Login will start from the beginning.": "Сессияның мерзімі аяқталды. Қайта кіріңіз",
 }
