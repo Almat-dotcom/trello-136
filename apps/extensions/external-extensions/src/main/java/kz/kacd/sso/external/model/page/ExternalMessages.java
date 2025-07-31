@@ -22,6 +22,7 @@ public class ExternalMessages {
     public static final String MISSING_RESIDENCY = "missingResidency";
     public static final String INVALID_RESIDENCY = "invalidResidency";
     public static final String INVALID_PHONE_NUMBER = "invalidPhoneNumber";
+    public static final String INVALID_PHONE_FORMAT = "invalidPhoneFormat";
 
     private ExternalMessages() {
     }

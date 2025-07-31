@@ -133,10 +133,30 @@ public class SimpleExternalAttributesValidator {
     }
 
     private void validatePhoneNumber(String value, Consumer<ValidationError> listener) {
-        if (value == null || value.length() != 12) {
+        if (value == null || value.isEmpty()) {
             listener.accept(error(ExternalRegistrationPage.FIELD_PHONE_NUMBER, ExternalMessages.INVALID_PHONE_NUMBER));
+            return;
         }
+        
+        PhoneNumberValidator.PhoneNumberValidationResult result = PhoneNumberValidator.validatePhoneNumber(value);
+        
+        if (!result.isValid()) {
+            System.out.println("Phone validation failed for '" + value + "': " + result.getErrorMessage());
+            
+            if (result.getErrorMessage().contains("format")) {
+                listener.accept(error(ExternalRegistrationPage.FIELD_PHONE_NUMBER, ExternalMessages.INVALID_PHONE_FORMAT));
+            } else {
+                listener.accept(error(ExternalRegistrationPage.FIELD_PHONE_NUMBER, ExternalMessages.INVALID_PHONE_NUMBER));
+            }
+            return;
+        }
+        
+        System.out.println("Phone number validated successfully: " + value +
+                          " (Type: " + result.getNumberType() + 
+                          ", Country: " + result.getPhoneNumber().getCountryCode() + ")");
     }
+    
+
 
     private ValidationError error(String field, String message, Object... args) {
         return new ValidationError(

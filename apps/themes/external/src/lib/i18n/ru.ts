@@ -199,4 +199,6 @@ export const ru = {
     "Invalid password.": "Неверный пароль.",
     "Email already exists.": "Email уже зарегистрирован.",
     "Your login attempt timed out. Login will start from the beginning.": "Срок вашей сессии истек. Войдите заново",
+    "invalidPhoneNumber": "Некорректный номер телефона.",
+    "invalidPhoneFormat": "Некорректный формат номера телефона.",
 }

@@ -1,7 +1,7 @@
 import { LayoutWithCarousel } from "components/Layout";
 import Alert from "components/parts/Alert";
 import Button from "components/parts/Button";
-import { InputMask } from "components/parts/Input";
+import InputPhoneWithCountry from "components/parts/Input/InputPhoneWithCountry";
 import { KcProps } from "keycloakify";
 import { I18n } from "lib/i18n";
 import { KcContext } from "lib/kc";
@@ -45,15 +45,15 @@ const ChangePhoneNumber = memo(({ kcContext, i18n, ...props }: { kcContext: KcCo
                 <div className="mt-4">
                     <form id="kc-reset-password-form" ref={formRef} action={url.loginAction} method="post">
 
-                        <InputMask
+                        <InputPhoneWithCountry
                             fieldName="phoneNumber"
                             label={msgStr("phoneNumber")}
-                            mask="+9 (999) 999 99 99"
                             placeholder="+x (xxx) xxx xx xx"
                             required
                             value={newPhoneNumber}
                             error={advancedMsgStr(error ?? "") ?? error}
                             onChange={(value) => onPhoneNumberChanged(value)}
+                            isNonResident={true}
                         />
 
                         <div>

@@ -1,7 +1,7 @@
 import { KcContext } from "lib/kc";
 import { signAuthXml } from "lib/ncalayer";
 import { CancelledByUser, ConnectionLost } from "lib/ncalayer/NCALayer";
-import { useState, RefObject } from "react";
+import { RefObject, useState } from "react";
 
 export type KcContext_Registration = Extract<KcContext, { pageId: "register.ftl" }>;
 
@@ -170,10 +170,9 @@ const useField = (validator: (value: string) => string | undefined, changeCallBa
 const isNotEmptyNorLegal = (legal: () => boolean) =>
     (value: string): string | undefined => legal() ? undefined : isNotEmpty(value);
 
-// const isBinIinOnResident = (resident: () => boolean, legal: () => boolean) =>
-//     (value: string): string | undefined => resident() && !legal() ? isNotEmpty(value) || is12CharsAndNumeric(value) : undefined;
 
-// const is12CharsAndNumeric = (value: string): string | undefined => value.length !== 12 || isNaN(+value) ? "only12Digits" : undefined;
+
+
 
 const isNotEmpty = (value: string): string | undefined => !value ? "error-empty" : undefined;
 

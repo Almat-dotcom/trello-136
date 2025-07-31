@@ -34,7 +34,7 @@ type ExtendedContextExtended = KcContextBase.Login | KcContextBase.RegisterUserP
 export const { kcContext } = getKcContext<ExtendedContextExtended>({
 
 	// "mockPageId": "login.ftl",
-	"mockPageId": "register.ftl",
+	// "mockPageId": "register.ftl",
 	// "mockPageId": "login-verify-email.ftl",
 	// "mockPageId": "login-update-password.ftl",
 	// "mockPageId": "logout-confirm.ftl",
@@ -43,7 +43,7 @@ export const { kcContext } = getKcContext<ExtendedContextExtended>({
 	// "mockPageId": "info.ftl",
 	// "mockPageId": "error.ftl",
 	// "mockPageId": "update-email.ftl",
-	// "mockPageId": "update-phone.ftl",
+	"mockPageId": "update-phone.ftl",
 	// "mockPageId": "login-otp.ftl",
 	// "mockPageId": "login-config-totp.ftl",
 

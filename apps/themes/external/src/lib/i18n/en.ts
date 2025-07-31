@@ -199,4 +199,6 @@ export const en = {
     "Invalid password.": "Invalid password.",
     "Email already exists.": "Email already exists.",
     "Your login attempt timed out. Login will start from the beginning.": "Your login attempt timed out.  Login will start from the beginning.",
+    "invalidPhoneNumber": "Invalid phone number.",
+    "invalidPhoneFormat": "Invalid phone number format.",
 }

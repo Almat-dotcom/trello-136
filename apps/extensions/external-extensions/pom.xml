@@ -146,6 +146,13 @@
             <version>4.9.0</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- Phone number validation library -->
+        <dependency>
+            <groupId>com.googlecode.libphonenumber</groupId>
+            <artifactId>libphonenumber</artifactId>
+            <version>8.13.25</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -199,4 +199,6 @@ export const kz = {
     "Invalid password.": "Құпиясөз дұрыс емес",
     "Email already exists.": "Электрондық почтаның адресі бұрыннан бар.",
     "Your login attempt timed out. Login will start from the beginning.": "Сессияның мерзімі аяқталды. Қайта кіріңіз",
+    "invalidPhoneNumber": "Телефон нөмірі дұрыс емес.",
+    "invalidPhoneFormat": "Телефон нөмірінің пішімі дұрыс емес.",
 }
