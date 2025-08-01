@@ -103,7 +103,7 @@ const InputPhoneWithCountry = ({
         
         const specialCases: { [key: string]: number } = {
             'KZ': 11, // Kazakhstan
-            'RU': 10, // Russia
+            'RU': 11, // Russia
             'US': 10, // USA
             'GB': 10, // UK
             'DE': 10, // Germany
