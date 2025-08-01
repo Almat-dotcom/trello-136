@@ -94,45 +94,7 @@ const InputPhoneWithCountry = ({
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    const getMaxDigitsForCountry = (country: Country): number => {
-        const countryCodeLength = country.phoneCode.replace('+', '').length;
-        
-        if (countryCodeLength === 1) return 10; // USA, Canada (+1)
-        if (countryCodeLength === 2) return 9;  // Most European countries (+33, +44, etc.)
-        if (countryCodeLength === 3) return 9;  // Most other countries (+998, +996, etc.)
-        
-        const specialCases: { [key: string]: number } = {
-            'KZ': 10, // Kazakhstan
-            'RU': 10, // Russia
-            'US': 10, // USA
-            'GB': 10, // UK
-            'DE': 10, // Germany
-            'FR': 9,  // France
-            'IT': 10, // Italy
-            'ES': 9,  // Spain
-            'CN': 11, // China
-            'IN': 10, // India
-            'JP': 10, // Japan
-            'KR': 10, // South Korea
-            'BR': 11, // Brazil
-            'MX': 10, // Mexico
-            'AR': 10, // Argentina
-            'AU': 9,  // Australia
-            'CA': 10, // Canada
-            'TR': 10, // Turkey
-            'UA': 9,  // Ukraine
-            'BY': 9,  // Belarus
-            'UZ': 9,  // Uzbekistan
-            'KG': 9,  // Kyrgyzstan
-            'TJ': 9,  // Tajikistan
-            'TM': 8,  // Turkmenistan
-            'AZ': 9,  // Azerbaijan
-            'GE': 9,  // Georgia
-            'AM': 8,  // Armenia
-        };
-        
-        return specialCases[country.code] || 10; // Default to 10
-    };
+
 
     const formatPhoneNumberWithSpaces = (input: string, country: Country): string => {
         const digitsOnly = input.replace(/\D/g, '');
@@ -150,10 +112,7 @@ const InputPhoneWithCountry = ({
             digitsAfterCode = digitsOnly;
         }
         
-        const maxDigits = getMaxDigitsForCountry(country);
-        if (digitsAfterCode.length > maxDigits) {
-            digitsAfterCode = digitsAfterCode.substring(0, maxDigits);
-        }
+
         
         let formattedNumber = country.phoneCode;
         
@@ -215,22 +174,6 @@ const InputPhoneWithCountry = ({
         if (event.key === 'Enter') {
             event.preventDefault();
         }
-        
-        const currentDigits = (value || '').replace(/\D/g, '');
-        const countryCodeDigits = selectedCountry.phoneCode.replace('+', '');
-        const digitsAfterCode = currentDigits.startsWith(countryCodeDigits) 
-            ? currentDigits.substring(countryCodeDigits.length) 
-            : currentDigits;
-        
-        const maxDigits = getMaxDigitsForCountry(selectedCountry);
-        
-        if (['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(event.key)) {
-            return;
-        }
-        
-        if (digitsAfterCode.length >= maxDigits && /\d/.test(event.key)) {
-            event.preventDefault();
-        }
     };
 
     const handleCountrySelect = (country: Country) => {
@@ -250,10 +193,7 @@ const InputPhoneWithCountry = ({
                 digitsAfterCode = digitsOnly;
             }
             
-            const maxDigits = getMaxDigitsForCountry(country);
-            if (digitsAfterCode.length > maxDigits) {
-                digitsAfterCode = digitsAfterCode.substring(0, maxDigits);
-            }
+
         }
         
         const newValue = formatPhoneNumberWithSpaces(country.phoneCode + digitsAfterCode, country);
