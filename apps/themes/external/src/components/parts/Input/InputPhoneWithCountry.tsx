@@ -102,7 +102,7 @@ const InputPhoneWithCountry = ({
         if (countryCodeLength === 3) return 9;  // Most other countries (+998, +996, etc.)
         
         const specialCases: { [key: string]: number } = {
-            'KZ': 10, // Kazakhstan
+            'KZ': 11, // Kazakhstan
             'RU': 10, // Russia
             'US': 10, // USA
             'GB': 10, // UK
