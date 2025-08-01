@@ -295,6 +295,8 @@ const InputPhoneWithCountry = ({
 
                     <div className="flex-1">
                         <input
+                            id={fieldName}
+                            name={fieldName}
                             type="tel"
                             value={value}
                             onChange={(e) => onInputChanged(e.target.value)}
@@ -312,6 +314,8 @@ const InputPhoneWithCountry = ({
         <InputContainer onFocus={() => {}} name={fieldName} required={required} label={label} error={error && memError === error ? undefined : error}>
             <style>{customStyles}</style>
             <input
+                id={fieldName}
+                name={fieldName}
                 type="tel"
                 value={value}
                 onChange={(e) => onInputChanged(e.target.value)}
