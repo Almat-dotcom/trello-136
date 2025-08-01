@@ -106,15 +106,15 @@ const InputPhoneWithCountry = ({
             'RU': 10, // Russia
             'US': 10, // USA
             'GB': 10, // UK
-            'DE': 12, // Germany
+            'DE': 10, // Germany
             'FR': 9,  // France
             'IT': 10, // Italy
             'ES': 9,  // Spain
-            'CN': 11, // China
+            'CN': 10, // China
             'IN': 10, // India
             'JP': 10, // Japan
             'KR': 10, // South Korea
-            'BR': 11, // Brazil
+            'BR': 10, // Brazil
             'MX': 10, // Mexico
             'AR': 10, // Argentina
             'AU': 9,  // Australia
