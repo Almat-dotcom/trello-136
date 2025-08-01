@@ -19,6 +19,12 @@ public class PhoneNumberValidator {
         // Remove all spaces and formatting before validation
         String cleanPhoneNumber = phoneNumber.replaceAll("\\s+", "");
         
+        // If plus sign was lost during form encoding, prepend it
+        if (!cleanPhoneNumber.startsWith("+")) {
+            cleanPhoneNumber = "+" + cleanPhoneNumber;
+        }
+        
+
         try {
             Phonenumber.PhoneNumber parsedNumber = phoneUtil.parse(cleanPhoneNumber, null);
             
