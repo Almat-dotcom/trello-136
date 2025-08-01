@@ -102,19 +102,19 @@ const InputPhoneWithCountry = ({
         if (countryCodeLength === 3) return 9;  // Most other countries (+998, +996, etc.)
         
         const specialCases: { [key: string]: number } = {
-            'KZ': 11, // Kazakhstan
-            'RU': 11, // Russia
+            'KZ': 10, // Kazakhstan
+            'RU': 10, // Russia
             'US': 10, // USA
             'GB': 10, // UK
             'DE': 10, // Germany
             'FR': 9,  // France
             'IT': 10, // Italy
             'ES': 9,  // Spain
-            'CN': 10, // China
+            'CN': 11, // China
             'IN': 10, // India
             'JP': 10, // Japan
             'KR': 10, // South Korea
-            'BR': 10, // Brazil
+            'BR': 11, // Brazil
             'MX': 10, // Mexico
             'AR': 10, // Argentina
             'AU': 9,  // Australia
