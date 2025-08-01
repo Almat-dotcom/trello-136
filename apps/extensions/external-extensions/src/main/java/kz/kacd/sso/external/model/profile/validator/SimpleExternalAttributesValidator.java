@@ -28,7 +28,7 @@ public class SimpleExternalAttributesValidator {
         validateBin(attributes.bin(), listener);
         validateLegalRole(attributes.legalRole(), listener);
         validateResidency(attributes.residency(), listener);
-        validatePhoneNumber(attributes.phoneNumber(), listener);
+//        validatePhoneNumber(attributes.phoneNumber(), listener);
     }
 
     private void validateEmail(String email, Consumer<ValidationError> listener) {
