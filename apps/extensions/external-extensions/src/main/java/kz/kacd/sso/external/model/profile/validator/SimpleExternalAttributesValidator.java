@@ -28,7 +28,7 @@ public class SimpleExternalAttributesValidator {
         validateBin(attributes.bin(), listener);
         validateLegalRole(attributes.legalRole(), listener);
         validateResidency(attributes.residency(), listener);
-//        validatePhoneNumber(attributes.phoneNumber(), listener);
+        validatePhoneNumber(attributes.phoneNumber(), listener);
     }
 
     private void validateEmail(String email, Consumer<ValidationError> listener) {
@@ -137,23 +137,24 @@ public class SimpleExternalAttributesValidator {
             listener.accept(error(ExternalRegistrationPage.FIELD_PHONE_NUMBER, ExternalMessages.INVALID_PHONE_NUMBER));
             return;
         }
+
         
-        PhoneNumberValidator.PhoneNumberValidationResult result = PhoneNumberValidator.validatePhoneNumber(value);
-        
-        if (!result.isValid()) {
-            System.out.println("Phone validation failed for '" + value + "': " + result.getErrorMessage());
-            
-            if (result.getErrorMessage().contains("format")) {
-                listener.accept(error(ExternalRegistrationPage.FIELD_PHONE_NUMBER, ExternalMessages.INVALID_PHONE_FORMAT));
-            } else {
-                listener.accept(error(ExternalRegistrationPage.FIELD_PHONE_NUMBER, ExternalMessages.INVALID_PHONE_NUMBER));
-            }
-            return;
-        }
-        
-        System.out.println("Phone number validated successfully: " + value +
-                          " (Type: " + result.getNumberType() + 
-                          ", Country: " + result.getPhoneNumber().getCountryCode() + ")");
+//        PhoneNumberValidator.PhoneNumberValidationResult result = PhoneNumberValidator.validatePhoneNumber(value);
+//
+//        if (!result.isValid()) {
+//            System.out.println("Phone validation failed for '" + value + "': " + result.getErrorMessage());
+//
+//            if (result.getErrorMessage().contains("format")) {
+//                listener.accept(error(ExternalRegistrationPage.FIELD_PHONE_NUMBER, ExternalMessages.INVALID_PHONE_FORMAT));
+//            } else {
+//                listener.accept(error(ExternalRegistrationPage.FIELD_PHONE_NUMBER, ExternalMessages.INVALID_PHONE_NUMBER));
+//            }
+//            return;
+//        }
+//
+//        System.out.println("Phone number validated successfully: " + value +
+//                          " (Type: " + result.getNumberType() +
+//                          ", Country: " + result.getPhoneNumber().getCountryCode() + ")");
     }
     
 
