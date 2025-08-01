@@ -133,10 +133,10 @@ public class SimpleExternalAttributesValidator {
     }
 
     private void validatePhoneNumber(String value, Consumer<ValidationError> listener) {
-        if (value == null || value.isEmpty()) {
-            listener.accept(error(ExternalRegistrationPage.FIELD_PHONE_NUMBER, ExternalMessages.INVALID_PHONE_NUMBER));
-            return;
-        }
+//        if (value == null || value.isEmpty()) {
+//            listener.accept(error(ExternalRegistrationPage.FIELD_PHONE_NUMBER, ExternalMessages.INVALID_PHONE_NUMBER));
+//            return;
+//        }
 
         
 //        PhoneNumberValidator.PhoneNumberValidationResult result = PhoneNumberValidator.validatePhoneNumber(value);
