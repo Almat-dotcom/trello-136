@@ -6,11 +6,14 @@ import kz.kacd.sso.external.model.page.ExternalMessages;
 import org.keycloak.authentication.forms.RegistrationPage;
 import org.keycloak.services.messages.Messages;
 import org.keycloak.validate.ValidationError;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.function.Consumer;
 
 public class SimpleExternalAttributesValidator {
     private static final String VALIDATOR_ID = "simple-external-attribute-validator";
+    private static final Logger log = LoggerFactory.getLogger(SimpleExternalAttributesValidator.class);
 
     private final Consumer<ValidationError> listener;
 
@@ -126,19 +129,20 @@ public class SimpleExternalAttributesValidator {
         }
         if (
                 !value.equals(ExternalRegistrationPage.RESIDENT)
-                    && !value.equals(ExternalRegistrationPage.NON_RESIDENT)
+                        && !value.equals(ExternalRegistrationPage.NON_RESIDENT)
         ) {
             listener.accept(error(ExternalRegistrationPage.FIELD_RESIDENCY, ExternalMessages.INVALID_RESIDENCY));
         }
     }
 
     private void validatePhoneNumber(String value, Consumer<ValidationError> listener) {
-//        if (value == null || value.isEmpty()) {
-//            listener.accept(error(ExternalRegistrationPage.FIELD_PHONE_NUMBER, ExternalMessages.INVALID_PHONE_NUMBER));
-//            return;
-//        }
+        log.info("Phone number is: " + value);
+        if (value == null || value.isEmpty()) {
+            listener.accept(error(ExternalRegistrationPage.FIELD_PHONE_NUMBER, ExternalMessages.INVALID_PHONE_NUMBER));
+            return;
+        }
 
-        
+
 //        PhoneNumberValidator.PhoneNumberValidationResult result = PhoneNumberValidator.validatePhoneNumber(value);
 //
 //        if (!result.isValid()) {
@@ -156,7 +160,6 @@ public class SimpleExternalAttributesValidator {
 //                          " (Type: " + result.getNumberType() +
 //                          ", Country: " + result.getPhoneNumber().getCountryCode() + ")");
     }
-    
 
 
     private ValidationError error(String field, String message, Object... args) {
