@@ -16,8 +16,11 @@ public class PhoneNumberValidator {
             return PhoneNumberValidationResult.empty();
         }
         
+        // Remove all spaces and formatting before validation
+        String cleanPhoneNumber = phoneNumber.replaceAll("\\s+", "");
+        
         try {
-            Phonenumber.PhoneNumber parsedNumber = phoneUtil.parse(phoneNumber, null);
+            Phonenumber.PhoneNumber parsedNumber = phoneUtil.parse(cleanPhoneNumber, null);
             
             if (!phoneUtil.isValidNumber(parsedNumber)) {
                 return PhoneNumberValidationResult.invalid("Invalid phone number format");
@@ -44,11 +47,24 @@ public class PhoneNumberValidator {
     }
 
     public static Optional<String> formatPhoneNumber(String phoneNumber) {
-        PhoneNumberValidationResult result = validatePhoneNumber(phoneNumber);
-        if (result.isValid()) {
-            return Optional.of(phoneUtil.format(result.getPhoneNumber(), PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL));
+        if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
+            return Optional.empty();
         }
-        return Optional.empty();
+        
+        // Remove all spaces and formatting before validation
+        String cleanPhoneNumber = phoneNumber.replaceAll("\\s+", "");
+        
+        try {
+            Phonenumber.PhoneNumber parsedNumber = phoneUtil.parse(cleanPhoneNumber, null);
+            
+            if (!phoneUtil.isValidNumber(parsedNumber)) {
+                return Optional.empty();
+            }
+            
+            return Optional.of(phoneUtil.format(parsedNumber, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL));
+        } catch (NumberParseException e) {
+            return Optional.empty();
+        }
     }
 
     public static Optional<String> getCountryCode(String phoneNumber) {
