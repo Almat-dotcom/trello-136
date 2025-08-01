@@ -161,12 +161,15 @@ const InputPhoneWithCountry = ({
             const countryCodeLength = country.phoneCode.replace('+', '').length;
             
             if (countryCodeLength === 1) {
+                // For +7 (Kazakhstan/Russia): +7 XXX XXX XX XX
                 if (digitsAfterCode.length <= 3) {
                     formattedNumber += ' ' + digitsAfterCode;
                 } else if (digitsAfterCode.length <= 6) {
                     formattedNumber += ' ' + digitsAfterCode.substring(0, 3) + ' ' + digitsAfterCode.substring(3);
-                } else {
+                } else if (digitsAfterCode.length <= 8) {
                     formattedNumber += ' ' + digitsAfterCode.substring(0, 3) + ' ' + digitsAfterCode.substring(3, 6) + ' ' + digitsAfterCode.substring(6);
+                } else {
+                    formattedNumber += ' ' + digitsAfterCode.substring(0, 3) + ' ' + digitsAfterCode.substring(3, 6) + ' ' + digitsAfterCode.substring(6, 8) + ' ' + digitsAfterCode.substring(8);
                 }
             } else if (countryCodeLength === 2) {
                 if (digitsAfterCode.length <= 4) {
