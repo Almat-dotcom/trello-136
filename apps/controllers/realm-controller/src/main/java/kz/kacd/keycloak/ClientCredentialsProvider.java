@@ -5,7 +5,7 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import kz.kacd.keycloak.model.KeycloakClientCredentials;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
