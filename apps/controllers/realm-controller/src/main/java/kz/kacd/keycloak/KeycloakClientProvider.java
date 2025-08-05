@@ -9,8 +9,8 @@ import kz.kacd.sso.v1.Realm;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.ws.rs.client.ClientBuilder;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.client.ClientBuilder;
 
 @ApplicationScoped
 public class KeycloakClientProvider {
