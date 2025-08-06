@@ -12,7 +12,7 @@ import org.keycloak.models.ClientScopeModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 public class ClientResource extends BaseAdminResource {
 

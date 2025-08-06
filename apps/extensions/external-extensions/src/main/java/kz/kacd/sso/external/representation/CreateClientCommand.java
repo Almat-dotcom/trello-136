@@ -2,7 +2,7 @@ package kz.kacd.sso.external.representation;
 
 import jakarta.validation.constraints.NotBlank;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 public class CreateClientCommand {

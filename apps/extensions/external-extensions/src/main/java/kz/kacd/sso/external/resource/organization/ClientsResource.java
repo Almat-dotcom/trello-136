@@ -16,7 +16,7 @@ import org.keycloak.models.ClientModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.stream.Collectors;
 
 public class ClientsResource extends BaseAdminResource {

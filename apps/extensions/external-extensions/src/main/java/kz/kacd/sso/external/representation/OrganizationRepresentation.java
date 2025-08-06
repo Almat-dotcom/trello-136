@@ -2,7 +2,7 @@ package kz.kacd.sso.external.representation;
 
 import kz.kacd.sso.external.model.OrganizationModel;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 public class OrganizationRepresentation {
 
