@@ -27,6 +27,7 @@ public class ConfigurationResourceProviderFactory implements RealmResourceProvid
 
     @Override
     public void postInit(KeycloakSessionFactory factory) {
+        log.info("ConfigurationResourceProviderFactory postInit called");
         factory.register(event -> {
             if (event instanceof RealmModel.RealmPostCreateEvent) {
                 log.debugf("Realm post create event captured.");
