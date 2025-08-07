@@ -114,7 +114,6 @@ public class ConfigurationResource extends BaseConfigAdminResource {
 
     @POST
     @Path("client/{name}")
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response configureClient(@PathParam("name") String name) {
         try {
