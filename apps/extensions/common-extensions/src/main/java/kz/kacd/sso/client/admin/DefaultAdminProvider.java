@@ -59,19 +59,11 @@ public class DefaultAdminProvider implements AdminClientProvider {
                         .getId()
         );
 
-        // Grant realm-admin role
-        RoleModel adminRole = realmManagement.getRolesStream()
+        RoleModel role = realmManagement.getRolesStream()
                 .filter(it -> it.getName().equals(ADMIN_CLIENT))
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("Cannot find realm-management role!"));
-        sa.grantRole(adminRole);
-        
-        // Grant realm-config role for k8s-config endpoint access
-        RoleModel configRole = realmManagement.getRolesStream()
-                .filter(it -> it.getName().equals("realm-config"))
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException("Cannot find realm-config role!"));
-        sa.grantRole(configRole);
+        sa.grantRole(role);
 
         if (K8sConfig.ENABLED) {
             SecretValueProvider secrets = session.getProvider(SecretValueProvider.class);

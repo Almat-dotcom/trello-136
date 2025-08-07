@@ -36,7 +36,8 @@ public class KeycloakClientProvider {
         var http = (ResteasyClient) ClientBuilder.newBuilder()
                 .register(filter)
                 .build();
-        var target = http.target(url + "/realms/" + name);
+        // Use admin REST path as our custom k8s-config endpoints are exposed under the Keycloak admin API
+        var target = http.target(url + "/admin/realms/" + name);
         return target.proxy(KeycloakClient.class);
     }
 
