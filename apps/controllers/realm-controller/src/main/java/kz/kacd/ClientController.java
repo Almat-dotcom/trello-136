@@ -35,6 +35,7 @@ public class ClientController implements Reconciler<Client> {
                 log.warn("Cannot find realm for client {}!", resource.getMetadata().getName());
                 return UpdateControl.noUpdate();
             }
+            log.info("Calling updateClient for client: {} in realm: {}", resource.getMetadata().getName(), realm.getMetadata().getName());
             var res = clientProvider.getForRealm(realm).updateClient(resource.getMetadata().getName());
             log.info("Updated client {} with status {}.", resource.getMetadata().getName(), res.getStatus());
         }

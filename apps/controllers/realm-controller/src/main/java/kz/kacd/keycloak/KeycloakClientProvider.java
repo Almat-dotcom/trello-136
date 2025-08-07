@@ -8,12 +8,15 @@ import kz.kacd.keycloak.model.KeycloakClientCredentials;
 import kz.kacd.sso.v1.Realm;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.client.ClientBuilder;
 
 @ApplicationScoped
 public class KeycloakClientProvider {
+    private static final Logger log = LoggerFactory.getLogger(KeycloakClientProvider.class);
 
     private final String baseUrl;
     private final OidcClients clients;
@@ -36,7 +39,9 @@ public class KeycloakClientProvider {
         var http = (ResteasyClient) ClientBuilder.newBuilder()
                 .register(filter)
                 .build();
-        var target = http.target(url + "/realms/" + name);
+        var targetUrl = url + "/realms/" + name;
+        log.info("Creating KeycloakClient for URL: {}", targetUrl);
+        var target = http.target(targetUrl);
         return target.proxy(KeycloakClient.class);
     }
 
