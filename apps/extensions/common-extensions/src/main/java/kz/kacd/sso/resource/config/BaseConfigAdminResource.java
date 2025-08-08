@@ -7,6 +7,7 @@ import jakarta.ws.rs.InternalServerErrorException;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.jboss.logging.Logger;
+import org.keycloak.models.AdminRoles;
 
 public abstract class BaseConfigAdminResource extends AbstractAdminResource {
     private static final Logger log = Logger.getLogger(BaseConfigAdminResource.class);
@@ -20,11 +21,13 @@ public abstract class BaseConfigAdminResource extends AbstractAdminResource {
         return resource;
     }
 
-    protected void checkPermissions() {
+        protected void checkPermissions() {
         log.infof("Checking permissions for user: %s", auth.getUser().getUsername());
-        boolean hasRealmConfig = auth().hasRealmConfig();
-        log.infof("User has realm-config permission: %s", hasRealmConfig);
-        if (!hasRealmConfig) {
+        // В Keycloak 23 используем более простую проверку, как в external-extensions
+        boolean hasRealmAdmin = auth.hasRealmRole(AdminRoles.REALM_ADMIN);
+        boolean hasAdmin = auth.hasRealmRole(AdminRoles.ADMIN);
+        log.infof("User has realm-admin: %s, admin: %s", hasRealmAdmin, hasAdmin);
+        if (!hasRealmAdmin && !hasAdmin) {
             throw new NotAuthorizedException("User has no permissions to run configuration!");
         }
     }
