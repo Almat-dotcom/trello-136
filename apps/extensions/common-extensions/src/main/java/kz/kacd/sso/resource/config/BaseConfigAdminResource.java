@@ -6,8 +6,10 @@ import kz.kacd.sso.resource.AbstractAdminResource;
 import jakarta.ws.rs.InternalServerErrorException;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
+import org.jboss.logging.Logger;
 
 public abstract class BaseConfigAdminResource extends AbstractAdminResource {
+    private static final Logger log = Logger.getLogger(BaseConfigAdminResource.class);
 
     protected BaseConfigAdminResource(KeycloakSession session, RealmModel realm) {
         super(session, realm);
@@ -19,7 +21,10 @@ public abstract class BaseConfigAdminResource extends AbstractAdminResource {
     }
 
     protected void checkPermissions() {
-        if (!auth().hasRealmConfig()) {
+        log.infof("Checking permissions for user: %s", auth.getUser().getUsername());
+        boolean hasRealmConfig = auth().hasRealmConfig();
+        log.infof("User has realm-config permission: %s", hasRealmConfig);
+        if (!hasRealmConfig) {
             throw new NotAuthorizedException("User has no permissions to run configuration!");
         }
     }

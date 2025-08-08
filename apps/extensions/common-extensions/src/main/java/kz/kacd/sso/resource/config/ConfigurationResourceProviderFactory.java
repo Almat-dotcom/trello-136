@@ -87,9 +87,13 @@ public class ConfigurationResourceProviderFactory implements RealmResourceProvid
 
     private void addRole(String name, ClientModel client, RoleModel parent) {
         if (client.getRole(name) == null) {
+            log.infof("Adding role %s to client %s", name, client.getClientId());
             RoleModel role = client.addRole(name);
             role.setDescription("${role_" + name + "}");
             parent.addCompositeRole(role);
+            log.infof("Successfully added role %s to client %s", name, client.getClientId());
+        } else {
+            log.infof("Role %s already exists for client %s", name, client.getClientId());
         }
     }
 
