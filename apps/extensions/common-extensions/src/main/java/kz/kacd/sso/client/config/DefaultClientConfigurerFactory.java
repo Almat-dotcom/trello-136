@@ -4,13 +4,16 @@ import com.google.auto.service.AutoService;
 import kz.kacd.sso.federation.FederationConfigurer;
 import kz.kacd.sso.k8s.K8sConfig;
 import kz.kacd.sso.k8s.client.K8sClientSpecProvider;
+import org.jboss.logging.Logger;
 import org.keycloak.Config;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
 import org.keycloak.models.RealmModel;
+import org.slf4j.LoggerFactory;
 
 @AutoService(ClientConfigurerFactory.class)
 public class DefaultClientConfigurerFactory implements ClientConfigurerFactory {
+    private static final Logger logger = Logger.getLogger(DefaultClientConfigurerFactory.class);
     private static final String PROVIDER_ID = "default-client-configurer";
 
     @Override
@@ -33,6 +36,7 @@ public class DefaultClientConfigurerFactory implements ClientConfigurerFactory {
     }
 
     private void configureClients(FederationConfigurer.FederationsConfigured event) {
+        logger.info("Configuring clients ALMAT");
         if (!K8sConfig.ENABLED) {
             return;
         }
