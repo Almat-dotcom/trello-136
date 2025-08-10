@@ -21,13 +21,11 @@ public abstract class BaseConfigAdminResource extends AbstractAdminResource {
         return resource;
     }
 
-        protected void checkPermissions() {
+    protected void checkPermissions() {
         log.infof("Checking permissions for user: %s", auth.getUser().getUsername());
-        // В Keycloak 23 используем более простую проверку, как в external-extensions
-        boolean hasRealmAdmin = auth.hasRealmRole(AdminRoles.REALM_ADMIN);
-        boolean hasAdmin = auth.hasRealmRole(AdminRoles.ADMIN);
-        log.infof("User has realm-admin: %s, admin: %s", hasRealmAdmin, hasAdmin);
-        if (!hasRealmAdmin && !hasAdmin) {
+        boolean hasRealmConfig = auth().hasRealmConfig();
+        log.infof("User has realm-config permission: %s", hasRealmConfig);
+        if (!hasRealmConfig) {
             throw new NotAuthorizedException("User has no permissions to run configuration!");
         }
     }

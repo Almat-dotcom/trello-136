@@ -1,0 +1,415 @@
+  apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: realms.sso.kacd.kz
+spec:
+  group: sso.kacd.kz
+  names:
+    kind: Realm
+    plural: realms
+    shortNames:
+    - rlm
+    singular: realm
+  scope: Namespaced
+  versions:
+  - name: v1
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            properties:
+              displayedName:
+                description: Displayed name of the realm
+                type: string
+              frontendUrl:
+                description: Host for specific realm
+                type: string
+              requireSsl:
+                description: Mode of the ssl requirement
+                type: string
+              login:
+                description: configuration of the login
+                properties:
+                  loginScreen:
+                    description: Login screen config
+                    properties:
+                      registration:
+                        description: Is user registration available
+                        type: boolean
+                      forgotPassword:
+                        description: Is forgot password available
+                        type: boolean
+                      rememberMe:
+                        description: Is remember me available
+                        type: boolean
+                    type: object
+                  email:
+                    description: email settings
+                    properties:
+                      emailAsUsername:
+                        description: Is email is a valid username
+                        type: boolean
+                      loginWithEmail:
+                        description: Are users allowed to log in with email
+                        type: boolean
+                      duplicatesEmails:
+                        description: Is user's emails can be duplicated
+                        type: boolean
+                      verifyEmail:
+                        description: Are users forced to verify their emails
+                        type: boolean
+                    type: object
+                type: object
+              email:
+                description: Email options
+                properties:
+                  from:
+                    description: Email address of the sender
+                    type: string
+                  displayedName:
+                      description: Displayed name of the sender
+                      type: string
+                  smtpHost:
+                    description: Host of smtp server
+                    type: string
+                  smtpPort:
+                    description: Port of smtp server
+                    type: integer
+                  encryption:
+                    description: Mode of encryption
+                    items:
+                      type: string
+                    type: array
+                  authentication:
+                    description: authentication settings
+                    properties:
+                      existingSecret:
+                        description: Name of the secret with authentication credentials
+                        type: string
+                      usernameKey:
+                        description: Name of the key where username is stored
+                        type: string
+                      usernamePlainValue:
+                        description: Plain value of username (This way is not recommended)
+                        type: string
+                      passwordKey:
+                        description: Name of the key where password is stored
+                        type: string
+                      passwordPlainValue:
+                        description: Plain value of password (This way is not recommended)
+                        type: string
+                    type: object
+                type: object
+              themes:
+                description: Specify themes for realm
+                properties:
+                  login:
+                    description: Theme of login page
+                    type: string
+                  account:
+                    description: Theme of the account page
+                    type: string
+                  admin:
+                    description: Theme of the admin console page
+                    type: string
+                  email:
+                    description: Theme of the email
+                    type: string
+                  localization:
+                    description: Localization settings
+                    properties:
+                      i18n:
+                        description: If true internationalization will be enabled
+                        type: boolean
+                      supportedLocales:
+                        description: List of supported locales
+                        items:
+                          type: string
+                          enum:
+                            - en
+                            - ru
+                            - kz
+                        type: array
+                      defaultLocale:
+                        description: Default locale if no one is defined
+                        type: string
+                        enum:
+                          - en
+                          - ru
+                          - kz
+                    type: object
+                type: object
+              events:
+                description: Configuration of user events storing
+                properties:
+                  eventListeners:
+                    description: List of event listeners
+                    items:
+                      type: string
+                    type: array
+                  userEvents:
+                    description: Config of user events
+                    properties:
+                      saveEvents:
+                        description: If true user events will be enabled
+                        type: boolean
+                      expiration:
+                        description: "Duration of user events persist time (duration\
+                          \ can be m(Minutest), h(Hours), d(Days))"
+                        type: string
+                      savedTypes:
+                        description: "List of event types which will be saved. If\
+                          \ empty and events active, it creates standard list of types."
+                        items:
+                          type: string
+                        type: array
+                    type: object
+                  adminEvents:
+                    description: Config of admin events
+                    properties:
+                      saveEvents:
+                        description: If true admin events will be stored
+                        type: boolean
+                      includeRepresentation:
+                        description: If true admin events will be stored with it's
+                          representations
+                        type: boolean
+                      expiration:
+                        description: "expiration of the admin events (duration can\
+                          \ be m(Minutest), h(Hours), d(Days))"
+                        type: string
+                    type: object
+                type: object
+              security:
+                description: Config of additional security
+                properties:
+                  headers:
+                    description: Content security policy based on HTTP headers
+                    properties:
+                      frameOptions:
+                        description: "The X-Frame-Options HTTP response header can be used to indicate \
+                          whether or not a browser should be allowed to render a page in a <frame>, <iframe>, \
+                          <embed> or <object>. Sites can use this to avoid click-jacking attacks, by ensuring \
+                          that their content is not embedded into other sites."
+                        type: string
+                      csp:
+                        description: "Content Security Policy (CSP) is an added layer of security that helps to \
+                          detect and mitigate certain types of attacks, including Cross-Site Scripting (XSS) and \
+                          data injection attacks. These attacks are used for everything from data theft, to site \
+                          defacement, to malware distribution."
+                        type: string
+                      contentTypeOptions:
+                        description: "The X-Content-Type-Options response HTTP header is a marker used by the \
+                          server to indicate that the MIME types advertised in the Content-Type headers should \
+                          be followed and not be changed. The header allows you to avoid MIME type sniffing by \
+                          saying that the MIME types are deliberately configured."
+                        type: string
+                      robotsTag:
+                        description: "Prevent pages to appearing in search engines"
+                        type: string
+                      xss:
+                        description: "The HTTP X-XSS-Protection response header is a feature of Internet Explorer, \
+                          Chrome and Safari that stops pages from loading when they detect reflected cross-site \
+                          scripting (XSS) attacks. These protections are largely unnecessary in modern browsers \
+                          when sites implement a strong Content-Security-Policy that disables the use of inline \
+                          JavaScript ('unsafe-inline')."
+                        type: string
+                      hsts:
+                        description: "The HTTP Strict-Transport-Security response header (often abbreviated as HSTS) \
+                          informs browsers that the site should only be accessed using HTTPS, and that any future \
+                          attempts to access it using HTTP should automatically be converted to HTTPS."
+                        type: string
+                    type: object
+                  bruteForce:
+                    description: Brute force detection config
+                    properties:
+                      enabled:
+                        description: If true Brute force attempts will be detected
+                        type: boolean
+                      maxLoginFailures:
+                        description: Count of login failures before lockout
+                        type: integer
+                      permanentLockout:
+                        description: If true after brute force detection user will
+                          be locked permanently
+                        type: boolean
+                      waitIncrement:
+                        description: "How much time user should be locked out (duration\
+                          \ can be m(Minutest), h(Hours), d(Days))"
+                        type: string
+                      maxWait:
+                        description: "Maximum time of user lockout (duration can be\
+                          \ m(Minutest), h(Hours), d(Days))"
+                        type: string
+                      failureResetTime:
+                        description: "Time after which failure count will be reset\
+                          \ (duration can be m(Minutest), h(Hours), d(Days))"
+                        type: string
+                      quickLoginMillis:
+                        description: If login failures happens too quickly user will
+                          be locked
+                        type: integer
+                      quickLoginWait:
+                        description: "How long to wait after a quick login failure\
+                          \ (duration can be m(Minutest), h(Hours), d(Days))"
+                        type: string
+                    type: object
+                type: object
+              sessions:
+                description: Sessions config
+                properties:
+                  sso:
+                    description: SSO sessions settings
+                    properties:
+                      sessionIdle:
+                        description: Session expiration if no refresh actions requested
+                        type: string
+                      sessionMax:
+                        description: Maximum lifetime of the session
+                        type: string
+                      rememberMeSessionIdle:
+                        description: Maximum lifetime of the remember me session
+                        type: string
+                    type: object
+                  client:
+                    description: Client session settings
+                    properties:
+                      sessionIdle:
+                        description: Session expiration if no actions requested
+                        type: string
+                      sessionMax:
+                        description: Maximum lifetime of the session
+                        type: string
+                    type: object
+                  offline:
+                    description: Settings of the offline sessions
+                    properties:
+                      sessionIdle:
+                        description: Idle time of the offline session
+                        type: string
+                      sessionMax:
+                        description: Max lifetime of the offline session
+                        type: string
+                    type: object
+                type: object
+              tokens:
+                description: Settings of tokens
+                properties:
+                  accessLifespan:
+                    description: "lifetime of the access token (It is recommended\
+                      \ for this value to be shorter than the SSO session idle timeout:\
+                      \ 30 minutes)"
+                    type: string
+                  oidcAccessLifespan:
+                    description: OIDC implicit flow access token lifetime
+                    type: string
+                type: object
+              authentication:
+                description: Settings to application flows for different
+                properties:
+                  flows:
+                    description: Settings of authentication flows
+                    properties:
+                      browser:
+                        description: Type of the browser flow
+                        type: string
+                        enum:
+                          - DEFAULT
+                          - RESTRICTED
+                          - EXTERNAL
+                      registration:
+                        description: Type of the registration flow
+                        type: string
+                        enum:
+                          - DEFAULT
+                          - EXTERNAL
+                      direct:
+                        description: Type of the direct grant flow
+                        type: string
+                        enum:
+                          - DEFAULT
+                      reset:
+                        description: Type of the reset credentials flow
+                        type: string
+                        enum:
+                          - DEFAULT
+                      client:
+                        description: Type of the client authentication flow
+                        type: string
+                        enum:
+                          - DEFAULT
+                    type: object
+                  passwordPolicy:
+                    description: Password policy configuration
+                    properties:
+                      expiration:
+                        description: number of days after which password will be expired
+                        type: integer
+                      notRecentlyUsed:
+                        description: "number of passwords of the user which will be saved to restrict user \
+                          type same password"
+                        type: integer
+                      passwordBlacklist:
+                        description: List of the passwords in lower case separated by new line which will be banned
+                        type: string
+                      minimumLength:
+                        description: Minimum length of chars of password
+                        type: integer
+                      regexp:
+                        description: Regular expression which forced password to match with
+                        type: string
+                      countOfSpecialChars:
+                        description: Number of special characters in password
+                        type: integer
+                      uppercaseChars:
+                        description: Number of uppercase characters in password
+                        type: integer
+                      lowercaseChars:
+                        description: Number of lowercase characters in password
+                        type: integer
+                      numberOfDigits:
+                        description: Number of digits in password
+                        type: integer
+                    type: object
+                type: object
+              realmRoles:
+                description: Roles on realm level
+                items:
+                  properties:
+                    name:
+                      description: Name of the role
+                      type: string
+                    roleDescription:
+                      description: Human readable description of the role
+                      type: string
+                  type: object
+                type: array
+            type: object
+          status:
+            properties:
+              state:
+                description: State of the realm application
+                enum:
+                - APPLYING
+                - APPLIED
+                - BACK_OFF
+                - FAILED
+                type: string
+              message:
+                description: Additional message for state
+                type: string
+              generation:
+                description: Applied generation
+                type: string
+              lastApplication:
+                description: Time of the last try to apply client
+                type: string
+              backoffSeconds:
+                description: Time to backoff in seconds
+                type: integer
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
