@@ -39,7 +39,7 @@ public class KeycloakClientProvider {
         var http = (ResteasyClient) ClientBuilder.newBuilder()
                 .register(filter)
                 .build();
-        var targetUrl = url + "/realms/" + name;
+        var targetUrl = url + "/realms/" + name + "/k8s-config";
         log.info("Creating KeycloakClient for URL: {}", targetUrl);
         var target = http.target(targetUrl);
         return target.proxy(KeycloakClient.class);
