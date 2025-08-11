@@ -15,7 +15,6 @@
 
     <properties>
         <keycloak.version>23.0.0</keycloak.version>
-        <fabric8.k8s.version>6.9.1</fabric8.k8s.version>
 
         <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
 
@@ -139,57 +138,12 @@
             <artifactId>libphonenumber</artifactId>
             <version>8.13.25</version>
         </dependency>
-
-        <!-- Kubernetes dependencies -->
-        <dependency>
-            <groupId>io.fabric8</groupId>
-            <artifactId>kubernetes-client-api</artifactId>
-            <version>${fabric8.k8s.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>io.fabric8</groupId>
-            <artifactId>kubernetes-client</artifactId>
-            <version>${fabric8.k8s.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>io.fabric8</groupId>
-                    <artifactId>kubernetes-client-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
     </dependencies>
 
     <build>
         <finalName>external-extensions</finalName>
 
         <plugins>
-            <plugin>
-                <groupId>io.fabric8</groupId>
-                <artifactId>java-generator-maven-plugin</artifactId>
-                <version>${fabric8.k8s.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <source>src/main/resources/k8s</source>
-                    <generatedAnnotations>false</generatedAnnotations>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
