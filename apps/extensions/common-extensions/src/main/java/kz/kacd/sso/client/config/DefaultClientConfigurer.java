@@ -34,14 +34,11 @@ public class DefaultClientConfigurer implements ClientConfigurer {
 
     @Override
     public void configure(RealmModel realm, String clientId, ClientSpec client) {
-        log.info("Configuring default client ALMAT " + clientId);
         if (client == null) {
             return;
         }
 
-        log.info("Configuring default client ALMAT 2" + clientId);
-
-        log.infof("Configuring client %s in realm %s ...", clientId, realm.getName());
+        log.debugf("Configuring client %s in realm %s ...", clientId, realm.getName());
         ClientModel target = realm.getClientByClientId(clientId);
         if (target == null) {
             target = create(realm, clientId);
