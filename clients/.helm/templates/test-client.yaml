@@ -14,7 +14,7 @@ metadata:
   {{- end }}
 spec:
   displayedName: TEST CLIENT FOR CRD
-  displayedDescription: Клиент test crd
+  displayedDescription: Клиент для test crd
   access:
     validRedirectUris:
     - http://localhost
