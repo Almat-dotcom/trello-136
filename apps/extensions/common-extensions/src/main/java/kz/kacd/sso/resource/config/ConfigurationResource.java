@@ -120,34 +120,39 @@ public class ConfigurationResource extends BaseAdminResource {
     public Response configureClient(@PathParam("name") String name) {
 //        checkPermissions();
 //        checkConfig();
-        log.info("ALMAT CLIENT START");
-        K8sClientSpecProvider k8s = session.getProvider(K8sClientSpecProvider.class);
-        K8sClient spec = k8s.findByName(name);
-        if (spec == null || spec.getRealm() == null || !spec.getRealm().equals(session.getContext().getRealm().getName())) {
-            log.infof("Client %s with realm %s not found!", name, session.getContext().getRealm().getName());
-            throw new NotFoundException("Client " + name + " for current realm not found!");
-        }
-        ClientStatus initial = spec.getStatus();
-        spec.applying();
-
-        ClientConfigurer configurer = session.getProvider(ClientConfigurer.class);
         try {
-            configurer.configure(realm, spec.getName(), spec.getSpec());
-            spec.applied();
-            adminEvent.resource(ConfigResourceType.CLIENT_CONFIG.name())
-                    .operation(OperationType.UPDATE)
-                    .resourcePath(session.getContext().getUri())
-                    .representation(spec.getSpec())
-                    .success();
-            return Response.ok(spec.getSpec()).build();
-        } catch (Exception e) {
-            log.error("Error on configuring client!", e);
-            if (initial != null && initial.getState() == ClientStatus.State.BACKOFF) {
-                spec.failed(e);
-            } else {
-                spec.backoff(e);
+            log.info("ALMAT CLIENT START");
+            K8sClientSpecProvider k8s = session.getProvider(K8sClientSpecProvider.class);
+            K8sClient spec = k8s.findByName(name);
+            if (spec == null || spec.getRealm() == null || !spec.getRealm().equals(session.getContext().getRealm().getName())) {
+                log.infof("Client %s with realm %s not found!", name, session.getContext().getRealm().getName());
+                throw new NotFoundException("Client " + name + " for current realm not found!");
             }
-            throw new InternalServerErrorException(e);
+            ClientStatus initial = spec.getStatus();
+            spec.applying();
+
+            ClientConfigurer configurer = session.getProvider(ClientConfigurer.class);
+            try {
+                configurer.configure(realm, spec.getName(), spec.getSpec());
+                spec.applied();
+                adminEvent.resource(ConfigResourceType.CLIENT_CONFIG.name())
+                        .operation(OperationType.UPDATE)
+                        .resourcePath(session.getContext().getUri())
+                        .representation(spec.getSpec())
+                        .success();
+                return Response.ok(spec.getSpec()).build();
+            } catch (Exception e) {
+                log.error("Error on configuring client!", e);
+                if (initial != null && initial.getState() == ClientStatus.State.BACKOFF) {
+                    spec.failed(e);
+                } else {
+                    spec.backoff(e);
+                }
+                throw new InternalServerErrorException(e);
+            }
+        } catch (Exception e) {
+            log.error("ALMAT Error on configuring client!", e);
+            throw new RuntimeException(e);
         }
     }
 }
