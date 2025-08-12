@@ -81,6 +81,8 @@ public abstract class AbstractAdminResource {
     }
 
     private void setupAuth() {
+        HttpRequest req = session.getContext().getHttpRequest();
+        HttpHeaders headers = req.getHttpHeaders();
         String tokenString = AppAuthManager.extractAuthorizationHeaderToken(headers);
 
         if (tokenString == null) {
