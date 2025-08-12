@@ -3,6 +3,7 @@ package kz.kacd.sso.resource.config;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import kz.kacd.sso.BaseAdminResource;
 import kz.kacd.sso.client.config.ClientConfigurer;
 import kz.kacd.sso.federation.FederationConfigurer;
 import kz.kacd.sso.k8s.client.K8sClient;
@@ -22,7 +23,7 @@ import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.utils.ModelToRepresentation;
 
-public class ConfigurationResource extends BaseConfigAdminResource {
+public class ConfigurationResource extends BaseAdminResource {
     private static final Logger log = Logger.getLogger(ConfigurationResource.class);
 
     protected ConfigurationResource(KeycloakSession session, RealmModel realm) {
@@ -34,8 +35,8 @@ public class ConfigurationResource extends BaseConfigAdminResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response configureRealm(@PathParam("name") String name, @QueryParam("full") String full) {
-        checkPermissions();
-        checkConfig();
+//        checkPermissions();
+//        checkConfig();
 
         K8sRealmProvider k8s = session.getProvider(K8sRealmProvider.class);
         K8sRealm spec = k8s.findSpec(name);
@@ -78,8 +79,8 @@ public class ConfigurationResource extends BaseConfigAdminResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response configureFederation(@PathParam("name") String name) {
-        checkPermissions();
-        checkConfig();
+//        checkPermissions();
+//        checkConfig();
 
         K8sFederationProvider k8s = session.getProvider(K8sFederationProvider.class);
         K8sFederation spec = k8s.findByName(name);
@@ -114,43 +115,38 @@ public class ConfigurationResource extends BaseConfigAdminResource {
 
     @POST
     @Path("client/{name}")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response configureClient(@PathParam("name") String name) {
+//        checkPermissions();
+//        checkConfig();
+        log.info("ALMAT CLIENT START");
+        K8sClientSpecProvider k8s = session.getProvider(K8sClientSpecProvider.class);
+        K8sClient spec = k8s.findByName(name);
+        if (spec == null || spec.getRealm() == null || !spec.getRealm().equals(session.getContext().getRealm().getName())) {
+            log.infof("Client %s with realm %s not found!", name, session.getContext().getRealm().getName());
+            throw new NotFoundException("Client " + name + " for current realm not found!");
+        }
+        ClientStatus initial = spec.getStatus();
+        spec.applying();
+
+        ClientConfigurer configurer = session.getProvider(ClientConfigurer.class);
         try {
-            log.info("START ALMAT CLIENT");
-            checkPermissions();
-            checkConfig();
-
-            K8sClientSpecProvider k8s = session.getProvider(K8sClientSpecProvider.class);
-            K8sClient spec = k8s.findByName(name);
-            if (spec == null || spec.getRealm() == null || !spec.getRealm().equals(session.getContext().getRealm().getName())) {
-                log.infof("Client %s with realm %s not found!", name, session.getContext().getRealm().getName());
-                throw new NotFoundException("Client " + name + " for current realm not found!");
-            }
-            ClientStatus initial = spec.getStatus();
-            spec.applying();
-
-            ClientConfigurer configurer = session.getProvider(ClientConfigurer.class);
-            try {
-                configurer.configure(realm, spec.getName(), spec.getSpec());
-                spec.applied();
-                adminEvent.resource(ConfigResourceType.CLIENT_CONFIG.name())
-                        .operation(OperationType.UPDATE)
-                        .resourcePath(session.getContext().getUri())
-                        .representation(spec.getSpec())
-                        .success();
-                return Response.ok(spec.getSpec()).build();
-            } catch (Exception e) {
-                log.error("Error on configuring client!", e);
-                if (initial != null && initial.getState() == ClientStatus.State.BACKOFF) {
-                    spec.failed(e);
-                } else {
-                    spec.backoff(e);
-                }
-                throw new InternalServerErrorException(e);
-            }
+            configurer.configure(realm, spec.getName(), spec.getSpec());
+            spec.applied();
+            adminEvent.resource(ConfigResourceType.CLIENT_CONFIG.name())
+                    .operation(OperationType.UPDATE)
+                    .resourcePath(session.getContext().getUri())
+                    .representation(spec.getSpec())
+                    .success();
+            return Response.ok(spec.getSpec()).build();
         } catch (Exception e) {
-            log.info("ALMAT Error on configuring client!", e);
+            log.error("Error on configuring client!", e);
+            if (initial != null && initial.getState() == ClientStatus.State.BACKOFF) {
+                spec.failed(e);
+            } else {
+                spec.backoff(e);
+            }
             throw new InternalServerErrorException(e);
         }
     }
