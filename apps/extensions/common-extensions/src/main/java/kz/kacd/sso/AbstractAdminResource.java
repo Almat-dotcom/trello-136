@@ -2,17 +2,15 @@ package kz.kacd.sso;
 
 import jakarta.ws.rs.NotAuthorizedException;
 import jakarta.ws.rs.NotFoundException;
-import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
-import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.UriInfo;
 import kz.kacd.sso.resource.cors.Cors;
 import kz.kacd.sso.resource.cors.CorsResource;
 import org.jboss.logging.Logger;
-import org.jboss.resteasy.spi.HttpResponse;
 import org.keycloak.Config;
 import org.keycloak.common.ClientConnection;
 import org.keycloak.http.HttpRequest;
+import org.keycloak.http.HttpResponse;
 import org.keycloak.jose.jws.JWSInput;
 import org.keycloak.jose.jws.JWSInputException;
 import org.keycloak.models.ClientModel;
@@ -35,11 +33,6 @@ import org.keycloak.services.resources.admin.permissions.AdminPermissions;
 public abstract class AbstractAdminResource {
     private static final Logger log = Logger.getLogger(AbstractAdminResource.class);
     protected final RealmModel realm;
-    @Context
-    protected ClientConnection clientConnection;
-    @Context
-    protected HttpHeaders headers;
-    @Context
     protected KeycloakSession session;
     protected ExternalAdminAuth auth;
     protected AdminPermissionEvaluator permissions;
@@ -63,21 +56,13 @@ public abstract class AbstractAdminResource {
 
     private void setupCors() {
         HttpRequest request = session.getContext().getHttpRequest();
-        org.keycloak.http.HttpResponse response = session.getContext().getHttpResponse();
+        HttpResponse response = session.getContext().getHttpResponse();
         Cors.add(request)
                 .allowedOrigins(auth.getToken())
                 .allowedMethods(CorsResource.METHODS)
                 .exposedHeaders("Location")
                 .auth()
                 .build(response);
-    }
-
-    private boolean hasCors(HttpResponse response) {
-        MultivaluedMap<String, Object> responseHeaders = response.getOutputHeaders();
-        if (responseHeaders == null) return false;
-        return (responseHeaders.get("Access-Control-Allow-Credentials") != null
-                || responseHeaders.get("Access-Control-Allow-Origin") != null
-                || responseHeaders.get("Access-Control-Expose-Headers") != null);
     }
 
     private void setupAuth() {
@@ -118,7 +103,7 @@ public abstract class AbstractAdminResource {
                 session,
                 adminRealm,
                 session.getContext().getUri(),
-                clientConnection,
+                session.getContext().getConnection(),
                 headers
         );
         if (authResult == null) {
