@@ -76,6 +76,7 @@ public class Cors {
     }
 
     public Cors allowedOrigins(AccessToken t) {
+        logInfo("ALMAT CORS allowed origins from token: {0}", t.getAllowedOrigins());
         if (t != null) this.allowedOrigins = t.getAllowedOrigins();
         return this;
     }

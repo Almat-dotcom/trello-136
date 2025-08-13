@@ -44,6 +44,7 @@ public abstract class AbstractAdminResource {
         this.session = session;
         this.realm = realm;
     }
+
     protected abstract void init();
 
     public final void setup() {
@@ -57,6 +58,8 @@ public abstract class AbstractAdminResource {
     private void setupCors() {
         HttpRequest request = session.getContext().getHttpRequest();
         HttpResponse response = session.getContext().getHttpResponse();
+
+        log.info("ALMAT auth: " + auth);
         Cors.add(request)
                 .allowedOrigins(auth.getToken())
                 .allowedMethods(CorsResource.METHODS)
