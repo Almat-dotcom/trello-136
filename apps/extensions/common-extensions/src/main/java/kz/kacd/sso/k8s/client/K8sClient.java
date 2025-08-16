@@ -1,7 +1,5 @@
 package kz.kacd.sso.k8s.client;
 
-import kz.kacd.sso.v1.ClientSpec;
-import kz.kacd.sso.v1.ClientStatus;
 import org.keycloak.models.KeycloakSessionFactory;
 import org.keycloak.provider.ProviderEvent;
 
@@ -12,9 +10,9 @@ public interface K8sClient {
 
     String getRealm();
 
-    ClientSpec getSpec();
+    Object getSpec();
 
-    ClientStatus getStatus();
+    Object getStatus();
 
     void applying();
 
