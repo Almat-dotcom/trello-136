@@ -15,15 +15,14 @@ import kz.kacd.sso.realm.config.KeycloakRealmConfigurer;
 import kz.kacd.sso.resource.common.ConfigResourceType;
 import org.jboss.logging.Logger;
 import org.keycloak.events.admin.OperationType;
-import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.utils.ModelToRepresentation;
 
 public class ConfigurationResource extends BaseConfigAdminResource {
     private static final Logger log = Logger.getLogger(ConfigurationResource.class);
 
-    protected ConfigurationResource(KeycloakSession session, RealmModel realm) {
-        super(session, realm);
+    protected ConfigurationResource(RealmModel realm) {
+        super(realm);
     }
 
     @POST

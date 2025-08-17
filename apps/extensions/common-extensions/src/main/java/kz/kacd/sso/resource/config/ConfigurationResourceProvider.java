@@ -14,7 +14,7 @@ public class ConfigurationResourceProvider extends BaseRealmResourceProvider {
     @Override
     protected Object getRealmResource() {
         RealmModel realm = session.getContext().getRealm();
-        ConfigurationResource resource = new ConfigurationResource(session, realm);
+        ConfigurationResource resource = new ConfigurationResource(realm);
         ResteasyProviderFactory.getInstance().injectProperties(resource);
         resource.setup();
         return resource;
