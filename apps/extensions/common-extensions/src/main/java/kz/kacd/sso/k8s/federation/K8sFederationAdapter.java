@@ -1,11 +1,11 @@
-package kz.kacd.sso.k8s.client;
+package kz.kacd.sso.k8s.federation;
 
-import kz.kacd.sso.k8s.client.model.K8sClientMessages;
-import kz.kacd.sso.k8s.client.repository.K8sClientRepository;
+import kz.kacd.sso.k8s.federation.model.K8sFederationMessages;
+import kz.kacd.sso.k8s.federation.repository.K8sFederationRepository;
 import kz.kacd.sso.k8s.realm.K8sRealm;
-import kz.kacd.sso.v1.Client;
-import kz.kacd.sso.v1.ClientSpec;
-import kz.kacd.sso.v1.ClientStatus;
+import kz.kacd.sso.v1.Federation;
+import kz.kacd.sso.v1.FederationSpec;
+import kz.kacd.sso.v1.FederationStatus;
 import org.jboss.logging.Logger;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
@@ -13,19 +13,19 @@ import org.keycloak.provider.ProviderEvent;
 
 import java.time.LocalDateTime;
 
-public class K8sClientAdapter implements K8sClient {
-    private static final Logger log = Logger.getLogger(K8sClientAdapter.class);
+public class K8sFederationAdapter implements K8sFederation {
+    private static final Logger log = Logger.getLogger(K8sFederationAdapter.class);
 
     private final KeycloakSession keycloakSession;
-    private final K8sClientRepository repository;
+    private final K8sFederationRepository repository;
 
     private final String name;
     private final String realm;
     private final String sourceGeneration;
-    private final ClientSpec spec;
-    private ClientStatus status;
+    private final FederationSpec spec;
+    private FederationStatus status;
 
-    public K8sClientAdapter(KeycloakSession session, K8sClientRepository repository, Client source) {
+    public K8sFederationAdapter(KeycloakSession session, K8sFederationRepository repository, Federation source) {
         this.keycloakSession = session;
         this.repository = repository;
         this.name = source.getMetadata().getName();
@@ -46,22 +46,22 @@ public class K8sClientAdapter implements K8sClient {
     }
 
     @Override
-    public ClientSpec getSpec() {
+    public FederationSpec getSpec() {
         return spec;
     }
 
     @Override
-    public ClientStatus getStatus() {
+    public FederationStatus getStatus() {
         return status;
     }
 
     @Override
     public void applying() {
-        log.infof("Marking client %s as applying ...", name);
+        log.infof("Marking federation %s as applying ...", name);
 
-        ClientStatus newStatus = new ClientStatus();
-        newStatus.setState(ClientStatus.State.APPLYING);
-        newStatus.setMessage(K8sClientMessages.CLIENT_APPLYING);
+        FederationStatus newStatus = new FederationStatus();
+        newStatus.setState(FederationStatus.State.APPLYING);
+        newStatus.setMessage(K8sFederationMessages.FEDERATION_APPLYING);
         newStatus.setGeneration(sourceGeneration);
         newStatus.setLastApplication(LocalDateTime.now().toString());
 
@@ -69,30 +69,30 @@ public class K8sClientAdapter implements K8sClient {
 
         this.status = newStatus;
 
-        keycloakSession.getKeycloakSessionFactory().publish(clientApplying(this));
+        keycloakSession.getKeycloakSessionFactory().publish(federationApplying(this));
     }
 
-    private ProviderEvent clientApplying(K8sClient client) {
-        return new K8sClientApplyingEvent() {
+    private ProviderEvent federationApplying(K8sFederation federation) {
+        return new K8sFederation.K8sFederationApplyingEvent() {
             @Override
             public KeycloakSessionFactory getFactory() {
                 return keycloakSession.getKeycloakSessionFactory();
             }
 
             @Override
-            public K8sClient getClient() {
-                return client;
+            public K8sFederation getFederation() {
+                return federation;
             }
         };
     }
 
     @Override
     public void applied() {
-        log.infof("Making client %s as applied ...", getName());
+        log.infof("Making federation %s as applied ...", getName());
 
-        ClientStatus newStatus = new ClientStatus();
-        newStatus.setState(ClientStatus.State.APPLIED);
-        newStatus.setMessage(K8sClientMessages.CLIENT_APPLIED);
+        FederationStatus newStatus = new FederationStatus();
+        newStatus.setState(FederationStatus.State.APPLIED);
+        newStatus.setMessage(K8sFederationMessages.FEDERATION_APPLIED);
         newStatus.setGeneration(sourceGeneration);
         newStatus.setLastApplication(LocalDateTime.now().toString());
 
@@ -100,30 +100,30 @@ public class K8sClientAdapter implements K8sClient {
 
         this.status = newStatus;
 
-        keycloakSession.getKeycloakSessionFactory().publish(clientApplied(this));
+        keycloakSession.getKeycloakSessionFactory().publish(federationApplied(this));
     }
 
-    private ProviderEvent clientApplied(K8sClient client) {
-        return new K8sClientAppliedEvent() {
+    private ProviderEvent federationApplied(K8sFederation federation) {
+        return new K8sFederation.K8sFederationAppliedEvent() {
             @Override
             public KeycloakSessionFactory getFactory() {
                 return keycloakSession.getKeycloakSessionFactory();
             }
 
             @Override
-            public K8sClient getClient() {
-                return client;
+            public K8sFederation getFederation() {
+                return federation;
             }
         };
     }
 
     @Override
     public void waitingForRealm() {
-        log.warnf("Client %s is targeted to not existing realm. Waiting to realm ...", getName());
+        log.warnf("Federation %s is targeted to not existing realm. Waiting to realm ...", getName());
 
-        ClientStatus newStatus = new ClientStatus();
-        newStatus.setState(ClientStatus.State.WAITING_FOR_REALM);
-        newStatus.setMessage(K8sClientMessages.WAITING_FOR_REALM);
+        FederationStatus newStatus = new FederationStatus();
+        newStatus.setState(FederationStatus.State.WAITING_REALM);
+        newStatus.setMessage(K8sFederationMessages.WAITING_FOR_REALM);
         newStatus.setGeneration(sourceGeneration);
         newStatus.setLastApplication(LocalDateTime.now().toString());
         newStatus.setBackoffSeconds(STANDARD_BACKOFF);
@@ -132,30 +132,30 @@ public class K8sClientAdapter implements K8sClient {
 
         this.status = newStatus;
 
-        keycloakSession.getKeycloakSessionFactory().publish(clientDelayed(this));
+        keycloakSession.getKeycloakSessionFactory().publish(federationDelayed(this));
     }
 
-    private ProviderEvent clientDelayed(K8sClient client) {
-        return new K8sClientDelayedEvent() {
+    private ProviderEvent federationDelayed(K8sFederation federation) {
+        return new K8sFederation.K8sFederationDelayedEvent() {
             @Override
             public KeycloakSessionFactory getFactory() {
                 return keycloakSession.getKeycloakSessionFactory();
             }
 
             @Override
-            public K8sClient getClient() {
-                return client;
+            public K8sFederation getFederation() {
+                return federation;
             }
         };
     }
 
     @Override
     public void backoff(Throwable e) {
-        log.infof("Client %s is backoffed ...", getName());
+        log.infof("Federation %s is backoffed ...", getName());
 
-        ClientStatus newStatus = new ClientStatus();
-        newStatus.setState(ClientStatus.State.BACKOFF);
-        newStatus.setMessage(K8sClientMessages.error(e));
+        FederationStatus newStatus = new FederationStatus();
+        newStatus.setState(FederationStatus.State.BACK_OFF);
+        newStatus.setMessage(K8sFederationMessages.error(e));
         newStatus.setGeneration(sourceGeneration);
         newStatus.setLastApplication(LocalDateTime.now().toString());
         newStatus.setBackoffSeconds(STANDARD_BACKOFF);
@@ -164,19 +164,19 @@ public class K8sClientAdapter implements K8sClient {
 
         this.status = newStatus;
 
-        keycloakSession.getKeycloakSessionFactory().publish(clientBackoffed(this, e));
+        keycloakSession.getKeycloakSessionFactory().publish(federationBackoffed(this, e));
     }
 
-    private ProviderEvent clientBackoffed(K8sClient client, Throwable e) {
-        return new K8sClientBackOffedEvent() {
+    private ProviderEvent federationBackoffed(K8sFederation federation, Throwable e) {
+        return new K8sFederation.K8sFederationBackOffedEvent() {
             @Override
             public KeycloakSessionFactory getFactory() {
                 return keycloakSession.getKeycloakSessionFactory();
             }
 
             @Override
-            public K8sClient getClient() {
-                return client;
+            public K8sFederation getFederation() {
+                return federation;
             }
 
             @Override
@@ -188,11 +188,11 @@ public class K8sClientAdapter implements K8sClient {
 
     @Override
     public void failed(Throwable e) {
-        log.warnf("Client %s is failed: %s", getName(), K8sClientMessages.error(e));
+        log.warnf("Federation %s is failed: %s", getName(), K8sFederationMessages.error(e));
 
-        ClientStatus newStatus = new ClientStatus();
-        newStatus.setState(ClientStatus.State.FAILED);
-        newStatus.setMessage(K8sClientMessages.error(e));
+        FederationStatus newStatus = new FederationStatus();
+        newStatus.setState(FederationStatus.State.FAILED);
+        newStatus.setMessage(K8sFederationMessages.error(e));
         newStatus.setGeneration(sourceGeneration);
         newStatus.setLastApplication(LocalDateTime.now().toString());
         newStatus.setBackoffSeconds(STANDARD_BACKOFF);
@@ -201,19 +201,19 @@ public class K8sClientAdapter implements K8sClient {
 
         this.status = newStatus;
 
-        keycloakSession.getKeycloakSessionFactory().publish(clientFailed(this, e));
+        keycloakSession.getKeycloakSessionFactory().publish(federationFailed(this, e));
     }
 
-    private ProviderEvent clientFailed(K8sClient client, Throwable e) {
-        return new K8sClientFailedEvent() {
+    private ProviderEvent federationFailed(K8sFederation federation, Throwable e) {
+        return new K8sFederation.K8sFederationFailedEvent() {
             @Override
             public KeycloakSessionFactory getFactory() {
                 return keycloakSession.getKeycloakSessionFactory();
             }
 
             @Override
-            public K8sClient getClient() {
-                return client;
+            public K8sFederation getFederation() {
+                return federation;
             }
 
             @Override

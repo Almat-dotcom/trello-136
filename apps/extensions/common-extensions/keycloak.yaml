@@ -9,7 +9,7 @@ services:
     - KEYCLOAK_ADMIN_PASSWORD=admin
     - KC_DB=postgres
     - KC_DB_PASSWORD=keycloak
-    - KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak?user=postgres
+    - KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak
     - KC_DB_USERNAME=postgres
     - KC_LOG_LEVEL=info
     - MASTER_REALM_ENABLED=true
@@ -22,14 +22,14 @@ services:
     - ./test-realm.yaml:/opt/keycloak/.kacd/import/test-realm.yaml
     - ./cache-ispn.xml:/opt/keycloak/config/cache-ispn.xml
     ports:
-    - "8084:8080"
+    - "8080:8080"
   postgres:
     image: postgres
     environment:
     - POSTGRES_PASSWORD=keycloak
     - POSTGRES_DB=keycloak
     ports:
-    - "5436:5432"
+    - "5432:5432"
   redis:
     image: redis:7.0.9-alpine
     ports:
