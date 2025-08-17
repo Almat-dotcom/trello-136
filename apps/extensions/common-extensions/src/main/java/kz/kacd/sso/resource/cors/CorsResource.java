@@ -18,9 +18,16 @@ public class CorsResource {
     }
 
     @OPTIONS
+    @Path("")
+    public Response preflightRoot() {
+        log.info("CORS OPTIONS preflight request (root)");
+        return Cors.add(request, Response.ok()).auth().allowedMethods(METHODS).preflight().build();
+    }
+
+    @OPTIONS
     @Path("{any:.*}")
     public Response preflight() {
-        log.debug("CORS OPTIONS preflight request");
+        log.info("CORS OPTIONS preflight request {any}");
         return Cors.add(request, Response.ok()).auth().allowedMethods(METHODS).preflight().build();
     }
 }

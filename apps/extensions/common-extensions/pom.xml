@@ -128,6 +128,14 @@
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-api</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>jakarta.ws.rs</groupId>
+                    <artifactId>jakarta.ws.rs-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.resteasy</groupId>
+                    <artifactId>resteasy-client</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -142,6 +150,14 @@
                 <exclusion>
                     <groupId>io.fabric8</groupId>
                     <artifactId>kubernetes-client-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>jakarta.ws.rs</groupId>
+                    <artifactId>jakarta.ws.rs-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.resteasy</groupId>
+                    <artifactId>resteasy-client</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -215,14 +231,10 @@
                 <version>3.2.0</version>
                 <configuration>
                     <archive>
-                        <!-- This is required since we need to add the jboss module references
-                             to
-                        the resulting jar -->
                         <manifestEntries>
-                            <!-- Adding explicit dependencies to avoid class-loading issues at
-                            runtime -->
+                            <!-- Keep only modules compatible with Keycloak 23 (Resteasy Reactive). Remove legacy javax/* and resteasy-jaxrs. -->
                             <Dependencies>
-                                <![CDATA[org.keycloak.keycloak-common,org.keycloak.keycloak-core,org.keycloak.keycloak-server-spi,org.keycloak.keycloak-server-spi-private,org.keycloak.keycloak-admin-client,org.apache.httpcomponents,org.keycloak.keycloak-services,org.keycloak.keycloak-saml-core,org.keycloak.keycloak-saml-core-public,org.jboss.logging,javax.api,javax.jms.api,javax.transaction.api,com.google.guava,com.fasterxml.jackson.core.jackson-core,com.fasterxml.jackson.core.jackson-annotations,com.fasterxml.jackson.core.jackson-databind,com.googlecode.owasp-java-html-sanitizer,org.apache.commons.io,org.bouncycastle,org.jboss.resteasy.resteasy-jaxrs,org.keycloak.keycloak-ldap-federation]]></Dependencies>
+                                <![CDATA[org.keycloak.keycloak-common,org.keycloak.keycloak-core,org.keycloak.keycloak-server-spi,org.keycloak.keycloak-server-spi-private,org.keycloak.keycloak-services,org.keycloak.keycloak-ldap-federation,org.jboss.logging]]></Dependencies>
                         </manifestEntries>
                     </archive>
                 </configuration>

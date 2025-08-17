@@ -9,11 +9,10 @@ import org.keycloak.models.KeycloakSessionFactory;
 public class DefaultK8sClientProviderFactory implements K8sClientProviderFactory {
     private static final String PROVIDER_ID = "default-k8s-client-provider";
 
-    private static final DefaultK8sClientProvider INSTANCE = new DefaultK8sClientProvider();
-
     @Override
     public K8sClientProvider create(KeycloakSession session) {
-        return INSTANCE;
+        // Lazily construct the Kubernetes client at runtime to avoid classloading Fabric8 during build time
+        return new DefaultK8sClientProvider();
     }
 
     @Override
@@ -28,7 +27,7 @@ public class DefaultK8sClientProviderFactory implements K8sClientProviderFactory
 
     @Override
     public void close() {
-//        INSTANCE.getClient().close();
+        // Nothing to close
     }
 
     @Override
