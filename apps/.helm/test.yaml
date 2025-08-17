@@ -71,6 +71,11 @@ ingress:
   hostname: sso-test.dev.kacd.kz
   tls: true
   secretName: kacd-tls
+  annotations:
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "Authorization, Content-Type, Accept, Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
 
 realmController:
   enabled: true
