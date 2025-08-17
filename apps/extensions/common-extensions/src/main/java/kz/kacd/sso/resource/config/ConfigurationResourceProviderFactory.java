@@ -9,7 +9,7 @@ import org.keycloak.services.resource.RealmResourceProviderFactory;
 
 @AutoService(RealmResourceProviderFactory.class)
 public class ConfigurationResourceProviderFactory implements RealmResourceProviderFactory {
-    public static final String PROVIDER_ID = "k8s-config";
+    public static final String PROVIDER_ID = "configuration";
 
     @Override
     public RealmResourceProvider create(KeycloakSession session) {
