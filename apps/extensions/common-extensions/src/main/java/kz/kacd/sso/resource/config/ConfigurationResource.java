@@ -106,7 +106,7 @@ public class ConfigurationResource extends BaseAdminResource {
 
     @POST
     @Path("realm/{name}")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.WILDCARD})
     @Produces(MediaType.APPLICATION_JSON)
     public Response configureRealm(@PathParam("name") String name, @QueryParam("full") String full) {
 //        checkPermissions();
@@ -150,7 +150,7 @@ public class ConfigurationResource extends BaseAdminResource {
 
     @POST
     @Path("federation/{name}")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.WILDCARD})
     @Produces(MediaType.APPLICATION_JSON)
     public Response configureFederation(@PathParam("name") String name) {
 //        checkPermissions();
@@ -189,7 +189,7 @@ public class ConfigurationResource extends BaseAdminResource {
 
     @POST
     @Path("client/{name}")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.WILDCARD})
     @Produces(MediaType.APPLICATION_JSON)
     public Response configureClient(@PathParam("name") String name) {
 //        checkPermissions();
