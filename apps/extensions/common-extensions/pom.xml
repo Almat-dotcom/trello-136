@@ -15,7 +15,7 @@
 
     <properties>
         <keycloak.version>23.0.0</keycloak.version>
-        <fabric8.k8s.version>6.2.0</fabric8.k8s.version>
+        <fabric8.k8s.version>6.9.1</fabric8.k8s.version>
         <lettuce.version>6.2.3.RELEASE</lettuce.version>
 
         <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
@@ -54,12 +54,6 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
             <version>1.11.5</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.glassfish.jersey</groupId>
-                    <artifactId>jersey-*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -90,13 +84,6 @@
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-services</artifactId>
             <version>${keycloak.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>jakarta.ws.rs</groupId>
-            <artifactId>jakarta.ws.rs-api</artifactId>
-            <version>3.1.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -132,80 +119,58 @@
             <artifactId>jboss-logging</artifactId>
             <scope>provided</scope>
         </dependency>
-                                        <!-- Fabric8 Kubernetes Client -->
         <dependency>
             <groupId>io.fabric8</groupId>
             <artifactId>kubernetes-client-api</artifactId>
             <version>${fabric8.k8s.version}</version>
             <exclusions>
                 <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
                     <groupId>jakarta.ws.rs</groupId>
                     <artifactId>jakarta.ws.rs-api</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>org.glassfish.jersey.core</groupId>
-                    <artifactId>jersey-*</artifactId>
-                </exclusion>
-                <exclusion>
                     <groupId>org.jboss.resteasy</groupId>
-                    <artifactId>resteasy-*</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.fasterxml.jackson.jaxrs</groupId>
-                    <artifactId>*</artifactId>
+                    <artifactId>resteasy-client</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
-
         <dependency>
             <groupId>io.fabric8</groupId>
             <artifactId>kubernetes-client</artifactId>
             <version>${fabric8.k8s.version}</version>
             <exclusions>
                 <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.fabric8</groupId>
+                    <artifactId>kubernetes-client-api</artifactId>
+                </exclusion>
+                <exclusion>
                     <groupId>jakarta.ws.rs</groupId>
                     <artifactId>jakarta.ws.rs-api</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>org.glassfish.jersey.core</groupId>
-                    <artifactId>jersey-*</artifactId>
-                </exclusion>
-                <exclusion>
                     <groupId>org.jboss.resteasy</groupId>
-                    <artifactId>resteasy-*</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.fasterxml.jackson.jaxrs</groupId>
-                    <artifactId>*</artifactId>
+                    <artifactId>resteasy-client</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
-
         <dependency>
             <groupId>io.fabric8</groupId>
-            <artifactId>kubernetes-httpclient-okhttp</artifactId>
+            <artifactId>generator-annotations</artifactId>
             <version>${fabric8.k8s.version}</version>
-        </dependency>
-        
-        <!-- Google Auto Service for SPI registration -->
-        <dependency>
-            <groupId>com.google.auto.service</groupId>
-            <artifactId>auto-service</artifactId>
-            <version>1.1.1</version>
-        </dependency>
-
-        <!-- Jackson for JSON processing -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.15.2</version>
-        </dependency>
-
-        <!-- Jackson YAML for reading YAML files -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.dataformat</groupId>
-            <artifactId>jackson-dataformat-yaml</artifactId>
-            <version>2.15.2</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -244,11 +209,35 @@
                 <version>3.9.1.2184</version>
             </plugin>
 
-
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>java-generator-maven-plugin</artifactId>
+                <version>${fabric8.k8s.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <source>src/main/resources/k8s</source>
+                    <generatedAnnotations>false</generatedAnnotations>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.2.0</version>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <!-- Keep only modules compatible with Keycloak 23 (Resteasy Reactive). Remove legacy javax/* and resteasy-jaxrs. -->
+                            <Dependencies>
+                                <![CDATA[org.keycloak.keycloak-common,org.keycloak.keycloak-core,org.keycloak.keycloak-server-spi,org.keycloak.keycloak-server-spi-private,org.keycloak.keycloak-services,org.keycloak.keycloak-ldap-federation,org.jboss.logging]]></Dependencies>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -268,85 +257,19 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.5.0</version>
+                <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
                     <execution>
                         <phase>package</phase>
                         <goals>
-                            <goal>shade</goal>
+                            <goal>single</goal>
                         </goals>
                     </execution>
                 </executions>
                 <configuration>
-                    <createDependencyReducedPom>true</createDependencyReducedPom>
-                    <shadedArtifactAttached>true</shadedArtifactAttached>
-                    <shadedClassifierName>jar-with-dependencies</shadedClassifierName>
-                    
-                    <!-- Чистим META-INF/services от сторонних библиотек -->
-                    <filters>
-                        <filter>
-                            <artifact>com.squareup.okhttp3:okhttp</artifact>
-                            <excludes>
-                                <exclude>META-INF/**</exclude>
-                            </excludes>
-                        </filter>
-                        <filter>
-                            <artifact>io.lettuce:lettuce-core</artifact>
-                            <excludes>
-                                <exclude>META-INF/**</exclude>
-                            </excludes>
-                        </filter>
-                        <filter>
-                            <artifact>xalan:xalan</artifact>
-                            <excludes>
-                                <exclude>META-INF/**</exclude>
-                            </excludes>
-                        </filter>
-                        <filter>
-                            <artifact>io.micrometer:*</artifact>
-                            <excludes>
-                                <exclude>META-INF/**</exclude>
-                                <exclude>**/jersey/**</exclude>
-                            </excludes>
-                        </filter>
-                        <filter>
-                            <artifact>io.fabric8:*</artifact>
-                            <excludes>
-                                <exclude>META-INF/services/**</exclude>
-                            </excludes>
-                        </filter>
-                        <filter>
-                            <artifact>com.fasterxml.jackson.core:jackson-core</artifact>
-                            <excludes>
-                                <exclude>META-INF/services/**</exclude>
-                            </excludes>
-                        </filter>
-                        <filter>
-                            <artifact>com.fasterxml.jackson.core:jackson-databind</artifact>
-                            <excludes>
-                                <exclude>META-INF/services/**</exclude>
-                            </excludes>
-                        </filter>
-                        <filter>
-                            <artifact>com.fasterxml.jackson.dataformat:jackson-dataformat-yaml</artifact>
-                            <excludes>
-                                <exclude>META-INF/services/**</exclude>
-                            </excludes>
-                        </filter>
-                        <filter>
-                            <artifact>com.fasterxml.jackson.datatype:jackson-datatype-jsr310</artifact>
-                            <excludes>
-                                <exclude>META-INF/services/**</exclude>
-                            </excludes>
-                        </filter>
-                        <filter>
-                            <artifact>io.projectreactor:reactor-core</artifact>
-                            <excludes>
-                                <exclude>META-INF/services/**</exclude>
-                            </excludes>
-                        </filter>
-                    </filters>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
                 </configuration>
             </plugin>
         </plugins>

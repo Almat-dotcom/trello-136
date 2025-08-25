@@ -4,8 +4,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("k8s-client-api")
-@Produces(MediaType.APPLICATION_JSON)            // ← используем рабочий API
+@Path("k8s-config")
+@Produces(MediaType.APPLICATION_JSON)            // ← сервер всё равно отдаёт JSON
 public interface KeycloakClient {
 
     @POST
