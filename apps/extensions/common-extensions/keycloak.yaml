@@ -3,34 +3,23 @@ version: "3.9"
 services:
   keycloak:
     image: quay.io/keycloak/keycloak:23.0.0
-    command: ["start-dev", "--import-realm"]
+    command: ["start-dev"]
     environment:
-    - KEYCLOAK_ADMIN=admin
-    - KEYCLOAK_ADMIN_PASSWORD=admin
-    - KC_DB=postgres
-    - KC_DB_PASSWORD=keycloak
-    - KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak?user=postgres
-    - KC_LOG_LEVEL=info
-    - MASTER_REALM_ENABLED=true
-    - KC_CACHE=ispn
-    - REDIS_HOST=redis
-    - REDIS_PORT=6379
-    # Enable Quarkus-level CORS so preflight OPTIONS is handled before realm-restapi-extension
-    - KC_HTTP_CORS=true
-    - KC_HTTP_CORS_ORIGINS=*
-    - KC_HTTP_CORS_ALLOWED_METHODS=GET,POST,PUT,DELETE,OPTIONS,PATCH
-    - KC_HTTP_CORS_ALLOWED_HEADERS=Authorization,Content-Type,Accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers
-    - KC_HTTP_CORS_EXPOSED_HEADERS=
-    - KC_HTTP_CORS_MAX_AGE=3600
-    - ENABLED_K8S=false
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=postgres
+      - KC_DB_PASSWORD=keycloak
+      - KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak?user=postgres
+      - KC_LOG_LEVEL=info
+      - YAML_MODE=true
+      - YAML_CLIENTS_DIRECTORY=/opt/keycloak/clients
     volumes:
-    - /Users/almatsagandykov/IdeaProjects/sso5/apps/extensions/common-extensions/target/common-extensions.jar:/opt/keycloak/providers/common-extensions.jar:rw
-    - /Users/almatsagandykov/IdeaProjects/sso5/keycloak/standalone/lib/k8s-bundle.jar:/opt/keycloak/providers/k8s-bundle.jar:ro
-    # All Fabric8 and transitive dependencies are shaded into k8s-bundle.jar; no extra jars needed
-    - ./test-realm.yaml:/opt/keycloak/.kacd/import/test-realm.yaml
-    - ./cache-ispn.xml:/opt/keycloak/config/cache-ispn.xml
+      - /Users/almatsagandykov/IdeaProjects/sso7/apps/extensions/common-extensions/target/common-extensions-23.0.0-jar-with-dependencies.jar:/opt/keycloak/providers/common-extensions.jar:rw
+      - /Users/almatsagandykov/IdeaProjects/sso7/apps/extensions/common-extensions/test-realm.yaml:/opt/keycloak/.kacd/import/test-realm.yaml
+      - /Users/almatsagandykov/IdeaProjects/sso7/apps/extensions/common-extensions/cache-ispn.xml:/opt/keycloak/config/cache-ispn.xml
+      - /Users/almatsagandykov/IdeaProjects/sso7/test-clients:/opt/keycloak/clients
     ports:
-    - "8082:8080"
+      - "8085:8080"
   postgres:
     image: postgres
     environment:
